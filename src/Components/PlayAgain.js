@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
-export class PlayAgain extends Component {
+class PlayAgain extends Component {
   render() {
     return (
       <div className="battle-text-content">
@@ -10,6 +11,10 @@ export class PlayAgain extends Component {
       </div>
     );
   }
+}
+
+PlayAgain.propTypes = {
+  handlePlayAgain: PropTypes.func,
 }
 
 export default PlayAgain;

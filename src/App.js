@@ -15,19 +15,19 @@ class App extends Component {
     playerHP: 200,
     playerMaxHP: 200,
     playerAttacks: {
-      attackOne: { name: "Morsure", damage: 10 },
-      attackTwo: { name: "Eclair", damage: 30 },
-      attackThree: { name: "Tonnère", damage: 35 },
-      attackFour: { name: "Méga éclair", damage: 45 }
+      attackOne: { name: "Morsure", damage: 10, cost: 0 },
+      attackTwo: { name: "Eclair", damage: 30, cost: 10 },
+      attackThree: { name: "Tonnerre", damage: 35, cost: 20 },
+      attackFour: { name: "Méga éclair", damage: 45, cost: 30 }
     },
-    playerFaint: "",
+    playerFaint: undefined,
     enemyName: "Mewtwo",
     enemyLevel: 43,
     enemyHP: 200,
     enemyMaxHP: 200,
     enemyAttackNames: ["Frappe", "Balle de l'ombre", "Rêve éveillé", "Cauchemard"],
     enemyAttackDamage: [10, 30, 35, 45],
-    enemyFaint: "",
+    enemyFaint: undefined,
     textMessageOne: " ",
     textMessageTwo: "",
     gameOver: false

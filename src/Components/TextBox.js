@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-export class TextBox extends Component {
+class TextBox extends Component {
   render() {
     return (
       <div className="battle-text-content">
@@ -10,6 +11,11 @@ export class TextBox extends Component {
       </div>
     );
   }
+}
+
+TextBox.propTypes = {
+  messageOne: PropTypes.string,
+  messageTwo: PropTypes.string,
 }
 
 export default TextBox;

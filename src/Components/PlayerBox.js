@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PlayerAvatar from "./PlayerAvatar";
+import Avatar from "./Avatar";
 
 export class PlayerBox extends Component {
   render() {
@@ -22,7 +22,7 @@ export class PlayerBox extends Component {
         <div id="hero-container">
           {/* HERO POKEMON AVATAR PICTURE */}
           <div className="avatar-box ml-sm-5">
-            <PlayerAvatar playerFaint={this.props.playerFaint} />
+            <Avatar faint={this.props.playerFaint} logoName="pikachu" className="avatar mt-sm-2" />
 
             <div className="oval" />
           </div>
@@ -38,7 +38,7 @@ export class PlayerBox extends Component {
               </h5>
             </div>
             <div className="d-flex justify-content-between align-items-center ml-3 mr-1">
-              <h5>HP</h5>
+              <h5>PV</h5>
               <div className="progress ml-1 both-progress">
                 <div
                   className={progressColor}

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import EnemyAvatar from "./EnemyAvatar";
+import Avatar from "./Avatar";
 
 export class EnemyBox extends Component {
   render() {
@@ -30,7 +30,7 @@ export class EnemyBox extends Component {
               </h5>
             </div>
             <div className="d-flex justify-content-between align-items-center ml-3 mr-1">
-              <h5>HP</h5>
+              <h5>PV</h5>
               <div className="progress ml-1 both-progress">
                 <div
                   className={progressColor}
@@ -47,7 +47,7 @@ export class EnemyBox extends Component {
 
           {/* ENEMY POKEMON AVATAR PICTURE */}
           <div className="mr-sm-4 avatar-box">
-            <EnemyAvatar enemyFaint={this.props.enemyFaint} />
+            <Avatar faint={this.props.enemyFaint} logoName="mewtwo" className="avatar mr-3 mt-4" />
 
             <div className="oval" />
           </div>
