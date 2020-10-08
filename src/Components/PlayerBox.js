@@ -17,50 +17,46 @@ export class PlayerBox extends Component {
       progressColor = "progress-bar bg-success";
     }
     return (
-      <div>
-        {/* HERO POKEMON CONTAINER */}
-        <div id="hero-container">
-          {/* HERO POKEMON AVATAR PICTURE */}
-          <div className="avatar-box ml-sm-5">
-            <Avatar faint={this.props.playerFaint} logoName="pikachu" className="avatar mt-sm-2" />
-
-            <div className="oval" />
+      <div id="hero-container">
+        {/* HERO POKEMON INFO BOX */}
+        <div id="hero-info-box">
+          <div className="d-flex justify-content-between align-items-center">
+            <h2 id="hero-name">{this.props.playerName}</h2>
+            <h5 className="mr-1 d-none d-sm-block">
+              Lv
+              {this.props.playerLevel}
+            </h5>
           </div>
-          {/* END HERO POKEMON AVATAR PICTURE */}
-
-          {/* HERO POKEMON INFO BOX */}
-          <div id="hero-info-box">
-            <div className="d-flex justify-content-between align-items-center">
-              <h2 id="hero-name">{this.props.playerName}</h2>
-              <h5 className="mr-1 d-none d-sm-block">
-                Lv
-                {this.props.playerLevel}
+          <div className="d-flex justify-content-between align-items-center ml-3 mr-1">
+            <h5>PV</h5>
+            <div className="progress ml-1 both-progress">
+              <div
+                className={progressColor}
+                role="progressbar"
+                style={{ width: percentage }}
+                aria-valuenow="75"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              />
+            </div>
+          </div>
+          <div id="hero-hp" className="d-flex">
+            <div className="ml-auto mr-3">
+              <h5>
+                {this.props.playerHP}/{this.props.playerMaxHP}
               </h5>
             </div>
-            <div className="d-flex justify-content-between align-items-center ml-3 mr-1">
-              <h5>PV</h5>
-              <div className="progress ml-1 both-progress">
-                <div
-                  className={progressColor}
-                  role="progressbar"
-                  style={{ width: percentage }}
-                  aria-valuenow="75"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                />
-              </div>
-            </div>
-            <div id="hero-hp" className="d-flex">
-              <div className="ml-auto mr-3">
-                <h5>
-                  {this.props.playerHP}/{this.props.playerMaxHP}
-                </h5>
-              </div>
-            </div>
           </div>
-          {/* END HERO POKEMON INFO BOX */}
         </div>
-        {/* END HERO POKEMON CONTAINER */}
+        {/* END HERO POKEMON INFO BOX */}
+
+        {/* HERO POKEMON AVATAR PICTURE */}
+        <div className="mr-sm-4 avatar-box">
+          <Avatar faint={this.props.playerFaint} logoName={this.props.playerName.toLowerCase()} className="avatar mr-3 mt-4" />
+
+          <div className="oval" />
+        </div>
+        {/* END HERO POKEMON AVATAR PICTURE */}
       </div>
     );
   }

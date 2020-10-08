@@ -7,31 +7,99 @@ import Attacks from "./Components/Attacks";
 import EnemyBox from "./Components/EnemyBox";
 import PlayerBox from "./Components/PlayerBox";
 import PlayAgain from "./Components/PlayAgain";
+import _ from 'lodash';
 
 class App extends Component {
-  state = {
-    playerName: "Pikachu",
-    playerLevel: 45,
-    playerHP: 200,
-    playerMaxHP: 200,
-    playerAttacks: {
-      attackOne: { name: "Morsure", damage: 10, cost: 0 },
-      attackTwo: { name: "Eclair", damage: 30, cost: 10 },
-      attackThree: { name: "Tonnerre", damage: 35, cost: 20 },
-      attackFour: { name: "Méga éclair", damage: 45, cost: 30 }
-    },
-    playerFaint: undefined,
-    enemyName: "Mewtwo",
-    enemyLevel: 43,
-    enemyHP: 200,
-    enemyMaxHP: 200,
-    enemyAttackNames: ["Frappe", "Balle de l'ombre", "Rêve éveillé", "Cauchemard"],
-    enemyAttackDamage: [10, 30, 35, 45],
-    enemyFaint: undefined,
-    textMessageOne: " ",
-    textMessageTwo: "",
-    gameOver: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      players: [
+        {
+          name: "Pikachu",
+          level: 45,
+          hp: 200,
+          maxHp: 200,
+          faint: undefined,
+          attacks: [
+            { name: "Morsure", damage: 10, cost: 0 },
+            { name: "Eclair", damage: 30, cost: 10 },
+            { name: "Tonnerre", damage: 35, cost: 20 },
+            { name: "Méga éclair", damage: 45, cost: 30 },
+          ],
+        },
+        {
+          name: "Emolga",
+          level: 45,
+          hp: 200,
+          maxHp: 200,
+          faint: undefined,
+          attacks: [
+            { name: "Morsure", damage: 10, cost: 0 },
+            { name: "Eclair", damage: 30, cost: 10 },
+            { name: "Tonnerre", damage: 35, cost: 20 },
+            { name: "Méga éclair", damage: 45, cost: 30 },
+          ],
+        },
+        {
+          name: "Teddiursa",
+          level: 45,
+          hp: 200,
+          maxHp: 200,
+          faint: undefined,
+          attacks: [
+            { name: "Morsure", damage: 10, cost: 0 },
+            { name: "Eclair", damage: 30, cost: 10 },
+            { name: "Tonnerre", damage: 35, cost: 20 },
+            { name: "Méga éclair", damage: 45, cost: 30 },
+          ],
+        },
+        {
+          name: "Togepi",
+          level: 45,
+          hp: 200,
+          maxHp: 200,
+          faint: undefined,
+          attacks: [
+            { name: "Morsure", damage: 10, cost: 0 },
+            { name: "Eclair", damage: 30, cost: 10 },
+            { name: "Tonnerre", damage: 35, cost: 20 },
+            { name: "Méga éclair", damage: 45, cost: 30 },
+          ],
+        }
+      ],
+      enemy: {
+        name: "Mewtwo",
+        level: 43,
+        hp: 200,
+        maxHp: 200,
+        faint: undefined,
+        attackNames: ["Frappe", "Balle de l'ombre", "Rêve éveillé", "Cauchemard"],
+        attackDamages: [10, 30, 35, 45],
+      },
+      // playerName: "Pikachu",
+      // playerLevel: 45,
+      // playerHP: 200,
+      // playerMaxHP: 200,
+      // playerFaint: undefined,
+      // playerAttacks: {
+      //   attackOne: { name: "Morsure", damage: 10, cost: 0 },
+      //   attackTwo: { name: "Eclair", damage: 30, cost: 10 },
+      //   attackThree: { name: "Tonnerre", damage: 35, cost: 20 },
+      //   attackFour: { name: "Méga éclair", damage: 45, cost: 30 }
+      // },
+      // enemyName: "Mewtwo",
+      // enemyLevel: 43,
+      // enemyHP: 200,
+      // enemyMaxHP: 200,
+      // enemyAttackNames: ["Frappe", "Balle de l'ombre", "Rêve éveillé", "Cauchemard"],
+      // enemyAttackDamage: [10, 30, 35, 45],
+      // enemyFaint: undefined,
+      textMessageOne: " ",
+      textMessageTwo: "",
+      gameOver: false
+    };
+  }
 
   componentDidMount() {
     this.startingSequence();
@@ -42,16 +110,24 @@ class App extends Component {
       this.setState(
         () => {
           return {
-            textMessageOne: `${this.state.enemyName} apparait!`,
-            enemyFaint: false
+            textMessageOne: `${this.state.enemy.name} apparait!`,
+            enemy: {
+              ...this.state.enemy,
+              faint: false,
+            },
           };
         },
         () => {
           setTimeout(() => {
+            const players = [...this.state.players];
+            for (let i = 0; i < this.state.players.length; i++) {
+              players[i] = { ...players[i], faint: false };
+            }
+
             this.setState(
               {
-                textMessageOne: `Go ${this.state.playerName}!`,
-                playerFaint: false
+                textMessageOne: "Vous entrez pour le combattre !",
+                players
               },
               () => {
                 setTimeout(() => {
@@ -70,12 +146,15 @@ class App extends Component {
   enemyTurn = (enemyAttackName, enemyAttackDamage) => {
     enemyAttackDamage = enemyAttackDamage + Math.floor(Math.random() * 11);
     // first, check if enemy fainted. End Game if they did.
-    if (this.state.enemyHP === 0) {
+    if (this.state.enemy.hp === 0) {
       this.setState(
         {
-          textMessageOne: `${this.state.enemyName} a perdu.`,
-          textMessageTwo: `${this.state.playerName} a gagné!`,
-          enemyFaint: true
+          textMessageOne: `${this.state.enemy.name} a perdu.`,
+          textMessageTwo: `Vous avez gagné!`,
+          enemy: {
+            ...this.state.enemy,
+            faint: true,
+          },
         },
         () => {
           setTimeout(() => {
@@ -87,33 +166,39 @@ class App extends Component {
       );
     } else {
       // if enemy is still alive, proceed with enemy turn
-
       this.setState(
         prevState => {
-          if (prevState.playerHP - enemyAttackDamage <= 0) {
+          const players = [...this.state.players];
+
+          if (prevState.players[0].hp - enemyAttackDamage <= 0) {
+            players[0] = { ...players[0], hp: 0 };
             return {
-              playerHP: 0,
+              players,
               textMessageOne: `${
-                this.state.enemyName
+                this.state.enemy.name
               } utilise ${enemyAttackName} pour ${enemyAttackDamage}pts de dégats!`
             };
           } else {
+            players[0] = { ...players[0], hp: prevState.players[0].hp - enemyAttackDamage };
             return {
-              playerHP: prevState.playerHP - enemyAttackDamage,
+              players,
               textMessageOne: `${
-                this.state.enemyName
+                this.state.enemy.name
               } utilise ${enemyAttackName} pour ${enemyAttackDamage}pts de dégats!`
             };
           }
         },
         () => {
           setTimeout(() => {
-            if (this.state.playerHP === 0) {
+            if (this.state.players[0].hp === 0) {
+              const players = [...this.state.players];
+              players[0] = { ...players[0], faint: true };
+
               this.setState(
                 {
-                  textMessageOne: `${this.state.playerName} a perdu.`,
-                  textMessageTwo: `${this.state.enemyName} a gagné!`,
-                  playerFaint: true
+                  textMessageOne: `${this.state.players[0].name} a perdu.`,
+                  textMessageTwo: `${this.state.enemy.name} a gagné!`,
+                  players
                 },
                 () => {
                   setTimeout(() => {
@@ -135,28 +220,29 @@ class App extends Component {
   };
 
   handleAttackClick = (name, damage) => {
-    // implicit return single value
-    // this.setState(prevState => ({
-    //   enemyHP: prevState.enemyHP - damage
-    // }));
-
     damage = damage + Math.floor(Math.random() * 11);
 
     // use attack to calculate enemy HP and adjust progress bar
     this.setState(
       prevState => {
-        if (prevState.enemyHP - damage <= 0) {
+        if (prevState.enemy.hp - damage <= 0) {
           return {
-            enemyHP: 0,
+            enemy: {
+              ...this.state.enemy,
+              hp: 0,
+            },
             textMessageOne: `${
-              this.state.playerName
+              this.state.players[0].name
             } utilise ${name} pour ${damage}pts de dégats!`
           };
         } else {
           return {
-            enemyHP: prevState.enemyHP - damage,
+            enemy: {
+              ...this.state.enemy,
+              hp: prevState.enemy.hp - damage,
+            },
             textMessageOne: `${
-              this.state.playerName
+              this.state.players[0].name
             } utilise ${name} pour ${damage}pts de dégats!`
           };
         }
@@ -166,8 +252,8 @@ class App extends Component {
         setTimeout(() => {
           // calc next enemy attack name and damage
           let enemyAttack = Math.floor(Math.random() * 4);
-          let enemyAttackDamage = this.state.enemyAttackDamage[enemyAttack];
-          let enemyAttackName = this.state.enemyAttackNames[enemyAttack];
+          let enemyAttackDamage = this.state.enemy.attackDamages[enemyAttack];
+          let enemyAttackName = this.state.enemy.attackNames[enemyAttack];
 
           // once the state is changed, start enemy turn
           this.enemyTurn(enemyAttackName, enemyAttackDamage);
@@ -177,14 +263,21 @@ class App extends Component {
   };
 
   handlePlayAgain = () => {
+    const players = [...this.state.players];
+    for (let i = 0; i < this.state.players.length; i++) {
+      players[i] = { ...players[i], faint: false, hp: this.state.players[i].maxHp };
+    }
+
     this.setState({
-      playerHP: this.state.playerMaxHP,
-      enemyHP: this.state.enemyMaxHP,
+      enemy: {
+        ...this.state.enemy,
+        hp: this.state.enemy.maxHp,
+        faint: false,
+      },
       gameOver: false,
       textMessageOne: "",
       textMessageTwo: "",
-      enemyFaint: false,
-      playerFaint: false
+      players
     });
   };
 
@@ -195,21 +288,27 @@ class App extends Component {
           <div className="col-sm-12">
             {/* BATTLE SCREEN CONTAINER */}
             <div id="battle-container" className="px-2 mx-auto">
-              <EnemyBox
-                enemyName={this.state.enemyName}
-                enemyLevel={this.state.enemyLevel}
-                enemyHP={this.state.enemyHP}
-                enemyMaxHP={this.state.enemyMaxHP}
-                enemyFaint={this.state.enemyFaint}
-              />
 
-              <PlayerBox
-                playerName={this.state.playerName}
-                playerLevel={this.state.playerLevel}
-                playerHP={this.state.playerHP}
-                playerMaxHP={this.state.playerMaxHP}
-                playerFaint={this.state.playerFaint}
-              />
+              <div className="all-players-box">
+                <EnemyBox
+                  enemyName={this.state.enemy.name}
+                  enemyLevel={this.state.enemy.level}
+                  enemyHP={this.state.enemy.hp}
+                  enemyMaxHP={this.state.enemy.maxHp}
+                  enemyFaint={this.state.enemy.faint}
+                />
+
+                {_.map(this.state.players, player => (
+                  <PlayerBox
+                    key={player.name}
+                    playerName={player.name}
+                    playerLevel={player.level}
+                    playerHP={player.hp}
+                    playerMaxHP={player.maxHp}
+                    playerFaint={player.faint}
+                  />
+                ))}
+              </div>
 
               {/* TEXT BOX SECTION */}
               <div id="text-box">
@@ -224,12 +323,12 @@ class App extends Component {
 
                   {this.state.textMessageOne === "" &&
                   this.state.gameOver === false &&
-                  Object.keys(this.state.playerAttacks).map((key, index) => {
+                  Object.keys(this.state.players[0].attacks).map((key, index) => {
                     return (
                       <Attacks
                         key={key}
                         index={index}
-                        details={this.state.playerAttacks[key]}
+                        details={this.state.players[0].attacks[key]}
                         handleAttackClick={this.handleAttackClick}
                       />
                     );
