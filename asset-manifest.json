@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/game/static/css/main.48717717.chunk.css",
-    "main.js": "/game/static/js/main.e8204bf9.chunk.js",
-    "main.js.map": "/game/static/js/main.e8204bf9.chunk.js.map",
+    "main.css": "/game/static/css/main.1f1c6a82.chunk.css",
+    "main.js": "/game/static/js/main.10b93455.chunk.js",
+    "main.js.map": "/game/static/js/main.10b93455.chunk.js.map",
     "runtime-main.js": "/game/static/js/runtime-main.eb6a8fc6.js",
     "runtime-main.js.map": "/game/static/js/runtime-main.eb6a8fc6.js.map",
-    "static/js/2.d575295d.chunk.js": "/game/static/js/2.d575295d.chunk.js",
-    "static/js/2.d575295d.chunk.js.map": "/game/static/js/2.d575295d.chunk.js.map",
+    "static/js/2.73b9ae27.chunk.js": "/game/static/js/2.73b9ae27.chunk.js",
+    "static/js/2.73b9ae27.chunk.js.map": "/game/static/js/2.73b9ae27.chunk.js.map",
     "index.html": "/game/index.html",
-    "precache-manifest.920be1983a1df46292315bceb27d91e4.js": "/game/precache-manifest.920be1983a1df46292315bceb27d91e4.js",
+    "precache-manifest.e31a02c9b7708f201bf08bc860397926.js": "/game/precache-manifest.e31a02c9b7708f201bf08bc860397926.js",
     "service-worker.js": "/game/service-worker.js",
-    "static/css/main.48717717.chunk.css.map": "/game/static/css/main.48717717.chunk.css.map",
-    "static/js/2.d575295d.chunk.js.LICENSE.txt": "/game/static/js/2.d575295d.chunk.js.LICENSE.txt"
+    "static/css/main.1f1c6a82.chunk.css.map": "/game/static/css/main.1f1c6a82.chunk.css.map",
+    "static/js/2.73b9ae27.chunk.js.LICENSE.txt": "/game/static/js/2.73b9ae27.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.eb6a8fc6.js",
-    "static/js/2.d575295d.chunk.js",
-    "static/css/main.48717717.chunk.css",
-    "static/js/main.e8204bf9.chunk.js"
+    "static/js/2.73b9ae27.chunk.js",
+    "static/css/main.1f1c6a82.chunk.css",
+    "static/js/main.10b93455.chunk.js"
   ]
 }
