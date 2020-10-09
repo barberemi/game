@@ -45,8 +45,12 @@ export class EnemyBox extends Component {
 
         {/* ENEMY POKEMON AVATAR PICTURE */}
         <div className="mr-sm-4 avatar-box">
-          <Avatar faint={this.props.enemyFaint} logoName="mewtwo" className="avatar mr-3 mt-4" />
-
+          <Avatar
+            faint={this.props.enemyFaint}
+            isHit={this.props.enemyIsHit}
+            logoName={this.props.enemyName.toLowerCase()}
+            className="avatar mr-3 mt-4"
+          />
           <div className="oval" />
         </div>
         {/* END ENEMY POKEMON AVATAR PICTURE */}

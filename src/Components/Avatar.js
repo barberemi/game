@@ -3,12 +3,15 @@ import PropTypes from "prop-types";
 
 class Avatar extends Component {
   animation() {
-    const { faint } = this.props;
+    const { faint, isHit } = this.props;
 
+    if (isHit === true) {
+      return "animated headShake";
+    }
     if (faint === true) {
       return "animated fadeOut slow";
     }
-    if (faint === false) {
+    if (faint === null) {
       return "animated fadeInUp";
     }
     if (faint === undefined) {

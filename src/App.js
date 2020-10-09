@@ -21,6 +21,7 @@ class App extends Component {
           hp: 300,
           maxHp: 300,
           faint: undefined,
+          isHit: false,
           attacks: [
             { name: "Morsure", damage: 10, cost: 0 },
             { name: "Eclair", damage: 30, cost: 10 },
@@ -34,6 +35,7 @@ class App extends Component {
           hp: 250,
           maxHp: 250,
           faint: undefined,
+          isHit: false,
           attacks: [
             { name: "Morsure", damage: 10, cost: 0 },
             { name: "Eclair", damage: 30, cost: 10 },
@@ -47,6 +49,7 @@ class App extends Component {
           hp: 150,
           maxHp: 150,
           faint: undefined,
+          isHit: false,
           attacks: [
             { name: "Morsure", damage: 10, cost: 0 },
             { name: "Eclair", damage: 30, cost: 10 },
@@ -60,20 +63,36 @@ class App extends Component {
           hp: 200,
           maxHp: 200,
           faint: undefined,
+          isHit: false,
           attacks: [
             { name: "Morsure", damage: 10, cost: 0 },
             { name: "Eclair", damage: 30, cost: 10 },
             { name: "Tonnerre", damage: 35, cost: 20 },
             { name: "Méga éclair", damage: 45, cost: 30 },
           ],
-        }
+        },
+        {
+          name: "Rondoudou",
+          level: 50,
+          hp: 300,
+          maxHp: 300,
+          faint: undefined,
+          isHit: false,
+          attacks: [
+            { name: "Morsure", damage: 10, cost: 0 },
+            { name: "Eclair", damage: 30, cost: 10 },
+            { name: "Tonnerre", damage: 35, cost: 20 },
+            { name: "Méga éclair", damage: 45, cost: 30 },
+          ],
+        },
       ],
       enemy: {
         name: "Mewtwo",
         level: 60,
-        hp: 1000,
-        maxHp: 1000,
+        hp: 600,
+        maxHp: 600,
         faint: undefined,
+        isHit: false,
         attackNames: ["Frappe", "Balle de l'ombre", "Rêve éveillé", "Cauchemard"],
         attackDamages: [100, 100, 100, 100],
       },
@@ -95,7 +114,7 @@ class App extends Component {
             textMessageOne: `${this.state.enemy.name} apparait!`,
             enemy: {
               ...this.state.enemy,
-              faint: false,
+              faint: null,
             },
           };
         },
@@ -103,7 +122,7 @@ class App extends Component {
           setTimeout(() => {
             const players = [...this.state.players];
             for (let i = 0; i < this.state.players.length; i++) {
-              players[i] = { ...players[i], faint: false };
+              players[i] = { ...players[i], faint: null };
             }
 
             this.setState(
@@ -155,6 +174,7 @@ class App extends Component {
           enemy: {
             ...this.state.enemy,
             faint: true,
+            isHit: false,
           },
         },
         () => {
@@ -170,7 +190,7 @@ class App extends Component {
       this.setState(
         prevState => {
           const players = [...this.state.players];
-          players[playerAttacked] = { ...players[playerAttacked], hp: (prevState.players[playerAttacked].hp - enemyAttackDamage <= 0 ? 0 : prevState.players[playerAttacked].hp - enemyAttackDamage) };
+          players[playerAttacked] = { ...players[playerAttacked], isHit: true, hp: (prevState.players[playerAttacked].hp - enemyAttackDamage <= 0 ? 0 : prevState.players[playerAttacked].hp - enemyAttackDamage) };
 
           return {
             players,
@@ -181,9 +201,9 @@ class App extends Component {
         },
         () => {
           setTimeout(() => {
+            const players = [...this.state.players];
             if (this.state.players[playerAttacked].hp === 0) {
-              const players = [...this.state.players];
-              players[playerAttacked] = { ...players[playerAttacked], faint: true };
+              players[playerAttacked] = { ...players[playerAttacked], faint: true, isHit: false };
 
               this.setState(
                 {
@@ -217,8 +237,10 @@ class App extends Component {
                 }
               );
             } else {
+              players[playerAttacked] = { ...players[playerAttacked], isHit: false, faint: false };
               this.setState({
-                textMessageOne: ""
+                textMessageOne: "",
+                players
               });
             }
           }, 2000);
@@ -235,6 +257,7 @@ class App extends Component {
           enemy: {
             ...this.state.enemy,
             hp: (prevState.enemy.hp - damage <= 0 ? 0 : prevState.enemy.hp - damage),
+            isHit: true,
           },
           textMessageOne: `${
             this.state.players[0].name
@@ -245,6 +268,13 @@ class App extends Component {
         // wait X seconds before enemy attacks
         setTimeout(() => {
           // Enemy turn
+          this.setState({
+            enemy: {
+              ...this.state.enemy,
+              isHit: false,
+              faint: false,
+            }
+          });
           this.enemyTurn();
         }, 3000);
       }
@@ -254,7 +284,7 @@ class App extends Component {
   handlePlayAgain = () => {
     const players = [...this.state.players];
     for (let i = 0; i < this.state.players.length; i++) {
-      players[i] = { ...players[i], faint: false, hp: this.state.players[i].maxHp };
+      players[i] = { ...players[i], faint: false, isHit: false, hp: this.state.players[i].maxHp };
     }
 
     this.setState({
@@ -262,6 +292,7 @@ class App extends Component {
         ...this.state.enemy,
         hp: this.state.enemy.maxHp,
         faint: false,
+        isHit: false,
       },
       gameOver: false,
       textMessageOne: "",
@@ -285,6 +316,7 @@ class App extends Component {
                   enemyHP={this.state.enemy.hp}
                   enemyMaxHP={this.state.enemy.maxHp}
                   enemyFaint={this.state.enemy.faint}
+                  enemyIsHit={this.state.enemy.isHit}
                 />
 
                 {_.map(this.state.players, player => (
@@ -295,6 +327,7 @@ class App extends Component {
                     playerHP={player.hp}
                     playerMaxHP={player.maxHp}
                     playerFaint={player.faint}
+                    playerIsHit={player.isHit}
                   />
                 ))}
               </div>

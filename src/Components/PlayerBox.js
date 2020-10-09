@@ -52,8 +52,12 @@ export class PlayerBox extends Component {
 
         {/* HERO POKEMON AVATAR PICTURE */}
         <div className="mr-sm-4 avatar-box">
-          <Avatar faint={this.props.playerFaint} logoName={this.props.playerName.toLowerCase()} className="avatar mr-3 mt-4" />
-
+          <Avatar
+            faint={this.props.playerFaint}
+            isHit={this.props.playerIsHit}
+            logoName={this.props.playerName.toLowerCase()}
+            className="avatar mr-3 mt-4"
+          />
           <div className="oval" />
         </div>
         {/* END HERO POKEMON AVATAR PICTURE */}
