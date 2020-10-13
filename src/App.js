@@ -98,6 +98,7 @@ class App extends Component {
       },
       textMessageOne: " ",
       textMessageTwo: "",
+      round: 1,
       gameOver: false
     };
   }
@@ -230,7 +231,8 @@ class App extends Component {
                       );
                     } else {
                       this.setState({
-                        textMessageOne: ""
+                        textMessageOne: "",
+                        round: this.state.round + 1,
                       });
                     }
                   }, 3000);
@@ -240,6 +242,7 @@ class App extends Component {
               players[playerAttacked] = { ...players[playerAttacked], isHit: false, faint: false };
               this.setState({
                 textMessageOne: "",
+                round: this.state.round + 1,
                 players
               });
             }
@@ -297,6 +300,7 @@ class App extends Component {
       gameOver: false,
       textMessageOne: "",
       textMessageTwo: "",
+      round: 1,
       players
     });
   }
@@ -308,17 +312,8 @@ class App extends Component {
           <div className="col-sm-12">
             {/* BATTLE SCREEN CONTAINER */}
             <div id="battle-container" className="px-2 mx-auto">
-
+              <div id="turn-text"><i className="fas fa-dice"/> Tour {this.state.round}</div>
               <div className="all-players-box">
-                <EnemyBox
-                  enemyName={this.state.enemy.name}
-                  enemyLevel={this.state.enemy.level}
-                  enemyHP={this.state.enemy.hp}
-                  enemyMaxHP={this.state.enemy.maxHp}
-                  enemyFaint={this.state.enemy.faint}
-                  enemyIsHit={this.state.enemy.isHit}
-                />
-
                 {_.map(this.state.players, player => (
                   <PlayerBox
                     key={player.name}
@@ -330,6 +325,15 @@ class App extends Component {
                     playerIsHit={player.isHit}
                   />
                 ))}
+
+                <EnemyBox
+                  enemyName={this.state.enemy.name}
+                  enemyLevel={this.state.enemy.level}
+                  enemyHP={this.state.enemy.hp}
+                  enemyMaxHP={this.state.enemy.maxHp}
+                  enemyFaint={this.state.enemy.faint}
+                  enemyIsHit={this.state.enemy.isHit}
+                />
               </div>
 
               {/* TEXT BOX SECTION */}

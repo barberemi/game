@@ -30,19 +30,17 @@ h5 {
   opacity: 0; }
 
 #enemy-container .oval {
-  top: 85px;
-  left: -13px; }
+  top: 80px; }
 
 #hero-container .oval {
-  top: 180px;
-  left: -5px; }
+  top: 110px; }
 
 #hero-container .avatar-box {
   left: 7px; }
 
 #battle-container {
   min-width: 280px;
-  height: 400px;
+  height: 423px;
   outline: 5px double black;
   background-image: linear-gradient(-225deg, #e3fdf5 0%, #ffe6fa 100%);
   -moz-box-sizing: border-box;
@@ -51,32 +49,22 @@ h5 {
 
 #enemy-container {
   position: relative;
-  top: 60px;
-  /*display: flex;*/
+  top: 55px;
   height: 100px;
   justify-content: space-between;
-  float: right;
+  margin-left: auto;
+  text-align: center;
 }
 
 #enemy-info-box {
-  background-color: white;
-  /*width: 55%;*/
-  height: 85px;
-  border: 5px solid #2f4f4f;
   padding: 5px;
-  border-radius: 14px 7px 14px 7px;
+  width: 100%;
   letter-spacing: -2px; }
 
 #hero-info-box {
-  background-color: white;
-  /*width: 55%;*/
-  height: 100px;
-  border: 5px solid #2f4f4f;
   padding: 5px;
-  border-radius: 14px 7px 14px 7px;
-  letter-spacing: -2px;
-  float: left;
-}
+  width: 100%;
+  letter-spacing: -2px; }
 
 .avatar-box {
   position: relative;
@@ -92,24 +80,23 @@ h5 {
 
 .both-progress {
   position: relative;
+  overflow: inherit;
+  border-radius: inherit;
+  background-color: #e09a9a;
+  box-shadow: 1px 1px 1px black;
   width: 100%; }
 
 #hero-container {
   justify-content: space-between;
   position: relative;
-  top: 50px;
-  /*display: flex;*/
+  top: 90px;
   height: 100px;
-  float: left;
 }
 
 .all-players-box {
-  height: 100px;
+  flex-direction: row;
+  display: flex;
 }
-
-#hero-name,
-#enemy-name {
-  letter-spacing: -4px; }
 
 #text-box {
   background-color: #4b4f53;
@@ -150,9 +137,6 @@ h5 {
   color: white;
   height: 80px; }
 
-.progress-bar {
-  border-radius: 18px; }
-
 #play-again-text {
   cursor: pointer; }
 
@@ -160,3 +144,18 @@ h5 {
   .move-pointer:hover,
   #play-again-text:hover {
     color: #c9def8; } }
+
+#turn-text {
+  text-align: center;
+}
+
+.hp-progress-bar {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  color: white;
+}
+
+.enemy-intention {
+  color: black;
+}
