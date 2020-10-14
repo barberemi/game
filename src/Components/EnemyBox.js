@@ -2,6 +2,23 @@ import React, { Component } from "react";
 import Avatar from "./Avatar";
 
 export class EnemyBox extends Component {
+  expectedAction(action) {
+    if (action !== undefined) {
+      switch (action.effect) {
+        case "attack":
+          return <><i className="fas fa-fist-raised"/> <span className="small">{action.amount}</span></>;
+        case "defense":
+          return <i className="fas fa-shield-alt"/>;
+        case "unknown":
+          return <i className="fas fa-question"/>;
+        default:
+          return <br />;
+      }
+    } else {
+      return <br />;
+    }
+  }
+
   render() {
     // calc enemy progress bar percentage based on HP
     let percentage = (this.props.enemyHP / this.props.enemyMaxHP) * 100 + "%";
@@ -29,11 +46,11 @@ export class EnemyBox extends Component {
           </div>
         </div>
         {/* END ENEMY POKEMON INFO BOX */}
-        <div className="enemy-intention">
-          <i className="fas fa-shield-alt"/>
+        <div className="action-intention">
+          {this.expectedAction(this.props.enemyExpectedAction)}
         </div>
         {/* ENEMY POKEMON AVATAR PICTURE */}
-        <div className="mr-sm-4 avatar-box">
+        <div className="mt-4 mr-sm-4 avatar-box">
           <Avatar
             faint={this.props.enemyFaint}
             isHit={this.props.enemyIsHit}

@@ -1,13 +1,28 @@
 import React, { Component } from "react";
 import Avatar from "./Avatar";
+import PropTypes from "prop-types";
 
 export class PlayerBox extends Component {
+  expectedAction(me, isSelectable) {
+    if (isSelectable) {
+      return <i className="far fa-hand-point-down"/>;
+    } else if (me) {
+      return <i className="fas fa-long-arrow-alt-down"/>;
+    } else {
+      return <br />;
+    }
+  }
+
   render() {
     // calc player progress bar percentage based on HP
-    let percentage = (this.props.playerHP / this.props.playerMaxHP) * 100 + "%";
+    let percentage = (this.props.player.hp / this.props.player.maxHp) * 100 + "%";
 
     return (
-      <div id="hero-container">
+      <div
+        id="hero-container"
+        className={this.props.player.isSelectable ? "hero-container-selected" : null}
+        onClick={() => this.props.onClick(this.props.player)}
+      >
         {/* HERO POKEMON INFO BOX */}
         <div id="hero-info-box">
           <div className="d-flex justify-content-between align-items-center">
@@ -21,27 +36,44 @@ export class PlayerBox extends Component {
                 aria-valuemax="100"
               />
               <div className="hp-progress-bar">
-                {this.props.playerHP}/{this.props.playerMaxHP}
+                {this.props.player.hp}/{this.props.player.maxHp}
               </div>
             </div>
           </div>
         </div>
         {/* END HERO POKEMON INFO BOX */}
-
+        <div className="action-intention">
+          {this.expectedAction(this.props.player.me, this.props.player.isSelectable)}
+        </div>
         {/* HERO POKEMON AVATAR PICTURE */}
         <div className="mr-sm-4 avatar-box">
           <Avatar
-            faint={this.props.playerFaint}
-            isHit={this.props.playerIsHit}
-            logoName={this.props.playerName.toLowerCase()}
+            faint={this.props.player.faint}
+            isHit={this.props.player.isHit}
+            logoName={this.props.player.name.toLowerCase()}
             className="avatar mr-3 mt-5"
           />
-          <div className="oval" />
+          <div className={`oval ${this.props.player.isSelectable ? "hero-oval-selected" : null}`} />
         </div>
         {/* END HERO POKEMON AVATAR PICTURE */}
       </div>
     );
   }
+}
+
+PlayerBox.propTypes = {
+  player: PropTypes.shape({
+    name: PropTypes.string,
+    me: PropTypes.bool,
+    level: PropTypes.number,
+    hp: PropTypes.number,
+    maxHp: PropTypes.number,
+    faint: PropTypes.bool,
+    isHit: PropTypes.bool,
+    isSelectable: PropTypes.bool,
+    actions: PropTypes.array,
+  }),
+  onClick: PropTypes.func,
 }
 
 export default PlayerBox;

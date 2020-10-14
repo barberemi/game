@@ -3,7 +3,7 @@ import "./animate.css";
 import "./bootstrap.css";
 import "./App.css";
 import TextBox from "./Components/TextBox";
-import Attacks from "./Components/Attacks";
+import Actions from "./Components/Actions";
 import EnemyBox from "./Components/EnemyBox";
 import PlayerBox from "./Components/PlayerBox";
 import PlayAgain from "./Components/PlayAgain";
@@ -17,72 +17,82 @@ class App extends Component {
       players: [
         {
           name: "Pikachu",
+          me: false,
           level: 50,
           hp: 300,
           maxHp: 300,
           faint: undefined,
           isHit: false,
-          attacks: [
-            { name: "Morsure", damage: 10, cost: 0 },
-            { name: "Eclair", damage: 30, cost: 10 },
-            { name: "Tonnerre", damage: 35, cost: 20 },
-            { name: "Méga éclair", damage: 45, cost: 30 },
+          isSelectable: false,
+          actions: [
+            { name: "Morsure", amount: 10, effect: "attack" },
+            { name: "Eclair", amount: 30, effect: "attack" },
+            { name: "Soin éclair", amount: 100, effect: "defense" },
+            { name: "Méga tonnerre", amount: 50, effect: "attack" },
           ],
         },
         {
           name: "Emolga",
+          me: false,
           level: 45,
           hp: 250,
           maxHp: 250,
           faint: undefined,
           isHit: false,
-          attacks: [
-            { name: "Morsure", damage: 10, cost: 0 },
-            { name: "Eclair", damage: 30, cost: 10 },
-            { name: "Tonnerre", damage: 35, cost: 20 },
-            { name: "Méga éclair", damage: 45, cost: 30 },
+          isSelectable: false,
+          actions: [
+            { name: "Morsure", amount: 10, effect: "attack" },
+            { name: "Eclair", amount: 30, effect: "attack" },
+            { name: "Tonnerre", amount: 35, effect: "attack" },
+            { name: "Méga éclair", amount: 45, effect: "attack" },
           ],
         },
         {
           name: "Teddiursa",
+          me: false,
           level: 35,
           hp: 150,
           maxHp: 150,
           faint: undefined,
           isHit: false,
-          attacks: [
-            { name: "Morsure", damage: 10, cost: 0 },
-            { name: "Eclair", damage: 30, cost: 10 },
-            { name: "Tonnerre", damage: 35, cost: 20 },
-            { name: "Méga éclair", damage: 45, cost: 30 },
+          isSelectable: false,
+          actions: [
+            { name: "Morsure", amount: 10, effect: "attack" },
+            { name: "Eclair", amount: 30, effect: "attack" },
+            { name: "Tonnerre", amount: 35, effect: "attack" },
+            { name: "Méga éclair", amount: 45, effect: "attack" },
           ],
         },
         {
           name: "Togepi",
+          me: false,
           level: 40,
           hp: 200,
           maxHp: 200,
           faint: undefined,
           isHit: false,
-          attacks: [
-            { name: "Morsure", damage: 10, cost: 0 },
-            { name: "Eclair", damage: 30, cost: 10 },
-            { name: "Tonnerre", damage: 35, cost: 20 },
-            { name: "Méga éclair", damage: 45, cost: 30 },
+          isSelectable: false,
+          actions: [
+            { name: "Morsure", amount: 10, effect: "attack" },
+            { name: "Eclair", amount: 30, effect: "attack" },
+            { name: "Tonnerre", amount: 35, effect: "attack" },
+            { name: "Méga éclair", amount: 45, effect: "attack" },
           ],
         },
         {
           name: "Rondoudou",
+          me: false,
           level: 50,
           hp: 300,
           maxHp: 300,
           faint: undefined,
           isHit: false,
-          attacks: [
-            { name: "Morsure", damage: 10, cost: 0 },
-            { name: "Eclair", damage: 30, cost: 10 },
-            { name: "Tonnerre", damage: 35, cost: 20 },
-            { name: "Méga éclair", damage: 45, cost: 30 },
+          isSelectable: false,
+          actions: [
+            { name: "Morsure", amount: 10, effect: "attack" },
+            { name: "Eclair", amount: 30, effect: "attack" },
+            { name: "Tonnerre", amount: 35, effect: "attack" },
+            { name: "Méga éclair", amount: 45, effect: "attack" },
           ],
         },
       ],
@@ -93,11 +103,17 @@ class App extends Component {
         maxHp: 600,
         faint: undefined,
         isHit: false,
-        attackNames: ["Frappe", "Balle de l'ombre", "Rêve éveillé", "Cauchemard"],
-        attackDamages: [100, 100, 100, 100],
+        actions: [
+          { name: "Frappe", amount: 50, effect: "attack" },
+          { name: "Bouclier de l'ombre", amount: 50, effect: "defense" },
+          { name: "Rêve éveillé", amount: 150, effect: "unknown" },
+          { name: "Cauchemard", amount: 200, effect: "unknown" },
+        ],
+        expectedAction: undefined,
       },
       textMessageOne: " ",
       textMessageTwo: "",
+      playerActionSelectable: undefined,
       round: 1,
       gameOver: false
     };
@@ -124,6 +140,10 @@ class App extends Component {
             const players = [...this.state.players];
             for (let i = 0; i < this.state.players.length; i++) {
               players[i] = { ...players[i], faint: null };
+              // Me
+              if (i === 0) {
+                players[i] = { ...players[i], me: true };
+              }
             }
 
             this.setState(
@@ -136,6 +156,8 @@ class App extends Component {
                   this.setState({
                     textMessageOne: ""
                   });
+
+                  this.nextEnemyAction();
                 }, 3000);
               }
             );
@@ -143,6 +165,17 @@ class App extends Component {
         }
       );
     }, 1000);
+  }
+
+  nextEnemyAction() {
+    const enemyAction = Math.floor(Math.random() * this.state.enemy.actions.length);
+
+    this.setState({
+      enemy: {
+        ...this.state.enemy,
+        expectedAction: this.state.enemy.actions[enemyAction],
+      }
+    })
   }
 
   selectPlayer() {
@@ -160,11 +193,9 @@ class App extends Component {
   }
 
   enemyTurn = () => {
-    // calc next enemy attack name + damage and player attacked
-    const playerAttacked = this.selectPlayer();
-    const enemyAttack = Math.floor(Math.random() * this.state.enemy.attackNames.length);
-    const enemyAttackDamage = this.state.enemy.attackDamages[enemyAttack];
-    const enemyAttackName = this.state.enemy.attackNames[enemyAttack];
+    const playerSelected = this.selectPlayer();
+    const enemyActionAmount = this.state.enemy.expectedAction.amount;
+    const enemyActionName = this.state.enemy.expectedAction.name;
 
     // first, check if enemy fainted. End Game if they did.
     if (this.state.enemy.hp === 0) {
@@ -191,24 +222,25 @@ class App extends Component {
       this.setState(
         prevState => {
           const players = [...this.state.players];
-          players[playerAttacked] = { ...players[playerAttacked], isHit: true, hp: (prevState.players[playerAttacked].hp - enemyAttackDamage <= 0 ? 0 : prevState.players[playerAttacked].hp - enemyAttackDamage) };
+          players[playerSelected] = { ...players[playerSelected], isHit: true, hp: (prevState.players[playerSelected].hp - enemyActionAmount <= 0 ? 0 : prevState.players[playerSelected].hp - enemyActionAmount) };
 
           return {
             players,
             textMessageOne: `${
               this.state.enemy.name
-            } utilise ${enemyAttackName} sur ${this.state.players[playerAttacked].name} pour ${enemyAttackDamage}pts de dégats!`
+            } utilise ${enemyActionName} sur ${this.state.players[playerSelected].name} pour ${enemyActionAmount}pts de dégats!`
           };
         },
         () => {
           setTimeout(() => {
             const players = [...this.state.players];
-            if (this.state.players[playerAttacked].hp === 0) {
-              players[playerAttacked] = { ...players[playerAttacked], faint: true, isHit: false };
+
+            if (this.state.players[playerSelected].hp === 0) {
+              players[playerSelected] = { ...players[playerSelected], faint: true, isHit: false };
 
               this.setState(
                 {
-                  textMessageOne: `${this.state.players[playerAttacked].name} a été terrassé.`,
+                  textMessageOne: `${this.state.players[playerSelected].name} a été terrassé.`,
                   players
                 },
                 () => {
@@ -234,17 +266,19 @@ class App extends Component {
                         textMessageOne: "",
                         round: this.state.round + 1,
                       });
+                      this.nextEnemyAction();
                     }
                   }, 3000);
                 }
               );
             } else {
-              players[playerAttacked] = { ...players[playerAttacked], isHit: false, faint: false };
+              players[playerSelected] = { ...players[playerSelected], isHit: false, faint: false };
               this.setState({
                 textMessageOne: "",
                 round: this.state.round + 1,
                 players
               });
+              this.nextEnemyAction();
             }
           }, 2000);
         }
@@ -252,36 +286,75 @@ class App extends Component {
     }
   }
 
-  handleAttackClick = (name, damage) => {
-    // use attack to calculate enemy HP and adjust progress bar
-    this.setState(
-      prevState => {
-        return {
+  handleClickOnPlayer = (player) => {
+    // 1 - Player click on an other player or himself
+    const players = [...this.state.players];
+    for (let i = 0; i < this.state.players.length; i++) {
+      if(this.state.players[i].hp > 0) {
+        players[i] = { ...players[i], isSelectable: false };
+        if (player.name === players[i].name) {
+          const newHp = (players[i].hp + this.state.playerActionSelectable.amount) < players[i].maxHp ? players[i].hp + this.state.playerActionSelectable.amount : players[i].maxHp;
+          players[i] = { ...players[i], hp: newHp };
+        }
+      }
+    }
+    this.setState({
+      textMessageOne: `${
+        this.state.players[0].name
+      } utilise ${this.state.playerActionSelectable.name} pour soigner ${player.name} de ${this.state.playerActionSelectable.amount}pts de vie!`,
+      players
+    });
+    //2 - ENEMY TURN
+    setTimeout(() => {
+      this.setState({
+        playerActionSelectable: undefined,
+      });
+      this.enemyTurn();
+    }, 3000);
+  }
+
+  handleActionClick = (action) => {
+    const { effect, name, amount } = action;
+    // 1 - ATTACK
+    if (effect === "attack") {
+      // 1.1 - PLAYER ACTION
+      this.setState({
+        enemy: {
+          ...this.state.enemy,
+          hp: (this.state.enemy.hp - amount <= 0 ? 0 : this.state.enemy.hp - amount),
+          isHit: true,
+        },
+        textMessageOne: `${
+          this.state.players[0].name
+        } utilise ${name} pour ${amount}pts de dégats!`
+      });
+      // 1.2 - ENEMY ACTION
+      setTimeout(() => {
+        // Enemy turn
+        this.setState({
           enemy: {
             ...this.state.enemy,
-            hp: (prevState.enemy.hp - damage <= 0 ? 0 : prevState.enemy.hp - damage),
-            isHit: true,
-          },
-          textMessageOne: `${
-            this.state.players[0].name
-          } utilise ${name} pour ${damage}pts de dégats!`
-        };
-      },
-      () => {
-        // wait X seconds before enemy attacks
-        setTimeout(() => {
-          // Enemy turn
-          this.setState({
-            enemy: {
-              ...this.state.enemy,
-              isHit: false,
-              faint: false,
-            }
-          });
-          this.enemyTurn();
-        }, 3000);
+            isHit: false,
+            faint: false,
+          }
+        });
+        this.enemyTurn();
+      }, 3000);
+    // 2 - DEFENSE
+    } else if (effect === "defense") {
+      // 2.1 - PLAYER ACTION
+      const players = [...this.state.players];
+      for (let i = 0; i < this.state.players.length; i++) {
+        if(this.state.players[i].hp > 0) {
+          players[i] = { ...players[i], isSelectable: true };
+        }
       }
-    );
+      this.setState({
+        textMessageOne: "Veuillez selectionner un joueur à soigner.",
+        playerActionSelectable: action,
+        players
+      });
+    }
   }
 
   handlePlayAgain = () => {
@@ -317,12 +390,8 @@ class App extends Component {
                 {_.map(this.state.players, player => (
                   <PlayerBox
                     key={player.name}
-                    playerName={player.name}
-                    playerLevel={player.level}
-                    playerHP={player.hp}
-                    playerMaxHP={player.maxHp}
-                    playerFaint={player.faint}
-                    playerIsHit={player.isHit}
+                    player={player}
+                    onClick={player.isSelectable ? this.handleClickOnPlayer : () => { return null }}
                   />
                 ))}
 
@@ -333,6 +402,7 @@ class App extends Component {
                   enemyMaxHP={this.state.enemy.maxHp}
                   enemyFaint={this.state.enemy.faint}
                   enemyIsHit={this.state.enemy.isHit}
+                  enemyExpectedAction={this.state.enemy.expectedAction}
                 />
               </div>
 
@@ -349,13 +419,13 @@ class App extends Component {
 
                   {this.state.textMessageOne === "" &&
                   this.state.gameOver === false &&
-                  Object.keys(this.state.players[0].attacks).map((key, index) => {
+                  Object.keys(this.state.players[0].actions).map((key, index) => {
                     return (
-                      <Attacks
+                      <Actions
                         key={key}
                         index={index}
-                        details={this.state.players[0].attacks[key]}
-                        handleAttackClick={this.handleAttackClick}
+                        action={this.state.players[0].actions[key]}
+                        onClick={this.handleActionClick}
                       />
                     );
                   })}

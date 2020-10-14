@@ -49,7 +49,7 @@ h5 {
 
 #enemy-container {
   position: relative;
-  top: 55px;
+  top: 33px;
   height: 100px;
   justify-content: space-between;
   margin-left: auto;
@@ -89,8 +89,17 @@ h5 {
 #hero-container {
   justify-content: space-between;
   position: relative;
-  top: 90px;
+  top: 70px;
   height: 100px;
+  text-align: center;
+}
+
+.hero-container-selected:hover {
+  color: #77BB77;
+}
+
+.hero-container-selected:hover .hero-oval-selected {
+  background: #77BB77;
 }
 
 .all-players-box {
@@ -154,8 +163,4 @@ h5 {
   text-align: center;
   width: 100%;
   color: white;
-}
-
-.enemy-intention {
-  color: black;
 }
