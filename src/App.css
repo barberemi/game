@@ -96,6 +96,7 @@ h5 {
 
 .hero-container-selected:hover {
   color: #77BB77;
+  cursor: pointer;
 }
 
 .hero-container-selected:hover .hero-oval-selected {
@@ -128,15 +129,15 @@ h5 {
   box-sizing: border-box; }
 
 .attack-container {
-  width: 50%;
+  width: 33%;
   display: inline-block;
   height: 40px;
-  line-height: 40px;
+  /*line-height: 40px;*/
   text-align: center; }
 
 .move-pointer {
-  cursor: pointer;
-  padding: 2px 5px;
+  /*cursor: pointer;*/
+  /*padding: 2px 5px;*/
   font-size: 18px;
   color: white; }
 
@@ -152,7 +153,9 @@ h5 {
 @media screen and (min-width: 769px) {
   .move-pointer:hover,
   #play-again-text:hover {
-    color: #c9def8; } }
+    color: #c9def8;
+  }
+}
 
 #turn-text {
   text-align: center;

@@ -8,122 +8,17 @@ import EnemyBox from "./Components/EnemyBox";
 import PlayerBox from "./Components/PlayerBox";
 import PlayAgain from "./Components/PlayAgain";
 import _ from 'lodash';
+import {enemyMovementAction, playerHealAction, playerMovementAction, selectPlayer} from "./utils/helper";
+import { characters } from "./utils/characters";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      players: [
-        {
-          name: "Pikachu",
-          me: false,
-          level: 50,
-          hp: 300,
-          maxHp: 300,
-          faint: undefined,
-          isHit: false,
-          isSelectable: false,
-          actions: [
-            { name: "Morsure", amount: 10, effect: "attack" },
-            { name: "Eclair", amount: 30, effect: "attack" },
-            { name: "Soin éclair", amount: 100, effect: "defense" },
-            { name: "Méga tonnerre", amount: 50, effect: "attack" },
-          ],
-        },
-        {
-          name: "Emolga",
-          me: false,
-          level: 45,
-          hp: 250,
-          maxHp: 250,
-          faint: undefined,
-          isHit: false,
-          isSelectable: false,
-          actions: [
-            { name: "Morsure", amount: 10, effect: "attack" },
-            { name: "Eclair", amount: 30, effect: "attack" },
-            { name: "Tonnerre", amount: 35, effect: "attack" },
-            { name: "Méga éclair", amount: 45, effect: "attack" },
-          ],
-        },
-        {
-          name: "Teddiursa",
-          me: false,
-          level: 35,
-          hp: 150,
-          maxHp: 150,
-          faint: undefined,
-          isHit: false,
-          isSelectable: false,
-          actions: [
-            { name: "Morsure", amount: 10, effect: "attack" },
-            { name: "Eclair", amount: 30, effect: "attack" },
-            { name: "Tonnerre", amount: 35, effect: "attack" },
-            { name: "Méga éclair", amount: 45, effect: "attack" },
-          ],
-        },
-        {
-          name: "Togepi",
-          me: false,
-          level: 40,
-          hp: 200,
-          maxHp: 200,
-          faint: undefined,
-          isHit: false,
-          isSelectable: false,
-          actions: [
-            { name: "Morsure", amount: 10, effect: "attack" },
-            { name: "Eclair", amount: 30, effect: "attack" },
-            { name: "Tonnerre", amount: 35, effect: "attack" },
-            { name: "Méga éclair", amount: 45, effect: "attack" },
-          ],
-        },
-        {
-          name: "Rondoudou",
-          me: false,
-          level: 50,
-          hp: 300,
-          maxHp: 300,
-          faint: undefined,
-          isHit: false,
-          isSelectable: false,
-          actions: [
-            { name: "Morsure", amount: 10, effect: "attack" },
-            { name: "Eclair", amount: 30, effect: "attack" },
-            { name: "Tonnerre", amount: 35, effect: "attack" },
-            { name: "Méga éclair", amount: 45, effect: "attack" },
-          ],
-        },
-      ],
-      enemy: {
-        name: "Mewtwo",
-        level: 60,
-        hp: 600,
-        maxHp: 600,
-        faint: undefined,
-        isHit: false,
-        actions: [
-          { name: "Frappe", amount: 50, effect: "attack" },
-          { name: "Bouclier de l'ombre", amount: 50, effect: "defense" },
-          { name: "Rêve éveillé", amount: 150, effect: "unknown" },
-          { name: "Cauchemard", amount: 200, effect: "unknown" },
-        ],
-        expectedAction: undefined,
-      },
-      textMessageOne: " ",
-      textMessageTwo: "",
-      playerActionSelectable: undefined,
-      round: 1,
-      gameOver: false
-    };
+    this.state = characters;
   }
 
   componentDidMount() {
-    this.startingSequence();
-  }
-
-  startingSequence = () => {
     setTimeout(() => {
       this.setState(
         () => {
@@ -178,26 +73,62 @@ class App extends Component {
     })
   }
 
-  selectPlayer() {
-    let playersToExclude = [];
+  checkIfPlayerAlive(idPlayerSelected) {
+    const players = [...this.state.players];
 
-    for (let i = 0; i < this.state.players.length; i++) {
-      if (this.state.players[i].hp <= 0) {
-        playersToExclude.push(i);
-      }
+    if (players[idPlayerSelected].hp === 0) {
+      players[idPlayerSelected] = {...players[idPlayerSelected], faint: true, isHit: false};
+      this.setState(
+        {
+          textMessageOne: `${players[idPlayerSelected].name} a été terrassé.`,
+          players
+        },
+        () => {
+          setTimeout(() => {
+            //All players dead
+            const allPlayersDead = _.find(players, (player) => {
+              return player.hp > 0
+            });
+            if (!allPlayersDead) {
+              this.setState(
+                {
+                  textMessageOne: `Toute l'équipe a perdu.`,
+                  textMessageTwo: `${this.state.enemy.name} a gagné!`,
+                },
+                () => {
+                  setTimeout(() => {
+                    this.setState({
+                      gameOver: true
+                    });
+                  }, 3000);
+                }
+              );
+            } else {
+              this.setState({
+                textMessageOne: "",
+                round: this.state.round + 1,
+              });
+              this.nextEnemyAction();
+            }
+          }, 3000);
+        }
+      );
+    } else {
+      players[idPlayerSelected] = {...players[idPlayerSelected], isHit: false, faint: false};
+      this.setState({
+        textMessageOne: "",
+        round: this.state.round + 1,
+        players
+      });
+      this.nextEnemyAction();
     }
-
-    const num = Math.floor(Math.random() * this.state.players.length);
-
-    return (_.includes(playersToExclude, num)) ? this.selectPlayer() : num;
   }
 
   enemyTurn = () => {
-    const playerSelected = this.selectPlayer();
-    const enemyActionAmount = this.state.enemy.expectedAction.amount;
-    const enemyActionName = this.state.enemy.expectedAction.name;
+    const { amount, name, effect } = this.state.enemy.expectedAction;
+    const playerSelected = selectPlayer(this.state.players, effect);
 
-    // first, check if enemy fainted. End Game if they did.
+    // 1 - ENEMY DEAD
     if (this.state.enemy.hp === 0) {
       this.setState(
         {
@@ -217,93 +148,85 @@ class App extends Component {
           }, 3000);
         }
       );
+    // 2 - ENEMY ACTIONS
     } else {
-      // if enemy is still alive, proceed with enemy turn
-      this.setState(
-        prevState => {
-          const players = [...this.state.players];
-          players[playerSelected] = { ...players[playerSelected], isHit: true, hp: (prevState.players[playerSelected].hp - enemyActionAmount <= 0 ? 0 : prevState.players[playerSelected].hp - enemyActionAmount) };
-
-          return {
-            players,
-            textMessageOne: `${
-              this.state.enemy.name
-            } utilise ${enemyActionName} sur ${this.state.players[playerSelected].name} pour ${enemyActionAmount}pts de dégats!`
-          };
-        },
-        () => {
-          setTimeout(() => {
-            const players = [...this.state.players];
-
-            if (this.state.players[playerSelected].hp === 0) {
-              players[playerSelected] = { ...players[playerSelected], faint: true, isHit: false };
-
-              this.setState(
-                {
-                  textMessageOne: `${this.state.players[playerSelected].name} a été terrassé.`,
-                  players
-                },
-                () => {
-                  setTimeout(() => {
-                    //All players dead
-                    const allPlayersDead = _.find(this.state.players, (player) => { return player.hp > 0 });
-                    if (!allPlayersDead) {
-                      this.setState(
-                        {
-                          textMessageOne: `Toute l'équipe a perdu.`,
-                          textMessageTwo: `${this.state.enemy.name} a gagné!`,
-                        },
-                        () => {
-                          setTimeout(() => {
-                            this.setState({
-                              gameOver: true
-                            });
-                          }, 3000);
-                        }
-                      );
-                    } else {
-                      this.setState({
-                        textMessageOne: "",
-                        round: this.state.round + 1,
-                      });
-                      this.nextEnemyAction();
-                    }
-                  }, 3000);
-                }
-              );
-            } else {
-              players[playerSelected] = { ...players[playerSelected], isHit: false, faint: false };
+      if (effect === "heal") {
+        this.setState(
+          {
+            textMessageOne: `${this.state.enemy.name} se soigne pour ${amount}pts de vie.`,
+            enemy: {
+              ...this.state.enemy,
+              hp: this.state.enemy.hp + amount,
+            },
+          },
+          () => {
+            setTimeout(() => {
               this.setState({
-                textMessageOne: "",
-                round: this.state.round + 1,
-                players
+                textMessageOne: ""
               });
               this.nextEnemyAction();
-            }
-          }, 2000);
-        }
-      );
+            }, 3000);
+          }
+        );
+      } else if (effect === "movement") {
+        let { players, textMessageOne } = enemyMovementAction(this.state.players, playerSelected, this.state.enemy);
+        this.setState(
+          {
+            textMessageOne,
+            players
+          },
+          () => {
+            setTimeout(() => {
+              this.setState({
+                textMessageOne: ""
+              });
+              this.checkIfPlayerAlive(playerSelected);
+            }, 3000);
+          }
+        );
+      } else {
+        this.setState(
+          prevState => {
+            const players = [...this.state.players];
+            players[playerSelected] = {
+              ...players[playerSelected],
+              isHit: true,
+              hp: (prevState.players[playerSelected].hp - amount <= 0 ? 0 : prevState.players[playerSelected].hp - amount)
+            };
+
+            return {
+              players,
+              textMessageOne: `${
+                this.state.enemy.name
+              } utilise ${name} sur ${this.state.players[playerSelected].name} pour ${amount}pts de dégats!`
+            };
+          },
+          () => {
+            setTimeout(() => {
+              this.checkIfPlayerAlive(playerSelected);
+            }, 3000);
+          }
+        );
+      }
     }
   }
 
-  handleClickOnPlayer = (player) => {
-    // 1 - Player click on an other player or himself
-    const players = [...this.state.players];
-    for (let i = 0; i < this.state.players.length; i++) {
-      if(this.state.players[i].hp > 0) {
-        players[i] = { ...players[i], isSelectable: false };
-        if (player.name === players[i].name) {
-          const newHp = (players[i].hp + this.state.playerActionSelectable.amount) < players[i].maxHp ? players[i].hp + this.state.playerActionSelectable.amount : players[i].maxHp;
-          players[i] = { ...players[i], hp: newHp };
-        }
-      }
+  handleClickOnPlayerToAction = (player) => {
+    const { playerActionSelectable } = this.state;
+
+    if (playerActionSelectable.effect === "heal") {
+      let { players, textMessageOne } = playerHealAction([...this.state.players], player, playerActionSelectable);
+      this.setState({
+        textMessageOne,
+        players
+      });
+    } else if (playerActionSelectable.effect === "movement") {
+      let { players, textMessageOne } = playerMovementAction([...this.state.players], player);
+      this.setState({
+        textMessageOne,
+        players
+      });
     }
-    this.setState({
-      textMessageOne: `${
-        this.state.players[0].name
-      } utilise ${this.state.playerActionSelectable.name} pour soigner ${player.name} de ${this.state.playerActionSelectable.amount}pts de vie!`,
-      players
-    });
     //2 - ENEMY TURN
     setTimeout(() => {
       this.setState({
@@ -313,10 +236,11 @@ class App extends Component {
     }, 3000);
   }
 
-  handleActionClick = (action) => {
+  handleClickOnActionBar = (action) => {
     const { effect, name, amount } = action;
+
     // 1 - ATTACK
-    if (effect === "attack") {
+    if (effect === "melee" || effect === "range") {
       // 1.1 - PLAYER ACTION
       this.setState({
         enemy: {
@@ -325,7 +249,7 @@ class App extends Component {
           isHit: true,
         },
         textMessageOne: `${
-          this.state.players[0].name
+          _.find(this.state.players, 'me').name
         } utilise ${name} pour ${amount}pts de dégats!`
       });
       // 1.2 - ENEMY ACTION
@@ -340,8 +264,8 @@ class App extends Component {
         });
         this.enemyTurn();
       }, 3000);
-    // 2 - DEFENSE
-    } else if (effect === "defense") {
+    // 2 - HEAL
+    } else if (effect === "heal") {
       // 2.1 - PLAYER ACTION
       const players = [...this.state.players];
       for (let i = 0; i < this.state.players.length; i++) {
@@ -351,6 +275,20 @@ class App extends Component {
       }
       this.setState({
         textMessageOne: "Veuillez selectionner un joueur à soigner.",
+        playerActionSelectable: action,
+        players
+      });
+    // 3 - MOVEMENT
+    } else if (effect === "movement") {
+      // 3.1 - PLAYER ACTION
+      const players = [...this.state.players];
+      for (let i = 0; i < this.state.players.length; i++) {
+        if(this.state.players[i] !== _.find(this.state.players, 'me') && this.state.players[i].hp > 0) {
+          players[i] = { ...players[i], isSelectable: true };
+        }
+      }
+      this.setState({
+        textMessageOne: "Veuillez selectionner la place que vous souhaitez.",
         playerActionSelectable: action,
         players
       });
@@ -391,18 +329,13 @@ class App extends Component {
                   <PlayerBox
                     key={player.name}
                     player={player}
-                    onClick={player.isSelectable ? this.handleClickOnPlayer : () => { return null }}
+                    onClick={player.isSelectable ? this.handleClickOnPlayerToAction : () => { return null }}
                   />
                 ))}
 
                 <EnemyBox
-                  enemyName={this.state.enemy.name}
-                  enemyLevel={this.state.enemy.level}
-                  enemyHP={this.state.enemy.hp}
-                  enemyMaxHP={this.state.enemy.maxHp}
-                  enemyFaint={this.state.enemy.faint}
-                  enemyIsHit={this.state.enemy.isHit}
-                  enemyExpectedAction={this.state.enemy.expectedAction}
+                  enemy={this.state.enemy}
+                  expectedAction={this.state.enemy.expectedAction}
                 />
               </div>
 
@@ -419,13 +352,13 @@ class App extends Component {
 
                   {this.state.textMessageOne === "" &&
                   this.state.gameOver === false &&
-                  Object.keys(this.state.players[0].actions).map((key, index) => {
+                  Object.keys(_.find(this.state.players, 'me').actions).map((key, index) => {
                     return (
                       <Actions
                         key={key}
-                        index={index}
-                        action={this.state.players[0].actions[key]}
-                        onClick={this.handleActionClick}
+                        frontPlayer={_.find(this.state.players, 'me') === _.last(this.state.players)}
+                        action={_.find(this.state.players, 'me').actions[key]}
+                        onClick={this.handleClickOnActionBar}
                       />
                     );
                   })}

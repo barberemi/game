@@ -30,6 +30,7 @@ class Avatar extends Component {
 
 Avatar.propTypes = {
   faint: PropTypes.bool,
+  isHit: PropTypes.bool,
   logoName: PropTypes.string,
   className: PropTypes.string,
 }
