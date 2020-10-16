@@ -23,20 +23,19 @@ h5 {
   font-size: 20px; }
 
 .avatar {
-  width: 100px;
-  height: 100px; }
+  width: 70%;
+  height: 70%; }
 
 .hide {
   opacity: 0; }
 
 #enemy-container .oval {
-  top: 80px; }
+  margin-top: -20px;
+  top: 130px; }
 
 #hero-container .oval {
-  top: 110px; }
-
-#hero-container .avatar-box {
-  left: 7px; }
+  margin-top: -20px;
+  top: 140px; }
 
 #battle-container {
   min-width: 280px;
@@ -49,10 +48,10 @@ h5 {
 
 #enemy-container {
   position: relative;
-  top: 33px;
+  top: 32px;
   height: 100px;
   justify-content: space-between;
-  margin-left: auto;
+  margin-left: 10%;
   text-align: center;
 }
 
@@ -71,12 +70,10 @@ h5 {
   z-index: 0; }
 
 .oval {
-  width: 120px;
-  height: 60px;
-  background: #ccbaa1;
-  border-radius: 50%;
-  position: absolute;
-  z-index: -1; }
+  /*width: 120px;*/
+  height: 30px;
+  background: #969893;
+  border-radius: 50%;}
 
 .both-progress {
   position: relative;
@@ -132,14 +129,16 @@ h5 {
   width: 33%;
   display: inline-block;
   height: 40px;
-  /*line-height: 40px;*/
   text-align: center; }
 
 .move-pointer {
-  /*cursor: pointer;*/
-  /*padding: 2px 5px;*/
-  font-size: 18px;
   color: white; }
+
+@media (max-width: 845px) {
+  .move-pointer {
+    font-size: 12px !important;
+  }
+}
 
 .battle-text-content {
   padding: 13px 13px 0px 13px;

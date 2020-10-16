@@ -55,12 +55,12 @@ export class EnemyBox extends Component {
           {this.expectedAction(this.props.expectedAction)}
         </div>
         {/* ENEMY POKEMON AVATAR PICTURE */}
-        <div className="mt-4 mr-sm-4 avatar-box">
+        <div className="avatar-box">
           <Avatar
             faint={this.props.enemy.faint}
             isHit={this.props.enemy.isHit}
             logoName={this.props.enemy.name.toLowerCase()}
-            className="avatar ml-3 mt-3"
+            className="avatar mt-4"
           />
           <div className="oval" />
         </div>

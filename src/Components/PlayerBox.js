@@ -46,14 +46,14 @@ export class PlayerBox extends Component {
           {this.expectedAction(this.props.player.me, this.props.player.isSelectable)}
         </div>
         {/* HERO POKEMON AVATAR PICTURE */}
-        <div className="mr-sm-4 avatar-box">
+        <div className="avatar-box">
           <Avatar
             faint={this.props.player.faint}
             isHit={this.props.player.isHit}
             logoName={this.props.player.name.toLowerCase()}
-            className="avatar mr-3 mt-5"
+            className="avatar mt-5"
           />
-          <div className={`oval ${this.props.player.isSelectable ? "hero-oval-selected" : null}`} />
+          <div className={`oval ${this.props.player.isSelectable ? "hero-oval-selected" : ""}`} />
         </div>
         {/* END HERO POKEMON AVATAR PICTURE */}
       </div>

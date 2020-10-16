@@ -18,7 +18,7 @@ class Actions extends Component {
   }
 
   disabledAction(isFrontPlayer, effect) {
-    return effect === "melee" && !isFrontPlayer ? "disabled" : null;
+    return effect === "melee" && !isFrontPlayer ? "disabled" : "";
   }
   render() {
     const { name, amount, effect } = this.props.action;
