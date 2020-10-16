@@ -29,7 +29,7 @@ class Actions extends Component {
           <span
             className="move-pointer"
             onClick={() => {
-              if (this.disabledAction(this.props.frontPlayer, effect) === null) {
+              if (this.disabledAction(this.props.frontPlayer, effect) === "") {
                 this.props.onClick(this.props.action);
               }
             }}
