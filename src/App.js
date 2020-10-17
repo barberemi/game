@@ -362,7 +362,6 @@ class App extends Component {
                       />
                     );
                   })}
-
                   {this.state.gameOver === true && (
                     <PlayAgain handlePlayAgain={this.handlePlayAgain} />
                   )}
