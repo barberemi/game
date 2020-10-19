@@ -12,6 +12,8 @@ export class EnemyBox extends Component {
           return <><i className="fas fa-bolt"/> <span className="small">{action.amount}</span></>;
         case "heal":
           return <><i className="fas fa-hand-holding-medical"/> <span className="small">{action.amount}</span></>;
+        case "skill_block":
+          return <><i className="fas fa-lock"/> <span className="small">{action.amount}</span></>;
         case "movement":
           return <><i className="fas fa-wind"/> <span className="small">{action.amount}</span></>;
         case "unknown":

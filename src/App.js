@@ -8,7 +8,7 @@ import EnemyBox from "./Components/EnemyBox";
 import PlayerBox from "./Components/PlayerBox";
 import PlayAgain from "./Components/PlayAgain";
 import _ from 'lodash';
-import {enemyMovementAction, playerHealAction, playerMovementAction, selectPlayer} from "./utils/helper";
+import {enemyMovementAction, enemyBlockAction, decrementBlockedSkill, playerHealAction, playerMovementAction, selectPlayer} from "./utils/helper";
 import { characters } from "./utils/characters";
 
 class App extends Component {
@@ -107,6 +107,7 @@ class App extends Component {
               this.setState({
                 textMessageOne: "",
                 round: this.state.round + 1,
+                players: decrementBlockedSkill(players),
               });
               this.nextEnemyAction();
             }
@@ -118,7 +119,7 @@ class App extends Component {
       this.setState({
         textMessageOne: "",
         round: this.state.round + 1,
-        players
+        players: decrementBlockedSkill(players),
       });
       this.nextEnemyAction();
     }
@@ -164,12 +165,28 @@ class App extends Component {
               this.setState({
                 textMessageOne: ""
               });
-              this.nextEnemyAction();
+              this.checkIfPlayerAlive(playerSelected);
             }, 3000);
           }
         );
       } else if (effect === "movement") {
         let { players, textMessageOne } = enemyMovementAction(this.state.players, playerSelected, this.state.enemy);
+        this.setState(
+          {
+            textMessageOne,
+            players
+          },
+          () => {
+            setTimeout(() => {
+              this.setState({
+                textMessageOne: ""
+              });
+              this.checkIfPlayerAlive(playerSelected);
+            }, 3000);
+          }
+        );
+      } else if (effect === "skill_block") {
+        let { players, textMessageOne } = enemyBlockAction(this.state.players, playerSelected, this.state.enemy);
         this.setState(
           {
             textMessageOne,
