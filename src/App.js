@@ -323,7 +323,7 @@ class App extends Component {
           <div className="col-sm-12">
             {/* BATTLE SCREEN CONTAINER */}
             <div id="battle-container" className="px-2 mx-auto">
-              <div id="turn-text"><i className="fas fa-dice"/> Tour {this.state.round}</div>
+              <div id="turn-text-number"><i className="fas fa-dice"/> Tour {this.state.round}</div>
               <div className="all-players-box">
                 {_.map(this.state.players, player => (
                   <PlayerBox
