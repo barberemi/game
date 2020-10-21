@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Avatar from "./Avatar";
 import PropTypes from "prop-types";
+import _ from "lodash";
 
 export class EnemyBox extends Component {
   expectedAction(action) {
@@ -10,8 +11,12 @@ export class EnemyBox extends Component {
           return <><i className="fas fa-fist-raised"/> <span className="small">{action.amount}</span></>;
         case "range":
           return <><i className="fas fa-bolt"/> <span className="small">{action.amount}</span></>;
+        case "dot":
+          return <> <span className="small">({action.duration} <i className="fas fa-clock"/>)</span> <i className="fas fa-burn"/> <span className="small">{action.amount}</span></>;
         case "heal":
           return <><i className="fas fa-hand-holding-medical"/> <span className="small">{action.amount}</span></>;
+        case "hot":
+          return <> <span className="small">({action.duration} <i className="fas fa-clock"/>)</span> <i className="fas fa-hand-holding-medical"/> <span className="small">{action.amount}</span></>;
         case "skill_block":
           return <><i className="fas fa-lock"/> <span className="small">{action.amount}</span></>;
         case "movement":
@@ -64,7 +69,12 @@ export class EnemyBox extends Component {
             logoName={this.props.enemy.name.toLowerCase()}
             className="avatar mt-4"
           />
-          <div className="oval" />
+          {!this.props.enemy.faint && _.map(this.props.enemy.hot, ({amount}, index) => (
+            <span key={index} className="small avatar-effect">{amount}<i className="fas fa-medkit"/></span>
+          ))}
+          {!this.props.enemy.faint && _.map(this.props.enemy.dot, ({amount}, index) => (
+            <span key={index} className="small avatar-effect">{amount}<i className="fas fa-burn"/></span>
+          ))}
         </div>
         {/* END ENEMY POKEMON AVATAR PICTURE */}
       </div>
@@ -81,11 +91,14 @@ EnemyBox.propTypes = {
     faint: PropTypes.bool,
     isHit: PropTypes.bool,
     actions: PropTypes.array,
+    dot: PropTypes.array,
+    hot: PropTypes.array,
   }),
   expectedAction: PropTypes.shape({
     name: PropTypes.string,
     amount: PropTypes.number,
     effect: PropTypes.string,
+    duration: PropTypes.number,
   })
 }
 

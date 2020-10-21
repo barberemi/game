@@ -23,19 +23,18 @@ h5 {
   font-size: 20px; }
 
 .avatar {
+  -webkit-filter: drop-shadow(1px 9px 1px rgba(0,0,0,0.3));
+  filter: drop-shadow(1px 9px 1px rgba(0,0,0,0.3));
+  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
   width: 70%;
   height: 70%; }
 
+.avatar-effect {
+  padding-right: 10px;
+}
+
 .hide {
   opacity: 0; }
-
-#enemy-container .oval {
-  margin-top: -20px;
-  top: 130px; }
-
-#hero-container .oval {
-  margin-top: -20px;
-  top: 140px; }
 
 #battle-container {
   min-width: 280px;
@@ -69,12 +68,6 @@ h5 {
   position: relative;
   z-index: 0; }
 
-.oval {
-  /*width: 120px;*/
-  height: 30px;
-  background: #969893;
-  border-radius: 50%;}
-
 .both-progress {
   position: relative;
   overflow: inherit;
@@ -96,8 +89,10 @@ h5 {
   cursor: pointer;
 }
 
-.hero-container-selected:hover .hero-oval-selected {
-  background: #77BB77;
+.hero-container-selected:hover .hero-hover-selected {
+  -webkit-filter: drop-shadow(1px 9px 1px rgba(0,128,0,0.3));
+  filter: drop-shadow(1px 9px 1px rgba(0,128,0,0.3));
+  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#008000')";
 }
 
 .all-players-box {
@@ -145,16 +140,6 @@ h5 {
   font-size: 18px;
   color: white;
   height: 80px; }
-
-#play-again-text {
-  cursor: pointer; }
-
-@media screen and (min-width: 769px) {
-  .move-pointer:hover,
-  #play-again-text:hover {
-    color: #c9def8;
-  }
-}
 
 #turn-text-number {
   text-align: center;

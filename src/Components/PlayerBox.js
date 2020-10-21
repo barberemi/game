@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Avatar from "./Avatar";
 import PropTypes from "prop-types";
+import _ from "lodash";
 
 export class PlayerBox extends Component {
   expectedAction(me, isSelectable) {
@@ -51,9 +52,14 @@ export class PlayerBox extends Component {
             faint={this.props.player.faint}
             isHit={this.props.player.isHit}
             logoName={this.props.player.name.toLowerCase()}
-            className="avatar mt-5"
+            className={`avatar mt-5 ${this.props.player.isSelectable ? "hero-hover-selected" : ""}`}
           />
-          <div className={`oval ${this.props.player.isSelectable ? "hero-oval-selected" : ""}`} />
+          {!this.props.player.faint && _.map(this.props.player.hot, ({amount}, index) => (
+            <span key={index} className="small avatar-effect">{amount}<i className="fas fa-medkit"/></span>
+          ))}
+          {!this.props.player.faint && _.map(this.props.player.dot, ({amount}, index) => (
+            <span key={index} className="small avatar-effect">{amount}<i className="fas fa-burn"/></span>
+          ))}
         </div>
         {/* END HERO POKEMON AVATAR PICTURE */}
       </div>
@@ -72,6 +78,8 @@ PlayerBox.propTypes = {
     isHit: PropTypes.bool,
     isSelectable: PropTypes.bool,
     actions: PropTypes.array,
+    dot: PropTypes.array,
+    hot: PropTypes.array,
   }),
   onClick: PropTypes.func,
 }

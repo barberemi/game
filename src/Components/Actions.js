@@ -8,8 +8,12 @@ class Actions extends Component {
         return <> <i className="fas fa-fist-raised"/> <span className="small">{amount}</span></>;
       case "range":
         return <> <i className="fas fa-bolt"/> <span className="small">{amount}</span></>;
+      case "dot":
+        return <> <i className="fas fa-burn"/> <span className="small">{amount}</span></>;
       case "heal":
         return <> <i className="fas fa-hand-holding-medical"/> <span className="small">{amount}</span></>;
+      case "hot":
+        return <> <i className="fas fa-medkit"/> <span className="small">{amount}</span></>;
       case "movement":
         return <> <i className="fas fa-shoe-prints"/></>;
       default:
@@ -17,33 +21,35 @@ class Actions extends Component {
     }
   }
 
-  isBlocked(nbBlockedRounds, isBlock) {
+  isBlocked(nbBlockedRounds, duration) {
     if (nbBlockedRounds > 0) {
-      return <>(<span className="small">{isBlock}</span> <i className="fas fa-lock"/>) </>;
+      return <span className="small">({nbBlockedRounds} <i className="fas fa-lock"/> <i className="fas fa-lock"/>) </span>;
+    } else if (duration) {
+      return <span className="small">({duration} <i className="fas fa-clock"/>) </span>;
     }
 
     return "";
   }
 
-  disabledAction(isFrontPlayer, effect, isBlock) {
-    return (effect === "melee" && !isFrontPlayer) || isBlock !== 0 ? "disabled" : "";
+  disabledAction(isFrontPlayer, effect, nbBlockedTurns) {
+    return (effect === "melee" && !isFrontPlayer) || nbBlockedTurns !== 0 ? "disabled" : "";
   }
 
   render() {
-    const { name, amount, effect, isBlock } = this.props.action;
+    const { name, amount, effect, duration, nbBlockedTurns } = this.props.action;
 
     return (
-      <div className={`attack-container btn ${this.disabledAction(this.props.frontPlayer, effect, isBlock)}`}>
+      <div className={`attack-container btn ${this.disabledAction(this.props.frontPlayer, effect, nbBlockedTurns)}`}>
         <div>
           <span
             className="move-pointer"
             onClick={() => {
-              if (this.disabledAction(this.props.frontPlayer, effect, isBlock) === "") {
+              if (this.disabledAction(this.props.frontPlayer, effect, nbBlockedTurns) === "") {
                 this.props.onClick(this.props.action);
               }
             }}
             >
-            {this.isBlocked(isBlock, isBlock)}{name}{this.expectedEffect(amount, effect)}
+            {this.isBlocked(nbBlockedTurns, duration)}{name}{this.expectedEffect(amount, effect)}
           </span>
         </div>
       </div>
@@ -56,7 +62,8 @@ Actions.propTypes = {
     name: PropTypes.string,
     amount: PropTypes.number,
     effect: PropTypes.string,
-    isBlock: PropTypes.number,
+    duration: PropTypes.number,
+    nbBlockedTurns: PropTypes.number,
   }),
   frontPlayer: PropTypes.bool,
   onClick: PropTypes.func,

@@ -2,19 +2,31 @@ import _ from "lodash";
 
 // When a player heal an other player (or himself)
 export const playerHealAction = (players, playerHeal, action) => {
+  let hotMessage = "";
   for (let i = 0; i < players.length; i++) {
     players[i] = { ...players[i], isSelectable: false };
+    let hot = [...players[i].hot];
+    let newHp = players[i].hp;
+
     if (playerHeal.name === players[i].name && action.effect === "heal") {
-      const newHp = (players[i].hp + action.amount) < players[i].maxHp
+      newHp = (players[i].hp + action.amount) < players[i].maxHp
         ? players[i].hp + action.amount
         : players[i].maxHp
       ;
-      players[i] = {...players[i], hp: newHp};
     }
+    if (playerHeal.name === players[i].name && action.effect === "hot") {
+      hotMessage = ` pendant ${action.duration} tours`;
+      hot = [
+        ...players[i].hot,
+        {amount: action.amount, duration: action.duration}
+      ];
+    }
+
+    players[i] = {...players[i], hp: newHp, hot};
   }
 
   const textMessageOne = `${_.find(players, 'me').name}
-   utilise ${action.name} pour soigner ${playerHeal.name} de ${action.amount}pts de vie!`;
+   utilise ${action.name} pour soigner ${playerHeal.name} de ${action.amount}pts de vie${hotMessage}!`;
 
   return {players, textMessageOne}
 }
@@ -81,7 +93,7 @@ export const enemyBlockAction = (players, idPlayerMove, enemy) => {
 
   actions[idSkillBlock] = {
     ...actions[idSkillBlock],
-    isBlock: enemy.expectedAction.duration,
+    nbBlockedTurns: enemy.expectedAction.duration,
   }
 
   players[idPlayerMove] = {
@@ -94,15 +106,78 @@ export const enemyBlockAction = (players, idPlayerMove, enemy) => {
   return {players, textMessageOne}
 }
 
-// When a turn is ended and decrement all blocked skills players
-export const decrementBlockedSkill = (players) => {
+// When a user have dot and take damages
+export const userTakeDot = (user) => {
+  let damages = 0;
+  for(let i = 0; i < user.dot.length; i++) {
+    damages = damages + user.dot[i].amount;
+  }
+
+  user = {
+    ...user,
+    hp: (user.hp - damages <= 0 ? 0 : user.hp - damages),
+  };
+
+  return {user};
+}
+
+export const userTakeHot = (user) => {
+  let healing = 0;
+  for(let i = 0; i < user.hot.length; i++) {
+    healing = healing + user.hot[i].amount;
+  }
+
+  user = {
+    ...user,
+    hp: (user.hp + healing > user.maxHp ? user.maxHp : user.hp + healing),
+  };
+
+  return {user};
+}
+
+// When a players turn is ended
+export const playersTurnFinished = (players) => {
   for(let i = 0; i < players.length; i++) {
-    for(let j = 0; j < players[i].actions.length; j++) {
-      players[i].actions[j].isBlock = players[i].actions[j].isBlock === 0 ? 0 : players[i].actions[j].isBlock - 1;
-    }
+    players[i] = decrementBlockedSkill(players[i]);
+    players[i] = decrementHotAndDot(players[i]);
   }
 
   return players;
+}
+
+// When an enemy turn is ended
+export const enemyTurnFinished = (enemy) => {
+  return decrementHotAndDot(enemy);
+}
+
+// When a turn is ended and decrement all blocked skills
+export const decrementBlockedSkill = (user) => {
+  for(let j = 0; j < user.actions.length; j++) {
+    user.actions[j].nbBlockedTurns = user.actions[j].nbBlockedTurns === 0 ? 0 : user.actions[j].nbBlockedTurns - 1;
+  }
+
+  return user;
+}
+
+// To decrement all HOT and DOT
+export const decrementHotAndDot = (user) => {
+  // HOT
+  for(let j = 0; j < user.hot.length; j++) {
+    user.hot[j].duration = user.hot[j].duration - 1;
+  }
+  user.hot = _.filter(user.hot, aHot => {
+    return aHot.duration > 0;
+  });
+
+  // DOT
+  for(let j = 0; j < user.dot.length; j++) {
+    user.dot[j].duration = user.dot[j].duration - 1;
+  }
+  user.dot = _.filter(user.dot, aDot => {
+    return aDot.duration > 0;
+  });
+
+  return user;
 }
 
 // When an enemy select a player
@@ -119,5 +194,5 @@ export const selectPlayer = (players, actionEffect) => {
     : Math.floor(Math.random() * players.length)
   ;
 
-  return (!_.includes(playersToKeep, num)) ? selectPlayer(players, actionEffect) : 0;
+  return (_.includes(playersToKeep, num)) ? num : selectPlayer(players, actionEffect);
 }

@@ -6,9 +6,12 @@ import TextBox from "./Components/TextBox";
 import Actions from "./Components/Actions";
 import EnemyBox from "./Components/EnemyBox";
 import PlayerBox from "./Components/PlayerBox";
-import PlayAgain from "./Components/PlayAgain";
 import _ from 'lodash';
-import {enemyMovementAction, enemyBlockAction, decrementBlockedSkill, playerHealAction, playerMovementAction, selectPlayer} from "./utils/helper";
+import {
+  enemyTurnFinished, enemyMovementAction, enemyBlockAction,
+  playersTurnFinished, playerHealAction, playerMovementAction,
+  selectPlayer, userTakeDot, userTakeHot,
+} from "./utils/helper";
 import { characters } from "./utils/characters";
 
 class App extends Component {
@@ -73,6 +76,65 @@ class App extends Component {
     })
   }
 
+  endTurn() {
+    const players = [...this.state.players];
+    const enemy = this.state.enemy;
+
+    // 1 - DOT ENEMY
+    if (enemy.dot.length > 0) {
+      let { user } = userTakeDot(enemy);
+      this.setState({
+        enemy: user,
+      });
+    }
+
+    if (this.checkIfEnemyAlive()) {
+      // 2 - DOT PLAYERS
+      for(let i = 0; i < players.length; i++) {
+        if (players[i].dot.length > 0 && players[i].hp > 0) {
+          let { user } = userTakeDot(this.state.players[i]);
+          players[i] = user;
+          this.setState({
+            players,
+          }, () => {
+              setTimeout(() => {
+                this.checkIfPlayerAlive(i);
+              }, 3000)
+            }
+          );
+        }
+      }
+
+      // 3 - HOT ENEMY
+      if (enemy.hot.length > 0) {
+        let { user } = userTakeHot(enemy);
+        this.setState({
+          enemy: user,
+        });
+      }
+
+      // 4 - HOT PLAYERS
+      for(let i = 0; i < players.length; i++) {
+        if (players[i].dot.length > 0) {
+          let { user } = userTakeHot(this.state.players[i]);
+          players[i] = user;
+          this.setState({
+            players,
+          });
+        }
+      }
+
+      // 5 - DECREMENT ALL DOT/HOT/BLOCKED SKILLS
+      this.setState({
+        // textMessageOne: "",
+        round: this.state.round + 1,
+        players: playersTurnFinished(this.state.players),
+        enemy: enemyTurnFinished(this.state.enemy),
+      });
+      this.nextEnemyAction();
+    }
+  }
+
   checkIfPlayerAlive(idPlayerSelected) {
     const players = [...this.state.players];
 
@@ -106,10 +168,7 @@ class App extends Component {
             } else {
               this.setState({
                 textMessageOne: "",
-                round: this.state.round + 1,
-                players: decrementBlockedSkill(players),
-              });
-              this.nextEnemyAction();
+              })
             }
           }, 3000);
         }
@@ -118,18 +177,12 @@ class App extends Component {
       players[idPlayerSelected] = {...players[idPlayerSelected], isHit: false, faint: false};
       this.setState({
         textMessageOne: "",
-        round: this.state.round + 1,
-        players: decrementBlockedSkill(players),
+        players,
       });
-      this.nextEnemyAction();
     }
   }
 
-  enemyTurn = () => {
-    const { amount, name, effect } = this.state.enemy.expectedAction;
-    const playerSelected = selectPlayer(this.state.players, effect);
-
-    // 1 - ENEMY DEAD
+  checkIfEnemyAlive() {
     if (this.state.enemy.hp === 0) {
       this.setState(
         {
@@ -149,8 +202,17 @@ class App extends Component {
           }, 3000);
         }
       );
-    // 2 - ENEMY ACTIONS
-    } else {
+      return false;
+    }
+
+    return true;
+  }
+
+  enemyTurn = () => {
+    const { amount, name, effect, duration } = this.state.enemy.expectedAction;
+    const playerSelected = selectPlayer(this.state.players, effect);
+
+    if (this.checkIfEnemyAlive()) {
       if (effect === "heal") {
         this.setState(
           {
@@ -165,7 +227,28 @@ class App extends Component {
               this.setState({
                 textMessageOne: ""
               });
-              this.checkIfPlayerAlive(playerSelected);
+              this.endTurn()
+            }, 3000);
+          }
+        );
+      } else if (effect === "hot") {
+        this.setState(
+          {
+            textMessageOne: `${this.state.enemy.name} se soignera de ${amount}pts de vie à la fin des ${duration} prochains tours.`,
+            enemy: {
+              ...this.state.enemy,
+              hot: [
+                ...this.state.enemy.hot,
+                {amount, duration}
+              ],
+            },
+          },
+          () => {
+            setTimeout(() => {
+              this.setState({
+                textMessageOne: ""
+              });
+              this.endTurn()
             }, 3000);
           }
         );
@@ -182,11 +265,12 @@ class App extends Component {
                 textMessageOne: ""
               });
               this.checkIfPlayerAlive(playerSelected);
+              this.endTurn()
             }, 3000);
           }
         );
       } else if (effect === "skill_block") {
-        let { players, textMessageOne } = enemyBlockAction(this.state.players, playerSelected, this.state.enemy);
+        let {players, textMessageOne} = enemyBlockAction(this.state.players, playerSelected, this.state.enemy);
         this.setState(
           {
             textMessageOne,
@@ -198,6 +282,34 @@ class App extends Component {
                 textMessageOne: ""
               });
               this.checkIfPlayerAlive(playerSelected);
+              this.endTurn()
+            }, 3000);
+          }
+        );
+      } else if (effect === "dot") {
+        this.setState(
+          prevState => {
+            const players = [...this.state.players];
+
+            players[playerSelected] = {
+              ...players[playerSelected],
+              isHit: true,
+              dot: [
+                ...prevState.players[playerSelected].dot,
+                {amount, duration}
+              ],
+            };
+
+            return {
+              players,
+              textMessageOne: `${
+                this.state.enemy.name
+              } utilise ${name} sur ${this.state.players[playerSelected].name} ce qui fera ${amount}pts de dégats à la fin des ${duration} prochains tours!`
+            };
+          },
+          () => {
+            setTimeout(() => {
+              this.endTurn()
             }, 3000);
           }
         );
@@ -205,10 +317,11 @@ class App extends Component {
         this.setState(
           prevState => {
             const players = [...this.state.players];
+
             players[playerSelected] = {
               ...players[playerSelected],
               isHit: true,
-              hp: (prevState.players[playerSelected].hp - amount <= 0 ? 0 : prevState.players[playerSelected].hp - amount)
+              hp: (prevState.players[playerSelected].hp - amount <= 0 ? 0 : prevState.players[playerSelected].hp - amount),
             };
 
             return {
@@ -221,6 +334,7 @@ class App extends Component {
           () => {
             setTimeout(() => {
               this.checkIfPlayerAlive(playerSelected);
+              this.endTurn()
             }, 3000);
           }
         );
@@ -231,7 +345,7 @@ class App extends Component {
   handleClickOnPlayerToAction = (player) => {
     const { playerActionSelectable } = this.state;
 
-    if (playerActionSelectable.effect === "heal") {
+    if (playerActionSelectable.effect === "heal" || playerActionSelectable.effect === "hot") {
       let { players, textMessageOne } = playerHealAction([...this.state.players], player, playerActionSelectable);
       this.setState({
         textMessageOne,
@@ -254,20 +368,32 @@ class App extends Component {
   }
 
   handleClickOnActionBar = (action) => {
-    const { effect, name, amount } = action;
+    const { effect, name, amount, duration } = action;
 
     // 1 - ATTACK
-    if (effect === "melee" || effect === "range") {
+    if (effect === "melee" || effect === "range" || effect === "dot") {
       // 1.1 - PLAYER ACTION
+      let dot = [...this.state.enemy.dot];
+      let hp = (this.state.enemy.hp - amount <= 0 ? 0 : this.state.enemy.hp - amount);
+      let textMessageOne = `${_.find(this.state.players, 'me').name} utilise ${name} pour ${amount}pts de dégats!`;
+
+      if (effect === "dot") {
+        dot = [
+          ...this.state.enemy.dot,
+          {amount, duration}
+        ];
+        hp = this.state.enemy.hp;
+        textMessageOne = `${_.find(this.state.players, 'me').name} utilise ${name} ce qui infligera ${amount}pts de dégats à la fin des ${duration} prochains tours!`;
+      }
+
       this.setState({
         enemy: {
           ...this.state.enemy,
-          hp: (this.state.enemy.hp - amount <= 0 ? 0 : this.state.enemy.hp - amount),
+          hp,
           isHit: true,
+          dot,
         },
-        textMessageOne: `${
-          _.find(this.state.players, 'me').name
-        } utilise ${name} pour ${amount}pts de dégats!`
+        textMessageOne
       });
       // 1.2 - ENEMY ACTION
       setTimeout(() => {
@@ -282,7 +408,7 @@ class App extends Component {
         this.enemyTurn();
       }, 3000);
     // 2 - HEAL
-    } else if (effect === "heal") {
+    } else if (effect === "heal" || effect === "hot") {
       // 2.1 - PLAYER ACTION
       const players = [...this.state.players];
       for (let i = 0; i < this.state.players.length; i++) {
@@ -310,27 +436,6 @@ class App extends Component {
         players
       });
     }
-  }
-
-  handlePlayAgain = () => {
-    const players = [...this.state.players];
-    for (let i = 0; i < this.state.players.length; i++) {
-      players[i] = { ...players[i], faint: false, isHit: false, hp: this.state.players[i].maxHp };
-    }
-
-    this.setState({
-      enemy: {
-        ...this.state.enemy,
-        hp: this.state.enemy.maxHp,
-        faint: false,
-        isHit: false,
-      },
-      gameOver: false,
-      textMessageOne: "",
-      textMessageTwo: "",
-      round: 1,
-      players
-    });
   }
 
   render() {
@@ -379,9 +484,6 @@ class App extends Component {
                       />
                     );
                   })}
-                  {this.state.gameOver === true && (
-                    <PlayAgain handlePlayAgain={this.handlePlayAgain} />
-                  )}
                 </div>
               </div>
               {/* END TEXT BOX SECTION */}
