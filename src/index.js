@@ -1,15 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { BrowserRouter, Switch, Redirect } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import App from './App';
+import "./animate.css";
+import "./bootstrap.css";
+import Fight from './containers/views/Fight/Fight';
+import Login from './containers/views/Login/Login';
+import AppRoute from "./containers/AppRoute";
+import FightLayout from "./containers/layouts/FightLayout";
+import LoginLayout from "./containers/layouts/LoginLayout";
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <BrowserRouter>
+    <Switch>
+      <AppRoute exact path="/fight" component={Fight} layout={FightLayout} />
+      <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
+      <Redirect from="/" to="/login" />
+    </Switch>
+  </BrowserRouter>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -23,7 +23,7 @@ class Actions extends Component {
 
   isBlocked(nbBlockedRounds, duration) {
     if (nbBlockedRounds > 0) {
-      return <span className="small">({nbBlockedRounds} <i className="fas fa-lock"/> <i className="fas fa-lock"/>) </span>;
+      return <span className="small">({nbBlockedRounds} <i className="fas fa-lock"/>) </span>;
     } else if (duration) {
       return <span className="small">({duration} <i className="fas fa-clock"/>) </span>;
     }

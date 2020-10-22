@@ -40,7 +40,7 @@ export class EnemyBox extends Component {
         {/* ENEMY POKEMON INFO BOX */}
         <div id="enemy-info-box">
           <div className="justify-content-between align-items-center">
-            <h2>{this.props.enemy.name}</h2>
+            <h2 className="enemy-name">{this.props.enemy.name}</h2>
           </div>
           <div className="d-flex justify-content-between align-items-center">
             <div className="progress both-progress">

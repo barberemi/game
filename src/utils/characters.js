@@ -107,6 +107,7 @@ export const characters = {
       {name: "Bouclier de l'ombre", amount: 50, effect: "heal"},
       {name: "Poussée du chaos", amount: 30, effect: "movement"},
       {name: "Rêve éveillé", amount: 100, effect: "range"},
+      {name: "Rêve éveillé", amount: 100, effect: "skill_block", duration: 3},
       {name: "Cauchemard", amount: 200, effect: "unknown"},
     ],
     hot: [],

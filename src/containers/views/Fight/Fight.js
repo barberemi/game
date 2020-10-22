@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import "./animate.css";
-import "./bootstrap.css";
-import "./App.css";
-import TextBox from "./Components/TextBox";
-import Actions from "./Components/Actions";
-import EnemyBox from "./Components/EnemyBox";
-import PlayerBox from "./Components/PlayerBox";
+import TextBox from "../../../Components/Fight/TextBox";
+import Actions from "../../../Components/Fight/Actions";
+import EnemyBox from "../../../Components/Fight/EnemyBox";
+import PlayerBox from "../../../Components/Fight/PlayerBox";
+import "./Fight.scss";
 import _ from 'lodash';
 import {
   enemyTurnFinished, enemyMovementAction, enemyBlockAction,
   playersTurnFinished, playerHealAction, playerMovementAction,
   selectPlayer, userTakeDot, userTakeHot,
-} from "./utils/helper";
-import { characters } from "./utils/characters";
+} from "../../../utils/fightHelper";
+import { characters } from "../../../utils/characters";
 
-class App extends Component {
+class Fight extends Component {
   constructor(props) {
     super(props);
 
@@ -496,4 +494,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Fight;

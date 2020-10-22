@@ -1,40 +1,22 @@
-body {
-  font-family: 'Lakki Reddy', cursive; }
-
-body,
-html,
-#root {
-  height: 100% !important;
-  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%); }
-
-h2 {
-  text-transform: uppercase;
-  font-size: 32px; }
-
-h2,
-h5 {
+.enemy-name {
   margin: 0;
-  cursor: default; }
-
-p {
-  cursor: default; }
-
-h5 {
-  font-size: 20px; }
+}
 
 .avatar {
-  -webkit-filter: drop-shadow(1px 9px 1px rgba(0,0,0,0.3));
-  filter: drop-shadow(1px 9px 1px rgba(0,0,0,0.3));
+  -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
   -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
   width: 70%;
-  height: 70%; }
+  height: 70%;
+}
 
 .avatar-effect {
   padding-right: 10px;
 }
 
 .hide {
-  opacity: 0; }
+  opacity: 0;
+}
 
 #battle-container {
   min-width: 280px;
@@ -43,7 +25,8 @@ h5 {
   background-image: linear-gradient(-225deg, #e3fdf5 0%, #ffe6fa 100%);
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 #enemy-container {
   position: relative;
@@ -54,19 +37,16 @@ h5 {
   text-align: center;
 }
 
-#enemy-info-box {
+#enemy-info-box, #hero-info-box {
   padding: 5px;
   width: 100%;
-  letter-spacing: -2px; }
-
-#hero-info-box {
-  padding: 5px;
-  width: 100%;
-  letter-spacing: -2px; }
+  letter-spacing: -2px;
+}
 
 .avatar-box {
   position: relative;
-  z-index: 0; }
+  z-index: 0;
+}
 
 .both-progress {
   position: relative;
@@ -74,7 +54,8 @@ h5 {
   border-radius: inherit;
   background-color: #e09a9a;
   box-shadow: 1px 1px 1px black;
-  width: 100%; }
+  width: 100%;
+}
 
 #hero-container {
   justify-content: space-between;
@@ -87,12 +68,12 @@ h5 {
 .hero-container-selected:hover {
   color: #77BB77;
   cursor: pointer;
-}
 
-.hero-container-selected:hover .hero-hover-selected {
-  -webkit-filter: drop-shadow(1px 9px 1px rgba(0,128,0,0.3));
-  filter: drop-shadow(1px 9px 1px rgba(0,128,0,0.3));
-  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#008000')";
+  .hero-hover-selected {
+    -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 128, 0, 0.3));
+    filter: drop-shadow(1px 9px 1px rgba(0, 128, 0, 0.3));
+    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#008000')";
+  }
 }
 
 .all-players-box {
@@ -110,7 +91,8 @@ h5 {
   padding: 10px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 #text-box-content {
   background-color: #5381b6;
@@ -118,16 +100,19 @@ h5 {
   border-radius: 5px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 .attack-container {
   width: 33%;
   display: inline-block;
   height: 40px;
-  text-align: center; }
+  text-align: center;
+}
 
 .move-pointer {
-  color: white; }
+  color: white;
+}
 
 @media (max-width: 845px) {
   .move-pointer {
@@ -139,7 +124,8 @@ h5 {
   padding: 13px 13px 0px 13px;
   font-size: 18px;
   color: white;
-  height: 80px; }
+  height: 80px;
+}
 
 #turn-text-number {
   text-align: center;
