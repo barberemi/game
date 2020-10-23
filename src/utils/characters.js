@@ -118,5 +118,6 @@ export const characters = {
   textMessageTwo: "",
   playerActionSelectable: undefined,
   round: 1,
-  gameOver: false
+  gameOver: false,
+  toto: null,
 };
