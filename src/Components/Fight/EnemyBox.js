@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Avatar from "./Avatar";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import HpBar from "./HpBar";
 
 export class EnemyBox extends Component {
   expectedAction(action) {
@@ -32,9 +33,6 @@ export class EnemyBox extends Component {
   }
 
   render() {
-    // calc enemy progress bar percentage based on HP
-    let percentage = (this.props.enemy.hp / this.props.enemy.maxHp) * 100 + "%";
-
     return (
       <div id="enemy-container">
         {/* ENEMY POKEMON INFO BOX */}
@@ -42,20 +40,7 @@ export class EnemyBox extends Component {
           <div className="justify-content-between align-items-center">
             <h2 className="enemy-name">{this.props.enemy.name}</h2>
           </div>
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="progress both-progress">
-              <div
-                className="progress-bar bg-danger"
-                role="progressbar"
-                style={{ width: percentage }}
-                aria-valuemin="0"
-                aria-valuemax="100"
-              />
-              <div className="hp-progress-bar">
-                <span>{this.props.enemy.hp}/{this.props.enemy.maxHp}</span>
-              </div>
-            </div>
-          </div>
+          <HpBar hp={this.props.enemy.hp} maxHp={this.props.enemy.maxHp} />
         </div>
         {/* END ENEMY POKEMON INFO BOX */}
         <div className="action-intention">

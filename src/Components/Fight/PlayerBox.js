@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Avatar from "./Avatar";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import HpBar from "./HpBar";
 
 export class PlayerBox extends Component {
   expectedAction(me, isSelectable) {
@@ -15,34 +16,16 @@ export class PlayerBox extends Component {
   }
 
   render() {
-    // calc player progress bar percentage based on HP
-    let percentage = (this.props.player.hp / this.props.player.maxHp) * 100 + "%";
-
     return (
       <div
         id="hero-container"
         className={this.props.player.isSelectable ? "hero-container-selected" : null}
         onClick={() => this.props.onClick(this.props.player)}
       >
-        {/* HERO POKEMON INFO BOX */}
         <div id="hero-info-box">
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="progress both-progress">
-              <div
-                className="progress-bar bg-danger"
-                role="progressbar"
-                style={{ width: percentage }}
-                aria-valuemin="0"
-                aria-valuenow="75"
-                aria-valuemax="100"
-              />
-              <div className="hp-progress-bar">
-                {this.props.player.hp}/{this.props.player.maxHp}
-              </div>
-            </div>
-          </div>
+          <HpBar hp={this.props.player.hp} maxHp={this.props.player.maxHp} />
         </div>
-        {/* END HERO POKEMON INFO BOX */}
+
         <div className="action-intention">
           {this.expectedAction(this.props.player.me, this.props.player.isSelectable)}
         </div>
