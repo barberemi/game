@@ -17,7 +17,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <AppRoute exact path="/fight" component={Fight} layout={FightLayout} />
-      <AppRoute exact path="/map" component={Map} layout={MapLayout} />
+      <AppRoute exact path="/maps" component={Map} layout={MapLayout} />
       <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
       <Redirect from="/" to="/login" />
     </Switch>

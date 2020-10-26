@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 
-const Card = styled.div`
-  display: inline-block; 
-  float: none;
-`
-
 const LevelNeededBackground = styled.div`
   position: absolute;
   font-size: 2vw;
@@ -25,6 +20,7 @@ const RequirementBlock = styled(LevelNeededBackground)`
 const RequirementNotBlock = styled(LevelNeededBackground)`
   background-color: #FFC312;
   color: #000;
+  text-shadow: 1px 1px 2px white;
 `
 
 const TitleCard = styled.div`
@@ -36,10 +32,12 @@ const TitleCard = styled.div`
   margin: auto;
   color: #fff;
   padding-top: 25%;
+  text-shadow: 1px 1px 2px black;
 `
 
 const AdventureButton = styled.div`
   background-color: #FFC312;
+  color: black;
 `
 
 class CardMap extends Component {
@@ -50,7 +48,6 @@ class CardMap extends Component {
   }
 
   displayCardLevel() {
-    console.log(this.cardBlocked());
     if (this.cardBlocked() === true) {
       return (
         <RequirementBlock className="mt-2">
@@ -68,7 +65,7 @@ class CardMap extends Component {
 
   render() {
     return (
-      <Card className="col-sm-5 mt-5 mb-5">
+      <div className="col-sm-5 mt-5 mb-5">
         <div className="card">
           {this.displayCardLevel()}
           <TitleCard>
@@ -83,7 +80,7 @@ class CardMap extends Component {
             {this.cardBlocked() === true && (<><i className="fas fa-lock"/>&nbsp;</>)}S'y aventurer
           </AdventureButton>
         </div>
-      </Card>
+      </div>
     );
   }
 }

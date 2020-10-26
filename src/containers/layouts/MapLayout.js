@@ -1,23 +1,19 @@
 import React from 'react';
 import styled from "@emotion/styled";
+import NavBar from "../../Components/NavBar/NavBar";
+import SideBar from "../../Components/SideBar/SideBar";
 
 const Background = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(0,0,0,0.8) !important;
-  align-content: center;
   font-family: 'Lakki Reddy', cursive;
-  font-size: 2vw;
-`
-
-const NavBar = styled.div`
-  height: 100px;
+  height: 100vh;
+  background-color: #343a40;
 `
 
 export default ({ children }) => {
   return (
     <Background>
       <NavBar />
+      <SideBar />
       {children}
     </Background>
   )

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 export class HpBar extends Component {
   colorBar(percentage) {
-    console.log(percentage);
     switch (true) {
       case (percentage >= 50):
         return "bg-success";
