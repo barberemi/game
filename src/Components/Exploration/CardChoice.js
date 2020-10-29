@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
-const AdventureButton = styled.div`
+const AdventureButton = styled(Link)`
   background-color: #FFC312;
   color: black;
+  
+  &:hover {
+    color: #fff;
+  }
 `
 
 class CardChoice extends Component {
@@ -17,7 +22,7 @@ class CardChoice extends Component {
             src={this.props.card.img_url}
             alt={this.props.card.name}
           />
-          <AdventureButton className={`card-footer btn`}>
+          <AdventureButton to="/exploration" className={`card-footer btn`}>
             {this.props.card.text_btn}
           </AdventureButton>
         </div>

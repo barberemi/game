@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
 const LevelNeededBackground = styled.div`
   position: absolute;
@@ -35,9 +36,13 @@ const TitleCard = styled.div`
   text-shadow: 1px 1px 2px black;
 `
 
-const AdventureButton = styled.div`
+const AdventureButton = styled(Link)`
   background-color: #FFC312;
   color: black;
+  
+  &:hover {
+    color: #fff;
+  }
 `
 
 class CardMap extends Component {
@@ -76,7 +81,7 @@ class CardMap extends Component {
             src={this.props.card.img_url}
             alt={this.props.card.name}
           />
-          <AdventureButton className={`card-footer btn${this.cardBlocked() ? " disabled" : ""}`}>
+          <AdventureButton to="/exploration" className={`card-footer btn${this.cardBlocked() ? " disabled" : ""}`}>
             {this.cardBlocked() === true && (<><i className="fas fa-lock"/>&nbsp;</>)}S'y aventurer
           </AdventureButton>
         </div>

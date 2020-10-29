@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import _ from "lodash";
 import ReactTooltip from "react-tooltip";
 import { explorations } from "../../../utils/explorations";
+import {Link} from "react-router-dom";
 
 const Container = styled.div`
   background-image: url("https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694");
@@ -19,16 +20,19 @@ const Container = styled.div`
   scroll-behavior: smooth;
 `
 
-const Zone = styled.img`
-  -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
-    
+const Building = styled.img`
   &:hover {
     cursor: pointer;
-    -webkit-filter: drop-shadow(1px 9px 1px rgba(255, 195, 18, 0.3));
-    filter: drop-shadow(1px 9px 1px rgba(255, 195, 18, 0.3));
-    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#FFC312')";
+    -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
+    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
+  }
+`
+
+const DisabledBuilding = styled.img`
+  opacity: 0.7;
+  &:hover {
+    cursor: not-allowed;
   }
 `
 
@@ -52,19 +56,27 @@ class Exploration extends Component {
   constructor(props) {
     super(props);
 
-    this.refScroll = React.createRef()
+    this.refScroll = React.createRef();
+    this.refMe = React.createRef();
     this.handleScroll = this.handleScroll.bind(this);
 
     this.state = {
       explorations: explorations.explorations,
       boss: explorations.boss,
+      player: explorations.player,
       scrollIsTop: true,
     };
   }
 
   componentDidMount() {
+    // Scroll if didnt see player
     setTimeout(() => {
-      this.refScroll.current.scrollTop = this.refScroll.current.scrollHeight;
+      if (!(
+        this.refMe.current.getBoundingClientRect().top < window.innerHeight &&
+        this.refMe.current.getBoundingClientRect().bottom >= 0)
+      ) {
+        this.refScroll.current.scrollTop = this.refScroll.current.scrollHeight;
+      }
     }, 1000);
   }
 
@@ -74,29 +86,46 @@ class Exploration extends Component {
     });
   }
 
+  handleMovement(index) {
+    // Call API to change position player in exploration
+  }
+
+  displayBuildings(exploration, index){
+    const { position, image } = this.state.player;
+
+    if (position === index) {
+      return <Building src={process.env.PUBLIC_URL+"/img/"+image} alt="pikachu" width={exploration.width} height="100px" ref={this.refMe} />
+    } else if (_.includes(this.state.explorations[position].next, exploration.id)) {
+      return <Link to="/choice" onClick={this.handleMovement(index)}>
+        <Building src={process.env.PUBLIC_URL+"/img/"+exploration.image} alt={exploration.image} width={exploration.width} height={exploration.height} />
+      </Link>
+    } else {
+      return <DisabledBuilding src={process.env.PUBLIC_URL+"/img/"+exploration.image} alt={exploration.image} width={exploration.width} height={exploration.height} />
+    }
+  }
+
   render() {
     const { boss, scrollIsTop } = this.state;
 
     return (
-      <Container className="container-fluid" id="container-bottom" onScroll={this.handleScroll} ref={this.refScroll}>
+      <Container className="container-fluid" onScroll={this.handleScroll} ref={this.refScroll}>
         <div className="container">
           <div className="row">
             <StickyBoss
               src={process.env.PUBLIC_URL+"/img/"+boss.image}
               alt={boss.name}
               style={{
-                left: scrollIsTop <= 40 ? "50%" : "60%",
-                transform: scrollIsTop <= 40 ? "translateX(-50%)" : "translateX(-60%)",
+                left: scrollIsTop <= 40 ? "50%" : "90%",
+                transform: scrollIsTop <= 40 ? "translateX(-50%)" : "translateX(-90%)",
               }}
-              // className={scrollIsTop <= 40 ? "animated slideInRight" : "animated slideInLeft"}
               width={boss.width}
               height={boss.height}
               data-tip={boss.name}
               data-place="bottom"
             />
-            {_.map(this.state.explorations, (explo, index) => (
-              <div key={index} className={`mt-auto mb-auto col-sm-${explo.col}${explo.offset !== 0 ? " offset-sm-"+explo.offset : ""}`}>
-                <Zone src={process.env.PUBLIC_URL+"/img/"+explo.image} alt={explo.image} width={explo.width} height={explo.height} />
+            {_.map(this.state.explorations, (exploration, index) => (
+              <div key={index} className={`mt-auto mb-auto col-sm-${exploration.col}${exploration.offset !== 0 ? " offset-sm-"+exploration.offset : ""}`}>
+                {this.displayBuildings(exploration, index)}
               </div>
             ))}
           </div>
