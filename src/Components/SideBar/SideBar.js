@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import Items from "./Items";
 
 const SideBarGlobale = styled.nav`
+  top: 30%;
+  height: 250px;
   transition: 0.5s;
   z-index: 1;
 `
@@ -16,22 +18,26 @@ const Image = styled.img`
   -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
 `
 
-const Circle = styled.div`
+const Menu = styled.div`
   background-color: #fcce18;
   // background-color: #182C51;
   border-radius: 0 50% 50% 0;
   width: 250px;
   height: 250px;
-  opacity: 0;
   border-top: solid;
   border-right: solid;
   border-bottom: solid;
   // border-color: white;
   border-color: black;
+  display: none;
 `
 
-const Open = styled(Circle)`
-  opacity: 1;
+const InitialMenu = styled(Menu)`
+  display: none;
+`
+
+const OpenMenu = styled(Menu)`
+  display: block;
 `
 
 class SideBar extends Component {
@@ -45,12 +51,12 @@ class SideBar extends Component {
     const isActive = this.state.isActive;
 
     return (
-      <SideBarGlobale className="position-fixed h-75 d-flex align-items-center">
+      <SideBarGlobale className="position-fixed d-flex align-items-center">
         {isActive === undefined
-          ? <Circle><Items /></Circle>
+          ? <InitialMenu><Items /></InitialMenu>
           : (isActive
-            ? <Open className="animated fadeInLeft"><Items /></Open>
-            : <Circle className="animated fadeOutLeft"><Items /></Circle>
+            ? <OpenMenu className="animated fadeInLeft"><Items /></OpenMenu>
+            : <Menu><Items /></Menu>
           )
         }
         {/*<Image onClick={this.handleToggle} src={require("./moon.svg")} className="menu-button" alt="moon" width="60px" height="60px" />*/}

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import styled from "@emotion/styled";
+import {Link} from "react-router-dom";
 
-const Link = styled.i`
-  cursor: pointer;
-  text-decoration: none;
+const LinkText = styled(Link)`
   color: white;
   display: block;
   line-height: 40px;
@@ -13,6 +12,7 @@ const Link = styled.i`
   text-align: center;
   
   &:hover {
+    text-decoration: none;
     color: #eef;
   }
 `
@@ -26,36 +26,36 @@ class Items extends Component {
   render() {
     return (
       <>
-        <Link className="fa fa-globe-europe fa-2x" style={{
+        <LinkText to={"/maps"} className="fa fa-globe-europe fa-2x" style={{
           left: (10 - 35*Math.cos(-0.5 * Math.PI)).toFixed(4) + "%",
           top: (50 + 35*Math.sin(-0.5 * Math.PI)).toFixed(4) + "%"
         }}>
           <Text>&nbsp;Carte du monde</Text>
-        </Link>
-        <Link className="fa fa-user-circle fa-2x" style={{
+        </LinkText>
+        <LinkText className="fa fa-user-circle fa-2x" style={{
           left: (10 - 35*Math.cos(-0.5 * Math.PI - 2*(1/8)*Math.PI)).toFixed(4) + "%",
           top: (55 + 35*Math.sin(-0.5 * Math.PI - 2*(1/8)*Math.PI)).toFixed(4) + "%"
         }}>
           <Text>&nbsp;Personnage</Text>
-        </Link>
-        <Link className="fa fa-dungeon fa-2x" style={{
+        </LinkText>
+        <LinkText className="fa fa-dungeon fa-2x" style={{
           left: (10 - 35*Math.cos(-0.5 * Math.PI - 2*(1/8)*2*Math.PI)).toFixed(4) + "%",
           top: (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/8)*2*Math.PI)).toFixed(4) + "%"
         }}>
           <Text>&nbsp;Tour des boss</Text>
-        </Link>
-        <Link className="fa fa-user-friends fa-2x" style={{
+        </LinkText>
+        <LinkText className="fa fa-user-friends fa-2x" style={{
           left: (10 - 35*Math.cos(-0.5 * Math.PI - 2*(1/8)*3*Math.PI)).toFixed(4) + "%",
           top: (45 + 35*Math.sin(-0.5 * Math.PI - 2*(1/8)*3*Math.PI)).toFixed(4) + "%"
         }}>
           <Text>&nbsp;Amis</Text>
-        </Link>
-        <Link className="fa fa-sign-out-alt fa-2x" style={{
+        </LinkText>
+        <LinkText to={"/login"} className="fa fa-sign-out-alt fa-2x" style={{
           left: (10 - 35*Math.cos(-0.5 * Math.PI - 2*(1/8)*4*Math.PI)).toFixed(4) + "%",
           top: (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/8)*4*Math.PI)).toFixed(4) + "%"
         }}>
           <Text>&nbsp;Déconnexion</Text>
-        </Link>
+        </LinkText>
       </>
     )
   }
