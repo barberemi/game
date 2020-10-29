@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from "@emotion/styled";
 
 const Link = styled.i`
+  cursor: pointer;
   text-decoration: none;
   color: white;
   display: block;
@@ -18,7 +19,7 @@ const Link = styled.i`
 
 const Text = styled.span`
   font-family: 'Lakki Reddy', cursive;
-  font-size: 1vw;
+  font-size: 16px;
 `
 
 class Items extends Component {

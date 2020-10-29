@@ -16,7 +16,6 @@ export class HpBar extends Component {
     // calc player progress bar percentage based on HP
     let percentage = (this.props.hp / this.props.maxHp) * 100;
 
-
     return (
       <div className="d-flex justify-content-between align-items-center">
         <div className="progress both-progress">

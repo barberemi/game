@@ -74,7 +74,7 @@ class CardMap extends Component {
           <img
             className="card-img-top"
             src={this.props.card.img_url}
-            alt="Card map image"
+            alt={this.props.card.name}
           />
           <AdventureButton className={`card-footer btn${this.cardBlocked() ? " disabled" : ""}`}>
             {this.cardBlocked() === true && (<><i className="fas fa-lock"/>&nbsp;</>)}S'y aventurer

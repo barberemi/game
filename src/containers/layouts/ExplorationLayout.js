@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "@emotion/styled";
-import MapNavBar from "../../Components/NavBar/MapNavBar";
 import SideBar from "../../Components/SideBar/SideBar";
+import ExplorationNavBar from "../../Components/NavBar/ExplorationNavBar";
 
 const Background = styled.div`
   font-family: 'Lakki Reddy', cursive;
@@ -12,7 +12,7 @@ const Background = styled.div`
 export default ({ children }) => {
   return (
     <Background>
-      <MapNavBar />
+      <ExplorationNavBar />
       <SideBar />
       {children}
     </Background>
