@@ -97,10 +97,10 @@ class Exploration extends Component {
       return <Building src={process.env.PUBLIC_URL+"/img/"+image} alt="pikachu" width={exploration.width} height="100px" ref={this.refMe} />
     } else if (_.includes(this.state.explorations[position].next, exploration.id)) {
       return <Link to="/choice" onClick={this.handleMovement(index)}>
-        <Building src={process.env.PUBLIC_URL+"/img/"+exploration.image} alt={exploration.image} width={exploration.width} height={exploration.height} />
+        <Building src={process.env.PUBLIC_URL+"/img/explorations/"+exploration.image} alt={exploration.image} width={exploration.width} height={exploration.height} />
       </Link>
     } else {
-      return <DisabledBuilding src={process.env.PUBLIC_URL+"/img/"+exploration.image} alt={exploration.image} width={exploration.width} height={exploration.height} />
+      return <DisabledBuilding src={process.env.PUBLIC_URL+"/img/explorations/"+exploration.image} alt={exploration.image} width={exploration.width} height={exploration.height} />
     }
   }
 

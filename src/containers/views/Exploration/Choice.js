@@ -56,9 +56,9 @@ class Choice extends Component {
             <div className="col-sm-3 offset-sm-1 mt-5 mb-5">
               <img src={process.env.PUBLIC_URL+"/img/rubillax.png"} alt="rubillax" height="250px" />
             </div>
-            {_.map(this.state.cards, (card, index) => {
-              return <CardChoice key={index} card={card} className={index === 0 ? "offset-sm-2" : ""} />;
-            })}
+            {_.map(this.state.cards, (card, index) => (
+              <CardChoice key={index} card={card} className={index === 0 ? "offset-sm-2" : ""} />
+              ))}
           </div>
         </SubContainer>
       </Container>
