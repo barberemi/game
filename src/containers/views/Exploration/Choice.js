@@ -13,15 +13,16 @@ const Container = styled.div`
   text-align: center;
   color: white;
   min-height: 250px;
+  overflow-y: scroll;
 `
 
 const SubContainer = styled.div`
   background-color: rgba(0,0,0,0.5) !important;
-  height: 100%;
+  margin-top: 50px;
 `
 
 const TextDescription = styled.div`
-  font-size: 2vw;
+  font-size: 24px;
   text-shadow: 1px 1px 2px black;
 `
 
