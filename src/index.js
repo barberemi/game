@@ -11,6 +11,7 @@ import Map from './containers/views/Map/Map';
 import Exploration from './containers/views/Exploration/Exploration';
 import Choice from './containers/views/Exploration/Choice';
 import Login from './containers/views/Login/Login';
+import Register from './containers/views/Login/Register';
 import Creation from './containers/views/Character/Creation';
 
 import FightLayout from "./containers/layouts/FightLayout";
@@ -29,6 +30,7 @@ ReactDOM.render(
       <AppRoute exact path="/choice" component={Choice} layout={ExplorationLayout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
+      <AppRoute exact path="/register" component={Register} layout={LoginLayout}/>
       <AppRoute exact path="/creation" component={Creation} layout={CharacterLayout} />
       <Redirect from="/" to="/login" />
     </Switch>

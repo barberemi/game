@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from "@emotion/styled";
-import {Link} from "react-router-dom";
 
 const Container = styled.div`
   height: 100%;
@@ -54,7 +53,7 @@ const InputSubmit = styled.input`
   }
 `
 
-const LinkInput = styled.div`
+const Link = styled.div`
   color: white;
   
   a {
@@ -62,20 +61,26 @@ const LinkInput = styled.div`
   }
 `
 
-class Login extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: null,
       password: null,
-    }
+      repeatPassword: null,
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    console.log("Call API Login");
+    if (this.state.password !== this.state.repeatPassword) {
+      event.target.repeatPassword.setCustomValidity('Le mot de passe ne correspond pas.');
+    }
+    console.log("Call API Register");
   }
 
   render() {
@@ -84,14 +89,10 @@ class Login extends Component {
         <div className="d-flex justify-content-center h-100">
           <Card className="card">
             <div className="card-header">
-              <Title>Se connecter</Title>
-              <Social className="d-flex justify-content-end">
-                <SocialIcon><i className="fab fa-facebook-square" /></SocialIcon>
-                <SocialIcon><i className="fab fa-twitter-square" /></SocialIcon>
-              </Social>
+              <Title>S'enregistrer</Title>
             </div>
             <div className="card-body">
-              <form>
+              <form onSubmit={this.handleSubmit}>
                 <div className="input-group form-group">
                   <div className="input-group-prepend">
                     <InputGroup className="input-group-text"><i className="fas fa-user" /></InputGroup>
@@ -104,6 +105,7 @@ class Login extends Component {
                     className="form-control"
                     placeholder="Email"
                     onChange={event => this.setState({email: event.target.value})}
+                    required
                   />
                 </div>
                 <div className="input-group form-group">
@@ -118,20 +120,33 @@ class Login extends Component {
                     className="form-control"
                     placeholder="Mot de passe"
                     onChange={event => this.setState({password: event.target.value})}
+                    required
+                  />
+                </div>
+                <div className="input-group form-group">
+                  <div className="input-group-prepend">
+                    <InputGroup className="input-group-text"><i className="fas fa-key" /></InputGroup>
+                  </div>
+                  <input
+                    type="password"
+                    id="repeatPassword"
+                    name="repeatPassword"
+                    value={this.state.repeatPassword}
+                    className="form-control"
+                    placeholder="Confirmer le mot de passe"
+                    onChange={event => this.setState({repeatPassword: event.target.value})}
+                    required
                   />
                 </div>
                 <div className="form-group">
-                  <InputSubmit type="submit" value="Login" className="btn float-right" onClick={this.handleSubmit} />
+                  <InputSubmit type="submit" value="Valider" className="btn float-right" />
                 </div>
               </form>
             </div>
             <div className="card-footer">
-              <LinkInput className="d-flex justify-content-center">
-                Pas de compte?&nbsp;<Link to={"/register"}>S'enregistrer</Link>
-              </LinkInput>
-              <LinkInput className="d-flex justify-content-center">
+              <Link className="d-flex justify-content-center">
                 <a href="#">Mot de passe oublié?</a>
-              </LinkInput>
+              </Link>
             </div>
           </Card>
         </div>
@@ -140,4 +155,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Register;
