@@ -5,16 +5,24 @@ export const academies = [
     roles: ["Dégats physiques", "Distance"],
     className: "text-danger",
     image: "hunter.png",
-    skills: [
-      {
-        name: "Décoche flèches",
-        description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
-      },
-      {
-        name: "Tir de flibustier",
-        description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
-      },
-    ],
+    skills: {
+      dark: [
+        {
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ]
+    },
   },
   {
     name: "Guerrier",
@@ -22,16 +30,24 @@ export const academies = [
     roles: ["Dégats physiques", "Corps à corps"],
     className: "text-danger",
     image: "warrior.png",
-    skills: [
-      {
-        name: "Décoche flèches",
-        description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
-      },
-      {
-        name: "Tir de flibustier",
-        description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
-      },
-    ],
+    skills: {
+      dark: [
+        {
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ]
+    },
   },
   {
     name: "Magicien",
@@ -39,16 +55,24 @@ export const academies = [
     roles: ["Dégats magiques", "Distance"],
     className: "text-primary",
     image: "magician.png",
-    skills: [
-      {
-        name: "Décoche flèches",
-        description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
-      },
-      {
-        name: "Tir de flibustier",
-        description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
-      },
-    ],
+    skills: {
+      dark: [
+        {
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ]
+    },
   },
   {
     name: "Protecteur",
@@ -56,16 +80,24 @@ export const academies = [
     roles: ["Encaisser les dégats", "Corps à corps"],
     className: "text-success",
     image: "protector.png",
-    skills: [
-      {
-        name: "Décoche flèches",
-        description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
-      },
-      {
-        name: "Tir de flibustier",
-        description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
-      },
-    ],
+    skills: {
+      dark: [
+        {
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ]
+    },
   },
   {
     name: "Prêtre",
@@ -73,15 +105,23 @@ export const academies = [
     roles: ["Soutien", "Soin"],
     className: "text-success",
     image: "priest.png",
-    skills: [
-      {
-        name: "Décoche flèches",
-        description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
-      },
-      {
-        name: "Tir de flibustier",
-        description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
-      },
-    ],
+    skills: {
+      dark: [
+        {
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          name: "Tir de flibustier",
+          description: "Tire une énorme flèche sur l'ennemi, lui infligeant 99pts de dégats.",
+        },
+      ]
+    },
   },
 ];

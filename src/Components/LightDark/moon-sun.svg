@@ -1,0 +1,60 @@
+<svg
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        id="svg4185"
+        version="1.1"
+        inkscape:version="0.91 r13725"
+        sodipodi:docname="moon.svg">
+    <defs
+            id="defs4187" />
+    <sodipodi:namedview
+            id="base"
+            pagecolor="#ffffff"
+            bordercolor="#666666"
+            borderopacity="1.0"
+            inkscape:pageopacity="0.0"
+            inkscape:pageshadow="2"
+            inkscape:zoom="7.9195959"
+            inkscape:cx="33.77632"
+            inkscape:cy="21.697334"
+            inkscape:document-units="px"
+            inkscape:current-layer="layer1"
+            showgrid="false"
+            units="px"
+            inkscape:window-width="1366"
+            inkscape:window-height="709"
+            inkscape:window-x="0"
+            inkscape:window-y="27"
+            inkscape:window-maximized="1" />
+    <metadata
+            id="metadata4190">
+        <rdf:RDF>
+            <cc:Work
+                    rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type
+                        rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                <dc:title></dc:title>
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
+    <g
+            inkscape:label="Capa 1"
+            inkscape:groupmode="layer"
+            id="layer1"
+            transform="translate(0,-1028.3622)">
+        <path
+                style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+                d="m 12.5,1051.8622 a 11.5,11.5 0 0 0 9.93359,-5.7305 11.5,11.5 0 0 1 -10.14844,-11.4121 11.5,11.5 0 0 1 1.56446,-5.7676 11.5,11.5 0 0 0 -1.34961,-0.09 11.5,11.5 0 0 0 -11.5,11.5 11.5,11.5 0 0 0 11.5,11.5 z"
+                id="circle5402"
+                inkscape:connector-curvature="0" />
+    </g>
+</svg>

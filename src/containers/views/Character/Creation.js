@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import _ from "lodash";
 import ReactTooltip from "react-tooltip";
 import { academies } from "../../../utils/academies";
+import LightDarkButton from "../../../Components/LightDark/LightDarkButton";
 
 const Container = styled.div`
   background-image: url("https://images.alphacoders.com/883/883163.jpg");
@@ -76,7 +77,7 @@ const Skill = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid;
   margin-right: 10px;
   
   &:hover {
@@ -88,6 +89,18 @@ const NameInput = styled.input`
   margin-top: 50px;
 `
 
+const InputSubmit = styled.input`
+  color: black;
+  background-color: #FFC312;
+  width: 100px;
+  margin-top: 10px;
+  
+  &:hover {
+    color: black;
+    background-color: white;
+  }
+`
+
 class Creation extends Component {
   constructor(props) {
     super(props);
@@ -96,6 +109,7 @@ class Creation extends Component {
       academies,
       academySelected: null,
       isAnimated: null,
+      isDark: true,
     };
   }
 
@@ -103,11 +117,17 @@ class Creation extends Component {
     this.setState({
       academySelected: academy,
       isAnimated: true,
+    });
+  }
+
+  onClickButtonLightdark = (type) => {
+    this.setState({
+      isDark: type === "dark",
     })
   }
 
   render() {
-    const { academySelected, isAnimated } = this.state;
+    const { academySelected, isAnimated, isDark } = this.state;
 
     return (
       <Container className="container-fluid">
@@ -143,6 +163,7 @@ class Creation extends Component {
                   />
                   <ReactTooltip />
                   <NameInput type="text" placeholder="Didier Raoult" />
+                  <InputSubmit type="submit" value="Valider" className="btn float-right" />
                 </>
               )}
             </CenterBox>
@@ -150,10 +171,11 @@ class Creation extends Component {
             <RightBox className="col-sm-3 h-100 my-auto">
               {academySelected && (
                 <Card className="card">
+                  <LightDarkButton onClick={this.onClickButtonLightdark} />
                   <div className="card-header">
                     <TitleBox>{academySelected.name}</TitleBox>
                     {_.map(academySelected.roles, role => (
-                      <div className={academySelected.className}>{role}</div>
+                      <div key={role} className={academySelected.className}>{role}</div>
                     ))}
                   </div>
                   <div className="card-body">
@@ -161,13 +183,17 @@ class Creation extends Component {
                   </div>
                   <div className="card-footer">
                     <TitleBox>Compétences</TitleBox>
-                    <div>Ombre / Lumière</div>
-                    {_.map(academySelected.skills, skill => (
+                    <div style={{color: isDark ? "#7730ec" : "#fcce18"}}>
+                      {isDark ? "Ombre" : "Lumière"}
+                    </div>
+                    {_.map(isDark ? academySelected.skills.dark : academySelected.skills.light, skill => (
                       <>
                         <Skill
+                          key={skill}
                           src="https://wiki-fr.guildwars2.com/images/8/88/Dagues_enchant%C3%A9es.png"
                           alt={skill.name}
                           data-tip={skill.description}
+                          style={{borderColor: isDark ? "#7730ec" : "#fcce18"}}
                         />
                         <ReactTooltip />
                       </>
