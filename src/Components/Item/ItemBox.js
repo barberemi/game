@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import styled from "@emotion/styled";
+import ReactTooltip from "react-tooltip";
 import { getColorItem } from "../../utils/itemHelper";
+import ReactDOMServer from 'react-dom/server';
+import ItemTooltip from "./ItemTooltip";
 
 const Box = styled.div`
   border: 2px solid;
@@ -29,10 +32,11 @@ class ItemBox extends Component {
 
     return (
       <>
-        <Box style={{borderColor: getColorItem(item)}}>
+        <Box style={{borderColor: getColorItem(item)}} data-tip={ReactDOMServer.renderToStaticMarkup(<ItemTooltip item={item} />)} data-html={true}>
           <img src="https://render-eu.worldofwarcraft.com/icons/56/inv_helm_cloth_nzothraid_d_01.jpg" alt={item.name} />
         </Box>
         <Text style={{color: getColorItem(item)}}>{item.name}</Text>
+        <ReactTooltip />
       </>
     );
   }
