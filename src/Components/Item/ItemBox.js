@@ -11,6 +11,10 @@ const Box = styled.div`
   background-color: #000;
   width: 60px;
   height: 60px;
+  
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 const Text = styled.div`
