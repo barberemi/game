@@ -9,7 +9,7 @@ import ReactTooltip from "react-tooltip";
 const Container = styled.div`
   position: absolute;
   z-index: 10;
-  top: -40px;
+  top: -60px;
   right: -40px;
 `
 

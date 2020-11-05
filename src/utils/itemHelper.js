@@ -1,8 +1,4 @@
 // To get the color of the rarity of object
-import ItemBox from "../Components/Item/ItemBox";
-import _ from "lodash";
-import React from "react";
-
 export const getColorItem = (item) => {
   switch (item.rarity) {
     case "unusual":

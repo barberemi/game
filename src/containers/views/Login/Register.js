@@ -18,23 +18,6 @@ const Title = styled.h3`
   color: white;
 `
 
-const Social = styled.div`
-  position: absolute;
-  right: 20px;
-  top: -45px;
-`
-
-const SocialIcon = styled.span`
-  font-size: 60px;
-  margin-left: 10px;
-  color: #FFC312;
-  
-  &:hover {
-    color: white;
-    cursor: pointer;
-  }
-`
-
 const InputGroup = styled.span`
   width: 50px;
   background-color: #FFC312;
