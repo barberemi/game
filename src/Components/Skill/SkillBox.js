@@ -13,9 +13,30 @@ const Container = styled.div`
 const SubContainer = styled.div`
   display: flex;
   float: left;
-  border: 1px solid #504137;
   width: 100%;
-  ${props => ( props.isSelected === true && css`
+  
+  ${props => ( props.descriptionDisplayed === false && css`
+    border: 1px solid #504137;
+  `)};
+  
+  ${props => ( props.descriptionDisplayed === false && props.isSelected === true && css`
+    -webkit-box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
+    box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
+    border-color: ${props.hoverColorBorder};
+  `)};
+  
+  &:hover {
+    cursor: pointer;
+    ${props => ({ borderColor: props.hoverColorBorder })},
+  }
+`
+
+const BorderBox = styled.div`
+  ${props => ( props.descriptionDisplayed === true && css`
+    border: 1px solid #504137;
+  `)};
+  
+  ${props => ( props.descriptionDisplayed === true && props.isSelected === true && css`
     -webkit-box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
     box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
     border-color: ${props.hoverColorBorder};
@@ -62,42 +83,66 @@ const InputCheckBox = styled.input`
   right: 30px;
 `
 
+const DescriptionBox = styled.div`
+  font-size: 14px;
+  padding: 15px;
+  text-align: justify;
+`
+
 class SkillBox extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isChecked: this.props.isSelected,
+      descriptionDisplayed: false,
     };
   }
 
   toggleChecked = () => {
+    // console.log(this.props.remainingSkillPoints);
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
     }));
   }
 
   render() {
-    const { skill, isDark } = this.props;
-    const { isChecked } = this.state;
+    const { skill, isDark, remainingSkillPoints } = this.props;
+    const { isChecked, descriptionDisplayed } = this.state;
 
     return (
       <Container className="col-sm-4">
-        <SubContainer hoverColorBorder={getBorderColorSkill(isDark)} isSelected={isChecked}>
-          <Level>{skill.level}</Level>
-          <Box>
-            <ImageSkill src="https://render-eu.worldofwarcraft.com/icons/56/spell_holy_holyguidance.jpg" alt={skill.name} />
-          </Box>
-          <Text>{skill.name}</Text>
-          <InputCheckBox
-            type="checkbox"
-            id={`skill-check-${skill.id}-${isDark ? "dark" : "light"}`}
-            name={`skill-check-${skill.id}-${isDark ? "dark" : "light"}`}
-            checked={isChecked}
-            onChange={(e) => {this.toggleChecked();this.props.onChekSkill(e)}}
-          />
-          <ReactTooltip />
-        </SubContainer>
+        <BorderBox
+          hoverColorBorder={getBorderColorSkill(isDark)}
+          isSelected={isChecked}
+          descriptionDisplayed={descriptionDisplayed}
+          onClick={() => { this.setState({descriptionDisplayed: !descriptionDisplayed})}}
+        >
+          <SubContainer
+            hoverColorBorder={getBorderColorSkill(isDark)}
+            isSelected={isChecked}
+            descriptionDisplayed={descriptionDisplayed}
+          >
+            <Level>{skill.level}</Level>
+            <Box>
+              <ImageSkill src="https://render-eu.worldofwarcraft.com/icons/56/spell_holy_holyguidance.jpg" alt={skill.name} />
+            </Box>
+            <Text>{skill.name}</Text>
+            <InputCheckBox
+              type="checkbox"
+              id={`skill-check-${skill.id}-${isDark ? "dark" : "light"}`}
+              name={`skill-check-${skill.id}-${isDark ? "dark" : "light"}`}
+              checked={isChecked}
+              disabled={!!(!isChecked && remainingSkillPoints === 0)}
+              onClick={(e) => {e.stopPropagation();}}
+              onChange={(e) => {this.toggleChecked();this.props.onChekSkill(e)}}
+            />
+            <ReactTooltip />
+          </SubContainer>
+          <DescriptionBox className={descriptionDisplayed ? "" : "d-none"}>
+            {skill.description}
+          </DescriptionBox>
+        </BorderBox>
       </Container>
     );
   }
@@ -112,6 +157,7 @@ SkillBox.propTypes = {
   }),
   isDark: PropTypes.bool,
   isSelected: PropTypes.bool,
+  remainingSkillPoints: PropTypes.number,
   onChekSkill: PropTypes.func,
 }
 

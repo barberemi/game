@@ -74,6 +74,13 @@ class Character extends Component {
 
   onCheckSkill = (e) => {
     const name = _.split(e.target.name, '-');
+    const exists = !!_.find(this.state.character.skills[name[3]], { id: parseInt(name[2]) });
+
+    if (exists) {
+      _.remove(this.state.character.skills[name[3]], { id: parseInt(name[2]) });
+    } else {
+      this.state.character.skills[name[3]] = [...this.state.character.skills[name[3]], {id: parseInt(name[2])} ];
+    }
 
     this.setState({
       character: {
@@ -82,7 +89,6 @@ class Character extends Component {
           ...this.state.character.skills,
           [name[3]]: [
             ...this.state.character.skills[name[3]],
-            {id: parseInt(name[2])},
           ]
         }
       }
@@ -91,6 +97,7 @@ class Character extends Component {
 
   render() {
     const { character, activatedTab } = this.state;
+    const remainingSkillPoints = character.skillPoints - (character.skills.dark.length + character.skills.light.length);
 
     return (
       <Container className="container-fluid">
@@ -154,10 +161,13 @@ class Character extends Component {
                     </div>
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <TitleBox>Compétences d'académie</TitleBox>
+                        <TitleBox>
+                          Compétences d'académie<br />
+                          ({remainingSkillPoints === 0 ? "Aucun point restant" : (remainingSkillPoints === 1 ? "1pt restant" : remainingSkillPoints + "pts restants")})
+                        </TitleBox>
                       </div>
                       <div className="col-sm-12">
-                        <EquippedSkills skills={character.skills} onChekSkill={this.onCheckSkill} />
+                        <EquippedSkills skills={character.skills} onChekSkill={this.onCheckSkill} remainingSkillPoints={remainingSkillPoints} />
                       </div>
                     </div>
                   </Card>

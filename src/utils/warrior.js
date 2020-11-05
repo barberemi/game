@@ -9,7 +9,7 @@ export const academy = {
         id: 1,
         level: 1,
         name: "Décoche flèches",
-        description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats. Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats. Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
       },
       {
         id: 2,

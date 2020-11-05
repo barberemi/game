@@ -54,6 +54,7 @@ EquippedSkills.propTypes = {
       description: PropTypes.string,
     })),
   }),
+  remainingSkillPoints: PropTypes.number,
   onChekSkill: PropTypes.func,
 }
 

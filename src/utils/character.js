@@ -4,6 +4,7 @@ export const character = {
   level: 55,
   experience: 160000,
   money: 666,
+  skillPoints: 10,
   characteristics: [
     {name: "health", amount: 1200},
     {name: "haste", amount: 50},
