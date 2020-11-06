@@ -86,5 +86,26 @@ export const character = {
     image: "warrior.png",
     roles: ["Dégats physiques", "Corps à corps"],
     className: "text-danger",
-  }
+  },
+  friends: [
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
+
+  ]
 };

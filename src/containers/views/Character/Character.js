@@ -7,6 +7,7 @@ import ProgressBar from "../../../Components/Character/ProgressBar";
 import CharacteristicItem from "../../../Components/Characteristic/CharacteristicItem";
 import EquippedItems from "../../../Components/Item/EquippedItems";
 import EquippedSkills from "../../../Components/Skill/EquippedSkills";
+import FriendList from "../../../Components/Friend/FriendList";
 
 const Container = styled.div`
   background-image: url("https://images2.alphacoders.com/717/717870.jpg");
@@ -56,13 +57,17 @@ const Image = styled.img`
   }
 `
 
+const RemainingPoints = styled.span`
+  font-size: 18px;
+`
+
 class Character extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       character,
-      activatedTab: "skillsTab",
+      activatedTab: "friendsTab",
     };
   }
 
@@ -114,6 +119,7 @@ class Character extends Component {
                   <ul>
                     <li onClick={() => this.onClickOnTab("generalTab")}><a className={activatedTab === "generalTab" ? "active" : ""} data-toggle="tab" role="tab" href="#generalTab">Général</a></li>
                     <li onClick={() => this.onClickOnTab("skillsTab")}><a className={activatedTab === "skillsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#skillsTab">Compétences</a></li>
+                    <li onClick={() => this.onClickOnTab("friendsTab")}><a className={activatedTab === "friendsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#friendsTab">Liste d'amis</a></li>
                   </ul>
                 </div>
               </Card>
@@ -145,9 +151,7 @@ class Character extends Component {
                     </div>
                     <div className="card-footer">
                       <TitleBox>Équipements</TitleBox>
-                      <div className="col-sm-12">
-                        <EquippedItems items={character.equippedItems} academyImage={character.academy.image} />
-                      </div>
+                      <EquippedItems items={character.equippedItems} academyImage={character.academy.image} />
                     </div>
                   </Card>
                 </div>
@@ -155,20 +159,28 @@ class Character extends Component {
                 {/* Skills */}
                 <div className={`tab-pane${activatedTab === "skillsTab" ? " active" : ""}`} id="skillsTab" role="tabpanel">
                   <Card className="card">
-                    <div className="card-header">
-                      <TitleBox>{character.name} <LevelBox> - Niv {character.level}</LevelBox></TitleBox>
-                      <ProgressBar actual={350} max={1200} color="#DC3545" transparentColor="#e09a9a" />
-                    </div>
                     <div className="card-body">
                       <div className="col-sm-12">
                         <TitleBox>
                           Compétences d'académie<br />
-                          ({remainingSkillPoints === 0 ? "Aucun point restant" : (remainingSkillPoints === 1 ? "1pt restant" : remainingSkillPoints + "pts restants")})
+                          <RemainingPoints>({remainingSkillPoints === 0 ? "Aucun point restant" : (remainingSkillPoints === 1 ? "1pt restant" : remainingSkillPoints + "pts restants")})</RemainingPoints>
                         </TitleBox>
                       </div>
+                      <EquippedSkills skills={character.skills} onChekSkill={this.onCheckSkill} remainingSkillPoints={remainingSkillPoints} />
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Friends */}
+                <div className={`tab-pane${activatedTab === "friendsTab" ? " active" : ""}`} id="friendsTab" role="tabpanel">
+                  <Card className="card">
+                    <div className="card-body">
                       <div className="col-sm-12">
-                        <EquippedSkills skills={character.skills} onChekSkill={this.onCheckSkill} remainingSkillPoints={remainingSkillPoints} />
+                        <TitleBox>
+                          Liste d'amis
+                        </TitleBox>
                       </div>
+                      <FriendList friends={character.friends} />
                     </div>
                   </Card>
                 </div>

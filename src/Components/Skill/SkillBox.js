@@ -100,7 +100,6 @@ class SkillBox extends Component {
   }
 
   toggleChecked = () => {
-    // console.log(this.props.remainingSkillPoints);
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
     }));

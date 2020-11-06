@@ -20,7 +20,7 @@ class EquippedSkills extends Component {
     const { academy, isDark } = this.state;
 
     return (
-      <>
+      <div className="col-sm-12">
         <LightDarkButton onClick={() => this.setState({isDark: !this.state.isDark})} />
         <div style={{color: isDark ? "#7730ec" : "#fcce18"}} className="mb-sm-2">
           {isDark ? "Ombre" : "Lumière"}
@@ -34,7 +34,7 @@ class EquippedSkills extends Component {
             {...this.props}
           />
         ))}
-      </>
+      </div>
     );
   }
 }

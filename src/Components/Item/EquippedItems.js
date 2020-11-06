@@ -13,7 +13,7 @@ const Equipment = styled.div`
 class EquippedItems extends Component {
   render() {
     return (
-      <div>
+      <div className="col-sm-12">
         <Equipment id="helmet" className="col-sm-7 offset-sm-5">
           <ItemBox item={_.find(this.props.items, { type: "helmet" })} />
         </Equipment>
