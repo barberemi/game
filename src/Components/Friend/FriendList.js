@@ -6,6 +6,7 @@ import _ from "lodash";
 
 const Container = styled.div`
  max-height: 70vh;
+ min-height: 70vh;
  overflow-y: scroll;
 `
 
@@ -57,7 +58,7 @@ class FriendList extends Component {
               <IconAction data-tip="Visualiser"><i className="far fa-address-card" /></IconAction>
               <IconAction data-tip="Grouper"><i className="fas fa-user-friends" /></IconAction>
               <IconAction data-tip="Discuter"><i className="far fa-comment" /></IconAction>
-              <IconAction data-tip="Supprimer"><i className="fas fa-times" /></IconAction>
+              <IconAction data-tip="Supprimer"><i className="fas fa-times text-danger" /></IconAction>
             </Actions>
             <ReactTooltip />
           </Friend>

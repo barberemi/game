@@ -17,16 +17,55 @@ const Box = styled.div`
   }
 `
 
+const Image = styled.img`
+  width: 50px;
+  height: 50px;
+`
+
+const Level = styled.div`
+  z-index: 1;
+  background-color: #000;
+  width: 25px;
+  height: 20px;
+  border: 1px solid #fff;
+  padding-top: 2px;
+`
+
 const Text = styled.div`
   padding: 0 10px;
   display: table-cell;
-  margin-top: auto;
-  margin-bottom: auto;
+  padding-top: 15px;
+`
+
+const ActionsBox = styled.div`
+  background-color: rgba(0,0,0,0.9) !important;
+  position: absolute;
+  border: 1px solid #2f3124;
+  width: 150px;
+  z-index: 1;
+`
+
+const ActionBtn = styled.div`
+  border: 1px solid #2f3124;
+  cursor: pointer;
 `
 
 class ItemBox extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      display: false,
+    }
+  }
+
+  toggleDisplayActions = () => {
+    this.setState({displayActions: !this.state.displayActions});
+  }
+
   render() {
-    const { item } = this.props;
+    const { item, displayText } = this.props;
+    const { displayActions } = this.state;
 
     if (!item) {
       return (
@@ -36,24 +75,55 @@ class ItemBox extends Component {
 
     return (
       <>
-        <Box style={{borderColor: getColorItem(item)}} data-tip={ReactDOMServer.renderToStaticMarkup(<ItemTooltip item={item} />)} data-html={true}>
-          <img src="https://render-eu.worldofwarcraft.com/icons/56/inv_helm_cloth_nzothraid_d_01.jpg" alt={item.name} />
+        <Box
+          style={{borderColor: getColorItem(item)}}
+          data-tip={ReactDOMServer.renderToStaticMarkup(<ItemTooltip item={item} />)}
+          data-html={true}
+          onClick={() => this.setState({displayActions: !displayActions})}
+        >
+          <Image src={item.image} alt={item.name} />
+          <Level>
+            {item.level}
+          </Level>
         </Box>
-        <Text style={{color: getColorItem(item)}}>{item.name}</Text>
+        {displayText && <Text style={{color: getColorItem(item)}}>{item.name}</Text>}
         <ReactTooltip />
+        <ActionsBox className={displayActions ? "d-block" : "d-none"}>
+          <div className="p-3">
+            <ActionBtn className="py-2 mb-4 text-warning" onClick={() => {this.toggleDisplayActions();this.props.onChangeEquippedItem(item);}}>
+              {item.equipped === true ? "Déséquiper" : "S'équiper"}
+            </ActionBtn>
+            <ActionBtn className="py-2 mb-4 text-danger" onClick={() => {this.toggleDisplayActions();this.props.onDeleteItem(item);}}>
+              Supprimer
+            </ActionBtn>
+            <ActionBtn className="py-2 text-white" onClick={() => this.toggleDisplayActions()}>
+              Annuler
+            </ActionBtn>
+          </div>
+        </ActionsBox>
       </>
     );
   }
 }
 
+ItemBox.defaultProps = {
+  displayText: true,
+}
+
 ItemBox.propTypes = {
   item: PropTypes.shape({
+    id: PropTypes.number,
     name: PropTypes.string,
+    image: PropTypes.string,
     cost: PropTypes.number,
     level: PropTypes.number,
     type: PropTypes.string,
     rarity: PropTypes.string,
+    equipped: PropTypes.bool,
   }),
+  displayText: PropTypes.bool,
+  onDeleteItem: PropTypes.func,
+  onChangeEquippedItem: PropTypes.func,
 }
 
 export default ItemBox;

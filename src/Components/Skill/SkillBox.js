@@ -134,7 +134,7 @@ class SkillBox extends Component {
               checked={isChecked}
               disabled={!!(!isChecked && remainingSkillPoints === 0)}
               onClick={(e) => {e.stopPropagation();}}
-              onChange={(e) => {this.toggleChecked();this.props.onChekSkill(e)}}
+              onChange={(e) => {this.toggleChecked();this.props.onCheckSkill(e)}}
             />
             <ReactTooltip />
           </SubContainer>
@@ -157,7 +157,7 @@ SkillBox.propTypes = {
   isDark: PropTypes.bool,
   isSelected: PropTypes.bool,
   remainingSkillPoints: PropTypes.number,
-  onChekSkill: PropTypes.func,
+  onCheckSkill: PropTypes.func,
 }
 
 export default SkillBox;

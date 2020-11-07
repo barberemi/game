@@ -8,6 +8,7 @@ import CharacteristicItem from "../../../Components/Characteristic/Characteristi
 import EquippedItems from "../../../Components/Item/EquippedItems";
 import EquippedSkills from "../../../Components/Skill/EquippedSkills";
 import FriendList from "../../../Components/Friend/FriendList";
+import ItemList from "../../../Components/Item/ItemList";
 
 const Container = styled.div`
   background-image: url("https://images2.alphacoders.com/717/717870.jpg");
@@ -57,7 +58,7 @@ const Image = styled.img`
   }
 `
 
-const RemainingPoints = styled.span`
+const SubTitle = styled.span`
   font-size: 18px;
 `
 
@@ -67,7 +68,7 @@ class Character extends Component {
 
     this.state = {
       character,
-      activatedTab: "friendsTab",
+      activatedTab: "itemsTab",
     };
   }
 
@@ -100,9 +101,41 @@ class Character extends Component {
     });
   }
 
+  onDeleteItem = (item) => {
+    _.remove(this.state.character.items, { id: item.id });
+
+    this.setState({
+      character: {
+        ...this.state.character,
+        items: this.state.character.items,
+      }
+    });
+  }
+
+  onChangeEquippedItem = (newEquippedItem) => {
+    const items = [...this.state.character.items];
+    // Remove all equipped items with the same item.type
+    _.map(_.filter(items, { equipped: true, type: newEquippedItem.type }), item => {
+      item.equipped = false;
+    });
+
+    // Equipped/Unequipped item now
+    newEquippedItem.equipped = !newEquippedItem.equipped;
+    const indexItem = _.findIndex(items, { id: newEquippedItem.id});
+    items[indexItem] = newEquippedItem;
+
+    this.setState({
+      character: {
+        ...this.state.character,
+        items,
+      }
+    });
+  }
+
   render() {
     const { character, activatedTab } = this.state;
     const remainingSkillPoints = character.skillPoints - (character.skills.dark.length + character.skills.light.length);
+    const remainingItemSpaceNb = character.itemSpaceNb - character.items.length;
 
     return (
       <Container className="container-fluid">
@@ -119,6 +152,7 @@ class Character extends Component {
                   <ul>
                     <li onClick={() => this.onClickOnTab("generalTab")}><a className={activatedTab === "generalTab" ? "active" : ""} data-toggle="tab" role="tab" href="#generalTab">Général</a></li>
                     <li onClick={() => this.onClickOnTab("skillsTab")}><a className={activatedTab === "skillsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#skillsTab">Compétences</a></li>
+                    <li onClick={() => this.onClickOnTab("itemsTab")}><a className={activatedTab === "itemsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#itemsTab">Objets</a></li>
                     <li onClick={() => this.onClickOnTab("friendsTab")}><a className={activatedTab === "friendsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#friendsTab">Liste d'amis</a></li>
                   </ul>
                 </div>
@@ -151,7 +185,7 @@ class Character extends Component {
                     </div>
                     <div className="card-footer">
                       <TitleBox>Équipements</TitleBox>
-                      <EquippedItems items={character.equippedItems} academyImage={character.academy.image} />
+                      <EquippedItems items={_.filter(character.items, { equipped: true })} academyImage={character.academy.image} />
                     </div>
                   </Card>
                 </div>
@@ -163,10 +197,10 @@ class Character extends Component {
                       <div className="col-sm-12">
                         <TitleBox>
                           Compétences d'académie<br />
-                          <RemainingPoints>({remainingSkillPoints === 0 ? "Aucun point restant" : (remainingSkillPoints === 1 ? "1pt restant" : remainingSkillPoints + "pts restants")})</RemainingPoints>
+                          <SubTitle>({remainingSkillPoints === 0 ? "Aucun point restant" : (remainingSkillPoints === 1 ? "1pt restant" : remainingSkillPoints + "pts restants")})</SubTitle>
                         </TitleBox>
                       </div>
-                      <EquippedSkills skills={character.skills} onChekSkill={this.onCheckSkill} remainingSkillPoints={remainingSkillPoints} />
+                      <EquippedSkills skills={character.skills} onCheckSkill={this.onCheckSkill} remainingSkillPoints={remainingSkillPoints} />
                     </div>
                   </Card>
                 </div>
@@ -181,6 +215,21 @@ class Character extends Component {
                         </TitleBox>
                       </div>
                       <FriendList friends={character.friends} />
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Items */}
+                <div className={`tab-pane${activatedTab === "itemsTab" ? " active" : ""}`} id="itemsTab" role="tabpanel">
+                  <Card className="card">
+                    <div className="card-body">
+                      <div className="col-sm-12">
+                        <TitleBox>
+                          Listes des objets<br />
+                          <SubTitle>({remainingItemSpaceNb === 0 ? "Aucune place restante" : (remainingItemSpaceNb === 1 ? "1 place restante" : remainingItemSpaceNb + " places restantes")})</SubTitle>
+                        </TitleBox>
+                      </div>
+                      <ItemList items={character.items} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
                     </div>
                   </Card>
                 </div>

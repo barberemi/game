@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from 'prop-types';
 import styled from "@emotion/styled";
 import _ from "lodash";
@@ -28,10 +28,10 @@ class ItemTooltip extends Component {
         <br />
         <div>{getItemTranslationType(item)}</div>
         <div>
-          {_.map(item.characteristics, characteristic => (
-            <>
+          {_.map(item.characteristics, (characteristic, index) => (
+            <Fragment key={index}>
               {getCharacteristicText(characteristic)} <br />
-            </>
+            </Fragment>
           ))}
         </div>
         <br />
@@ -44,6 +44,7 @@ class ItemTooltip extends Component {
 
 ItemTooltip.propTypes = {
   item: PropTypes.shape({
+    id: PropTypes.number,
     name: PropTypes.string,
     cost: PropTypes.number,
     level: PropTypes.number,
