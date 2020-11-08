@@ -115,9 +115,11 @@ class Character extends Component {
   onChangeEquippedItem = (newEquippedItem) => {
     const items = [...this.state.character.items];
     // Remove all equipped items with the same item.type
-    _.map(_.filter(items, { equipped: true, type: newEquippedItem.type }), item => {
-      item.equipped = false;
-    });
+    if (!newEquippedItem.equipped) {
+      _.map(_.filter(items, { equipped: true, type: newEquippedItem.type }), item => {
+        item.equipped = false;
+      });
+    }
 
     // Equipped/Unequipped item now
     newEquippedItem.equipped = !newEquippedItem.equipped;
@@ -184,7 +186,7 @@ class Character extends Component {
                     </div>
                     <div className="card-footer">
                       <TitleBox>Équipements</TitleBox>
-                      <EquippedItems items={_.filter(character.items, { equipped: true })} academyImage={character.academy.image} />
+                      <EquippedItems items={_.filter(character.items, { equipped: true })} academyImage={character.academy.image} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
                     </div>
                   </Card>
                 </div>

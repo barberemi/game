@@ -64,7 +64,7 @@ class ItemBox extends Component {
     super(props);
 
     this.state = {
-      display: false,
+      displayActions: false,
     }
   }
 
@@ -90,7 +90,7 @@ class ItemBox extends Component {
           data-html={true}
           onClick={() => this.setState({displayActions: !displayActions})}
         >
-          {item.equipped && (
+          {item.equipped && !displayText && (
             <Equipped className="text-success">
               <i className="far fa-check-square" />
             </Equipped>

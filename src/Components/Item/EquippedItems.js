@@ -13,35 +13,35 @@ class EquippedItems extends Component {
     return (
       <div className="col-sm-12">
         <Equipment id="helmet" className="col-sm-12 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "helmet" })} />
+          <ItemBox item={_.find(this.props.items, { type: "helmet" })} {...this.props} />
         </Equipment>
 
         <Equipment id="amulet" className="col-sm-6 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "amulet" })} />
+          <ItemBox item={_.find(this.props.items, { type: "amulet" })} {...this.props} />
         </Equipment>
         <Equipment id="shoulders" className="col-sm-6 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "shoulders" })} />
+          <ItemBox item={_.find(this.props.items, { type: "shoulders" })} {...this.props} />
         </Equipment>
 
         <Equipment id="glovers" className="col-sm-4 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "glovers" })} />
+          <ItemBox item={_.find(this.props.items, { type: "glovers" })} {...this.props} />
         </Equipment>
         <Equipment id="armor" className="col-sm-4 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "armor" })} />
+          <ItemBox item={_.find(this.props.items, { type: "armor" })} {...this.props} />
         </Equipment>
         <Equipment id="belt" className="col-sm-4 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "belt" })} />
+          <ItemBox item={_.find(this.props.items, { type: "belt" })} {...this.props} />
         </Equipment>
 
         <Equipment id="pants" className="col-sm-6 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "pants" })} />
+          <ItemBox item={_.find(this.props.items, { type: "pants" })} {...this.props} />
         </Equipment>
         <Equipment id="shoes" className="col-sm-6 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "shoes" })} />
+          <ItemBox item={_.find(this.props.items, { type: "shoes" })} {...this.props} />
         </Equipment>
 
         <Equipment id="weapon" className="col-sm-12 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "weapon" })} />
+          <ItemBox item={_.find(this.props.items, { type: "weapon" })} {...this.props} />
         </Equipment>
       </div>
     );
@@ -60,6 +60,8 @@ EquippedItems.propTypes = {
     equipped: PropTypes.bool,
   })),
   academyImage: PropTypes.string,
+  onDeleteItem: PropTypes.func,
+  onChangeEquippedItem: PropTypes.func,
 }
 
 export default EquippedItems;

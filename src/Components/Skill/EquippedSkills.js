@@ -56,6 +56,8 @@ EquippedSkills.propTypes = {
   }),
   remainingSkillPoints: PropTypes.number,
   onCheckSkill: PropTypes.func,
+  onDeleteItem: PropTypes.func,
+  onChangeEquippedItem: PropTypes.func,
 }
 
 export default EquippedSkills;
