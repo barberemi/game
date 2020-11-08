@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 // To get the color of the rarity of object
 export const getColorItem = (item) => {
   switch (item.rarity) {
@@ -39,13 +41,13 @@ export const getItemTranslationType = (item) => {
       return "Amulette";
     case "shoulders":
       return "Épaulières";
-    case "gloves":
+    case "glovers":
       return "Gants";
     case "armor":
       return "Armure";
     case "belt":
       return "Ceinture";
-    case "pantalon":
+    case "pants":
       return "Pantalon";
     case "shoes":
       return "Chaussures";
@@ -56,7 +58,9 @@ export const getItemTranslationType = (item) => {
   }
 }
 
-// To get the translation of the characteristic with amount
-export const getCharacteristicText = (characteristic) => {
-  return "+" + characteristic.amount + " " + characteristic.characteristic.name;
+// To know if item is an equipped item
+export const isAnEquippedItem = (item) => {
+  const equippedItems = ["helmet", "amulet", "shoulders", "glovers", "armor", "belt", "pants", "shoes", "weapon"];
+
+  return !!_.includes(equippedItems, item.type);
 }

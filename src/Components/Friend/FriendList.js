@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import styled from "@emotion/styled";
-import ReactTooltip from "react-tooltip";
 import _ from "lodash";
 
 const Container = styled.div`
@@ -60,7 +59,6 @@ class FriendList extends Component {
               <IconAction data-tip="Discuter"><i className="far fa-comment" /></IconAction>
               <IconAction data-tip="Supprimer"><i className="fas fa-times text-danger" /></IconAction>
             </Actions>
-            <ReactTooltip />
           </Friend>
         ))}
       </Container>

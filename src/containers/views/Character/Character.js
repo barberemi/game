@@ -162,7 +162,6 @@ class Character extends Component {
                 alt={character.academy.name}
                 data-tip="Ahou Ahou !!"
               />
-              <ReactTooltip />
             </LeftBox>
 
             <RightBox className="col-sm-9 my-auto">
@@ -239,6 +238,7 @@ class Character extends Component {
 
           </div>
         </div>
+        <ReactTooltip />
       </Container>
     );
   }

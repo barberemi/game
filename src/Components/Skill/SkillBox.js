@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
-import ReactTooltip from "react-tooltip";
 import { getBorderColorSkill } from "../../utils/skillHelper";
 
 const Container = styled.div`
@@ -136,7 +135,6 @@ class SkillBox extends Component {
               onClick={(e) => {e.stopPropagation();}}
               onChange={(e) => {this.toggleChecked();this.props.onCheckSkill(e)}}
             />
-            <ReactTooltip />
           </SubContainer>
           <DescriptionBox className={descriptionDisplayed ? "" : "d-none"}>
             {skill.description}

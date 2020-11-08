@@ -24,7 +24,7 @@ class ItemList extends Component {
         <Container className="position-relative">
           {_.map(items, item => (
             <Item className="float-left d-flex position-relative" key={item.id}>
-              <ItemBox item={item} displayText={false} {...this.props} />
+              <ItemBox item={item} oldItem={!item.equipped ? _.find(items, { type: item.type, equipped: true }) : null} displayText={false} {...this.props} />
             </Item>
           ))}
         </Container>

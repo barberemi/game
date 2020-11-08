@@ -23,8 +23,8 @@ class EquippedItems extends Component {
           <ItemBox item={_.find(this.props.items, { type: "shoulders" })} />
         </Equipment>
 
-        <Equipment id="gloves" className="col-sm-4 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "gloves" })} />
+        <Equipment id="glovers" className="col-sm-4 float-left d-flex flex-column align-items-center">
+          <ItemBox item={_.find(this.props.items, { type: "glovers" })} />
         </Equipment>
         <Equipment id="armor" className="col-sm-4 float-left d-flex flex-column align-items-center">
           <ItemBox item={_.find(this.props.items, { type: "armor" })} />
@@ -33,8 +33,8 @@ class EquippedItems extends Component {
           <ItemBox item={_.find(this.props.items, { type: "belt" })} />
         </Equipment>
 
-        <Equipment id="pantalon" className="col-sm-6 float-left d-flex flex-column align-items-center">
-          <ItemBox item={_.find(this.props.items, { type: "pantalon" })} />
+        <Equipment id="pants" className="col-sm-6 float-left d-flex flex-column align-items-center">
+          <ItemBox item={_.find(this.props.items, { type: "pants" })} />
         </Equipment>
         <Equipment id="shoes" className="col-sm-6 float-left d-flex flex-column align-items-center">
           <ItemBox item={_.find(this.props.items, { type: "shoes" })} />
