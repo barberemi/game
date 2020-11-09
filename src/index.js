@@ -25,14 +25,14 @@ import ExplorationLayout from "./containers/layouts/ExplorationLayout";
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter forceRefresh={true}>
     <Switch>
       <AppRoute exact path="/fight" component={Fight} layout={FightLayout} />
       <AppRoute exact path="/maps" component={Map} layout={MapLayout} />
       <AppRoute exact path="/exploration" component={Exploration} layout={ExplorationLayout} />
       <AppRoute exact path="/choice" component={Choice} layout={ExplorationLayout} />
       <AppRoute exact path="/character" component={Character} layout={CharacterLayout} />
-      <AppRoute exact path="/boss" component={Boss} layout={BossLayout} />
+      <AppRoute path="/boss/:towernumber" component={Boss} layout={BossLayout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
       <AppRoute exact path="/register" component={Register} layout={LoginLayout}/>

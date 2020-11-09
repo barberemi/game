@@ -50,7 +50,7 @@ const ActionsBox = styled.div`
   position: absolute;
   border: 1px solid #2f3124;
   width: 150px;
-  z-index: 1;
+  z-index: 2;
   top: 30px;
 `
 

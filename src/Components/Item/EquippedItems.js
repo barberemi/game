@@ -59,6 +59,7 @@ EquippedItems.propTypes = {
     rarity: PropTypes.string,
     equipped: PropTypes.bool,
   })),
+  displayActions: PropTypes.string,
   academyImage: PropTypes.string,
   onDeleteItem: PropTypes.func,
   onChangeEquippedItem: PropTypes.func,

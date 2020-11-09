@@ -1,8 +1,9 @@
-export const boss = {
+export const boss1 = {
   name: "Le Berseker",
   image: "berseker.png",
   level: 55,
   givenExperience: 16000,
+  towerLevel: 3,
   characteristics: [
     {name: "health", amount: 1200},
     {name: "haste", amount: 50},

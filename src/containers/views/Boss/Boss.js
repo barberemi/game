@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import styled from "@emotion/styled";
+import { css } from "@emotion/core";
 import _ from "lodash";
 import ReactTooltip from "react-tooltip";
-import { boss } from "../../../utils/boss";
-import ProgressBar from "../../../Components/Character/ProgressBar";
+import {Link} from "react-router-dom";
+import { boss1 } from "../../../utils/boss1";
+import { boss2 } from "../../../utils/boss2";
+import { boss3 } from "../../../utils/boss3";
 import CharacteristicItem from "../../../Components/Characteristic/CharacteristicItem";
 import EquippedSkills from "../../../Components/Skill/EquippedSkills";
 import ItemList from "../../../Components/Item/ItemList";
@@ -43,11 +46,32 @@ const LevelBox = styled.span`
   color: #fff;
 `
 
-const LeftBox = styled.div`
+const LeftArrayBox = styled.div`
+  left: 10px;
+  top: 50%;
+  z-index: 10;
+`
+
+const RightArrayBox = styled.div`
+  right: 10px;
+  top: 50%;
+  z-index: 10;
 `
 
 const RightBox = styled.div`
   min-height: 550px;
+`
+
+const LinkArrow = styled(Link)`
+  color: #fff;
+  
+  &:hover{
+    color: #FFC312;
+    ${props => ( ((props.towernumber === 1 && props.arrow === "left") || (props.towernumber === 3 && props.arrow === "right")) && css`
+      cursor: not-allowed;
+      color: #fff;
+    `)};
+  }
 `
 
 const Card = styled.div`
@@ -65,10 +89,24 @@ const Image = styled.img`
 class Boss extends Component {
   constructor(props) {
     super(props);
+    const towernumber = parseInt(this.props.match.params.towernumber);
+    let boss = boss1;
+
+    switch (towernumber) {
+      case 2:
+        boss = boss2;
+        break
+      case 3:
+        boss = boss3;
+        break
+      default:
+        break;
+    }
 
     this.state = {
-      boss,
+      boss: boss,
       activatedTab: "generalTab",
+      towernumber,
     };
   }
 
@@ -102,14 +140,34 @@ class Boss extends Component {
   }
 
   render() {
-    const { boss, activatedTab } = this.state;
+    const { boss, activatedTab, towernumber } = this.state;
 
     return (
       <Container className="container-fluid">
         <div className="container">
           <div className="row h-100 mt-5">
 
-            <LeftBox className="col-sm-3 my-auto">
+            <LeftArrayBox className="position-fixed h-100">
+              <LinkArrow
+                towernumber={towernumber}
+                arrow="left"
+                to={towernumber === 1 ? "#" : "/boss/" + (towernumber - 1)}
+              >
+                <i className="fas fa-arrow-left fa-3x" />
+              </LinkArrow>
+            </LeftArrayBox>
+
+            <RightArrayBox className="position-fixed h-100">
+              <LinkArrow
+                towernumber={towernumber}
+                arrow="right"
+                to={towernumber === 3 ? "#" : "/boss/" + (towernumber + 1)}
+              >
+                <i className="fas fa-arrow-right fa-3x" />
+              </LinkArrow>
+            </RightArrayBox>
+
+            <div className="col-sm-3 my-auto">
               <Card className="card">
                 <div className="card-header">
                   <TitleBox>Menu</TitleBox>
@@ -133,7 +191,7 @@ class Boss extends Component {
                 src={process.env.PUBLIC_URL+"/img/boss/"+boss.image}
                 alt={boss.academy.name}
               />
-            </LeftBox>
+            </div>
 
             <RightBox className="col-sm-9 my-auto">
               <div className="tab-content">
@@ -142,7 +200,10 @@ class Boss extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <TitleBox>{boss.name} ({boss.academy.name})<LevelBox> - Niv {boss.level}</LevelBox></TitleBox>
+                      <TitleBox>
+                        Tour niveau {towernumber}
+                      </TitleBox>
+                      {boss.name} <span className={boss.academy.className}>({boss.academy.name})</span><LevelBox> - Niv {boss.level}</LevelBox>
                     </div>
                     <div className="card-body">
                       <TitleBox>Caractéristiques</TitleBox>

@@ -45,9 +45,6 @@ const LevelBox = styled.span`
   color: #fff;
 `
 
-const LeftBox = styled.div`
-`
-
 const RightBox = styled.div`
   min-height: 550px;
 `
@@ -150,7 +147,7 @@ class Character extends Component {
         <div className="container">
           <div className="row h-100 mt-5">
 
-            <LeftBox className="col-sm-3 my-auto">
+            <div className="col-sm-3 my-auto">
               <Card className="card">
                 <div className="card-header">
                   <TitleBox>Menu</TitleBox>
@@ -178,7 +175,7 @@ class Character extends Component {
                 src={process.env.PUBLIC_URL+"/img/academies/"+character.academy.image}
                 alt={character.academy.name}
               />
-            </LeftBox>
+            </div>
 
             <RightBox className="col-sm-9 my-auto">
               <div className="tab-content">
@@ -187,7 +184,7 @@ class Character extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <TitleBox>{character.name} ({character.academy.name})<LevelBox> - Niv {character.level}</LevelBox></TitleBox>
+                      <TitleBox>{character.name} <span className={character.academy.className}>({character.academy.name})</span><LevelBox> - Niv {character.level}</LevelBox></TitleBox>
                       <ProgressBar actual={350} max={1200} color="#DC3545" transparentColor="#e09a9a" />
                     </div>
                     <div className="card-body">
@@ -200,7 +197,7 @@ class Character extends Component {
                     </div>
                     <div className="card-footer">
                       <TitleBox>Équipements</TitleBox>
-                      <EquippedItems items={_.filter(character.items, { equipped: true })} academyImage={character.academy.image} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
+                      <EquippedItems items={_.filter(character.items, { equipped: true })} displayActions={true} academyImage={character.academy.image} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
                     </div>
                   </Card>
                 </div>
