@@ -14,11 +14,13 @@ import Login from './containers/views/Login/Login';
 import Register from './containers/views/Login/Register';
 import Creation from './containers/views/Character/Creation';
 import Character from './containers/views/Character/Character';
+import Boss from './containers/views/Boss/Boss';
 
 import FightLayout from "./containers/layouts/FightLayout";
 import MapLayout from "./containers/layouts/MapLayout";
 import LoginLayout from "./containers/layouts/LoginLayout";
 import CharacterLayout from "./containers/layouts/CharacterLayout";
+import BossLayout from "./containers/layouts/BossLayout";
 import ExplorationLayout from "./containers/layouts/ExplorationLayout";
 // import * as serviceWorker from './serviceWorker';
 
@@ -30,6 +32,7 @@ ReactDOM.render(
       <AppRoute exact path="/exploration" component={Exploration} layout={ExplorationLayout} />
       <AppRoute exact path="/choice" component={Choice} layout={ExplorationLayout} />
       <AppRoute exact path="/character" component={Character} layout={CharacterLayout} />
+      <AppRoute exact path="/boss" component={Boss} layout={BossLayout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
       <AppRoute exact path="/register" component={Register} layout={LoginLayout}/>

@@ -7,6 +7,7 @@ import hasteSvg from "./haste.svg";
 import healthSvg from "./health.svg";
 import intelligenceSvg from "./intelligence.svg";
 import strengthSvg from "./strength.svg";
+import experienceSvg from "./experience.svg";
 
 const Characteristic = styled.div`
   display: flex;
@@ -49,6 +50,9 @@ class CharacteristicItem extends Component {
         break;
       case "strength":
         this.setState({label: "Force", color: "#f33232", svg: strengthSvg});
+        break;
+      case "experience":
+        this.setState({label: "Expérience", color: "#bfbfbf", svg: experienceSvg});
         break;
       default:
         this.setState({label: "Vie", color: "#27cc4e", svg: healthSvg});

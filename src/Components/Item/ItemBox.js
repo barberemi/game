@@ -64,17 +64,17 @@ class ItemBox extends Component {
     super(props);
 
     this.state = {
-      displayActions: false,
+      stateActions: false,
     }
   }
 
   toggleDisplayActions = () => {
-    this.setState({displayActions: !this.state.displayActions});
+    this.setState({stateActions: !this.state.stateActions});
   }
 
   render() {
-    const { item, displayText, oldItem } = this.props;
-    const { displayActions } = this.state;
+    const { item, displayText, oldItem, displayActions } = this.props;
+    const { stateActions } = this.state;
 
     if (!item) {
       return (
@@ -88,7 +88,7 @@ class ItemBox extends Component {
           style={{borderColor: getColorItem(item)}}
           data-tip={ReactDOMServer.renderToStaticMarkup(<ItemTooltip item={item} oldItem={oldItem} />)}
           data-html={true}
-          onClick={() => this.setState({displayActions: !displayActions})}
+          onClick={() => this.setState({stateActions: !stateActions})}
         >
           {item.equipped && !displayText && (
             <Equipped className="text-success">
@@ -101,21 +101,23 @@ class ItemBox extends Component {
           </Level>
         </Box>
         {displayText && <Text style={{color: getColorItem(item)}}>{item.name}</Text>}
-        <ActionsBox className={displayActions ? "d-block" : "d-none"}>
-          <div className="p-3">
-            {isAnEquippedItem(item) && (
-              <ActionBtn className="py-2 mb-4 text-warning" onClick={() => {this.toggleDisplayActions();this.props.onChangeEquippedItem(item);}}>
-                {item.equipped === true ? "Déséquiper" : "S'équiper"}
+        {displayActions && (
+          <ActionsBox className={stateActions ? "d-block" : "d-none"}>
+            <div className="p-3">
+              {isAnEquippedItem(item) && (
+                <ActionBtn className="py-2 mb-4 text-warning" onClick={() => {this.toggleDisplayActions();this.props.onChangeEquippedItem(item);}}>
+                  {item.equipped === true ? "Déséquiper" : "S'équiper"}
+                </ActionBtn>
+              )}
+              <ActionBtn className="py-2 mb-4 text-danger" onClick={() => {this.toggleDisplayActions();this.props.onDeleteItem(item);}}>
+                Supprimer
               </ActionBtn>
-            )}
-            <ActionBtn className="py-2 mb-4 text-danger" onClick={() => {this.toggleDisplayActions();this.props.onDeleteItem(item);}}>
-              Supprimer
-            </ActionBtn>
-            <ActionBtn className="py-2 text-white" onClick={() => this.toggleDisplayActions()}>
-              Annuler
-            </ActionBtn>
-          </div>
-        </ActionsBox>
+              <ActionBtn className="py-2 text-white" onClick={() => this.toggleDisplayActions()}>
+                Annuler
+              </ActionBtn>
+            </div>
+          </ActionsBox>
+        )}
       </>
     );
   }
@@ -146,6 +148,7 @@ ItemBox.propTypes = {
     rarity: PropTypes.string,
     equipped: PropTypes.bool,
   }),
+  displayActions: PropTypes.bool,
   displayText: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onChangeEquippedItem: PropTypes.func,

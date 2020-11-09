@@ -49,7 +49,7 @@ const Academy = styled.img`
 `
 
 const CenterBox = styled.div`
-  height: 500px;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;

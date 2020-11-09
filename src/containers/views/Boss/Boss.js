@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import _ from "lodash";
 import ReactTooltip from "react-tooltip";
-import { character } from "../../../utils/character";
+import { boss } from "../../../utils/boss";
 import ProgressBar from "../../../Components/Character/ProgressBar";
 import CharacteristicItem from "../../../Components/Characteristic/CharacteristicItem";
-import EquippedItems from "../../../Components/Item/EquippedItems";
 import EquippedSkills from "../../../Components/Skill/EquippedSkills";
-import FriendList from "../../../Components/Friend/FriendList";
 import ItemList from "../../../Components/Item/ItemList";
 
 const Container = styled.div`
-  background-image: url("https://images2.alphacoders.com/717/717870.jpg");
+  background-image: url("https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg");
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -64,16 +62,12 @@ const Image = styled.img`
   -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
 `
 
-const SubTitle = styled.span`
-  font-size: 18px;
-`
-
-class Character extends Component {
+class Boss extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      character,
+      boss,
       activatedTab: "generalTab",
     };
   }
@@ -86,64 +80,29 @@ class Character extends Component {
 
   onCheckSkill = (e) => {
     const name = _.split(e.target.name, '-');
-    const exists = !!_.find(this.state.character.skills[name[3]], { id: parseInt(name[2]) });
+    const exists = !!_.find(this.state.boss.skills[name[3]], { id: parseInt(name[2]) });
 
     if (exists) {
-      _.remove(this.state.character.skills[name[3]], { id: parseInt(name[2]) });
+      _.remove(this.state.boss.skills[name[3]], { id: parseInt(name[2]) });
     } else {
-      this.state.character.skills[name[3]] = [...this.state.character.skills[name[3]], {id: parseInt(name[2])} ];
+      this.state.boss.skills[name[3]] = [...this.state.boss.skills[name[3]], {id: parseInt(name[2])} ];
     }
 
     this.setState({
-      character: {
-        ...this.state.character,
+      boss: {
+        ...this.state.boss,
         skills: {
-          ...this.state.character.skills,
+          ...this.state.boss.skills,
           [name[3]]: [
-            ...this.state.character.skills[name[3]],
+            ...this.state.boss.skills[name[3]],
           ]
         }
       }
     });
   }
 
-  onDeleteItem = (item) => {
-    _.remove(this.state.character.items, { id: item.id });
-
-    this.setState({
-      character: {
-        ...this.state.character,
-        items: this.state.character.items,
-      }
-    });
-  }
-
-  onChangeEquippedItem = (newEquippedItem) => {
-    const items = [...this.state.character.items];
-    // Remove all equipped items with the same item.type
-    if (!newEquippedItem.equipped) {
-      _.map(_.filter(items, { equipped: true, type: newEquippedItem.type }), item => {
-        item.equipped = false;
-      });
-    }
-
-    // Equipped/Unequipped item now
-    newEquippedItem.equipped = !newEquippedItem.equipped;
-    const indexItem = _.findIndex(items, { id: newEquippedItem.id});
-    items[indexItem] = newEquippedItem;
-
-    this.setState({
-      character: {
-        ...this.state.character,
-        items,
-      }
-    });
-  }
-
   render() {
-    const { character, activatedTab } = this.state;
-    const remainingSkillPoints = character.skillPoints - (character.skills.dark.length + character.skills.light.length);
-    const remainingItemSpaceNb = character.itemSpaceNb - character.items.length;
+    const { boss, activatedTab } = this.state;
 
     return (
       <Container className="container-fluid">
@@ -163,20 +122,16 @@ class Character extends Component {
                       <ListLink className={activatedTab === "skillsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#skillsTab">Compétences</ListLink>
                       {activatedTab === "skillsTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
                     </div>
-                    <div onClick={() => this.onClickOnTab("itemsTab")}>
-                      <ListLink className={activatedTab === "itemsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#itemsTab">Objets</ListLink>
-                      {activatedTab === "itemsTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
-                    </div>
-                    <div onClick={() => this.onClickOnTab("friendsTab")}>
-                      <ListLink className={activatedTab === "friendsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#friendsTab">Liste d'amis</ListLink>
-                      {activatedTab === "friendsTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    <div onClick={() => this.onClickOnTab("itemsLootTab")}>
+                      <ListLink className={activatedTab === "itemsLootTab" ? " active" : ""} data-toggle="tab" role="tab" href="#itemsLootTab">Objets lachés</ListLink>
+                      {activatedTab === "itemsLootTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
                     </div>
                   </div>
                 </div>
               </Card>
               <Image
-                src={process.env.PUBLIC_URL+"/img/academies/"+character.academy.image}
-                alt={character.academy.name}
+                src={process.env.PUBLIC_URL+"/img/boss/"+boss.image}
+                alt={boss.academy.name}
               />
             </LeftBox>
 
@@ -187,20 +142,16 @@ class Character extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <TitleBox>{character.name} ({character.academy.name})<LevelBox> - Niv {character.level}</LevelBox></TitleBox>
-                      <ProgressBar actual={350} max={1200} color="#DC3545" transparentColor="#e09a9a" />
+                      <TitleBox>{boss.name} ({boss.academy.name})<LevelBox> - Niv {boss.level}</LevelBox></TitleBox>
                     </div>
                     <div className="card-body">
                       <TitleBox>Caractéristiques</TitleBox>
                       <div className="col-sm-12">
-                        {_.map(character.characteristics, characteristic => (
+                        {_.map(boss.characteristics, characteristic => (
                           <CharacteristicItem key={characteristic.name} name={characteristic.name} amount={characteristic.amount} />
                         ))}
+                        <CharacteristicItem key="experience" name="experience" amount={boss.givenExperience} />
                       </div>
-                    </div>
-                    <div className="card-footer">
-                      <TitleBox>Équipements</TitleBox>
-                      <EquippedItems items={_.filter(character.items, { equipped: true })} academyImage={character.academy.image} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
                     </div>
                   </Card>
                 </div>
@@ -211,40 +162,24 @@ class Character extends Component {
                     <div className="card-body">
                       <div className="col-sm-12">
                         <TitleBox>
-                          Compétences d'académie<br />
-                          <SubTitle>({remainingSkillPoints === 0 ? "Aucun point restant" : (remainingSkillPoints === 1 ? "1pt restant" : remainingSkillPoints + "pts restants")})</SubTitle>
+                          Compétences du boss
                         </TitleBox>
                       </div>
-                      <EquippedSkills skills={character.skills} onCheckSkill={this.onCheckSkill} remainingSkillPoints={remainingSkillPoints} />
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Friends */}
-                <div className={`tab-pane${activatedTab === "friendsTab" ? " active" : ""}`} id="friendsTab" role="tabpanel">
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <TitleBox>
-                          Liste d'amis
-                        </TitleBox>
-                      </div>
-                      <FriendList friends={character.friends} />
+                      <EquippedSkills skills={boss.skills} onCheckSkill={this.onCheckSkill} />
                     </div>
                   </Card>
                 </div>
 
                 {/* Items */}
-                <div className={`tab-pane${activatedTab === "itemsTab" ? " active" : ""}`} id="itemsTab" role="tabpanel">
+                <div className={`tab-pane${activatedTab === "itemsLootTab" ? " active" : ""}`} id="itemsLootTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
                         <TitleBox>
-                          Listes des objets<br />
-                          <SubTitle>({remainingItemSpaceNb === 0 ? "Aucune place restante" : (remainingItemSpaceNb === 1 ? "1 place restante" : remainingItemSpaceNb + " places restantes")})</SubTitle>
+                          Liste des objets lachés
                         </TitleBox>
                       </div>
-                      <ItemList items={character.items} displayActions={true} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
+                      <ItemList items={boss.items} displayActions={false} />
                     </div>
                   </Card>
                 </div>
@@ -259,4 +194,4 @@ class Character extends Component {
     );
   }
 }
-export default Character;
+export default Boss;

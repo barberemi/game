@@ -44,6 +44,7 @@ ItemList.propTypes = {
     rarity: PropTypes.string,
     equipped: PropTypes.bool,
   })),
+  displayActions: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onChangeEquippedItem: PropTypes.func,
 }

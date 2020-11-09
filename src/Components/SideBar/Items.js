@@ -32,7 +32,7 @@ class Items extends Component {
         }}>
           <Text>&nbsp;Carte du monde</Text>
         </LinkText>
-        <LinkText className="fa fa-user-circle fa-2x" style={{
+        <LinkText to={"/character"} className="fa fa-user-circle fa-2x" style={{
           left: (10 - 35*Math.cos(-0.5 * Math.PI - 2*(1/8)*Math.PI)).toFixed(4) + "%",
           top: (55 + 35*Math.sin(-0.5 * Math.PI - 2*(1/8)*Math.PI)).toFixed(4) + "%"
         }}>
