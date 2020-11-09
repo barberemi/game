@@ -89,10 +89,8 @@ class ItemTooltip extends Component {
         </div>
         <br />
         <div>
-          {_.map(item.characteristics, (characteristic, index) => (
-            <Fragment key={index}>
-              +{characteristic.amount} {characteristic.characteristic.name}<br />
-            </Fragment>
+          {item.characteristics &&_.map(item.characteristics, (characteristic, index) => (
+            <div key={index} className={!oldItem && !item.equipped ? "text-success" : ""}>+{characteristic.amount} {characteristic.characteristic.name}</div>
           ))}
         </div>
         {oldItem && (
