@@ -23,6 +23,15 @@ const Container = styled.div`
   overflow-y: scroll;
 `
 
+const ListLink = styled.a`
+  color: #fff;
+  
+  &:hover {
+    color: #FFC312;
+    text-decoration: none;
+  }
+`
+
 const TitleBox = styled.div`
   font-size: 22px;
   color: #FFC312;
@@ -68,7 +77,7 @@ class Character extends Component {
 
     this.state = {
       character,
-      activatedTab: "itemsTab",
+      activatedTab: "generalTab",
     };
   }
 
@@ -147,22 +156,31 @@ class Character extends Component {
             <LeftBox className="col-sm-3 my-auto">
               <Card className="card">
                 <div className="card-header">
-                  <TitleBox>{character.academy.name}</TitleBox>
-                  {_.map(character.academy.roles, role => (
-                    <div key={role} className={character.academy.className}>{role}</div>
-                  ))}
-                  <ul>
-                    <li onClick={() => this.onClickOnTab("generalTab")}><a className={activatedTab === "generalTab" ? "active" : ""} data-toggle="tab" role="tab" href="#generalTab">Général</a></li>
-                    <li onClick={() => this.onClickOnTab("skillsTab")}><a className={activatedTab === "skillsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#skillsTab">Compétences</a></li>
-                    <li onClick={() => this.onClickOnTab("itemsTab")}><a className={activatedTab === "itemsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#itemsTab">Objets</a></li>
-                    <li onClick={() => this.onClickOnTab("friendsTab")}><a className={activatedTab === "friendsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#friendsTab">Liste d'amis</a></li>
-                  </ul>
+                  <TitleBox>Menu</TitleBox>
+                  <div>
+                    <div onClick={() => this.onClickOnTab("generalTab")}>
+                      <ListLink className={activatedTab === "generalTab" ? "active" : ""} data-toggle="tab" role="tab" href="#generalTab">Général</ListLink>
+                      {activatedTab === "generalTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    </div>
+                    <div onClick={() => this.onClickOnTab("skillsTab")}>
+                      <ListLink className={activatedTab === "skillsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#skillsTab">Compétences</ListLink>
+                      {activatedTab === "skillsTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    </div>
+                    <div onClick={() => this.onClickOnTab("itemsTab")}>
+                      <ListLink className={activatedTab === "itemsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#itemsTab">Objets</ListLink>
+                      {activatedTab === "itemsTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    </div>
+                    <div onClick={() => this.onClickOnTab("friendsTab")}>
+                      <ListLink className={activatedTab === "friendsTab" ? " active" : ""} data-toggle="tab" role="tab" href="#friendsTab">Liste d'amis</ListLink>
+                      {activatedTab === "friendsTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    </div>
+                  </div>
                 </div>
               </Card>
               <Image
                 src={process.env.PUBLIC_URL+"/img/academies/"+character.academy.image}
                 alt={character.academy.name}
-                data-tip="Ahou Ahou !!"
+                data-tip={character.academy.name}
               />
             </LeftBox>
 
@@ -173,7 +191,7 @@ class Character extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <TitleBox>{character.name} <LevelBox> - Niv {character.level}</LevelBox></TitleBox>
+                      <TitleBox>{character.name} ({character.academy.name})<LevelBox> - Niv {character.level}</LevelBox></TitleBox>
                       <ProgressBar actual={350} max={1200} color="#DC3545" transparentColor="#e09a9a" />
                     </div>
                     <div className="card-body">
