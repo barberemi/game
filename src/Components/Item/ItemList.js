@@ -5,8 +5,8 @@ import _ from "lodash";
 import ItemBox from "./ItemBox";
 
 const Container = styled.div`
- max-height: 70vh;
- min-height: 70vh;
+ max-height: 40vh;
+ min-height: 40vh;
  overflow-y: scroll;
  padding-left: 30px;
 `
@@ -17,14 +17,16 @@ const Item = styled.div`
 
 class ItemList extends Component {
   render() {
-    const { items } = this.props;
+    const { items, onClick } = this.props;
 
     return (
       <>
         <Container className="position-relative">
           {_.map(items, item => (
             <Item className="float-left d-flex position-relative" key={item.id}>
+              <div onClick={() => onClick ? onClick(item) : null}>
               <ItemBox item={item} oldItem={!item.equipped ? _.find(items, { type: item.type, equipped: true }) : null} displayText={false} {...this.props} />
+              </div>
             </Item>
           ))}
         </Container>
@@ -47,6 +49,7 @@ ItemList.propTypes = {
   displayActions: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onChangeEquippedItem: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 export default ItemList;

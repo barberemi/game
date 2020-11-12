@@ -10,6 +10,7 @@ import { boss3 } from "../../../utils/boss3";
 import CharacteristicItem from "../../../Components/Characteristic/CharacteristicItem";
 import EquippedSkills from "../../../Components/Skill/EquippedSkills";
 import ItemList from "../../../Components/Item/ItemList";
+import Title from "../../../Components/Title/Title";
 
 const Container = styled.div`
   background-image: url("https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg");
@@ -31,14 +32,6 @@ const ListLink = styled.a`
     color: #FFC312;
     text-decoration: none;
   }
-`
-
-const TitleBox = styled.div`
-  font-size: 22px;
-  color: #FFC312;
-  -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
 `
 
 const LevelBox = styled.span`
@@ -153,7 +146,7 @@ class Boss extends Component {
                 arrow="left"
                 to={towernumber === 1 ? "#" : "/boss/" + (towernumber - 1)}
               >
-                <i className="fas fa-arrow-left fa-3x" />
+                <i className="fas fa-chevron-left fa-3x" />
               </LinkArrow>
             </LeftArrayBox>
 
@@ -163,14 +156,14 @@ class Boss extends Component {
                 arrow="right"
                 to={towernumber === 3 ? "#" : "/boss/" + (towernumber + 1)}
               >
-                <i className="fas fa-arrow-right fa-3x" />
+                <i className="fas fa-chevron-right fa-3x" />
               </LinkArrow>
             </RightArrayBox>
 
             <div className="col-sm-3 my-auto">
               <Card className="card">
                 <div className="card-header">
-                  <TitleBox>Menu</TitleBox>
+                  <Title>Menu</Title>
                   <div>
                     <div onClick={() => this.onClickOnTab("generalTab")}>
                       <ListLink className={activatedTab === "generalTab" ? "active" : ""} data-toggle="tab" role="tab" href="#generalTab">Général</ListLink>
@@ -200,13 +193,11 @@ class Boss extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <TitleBox>
-                        Tour niveau {towernumber}
-                      </TitleBox>
+                      <Title>Tour niveau {towernumber}</Title>
                       {boss.name} <span className={boss.academy.className}>({boss.academy.name})</span><LevelBox> - Niv {boss.level}</LevelBox>
                     </div>
                     <div className="card-body">
-                      <TitleBox>Caractéristiques</TitleBox>
+                      <Title>Caractéristiques</Title>
                       <div className="col-sm-12">
                         {_.map(boss.characteristics, characteristic => (
                           <CharacteristicItem key={characteristic.name} name={characteristic.name} amount={characteristic.amount} />
@@ -222,9 +213,7 @@ class Boss extends Component {
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <TitleBox>
-                          Compétences du boss
-                        </TitleBox>
+                        <Title>Compétences du boss</Title>
                       </div>
                       <EquippedSkills skills={boss.skills} onCheckSkill={this.onCheckSkill} />
                     </div>
@@ -236,9 +225,7 @@ class Boss extends Component {
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <TitleBox>
-                          Liste des objets lachés
-                        </TitleBox>
+                        <Title>Liste des objets lachés</Title>
                       </div>
                       <ItemList items={boss.items} displayActions={false} />
                     </div>

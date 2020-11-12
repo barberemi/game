@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Redirect } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./animate.css";
 import "./bootstrap.css";
+import 'react-toastify/dist/ReactToastify.min.css';
 import AppRoute from "./containers/AppRoute";
 
 import Fight from './containers/views/Fight/Fight';
@@ -15,13 +16,17 @@ import Register from './containers/views/Login/Register';
 import Creation from './containers/views/Character/Creation';
 import Character from './containers/views/Character/Character';
 import Boss from './containers/views/Boss/Boss';
+import Crafting from './containers/views/Crafting/Crafting';
 
 import FightLayout from "./containers/layouts/FightLayout";
 import MapLayout from "./containers/layouts/MapLayout";
 import LoginLayout from "./containers/layouts/LoginLayout";
 import CharacterLayout from "./containers/layouts/CharacterLayout";
-import BossLayout from "./containers/layouts/BossLayout";
+import BossLayout from "./containers/layouts/BossLayout"
+import CraftingLayout from "./containers/layouts/CraftingLayout";
 import ExplorationLayout from "./containers/layouts/ExplorationLayout";
+
+import { ToastContainer } from 'react-toastify';
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
@@ -33,6 +38,8 @@ ReactDOM.render(
       <AppRoute exact path="/choice" component={Choice} layout={ExplorationLayout} />
       <AppRoute exact path="/character" component={Character} layout={CharacterLayout} />
       <AppRoute path="/boss/:towernumber" component={Boss} layout={BossLayout} />
+      <AppRoute exact path="/crafting" component={Crafting} layout={CraftingLayout} />
+      <AppRoute exact path="/crafting/:idboss" component={Crafting} layout={CraftingLayout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
       <AppRoute exact path="/register" component={Register} layout={LoginLayout}/>
@@ -40,6 +47,7 @@ ReactDOM.render(
 
       <Redirect from="/" to="/login" />
     </Switch>
+    <ToastContainer />
   </BrowserRouter>,
   document.getElementById("root")
 );

@@ -9,6 +9,7 @@ import EquippedItems from "../../../Components/Item/EquippedItems";
 import EquippedSkills from "../../../Components/Skill/EquippedSkills";
 import FriendList from "../../../Components/Friend/FriendList";
 import ItemList from "../../../Components/Item/ItemList";
+import Title from "../../../Components/Title/Title";
 
 const Container = styled.div`
   background-image: url("https://images2.alphacoders.com/717/717870.jpg");
@@ -30,14 +31,6 @@ const ListLink = styled.a`
     color: #FFC312;
     text-decoration: none;
   }
-`
-
-const TitleBox = styled.div`
-  font-size: 22px;
-  color: #FFC312;
-  -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
 `
 
 const LevelBox = styled.span`
@@ -150,7 +143,7 @@ class Character extends Component {
             <div className="col-sm-3 my-auto">
               <Card className="card">
                 <div className="card-header">
-                  <TitleBox>Menu</TitleBox>
+                  <Title>Menu</Title>
                   <div>
                     <div onClick={() => this.onClickOnTab("generalTab")}>
                       <ListLink className={activatedTab === "generalTab" ? "active" : ""} data-toggle="tab" role="tab" href="#generalTab">Général</ListLink>
@@ -184,11 +177,11 @@ class Character extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <TitleBox>{character.name} <span className={character.academy.className}>({character.academy.name})</span><LevelBox> - Niv {character.level}</LevelBox></TitleBox>
+                      <Title>{character.name} <span className={character.academy.className}>({character.academy.name})</span><LevelBox> - Niv {character.level}</LevelBox></Title>
                       <ProgressBar actual={350} max={1200} color="#DC3545" transparentColor="#e09a9a" />
                     </div>
                     <div className="card-body">
-                      <TitleBox>Caractéristiques</TitleBox>
+                      <Title>Caractéristiques</Title>
                       <div className="col-sm-12">
                         {_.map(character.characteristics, characteristic => (
                           <CharacteristicItem key={characteristic.name} name={characteristic.name} amount={characteristic.amount} />
@@ -196,7 +189,7 @@ class Character extends Component {
                       </div>
                     </div>
                     <div className="card-footer">
-                      <TitleBox>Équipements</TitleBox>
+                      <Title>Équipements</Title>
                       <EquippedItems items={_.filter(character.items, { equipped: true })} displayActions={true} academyImage={character.academy.image} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
                     </div>
                   </Card>
@@ -207,10 +200,10 @@ class Character extends Component {
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <TitleBox>
+                        <Title>
                           Compétences d'académie<br />
                           <SubTitle>({remainingSkillPoints === 0 ? "Aucun point restant" : (remainingSkillPoints === 1 ? "1pt restant" : remainingSkillPoints + "pts restants")})</SubTitle>
-                        </TitleBox>
+                        </Title>
                       </div>
                       <EquippedSkills skills={character.skills} onCheckSkill={this.onCheckSkill} remainingSkillPoints={remainingSkillPoints} />
                     </div>
@@ -222,9 +215,9 @@ class Character extends Component {
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <TitleBox>
+                        <Title>
                           Liste d'amis
-                        </TitleBox>
+                        </Title>
                       </div>
                       <FriendList friends={character.friends} />
                     </div>
@@ -236,10 +229,10 @@ class Character extends Component {
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <TitleBox>
+                        <Title>
                           Listes des objets<br />
                           <SubTitle>({remainingItemSpaceNb === 0 ? "Aucune place restante" : (remainingItemSpaceNb === 1 ? "1 place restante" : remainingItemSpaceNb + " places restantes")})</SubTitle>
-                        </TitleBox>
+                        </Title>
                       </div>
                       <ItemList items={character.items} displayActions={true} onDeleteItem={this.onDeleteItem} onChangeEquippedItem={this.onChangeEquippedItem} />
                     </div>

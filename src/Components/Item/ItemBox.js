@@ -73,7 +73,7 @@ class ItemBox extends Component {
   }
 
   render() {
-    const { item, displayText, oldItem, displayActions } = this.props;
+    const { item, displayText, oldItem, displayActions, withOpacity } = this.props;
     const { stateActions } = this.state;
 
     if (!item) {
@@ -85,7 +85,7 @@ class ItemBox extends Component {
     return (
       <>
         <Box
-          style={{borderColor: getColorItem(item)}}
+          style={{borderColor: getColorItem(item), opacity: withOpacity ? "0.5" : "1"}}
           data-tip={ReactDOMServer.renderToStaticMarkup(<ItemTooltip item={item} oldItem={oldItem} />)}
           data-html={true}
           onClick={() => this.setState({stateActions: !stateActions})}
@@ -148,6 +148,7 @@ ItemBox.propTypes = {
     rarity: PropTypes.string,
     equipped: PropTypes.bool,
   }),
+  withOpacity: PropTypes.bool,
   displayActions: PropTypes.bool,
   displayText: PropTypes.bool,
   onDeleteItem: PropTypes.func,
