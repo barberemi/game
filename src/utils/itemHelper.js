@@ -53,6 +53,8 @@ export const getItemTranslationType = (item) => {
       return "Chaussures";
     case "weapon":
       return "Arme";
+    case "craft":
+      return "Composant";
     default:
       return item.type;
   }

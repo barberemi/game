@@ -96,9 +96,7 @@ class ItemBox extends Component {
             </Equipped>
           )}
           <Image src={item.image} alt={item.name} />
-          <Level>
-            {item.level}
-          </Level>
+          {item.level && <Level>{item.level}</Level>}
         </Box>
         {displayText && <Text style={{color: getColorItem(item)}}>{item.name}</Text>}
         {displayActions && (

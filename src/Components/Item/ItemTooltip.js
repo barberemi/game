@@ -11,6 +11,7 @@ import beltSvg from "./svg/belt.svg";
 import pantsSvg from "./svg/pants.svg";
 import shoesSvg from "./svg/shoes.svg";
 import weaponSvg from "./svg/weapon.svg";
+import craftSvg from "./svg/craft.svg";
 import {getColorItem, getItemTranslationRarity, getItemTranslationType} from "../../utils/itemHelper";
 
 const Tooltip = styled.div`
@@ -63,6 +64,9 @@ class ItemTooltip extends Component {
       case "weapon":
         svg = weaponSvg;
         break;
+      case "craft":
+        svg = craftSvg;
+        break;
       default:
         break;
     }
@@ -88,14 +92,18 @@ class ItemTooltip extends Component {
           <Text>{getItemTranslationType(item)}</Text>
         </div>
         <br />
-        <div>
-          {item.characteristics &&_.map(item.characteristics, (characteristic, index) => (
-            <div key={index} className={!oldItem && !item.equipped ? "text-success" : ""}>+{characteristic.amount} {characteristic.characteristic.name}</div>
-          ))}
-        </div>
+        {item.characteristics && (
+          <>
+            <div>
+              {_.map(item.characteristics, (characteristic, index) => (
+                <div key={index} className={!oldItem && !item.equipped ? "text-success" : ""}>+{characteristic.amount} {characteristic.characteristic.name}</div>
+              ))}
+            </div>
+            <br />
+          </>
+        )}
         {oldItem && (
           <>
-            <br />
             <div className="text-warning">Comparatif : </div>
             {oldItem.characteristics && _.map(oldItem.characteristics, oldCharac => {
               const newCharac = _.find(item.characteristics, { characteristic: { name: oldCharac.characteristic.name }});
@@ -113,10 +121,10 @@ class ItemTooltip extends Component {
                 return <div className="text-success">+{newCharac.amount} {newCharac.characteristic.name}</div>;
               }
             })}
+            <br />
           </>
         )}
-        <br />
-        <div>Niv {item.level}</div>
+        {item.level && <div>Niv {item.level}</div>}
         <div>Prix de vente : {item.cost} <i className="far fa-money-bill-alt" /></div>
       </Tooltip>
     );

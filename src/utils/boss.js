@@ -132,6 +132,14 @@ export const boss = [
           }
         ]
       },
+      {
+        id: 20,
+        name: "Morceau d'épée",
+        image: "https://www.gameuionweb.com/zelda-botw/items/weapons/BotW_Royal_Claymore_Icon.png",
+        cost: 4500,
+        type: "craft",
+        rarity: "epic",
+      },
     ]
   },
   {

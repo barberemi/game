@@ -59,25 +59,8 @@ export const character = {
     className: "text-danger",
   },
   friends: [
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-    {id: 3, name: "Romain le roumaiinnng", level: 5, academy: {name: "warrior"}},
-    {id: 4, name: "Alain le bambin", level: 2, academy: {name: "magician"}},
-
+    {id: 3, name: "Romain le romarin", level: 5, academy: {name: "warrior"}},
+    {id: 4, name: "Alain le babouin", level: 2, academy: {name: "magician"}},
   ],
   items: [
     {id: 1, name: "Casque d'or", equipped: true, image: "https://www.gameuionweb.com/zelda-botw/items/armors/BotW_Cap_of_the_Hero_Icon.png", cost: 100, level: 10, type: "helmet", rarity: "common", characteristics: [

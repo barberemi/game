@@ -18,6 +18,7 @@ import Creation from './containers/views/Character/Creation';
 import Character from './containers/views/Character/Character';
 import Boss from './containers/views/Boss/Boss';
 import Crafting from './containers/views/Crafting/Crafting';
+import Reward from './containers/views/Reward/Reward';
 
 import FightLayout from "./containers/layouts/FightLayout";
 import MapLayout from "./containers/layouts/MapLayout";
@@ -26,6 +27,7 @@ import CharacterLayout from "./containers/layouts/CharacterLayout";
 import BossLayout from "./containers/layouts/BossLayout"
 import CraftingLayout from "./containers/layouts/CraftingLayout";
 import ExplorationLayout from "./containers/layouts/ExplorationLayout";
+import RewardLayout from "./containers/layouts/RewardLayout";
 
 import { ToastContainer } from 'react-toastify';
 // import * as serviceWorker from './serviceWorker';
@@ -33,11 +35,13 @@ import { ToastContainer } from 'react-toastify';
 ReactDOM.render(
   <BrowserRouter forceRefresh={true}>
     <Switch>
-      <AppRoute exact path="/fight" component={Fight} layout={FightLayout} />
       <AppRoute exact path="/maps" component={Map} layout={MapLayout} />
       <AppRoute exact path="/exploration" component={Exploration} layout={ExplorationLayout} />
       <AppRoute exact path="/choice" component={Choice} layout={ExplorationLayout} />
+      <AppRoute exact path="/fight" component={Fight} layout={FightLayout} />
+
       <AppRoute exact path="/character" component={Character} layout={CharacterLayout} />
+      <AppRoute exact path="/creation" component={Creation} layout={CharacterLayout} />
 
       <AppRoute path="/boss/:idboss" component={Boss} layout={BossLayout} />
       <AppRoute path="/boss" component={Boss} layout={BossLayout} />
@@ -45,9 +49,10 @@ ReactDOM.render(
       <AppRoute exact path="/crafting" component={Crafting} layout={CraftingLayout} />
       <AppRoute exact path="/crafting/:idboss" component={Crafting} layout={CraftingLayout} />
 
+      <AppRoute path="/reward" component={Reward} layout={RewardLayout} />
+
       <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
       <AppRoute exact path="/register" component={Register} layout={LoginLayout}/>
-      <AppRoute exact path="/creation" component={Creation} layout={CharacterLayout} />
 
       <Redirect from="/" to="/login" />
     </Switch>

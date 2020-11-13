@@ -9,6 +9,7 @@ import EquippedSkills from "../../../Components/Skill/EquippedSkills";
 import FriendList from "../../../Components/Friend/FriendList";
 import ItemList from "../../../Components/Item/ItemList";
 import Title from "../../../Components/Title/Title";
+import {toast} from "react-toastify";
 
 const Container = styled.div`
   background-image: url("https://images2.alphacoders.com/717/717870.jpg");
@@ -104,6 +105,16 @@ class Character extends Component {
         ...this.state.character,
         items: this.state.character.items,
       }
+    });
+
+    toast.error(<span style={{ fontSize: "14px"}}>Suppression de l'objet réussie !</span>, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
   }
 
