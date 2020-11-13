@@ -4,12 +4,56 @@ export const boss = [
     name: "The Lich Skin",
     image: "lich-skin.png",
     level: 25,
+    givenExperience: 8600,
     towerLevel: 1,
+    characteristics: [
+      {name: "health", amount: 600},
+      {name: "haste", amount: 20},
+      {name: "strength", amount: 30},
+      {name: "intelligence", amount: 120},
+      {name: "focus", amount: 50},
+    ],
     academy: {
       name: "Magicien",
       roles: ["Dégats magiques", "Distance"],
       className: "text-primary",
       image: "magician.png",
+    },
+    skills: {
+      dark: [
+        {
+          id: 1,
+          level: 5,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 4,
+          level: 15,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 7,
+          level: 25,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          id: 19,
+          level: 5,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 22,
+          level: 15,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+      ]
     },
     items: [
       {
@@ -95,12 +139,56 @@ export const boss = [
     name: "Green Barrow",
     image: "green-barrow.png",
     level: 45,
+    givenExperience: 11500,
     towerLevel: 2,
+    characteristics: [
+      {name: "health", amount: 800},
+      {name: "haste", amount: 20},
+      {name: "strength", amount: 70},
+      {name: "intelligence", amount: 30},
+      {name: "focus", amount: 80},
+    ],
     academy: {
       name: "Archer",
       roles: ["Dégats physiques", "Distance"],
       className: "text-danger",
       image: "hunter.png",
+    },
+    skills: {
+      dark: [
+        {
+          id: 1,
+          level: 5,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 4,
+          level: 15,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 7,
+          level: 25,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          id: 19,
+          level: 5,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 22,
+          level: 15,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+      ]
     },
     items: [
       {
@@ -140,12 +228,56 @@ export const boss = [
     name: "Le Berseker",
     image: "berseker.png",
     level: 55,
+    givenExperience: 16000,
     towerLevel: 3,
+    characteristics: [
+      {name: "health", amount: 1200},
+      {name: "haste", amount: 50},
+      {name: "strength", amount: 110},
+      {name: "intelligence", amount: 20},
+      {name: "focus", amount: 150},
+    ],
     academy: {
       name: "Guerrier",
       image: "warrior.png",
       roles: ["Dégats physiques", "Corps à corps"],
       className: "text-danger",
+    },
+    skills: {
+      dark: [
+        {
+          id: 1,
+          level: 5,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 4,
+          level: 15,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 7,
+          level: 25,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+      ],
+      light: [
+        {
+          id: 19,
+          level: 5,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+        {
+          id: 22,
+          level: 15,
+          name: "Décoche flèches",
+          description: "Décoche une volée de flèches sur l'ennemi, lui infligeant 46pts de dégats.",
+        },
+      ]
     },
     items: [
       {

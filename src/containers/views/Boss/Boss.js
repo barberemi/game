@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 import _ from "lodash";
-import ReactTooltip from "react-tooltip";
 import {Link} from "react-router-dom";
-import { boss1 } from "../../../utils/boss1";
-import { boss2 } from "../../../utils/boss2";
-import { boss3 } from "../../../utils/boss3";
+import { boss } from "../../../utils/boss";
 import CharacteristicItem from "../../../Components/Characteristic/CharacteristicItem";
 import EquippedSkills from "../../../Components/Skill/EquippedSkills";
 import ItemList from "../../../Components/Item/ItemList";
@@ -60,10 +57,6 @@ const LinkArrow = styled(Link)`
   
   &:hover{
     color: #FFC312;
-    ${props => ( ((props.towernumber === 1 && props.arrow === "left") || (props.towernumber === 3 && props.arrow === "right")) && css`
-      cursor: not-allowed;
-      color: #fff;
-    `)};
   }
 `
 
@@ -82,24 +75,12 @@ const Image = styled.img`
 class Boss extends Component {
   constructor(props) {
     super(props);
-    const towernumber = parseInt(this.props.match.params.towernumber);
-    let boss = boss1;
-
-    switch (towernumber) {
-      case 2:
-        boss = boss2;
-        break
-      case 3:
-        boss = boss3;
-        break
-      default:
-        break;
-    }
+    const idboss = parseInt(this.props.match.params.idboss);
 
     this.state = {
-      boss: boss,
+      boss,
       activatedTab: "generalTab",
-      towernumber,
+      selectedBoss: idboss ? _.find(boss, { id: idboss }) : _.first(boss),
     };
   }
 
@@ -111,21 +92,21 @@ class Boss extends Component {
 
   onCheckSkill = (e) => {
     const name = _.split(e.target.name, '-');
-    const exists = !!_.find(this.state.boss.skills[name[3]], { id: parseInt(name[2]) });
+    const exists = !!_.find(this.state.selectedBoss.skills[name[3]], { id: parseInt(name[2]) });
 
     if (exists) {
-      _.remove(this.state.boss.skills[name[3]], { id: parseInt(name[2]) });
+      _.remove(this.state.selectedBoss.skills[name[3]], { id: parseInt(name[2]) });
     } else {
-      this.state.boss.skills[name[3]] = [...this.state.boss.skills[name[3]], {id: parseInt(name[2])} ];
+      this.state.selectedBoss.skills[name[3]] = [...this.state.selectedBoss.skills[name[3]], {id: parseInt(name[2])} ];
     }
 
     this.setState({
       boss: {
         ...this.state.boss,
         skills: {
-          ...this.state.boss.skills,
+          ...this.state.selectedBoss.skills,
           [name[3]]: [
-            ...this.state.boss.skills[name[3]],
+            ...this.state.selectedBoss.skills[name[3]],
           ]
         }
       }
@@ -133,32 +114,34 @@ class Boss extends Component {
   }
 
   render() {
-    const { boss, activatedTab, towernumber } = this.state;
+    const { activatedTab, selectedBoss } = this.state;
 
     return (
       <Container className="container-fluid">
         <div className="container">
           <div className="row h-100 mt-5">
 
-            <LeftArrayBox className="position-fixed h-100">
-              <LinkArrow
-                towernumber={towernumber}
-                arrow="left"
-                to={towernumber === 1 ? "#" : "/boss/" + (towernumber - 1)}
-              >
-                <i className="fas fa-chevron-left fa-3x" />
-              </LinkArrow>
-            </LeftArrayBox>
+            {selectedBoss.id !== _.first(boss).id && (
+              <LeftArrayBox className="position-fixed h-100">
+                <LinkArrow
+                  arrow="left"
+                  to={"/boss/" + boss[_.findIndex(boss, { id: selectedBoss.id }) - 1].id}
+                >
+                  <i className="fas fa-chevron-left fa-3x" />
+                </LinkArrow>
+              </LeftArrayBox>
+            )}
 
-            <RightArrayBox className="position-fixed h-100">
-              <LinkArrow
-                towernumber={towernumber}
-                arrow="right"
-                to={towernumber === 3 ? "#" : "/boss/" + (towernumber + 1)}
-              >
-                <i className="fas fa-chevron-right fa-3x" />
-              </LinkArrow>
-            </RightArrayBox>
+            {selectedBoss.id !== _.last(boss).id && (
+              <RightArrayBox className="position-fixed h-100">
+                <LinkArrow
+                  arrow="right"
+                  to={"/boss/" + boss[_.findIndex(boss, { id: selectedBoss.id }) + 1].id}
+                >
+                  <i className="fas fa-chevron-right fa-3x" />
+                </LinkArrow>
+              </RightArrayBox>
+            )}
 
             <div className="col-sm-3 my-auto">
               <Card className="card">
@@ -181,8 +164,8 @@ class Boss extends Component {
                 </div>
               </Card>
               <Image
-                src={process.env.PUBLIC_URL+"/img/boss/"+boss.image}
-                alt={boss.academy.name}
+                src={process.env.PUBLIC_URL+"/img/boss/"+selectedBoss.image}
+                alt={selectedBoss.academy.name}
               />
             </div>
 
@@ -193,16 +176,16 @@ class Boss extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <Title>Tour niveau {towernumber}</Title>
-                      {boss.name} <span className={boss.academy.className}>({boss.academy.name})</span><LevelBox> - Niv {boss.level}</LevelBox>
+                      <Title>Tour niveau {selectedBoss.towerLevel}</Title>
+                      {selectedBoss.name} <span className={selectedBoss.academy.className}>({selectedBoss.academy.name})</span><LevelBox> - Niv {selectedBoss.level}</LevelBox>
                     </div>
                     <div className="card-body">
                       <Title>Caractéristiques</Title>
                       <div className="col-sm-12">
-                        {_.map(boss.characteristics, characteristic => (
+                        {_.map(selectedBoss.characteristics, characteristic => (
                           <CharacteristicItem key={characteristic.name} name={characteristic.name} amount={characteristic.amount} />
                         ))}
-                        <CharacteristicItem key="experience" name="experience" amount={boss.givenExperience} />
+                        <CharacteristicItem key="experience" name="experience" amount={selectedBoss.givenExperience} />
                       </div>
                     </div>
                   </Card>
@@ -215,7 +198,7 @@ class Boss extends Component {
                       <div className="col-sm-12">
                         <Title>Compétences du boss</Title>
                       </div>
-                      <EquippedSkills skills={boss.skills} onCheckSkill={this.onCheckSkill} />
+                      <EquippedSkills skills={selectedBoss.skills} onCheckSkill={this.onCheckSkill} />
                     </div>
                   </Card>
                 </div>
@@ -227,7 +210,7 @@ class Boss extends Component {
                       <div className="col-sm-12">
                         <Title>Liste des objets lachés</Title>
                       </div>
-                      <ItemList items={boss.items} displayActions={false} />
+                      <ItemList items={selectedBoss.items} displayActions={false} />
                     </div>
                   </Card>
                 </div>
@@ -237,7 +220,6 @@ class Boss extends Component {
 
           </div>
         </div>
-        <ReactTooltip />
       </Container>
     );
   }

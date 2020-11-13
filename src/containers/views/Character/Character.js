@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import _ from "lodash";
-import ReactTooltip from "react-tooltip";
 import { character } from "../../../utils/character";
 import ProgressBar from "../../../Components/Character/ProgressBar";
 import CharacteristicItem from "../../../Components/Characteristic/CharacteristicItem";
@@ -244,7 +243,6 @@ class Character extends Component {
 
           </div>
         </div>
-        <ReactTooltip />
       </Container>
     );
   }

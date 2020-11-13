@@ -4,7 +4,6 @@ import styles from "./styles.scss"; // dont remove, used to svg animations etc
 import moonSunSvg from './moon-sun.svg';
 import landSvg from './land.svg';
 import PropTypes from "prop-types";
-import ReactTooltip from "react-tooltip";
 
 const Container = styled.div`
   position: absolute;
@@ -91,7 +90,6 @@ class LightDarkButton extends Component {
             </OlasBottom>
           </Circle>
         </Container>
-        <ReactTooltip />
       </>
     );
   }

@@ -6,6 +6,7 @@ import "./animate.css";
 import "./bootstrap.css";
 import 'react-toastify/dist/ReactToastify.min.css';
 import AppRoute from "./containers/AppRoute";
+import ReactTooltip from "react-tooltip";
 
 import Fight from './containers/views/Fight/Fight';
 import Map from './containers/views/Map/Map';
@@ -37,7 +38,10 @@ ReactDOM.render(
       <AppRoute exact path="/exploration" component={Exploration} layout={ExplorationLayout} />
       <AppRoute exact path="/choice" component={Choice} layout={ExplorationLayout} />
       <AppRoute exact path="/character" component={Character} layout={CharacterLayout} />
-      <AppRoute path="/boss/:towernumber" component={Boss} layout={BossLayout} />
+
+      <AppRoute path="/boss/:idboss" component={Boss} layout={BossLayout} />
+      <AppRoute path="/boss" component={Boss} layout={BossLayout} />
+
       <AppRoute exact path="/crafting" component={Crafting} layout={CraftingLayout} />
       <AppRoute exact path="/crafting/:idboss" component={Crafting} layout={CraftingLayout} />
 
@@ -48,6 +52,7 @@ ReactDOM.render(
       <Redirect from="/" to="/login" />
     </Switch>
     <ToastContainer />
+    <ReactTooltip />
   </BrowserRouter>,
   document.getElementById("root")
 );

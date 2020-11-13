@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import _ from "lodash";
-import ReactTooltip from "react-tooltip";
 import { boss } from "../../../utils/boss";
 import { character } from "../../../utils/character";
 import {Link} from "react-router-dom";
@@ -257,7 +256,6 @@ class Crafting extends Component {
 
           </div>
         </div>
-        <ReactTooltip />
       </Container>
     );
   }

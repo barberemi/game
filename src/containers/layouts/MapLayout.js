@@ -4,7 +4,6 @@ import MapNavBar from "../../Components/NavBar/MapNavBar";
 import SideBar from "../../Components/SideBar/SideBar";
 
 const Background = styled.div`
-  font-family: 'Lakki Reddy', cursive;
   height: 100vh;
   background-color: #343a40;
 `

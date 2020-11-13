@@ -4,7 +4,6 @@ import SideBar from "../../Components/SideBar/SideBar";
 import ExplorationNavBar from "../../Components/NavBar/ExplorationNavBar";
 
 const Background = styled.div`
-  font-family: 'Lakki Reddy', cursive;
   height: 100vh;
   background-color: #343a40;
 `

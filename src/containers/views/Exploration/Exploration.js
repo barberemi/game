@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from "@emotion/styled";
 import _ from "lodash";
-import ReactTooltip from "react-tooltip";
 import { explorations } from "../../../utils/explorations";
 import {Link} from "react-router-dom";
 
@@ -130,7 +129,6 @@ class Exploration extends Component {
             ))}
           </div>
         </div>
-        <ReactTooltip />
       </Container>
     );
   }
