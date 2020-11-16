@@ -5,7 +5,7 @@ import SideBar from "../../Components/SideBar/SideBar";
 
 const Background = styled.div`
   height: 100vh;
-  background-color: #343a40;
+  background-color: rgba(0,0,0,0.8) !important;
 `
 
 export default ({ children }) => {

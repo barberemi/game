@@ -51,6 +51,19 @@ const StickyBoss = styled.img`
   }
 `
 
+const PossibleBuildingText = styled.div`
+  background-color: #fff;
+  color: #000;
+  border-radius: 50%;
+  border: 2px solid #000;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 50%;
+  top: 90%;
+  padding-top: 2px; // Font is too up
+`
+
 class Exploration extends Component {
   constructor(props) {
     super(props);
@@ -105,6 +118,7 @@ class Exploration extends Component {
 
   render() {
     const { boss, scrollIsTop } = this.state;
+    let countExplorations = 0;
 
     return (
       <Container className="container-fluid" onScroll={this.handleScroll} ref={this.refScroll}>
@@ -123,8 +137,11 @@ class Exploration extends Component {
               data-place="bottom"
             />
             {_.map(this.state.explorations, (exploration, index) => (
-              <div key={index} className={`mt-auto mb-auto col-sm-${exploration.col}${exploration.offset !== 0 ? " offset-sm-"+exploration.offset : ""}`}>
+              <div key={index} className={`mt-3 mb-3 col-sm-${exploration.col}${exploration.offset !== 0 ? " offset-sm-"+exploration.offset : ""}`}>
                 {this.displayBuildings(exploration, index)}
+                {_.includes(this.state.explorations[this.state.player.position].next, exploration.id) && (countExplorations = countExplorations + 1) && (
+                  <PossibleBuildingText>{countExplorations}</PossibleBuildingText>
+                )}
               </div>
             ))}
           </div>

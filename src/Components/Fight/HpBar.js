@@ -2,16 +2,16 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export class HpBar extends Component {
-  colorBar(percentage) {
-    switch (true) {
-      case (percentage >= 50):
-        return "bg-success";
-      case (percentage >= 30 && percentage <= 49):
-        return "bg-warning";
-      default:
-        return "bg-danger";
-    }
-  }
+  // colorBar(percentage) {
+  //   switch (true) {
+  //     case (percentage >= 50):
+  //       return "bg-success";
+  //     case (percentage >= 30 && percentage <= 49):
+  //       return "bg-warning";
+  //     default:
+  //       return "bg-danger";
+  //   }
+  // }
   render() {
     // calc player progress bar percentage based on HP
     let percentage = (this.props.hp / this.props.maxHp) * 100;
@@ -20,7 +20,8 @@ export class HpBar extends Component {
       <div className="d-flex justify-content-between align-items-center">
         <div className="progress both-progress">
           <div
-            className={`progress-bar ${this.colorBar(percentage)}`}
+            // className={`progress-bar ${this.colorBar(percentage)}`}
+            className="progress-bar bg-danger"
             role="progressbar"
             style={{ width: percentage + "%"}}
             aria-valuemin="0"

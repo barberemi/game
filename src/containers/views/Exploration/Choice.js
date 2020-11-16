@@ -17,8 +17,9 @@ const Container = styled.div`
 `
 
 const SubContainer = styled.div`
-  background-color: rgba(0,0,0,0.5) !important;
+  background-color: rgba(0,0,0,0.6) !important;
   margin-top: 50px;
+  border-radius: 0.3em;
 `
 
 const TextDescription = styled.div`

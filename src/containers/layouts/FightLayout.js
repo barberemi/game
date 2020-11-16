@@ -2,8 +2,10 @@ import React from 'react';
 import styled from "@emotion/styled";
 
 const FightContainer = styled.div`
+  background-image: url("https://mfiles.alphacoders.com/828/828646.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   height: 100vh !important;
-  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
 `
 
 export default ({ children }) => {
