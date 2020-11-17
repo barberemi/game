@@ -19,6 +19,7 @@ import Character from './containers/views/Character/Character';
 import Boss from './containers/views/Boss/Boss';
 import Crafting from './containers/views/Crafting/Crafting';
 import Reward from './containers/views/Reward/Reward';
+import Guild from './containers/views/Guild/Guild';
 
 import FightLayout from "./containers/layouts/FightLayout";
 import MapLayout from "./containers/layouts/MapLayout";
@@ -28,6 +29,7 @@ import BossLayout from "./containers/layouts/BossLayout"
 import CraftingLayout from "./containers/layouts/CraftingLayout";
 import ExplorationLayout from "./containers/layouts/ExplorationLayout";
 import RewardLayout from "./containers/layouts/RewardLayout";
+import GuildLayout from "./containers/layouts/GuildLayout";
 
 import { ToastContainer } from 'react-toastify';
 // import * as serviceWorker from './serviceWorker';
@@ -50,6 +52,8 @@ ReactDOM.render(
       <AppRoute exact path="/crafting/:idboss" component={Crafting} layout={CraftingLayout} />
 
       <AppRoute path="/reward" component={Reward} layout={RewardLayout} />
+
+      <AppRoute path="/guild" component={Guild} layout={GuildLayout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout}/>
       <AppRoute exact path="/register" component={Register} layout={LoginLayout}/>
