@@ -194,7 +194,7 @@ class Character extends Component {
                       <Title>Caractéristiques</Title>
                       <div className="col-sm-12">
                         {_.map(character.characteristics, characteristic => (
-                          <CharacteristicItem key={characteristic.name} name={characteristic.name} amount={characteristic.amount} />
+                          <CharacteristicItem key={characteristic.name} name={characteristic.name} amount={characteristic.amount} equippedItems={_.filter(character.items, { equipped: true })} />
                         ))}
                       </div>
                     </div>

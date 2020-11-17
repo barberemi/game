@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import styled from "@emotion/styled";
 import _ from "lodash";
+import {getColorItem, getItemTranslationRarity, getItemTranslationType} from "../../utils/itemHelper";
+import { getCharacteristicTranslationName } from "../../utils/characteristicHelper";
+
 import helmetSvg from "./svg/helmet.svg";
 import amuletSvg from "./svg/amulet.svg";
 import shouldersSvg from "./svg/shoulders.svg";
@@ -12,7 +15,6 @@ import pantsSvg from "./svg/pants.svg";
 import shoesSvg from "./svg/shoes.svg";
 import weaponSvg from "./svg/weapon.svg";
 import craftSvg from "./svg/craft.svg";
-import {getColorItem, getItemTranslationRarity, getItemTranslationType} from "../../utils/itemHelper";
 
 const Tooltip = styled.div`
   text-align: left;
@@ -96,7 +98,7 @@ class ItemTooltip extends Component {
           <>
             <div>
               {_.map(item.characteristics, (characteristic, index) => (
-                <div key={index} className={!oldItem && !item.equipped ? "text-success" : ""}>+{characteristic.amount} {characteristic.characteristic.name}</div>
+                <div key={index} className={!oldItem && !item.equipped ? "text-success" : ""}>+{characteristic.amount} {getCharacteristicTranslationName(characteristic.characteristic)}</div>
               ))}
             </div>
             <br />
@@ -111,14 +113,14 @@ class ItemTooltip extends Component {
 
               if(newCharac) {
                 const operation = (newCharac.amount - oldCharac.amount) > 0 ? "+": "";
-                return <div className={operation !== "" ? "text-success" : "text-danger"}>{operation}{newCharac.amount - oldCharac.amount} {oldCharac.characteristic.name}</div>;
+                return <div className={operation !== "" ? "text-success" : "text-danger"}>{operation}{newCharac.amount - oldCharac.amount} {getCharacteristicTranslationName(oldCharac.characteristic)}</div>;
               } else {
-                return <div className="text-danger">-{oldCharac.amount} {oldCharac.characteristic.name}</div>;
+                return <div className="text-danger">-{oldCharac.amount} {getCharacteristicTranslationName(oldCharac.characteristic)}</div>;
               }
             })}
             {item.characteristics && _.map(item.characteristics, newCharac => {
               if (!_.includes(tabCharactersitics, newCharac.characteristic.name)) {
-                return <div className="text-success">+{newCharac.amount} {newCharac.characteristic.name}</div>;
+                return <div className="text-success">+{newCharac.amount} {getCharacteristicTranslationName(newCharac.characteristic)}</div>;
               }
             })}
             <br />
