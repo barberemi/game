@@ -55,8 +55,8 @@ export const character = {
   academy: {
     name: "Guerrier",
     image: "warrior.png",
-    roles: ["Dégats physiques", "Corps à corps"],
-    className: "text-danger",
+    role: "Dégats physiques,Corps à corps",
+    color: "text-danger",
   },
   friends: [
     {id: 3, name: "Romain le romarin", level: 5, academy: {name: "warrior"}},

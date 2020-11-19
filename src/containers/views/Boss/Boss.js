@@ -177,7 +177,7 @@ class Boss extends Component {
                   <Card className="card">
                     <div className="card-header">
                       <Title>Tour niveau {selectedBoss.towerLevel}</Title>
-                      {selectedBoss.name} <span className={selectedBoss.academy.className}>({selectedBoss.academy.name})</span><LevelBox> - Niv {selectedBoss.level}</LevelBox>
+                      {selectedBoss.name} <span className={selectedBoss.academy.color}>({selectedBoss.academy.name})</span><LevelBox> - Niv {selectedBoss.level}</LevelBox>
                     </div>
                     <div className="card-body">
                       <Title>Caractéristiques</Title>

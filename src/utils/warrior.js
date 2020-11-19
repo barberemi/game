@@ -1,8 +1,8 @@
 export const academy = {
   name: "Guerrier",
   image: "warrior.png",
-  roles: ["Dégats physiques", "Corps à corps"],
-  className: "text-danger",
+  role: "Dégats physiques,Corps à corps",
+  color: "text-danger",
   skills: {
     dark: [
       {

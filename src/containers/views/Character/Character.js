@@ -187,7 +187,7 @@ class Character extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <Title>{character.name} <span className={character.academy.className}>({character.academy.name})</span><LevelBox> - Niv {character.level}</LevelBox></Title>
+                      <Title>{character.name} <span className={character.academy.color}>({character.academy.name})</span><LevelBox> - Niv {character.level}</LevelBox></Title>
                       <ProgressBar actual={350} max={1200} color="#DC3545" transparentColor="#e09a9a" />
                     </div>
                     <div className="card-body">

@@ -15,8 +15,8 @@ export const boss = [
     ],
     academy: {
       name: "Magicien",
-      roles: ["Dégats magiques", "Distance"],
-      className: "text-primary",
+      role: "Dégats magiques,Distance",
+      color: "text-primary",
       image: "magician.png",
     },
     skills: {
@@ -158,8 +158,8 @@ export const boss = [
     ],
     academy: {
       name: "Archer",
-      roles: ["Dégats physiques", "Distance"],
-      className: "text-danger",
+      role: "Dégats physiques,Distance",
+      color: "text-danger",
       image: "hunter.png",
     },
     skills: {
@@ -248,8 +248,8 @@ export const boss = [
     academy: {
       name: "Guerrier",
       image: "warrior.png",
-      roles: ["Dégats physiques", "Corps à corps"],
-      className: "text-danger",
+      role: "Dégats physiques,Corps à corps",
+      color: "text-danger",
     },
     skills: {
       dark: [

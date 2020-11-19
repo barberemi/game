@@ -2,8 +2,8 @@ export const academies = [
   {
     name: "Archer",
     description: "Académie de combat à distance, l'archer est présent sur le champ de bataille pour infliger des dégats physique.",
-    roles: ["Dégats physiques", "Distance"],
-    className: "text-danger",
+    role: "Dégats physiques,Distance",
+    color: "text-danger",
     image: "hunter.png",
     skills: {
       dark: [
@@ -27,8 +27,8 @@ export const academies = [
   {
     name: "Guerrier",
     description: "Académie de combat au corps à corps, le guerrier est présent sur le champ de bataille pour infliger des dégats physique.",
-    roles: ["Dégats physiques", "Corps à corps"],
-    className: "text-danger",
+    role: "Dégats physiques,Corps à corps",
+    color: "text-danger",
     image: "warrior.png",
     skills: {
       dark: [
@@ -52,8 +52,8 @@ export const academies = [
   {
     name: "Magicien",
     description: "Académie de combat à distance, le mage est présent sur le champ de bataille pour infliger des dégats magique et de zone.",
-    roles: ["Dégats magiques", "Distance"],
-    className: "text-primary",
+    role: "Dégats magiques,Distance",
+    color: "text-primary",
     image: "magician.png",
     skills: {
       dark: [
@@ -77,8 +77,8 @@ export const academies = [
   {
     name: "Protecteur",
     description: "Académie de combat au corps à corps, le protecteur est présent sur le champ de bataille pour encaisser les dégats des ennemis et prendre le focus de ceux-ci.",
-    roles: ["Encaisser les dégats", "Corps à corps"],
-    className: "text-success",
+    role: "Encaisser les dégats,Corps à corps",
+    color: "text-success",
     image: "protector.png",
     skills: {
       dark: [
@@ -102,8 +102,8 @@ export const academies = [
   {
     name: "Prêtre",
     description: "Académie de soutien, le prêtre est présent sur le champ de bataille pour épauler ses collègues via des compétences de soin ou des buffs.",
-    roles: ["Soutien", "Soin"],
-    className: "text-success",
+    role: "Soutien,Soin",
+    color: "text-success",
     image: "priest.png",
     skills: {
       dark: [

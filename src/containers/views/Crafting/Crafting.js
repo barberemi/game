@@ -189,7 +189,7 @@ class Crafting extends Component {
                             <div key={aBoss.id} className={`carousel-item${selectedBoss.id === aBoss.id ? "active" : ""}`}>
                               <Image src={process.env.PUBLIC_URL+"/img/boss/"+aBoss.image} alt="Third slide"/>
                               <Title>Tour niveau {aBoss.towerLevel}</Title>
-                              {aBoss.name} <span className={aBoss.academy.className}>({aBoss.academy.name})</span><LevelBox> - Niv {aBoss.level}</LevelBox>
+                              {aBoss.name} <span className={aBoss.academy.color}>({aBoss.academy.name})</span><LevelBox> - Niv {aBoss.level}</LevelBox>
                             </div>
                           ))}
 

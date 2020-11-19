@@ -167,8 +167,8 @@ class Creation extends Component {
                   <LightDarkButton onClick={this.onClickButtonLightdark} />
                   <div className="card-header">
                     <Title>{academySelected.name}</Title>
-                    {_.map(academySelected.roles, role => (
-                      <div key={role} className={academySelected.className}>{role}</div>
+                    {_.map(_.split(academySelected.role, ','), role => (
+                      <div key={role} className={academySelected.color}>{role}</div>
                     ))}
                   </div>
                   <div className="card-body">
