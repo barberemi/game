@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import styled from "@emotion/styled";
-import _ from "lodash";
-import { boss } from "../../../utils/boss";
-import { character } from "../../../utils/character";
-import {Link} from "react-router-dom";
-import Title from "../../../Components/Title/Title";
-import ItemList from "../../../Components/Item/ItemList";
-import ItemCrafting from "../../../Components/Item/ItemCrafting";
-import { toast } from "react-toastify";
+import React, { Component } from 'react'
+import styled from '@emotion/styled'
+import _ from 'lodash'
+import { boss } from '../../../utils/boss'
+import { character } from '../../../utils/character'
+import { Link } from 'react-router-dom'
+import Title from '../../../Components/Title/Title'
+import ItemList from '../../../Components/Item/ItemList'
+import ItemCrafting from '../../../Components/Item/ItemCrafting'
+import { toast } from 'react-toastify'
 
 const Container = styled.div`
-  background-image: url("https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg");
+  background-image: url('https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg');
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -24,9 +24,9 @@ const Container = styled.div`
 
 const ListLink = styled.a`
   color: #fff;
-  
+
   &:hover {
-    color: #FFC312;
+    color: #ffc312;
     text-decoration: none;
   }
 `
@@ -41,7 +41,7 @@ const RightBox = styled.div`
 `
 
 const Card = styled.div`
-  background-color: rgba(0,0,0,0.7) !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
 `
 
 const Image = styled.img`
@@ -54,32 +54,37 @@ const Image = styled.img`
 
 class Crafting extends Component {
   constructor(props) {
-    super(props);
-    const idBoss = parseInt(this.props.match.params.idboss);
+    super(props)
+    const idBoss = parseInt(this.props.match.params.idboss)
 
     this.state = {
       boss,
       character,
-      activatedTab: "bossChoiceTab",
+      activatedTab: 'bossChoiceTab',
       selectedBoss: idBoss ? _.find(boss, { id: idBoss }) : _.first(boss),
-      selectedItem: null,
-    };
+      selectedItem: null
+    }
   }
 
   onClickOnTab = (idTab) => {
     this.setState({
-      activatedTab: idTab,
-    });
+      activatedTab: idTab
+    })
   }
 
   onCheckSkill = (e) => {
-    const name = _.split(e.target.name, '-');
-    const exists = !!_.find(this.state.boss.skills[name[3]], { id: parseInt(name[2]) });
+    const name = _.split(e.target.name, '-')
+    const exists = !!_.find(this.state.boss.skills[name[3]], {
+      id: parseInt(name[2])
+    })
 
     if (exists) {
-      _.remove(this.state.boss.skills[name[3]], { id: parseInt(name[2]) });
+      _.remove(this.state.boss.skills[name[3]], { id: parseInt(name[2]) })
     } else {
-      this.state.boss.skills[name[3]] = [...this.state.boss.skills[name[3]], {id: parseInt(name[2])} ];
+      this.state.boss.skills[name[3]] = [
+        ...this.state.boss.skills[name[3]],
+        { id: parseInt(name[2]) }
+      ]
     }
 
     this.setState({
@@ -87,135 +92,225 @@ class Crafting extends Component {
         ...this.state.boss,
         skills: {
           ...this.state.boss.skills,
-          [name[3]]: [
-            ...this.state.boss.skills[name[3]],
-          ]
+          [name[3]]: [...this.state.boss.skills[name[3]]]
         }
       }
-    });
+    })
   }
 
   handleForgeItem = (item) => {
     // Remove from character items
-    let characterItems = [...this.state.character.items];
-    let error = false;
+    let characterItems = [...this.state.character.items]
+    let error = false
 
-    _.map(item.itemsToCraft, craft => {
-      let count = craft.amount;
+    _.map(item.itemsToCraft, (craft) => {
+      let count = craft.amount
 
       for (let i = 0; i < count; i++) {
-        const index = _.findLastIndex(characterItems, { id: craft.item.id });
+        const index = _.findLastIndex(characterItems, { id: craft.item.id })
 
         if (index) {
-          _.pullAt(characterItems, [index]);
+          _.pullAt(characterItems, [index])
         } else {
-          error = true;
+          error = true
         }
       }
     })
 
     if (!error) {
-      characterItems.push(item);
+      characterItems.push(item)
 
       this.setState({
         character: {
           ...this.state.character,
-          items: characterItems,
+          items: characterItems
         }
-      });
+      })
 
-      toast.success(<span style={{ fontSize: "14px"}}>Création de l'objet réussie !</span>, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success(
+        <span style={{ fontSize: '14px' }}>Création de l'objet réussie !</span>,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        }
+      )
     }
   }
 
   render() {
-    const { boss, character, activatedTab, selectedBoss, selectedItem } = this.state;
+    const {
+      boss,
+      character,
+      activatedTab,
+      selectedBoss,
+      selectedItem
+    } = this.state
 
     return (
       <Container className="container-fluid">
         <div className="container">
           <div className="row h-100 mt-5">
-
             <div className="col-sm-3 my-auto">
               <Card className="card">
                 <div className="card-header">
                   <Title>Menu</Title>
                   <div>
-                    <div onClick={() => this.onClickOnTab("bossChoiceTab")}>
-                      <ListLink className={activatedTab === "bossChoiceTab" ? " active" : ""} data-toggle="tab" role="tab" href="#bossChoiceTab">Choix du boss</ListLink>
-                      {activatedTab === "bossChoiceTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    <div onClick={() => this.onClickOnTab('bossChoiceTab')}>
+                      <ListLink
+                        className={
+                          activatedTab === 'bossChoiceTab' ? ' active' : ''
+                        }
+                        data-toggle="tab"
+                        role="tab"
+                        href="#bossChoiceTab"
+                      >
+                        Choix du boss
+                      </ListLink>
+                      {activatedTab === 'bossChoiceTab' && (
+                        <span className="text-warning">
+                          &nbsp;
+                          <i className="far fa-arrow-alt-circle-right" />
+                        </span>
+                      )}
                     </div>
-                    <div onClick={() => this.onClickOnTab("itemsCraftingTab")}>
-                      <ListLink className={activatedTab === "itemsCraftingTab" ? " active" : ""} data-toggle="tab" role="tab" href="#itemsCraftingTab">Création d'objets</ListLink>
-                      {activatedTab === "itemsCraftingTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    <div onClick={() => this.onClickOnTab('itemsCraftingTab')}>
+                      <ListLink
+                        className={
+                          activatedTab === 'itemsCraftingTab' ? ' active' : ''
+                        }
+                        data-toggle="tab"
+                        role="tab"
+                        href="#itemsCraftingTab"
+                      >
+                        Création d'objets
+                      </ListLink>
+                      {activatedTab === 'itemsCraftingTab' && (
+                        <span className="text-warning">
+                          &nbsp;
+                          <i className="far fa-arrow-alt-circle-right" />
+                        </span>
+                      )}
                     </div>
-                    <div onClick={() => this.onClickOnTab("skillsCraftingTab")}>
-                      <ListLink className={activatedTab === "skillsCraftingTab" ? " active" : ""} data-toggle="tab" role="tab" href="#skillsCraftingTab">Création de compétences</ListLink>
-                      {activatedTab === "skillsCraftingTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    <div onClick={() => this.onClickOnTab('skillsCraftingTab')}>
+                      <ListLink
+                        className={
+                          activatedTab === 'skillsCraftingTab' ? ' active' : ''
+                        }
+                        data-toggle="tab"
+                        role="tab"
+                        href="#skillsCraftingTab"
+                      >
+                        Création de compétences
+                      </ListLink>
+                      {activatedTab === 'skillsCraftingTab' && (
+                        <span className="text-warning">
+                          &nbsp;
+                          <i className="far fa-arrow-alt-circle-right" />
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
               </Card>
               <Image
-                src={process.env.PUBLIC_URL+"/img/forgeron.png"}
+                src={process.env.PUBLIC_URL + '/img/forgeron.png'}
                 alt="forgeron"
               />
             </div>
 
             <RightBox className="col-sm-9 my-auto">
               <div className="tab-content">
-
                 {/* BossChoice */}
-                <div className={`tab-pane${activatedTab === "bossChoiceTab" ? " active" : ""}`} id="bossChoiceTab" role="tabpanel">
+                <div
+                  className={`tab-pane${
+                    activatedTab === 'bossChoiceTab' ? ' active' : ''
+                  }`}
+                  id="bossChoiceTab"
+                  role="tabpanel"
+                >
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
                         <Title>Choix du boss</Title>
-                        <div>Séléctionner le boss pour visualiser les objets et compétences que vous pouvez confectionner grâce à ses composants.</div>
+                        <div>
+                          Séléctionner le boss pour visualiser les objets et
+                          compétences que vous pouvez confectionner grâce à ses
+                          composants.
+                        </div>
                       </div>
 
                       <div className="mt-3">
                         <div>
-
-                          {_.map(boss, aBoss => (
-                            <div key={aBoss.id} className={`carousel-item${selectedBoss.id === aBoss.id ? "active" : ""}`}>
-                              <Image src={process.env.PUBLIC_URL+"/img/boss/"+aBoss.image} alt="Third slide"/>
+                          {_.map(boss, (aBoss) => (
+                            <div
+                              key={aBoss.id}
+                              className={`carousel-item${
+                                selectedBoss.id === aBoss.id ? 'active' : ''
+                              }`}
+                            >
+                              <Image
+                                src={
+                                  process.env.PUBLIC_URL +
+                                  '/img/boss/' +
+                                  aBoss.image
+                                }
+                                alt="Third slide"
+                              />
                               <Title>Tour niveau {aBoss.towerLevel}</Title>
-                              {aBoss.name} <span className={aBoss.academy.color}>({aBoss.academy.name})</span><LevelBox> - Niv {aBoss.level}</LevelBox>
+                              {aBoss.name}{' '}
+                              <span className={aBoss.academy.color}>
+                                ({aBoss.academy.name})
+                              </span>
+                              <LevelBox> - Niv {aBoss.level}</LevelBox>
                             </div>
                           ))}
-
                         </div>
                         {selectedBoss.id !== _.first(boss).id && (
-                          <Link to={"/crafting/" + boss[_.findIndex(boss, { id: selectedBoss.id }) - 1].id}>
+                          <Link
+                            to={
+                              '/crafting/' +
+                              boss[
+                                _.findIndex(boss, { id: selectedBoss.id }) - 1
+                              ].id
+                            }
+                          >
                             <div className="carousel-control-prev">
                               <i className="fas fa-chevron-left fa-2x" />
                             </div>
                           </Link>
                         )}
                         {selectedBoss.id !== _.last(boss).id && (
-                          <Link to={"/crafting/" + boss[_.findIndex(boss, { id: selectedBoss.id }) + 1].id}>
+                          <Link
+                            to={
+                              '/crafting/' +
+                              boss[
+                                _.findIndex(boss, { id: selectedBoss.id }) + 1
+                              ].id
+                            }
+                          >
                             <div className="carousel-control-next">
                               <i className="fas fa-chevron-right fa-2x" />
                             </div>
                           </Link>
                         )}
                       </div>
-
                     </div>
                   </Card>
                 </div>
 
                 {/* ItemsCrafting */}
-                <div className={`tab-pane${activatedTab === "itemsCraftingTab" ? " active" : ""}`} id="itemsCraftingTab" role="tabpanel">
+                <div
+                  className={`tab-pane${
+                    activatedTab === 'itemsCraftingTab' ? ' active' : ''
+                  }`}
+                  id="itemsCraftingTab"
+                  role="tabpanel"
+                >
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
@@ -225,13 +320,19 @@ class Crafting extends Component {
                       <ItemList
                         items={selectedBoss.items}
                         displayActions={false}
-                        onClick={(item) => this.setState({ selectedItem: item })}
+                        onClick={(item) =>
+                          this.setState({ selectedItem: item })
+                        }
                       />
                       {selectedItem && (
                         <div>
                           <div className="col-sm-12">
                             <Title>Forger l'objet</Title>
-                            <ItemCrafting item={selectedItem} characterItems={character.items} onClick={this.handleForgeItem} />
+                            <ItemCrafting
+                              item={selectedItem}
+                              characterItems={character.items}
+                              onClick={this.handleForgeItem}
+                            />
                           </div>
                         </div>
                       )}
@@ -240,7 +341,13 @@ class Crafting extends Component {
                 </div>
 
                 {/* SkillsCrafting */}
-                <div className={`tab-pane${activatedTab === "skillsCraftingTab" ? " active" : ""}`} id="skillsCraftingTab" role="tabpanel">
+                <div
+                  className={`tab-pane${
+                    activatedTab === 'skillsCraftingTab' ? ' active' : ''
+                  }`}
+                  id="skillsCraftingTab"
+                  role="tabpanel"
+                >
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
@@ -250,14 +357,12 @@ class Crafting extends Component {
                     </div>
                   </Card>
                 </div>
-
               </div>
             </RightBox>
-
           </div>
         </div>
       </Container>
-    );
+    )
   }
 }
-export default Crafting;
+export default Crafting

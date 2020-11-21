@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import styled from "@emotion/styled";
-import _ from "lodash";
-import { guild } from "../../../utils/guild";
-import FriendList from "../../../Components/Friend/FriendList";
-import Title from "../../../Components/Title/Title";
+import React, { Component } from 'react'
+import styled from '@emotion/styled'
+import _ from 'lodash'
+import { guild } from '../../../utils/guild'
+import FriendList from '../../../Components/Friend/FriendList'
+import Title from '../../../Components/Title/Title'
 
 const Container = styled.div`
-  background-image: url("https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg");
+  background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -20,9 +20,9 @@ const Container = styled.div`
 
 const ListLink = styled.a`
   color: #fff;
-  
+
   &:hover {
-    color: #FFC312;
+    color: #ffc312;
     text-decoration: none;
   }
 `
@@ -32,7 +32,7 @@ const RightBox = styled.div`
 `
 
 const Card = styled.div`
-  background-color: rgba(0,0,0,0.7) !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
 `
 
 const Image = styled.img`
@@ -62,7 +62,7 @@ const InputMessage = styled.input`
 
 const CustomButton = styled.button`
   border-radius: inherit;
-  
+
   &:hover {
     transform: inherit;
   }
@@ -70,55 +70,85 @@ const CustomButton = styled.button`
 
 class Guild extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       guild,
-      activatedTab: "chatTab",
-    };
+      activatedTab: 'chatTab'
+    }
   }
 
   onClickOnTab = (idTab) => {
     this.setState({
-      activatedTab: idTab,
-    });
+      activatedTab: idTab
+    })
   }
 
   render() {
-    const { guild, activatedTab } = this.state;
+    const { guild, activatedTab } = this.state
 
     return (
       <Container className="container-fluid">
         <div className="container">
           <div className="row h-100 mt-5">
-
             <div className="col-sm-3 my-auto">
               <Card className="card">
                 <div className="card-header">
                   <Title>Menu</Title>
                   <div>
-                    <div onClick={() => this.onClickOnTab("chatTab")}>
-                      <ListLink className={activatedTab === "chatTab" ? "active" : ""} data-toggle="tab" role="tab" href="#chatTab">Discussion</ListLink>
-                      {activatedTab === "chatTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    <div onClick={() => this.onClickOnTab('chatTab')}>
+                      <ListLink
+                        className={activatedTab === 'chatTab' ? 'active' : ''}
+                        data-toggle="tab"
+                        role="tab"
+                        href="#chatTab"
+                      >
+                        Discussion
+                      </ListLink>
+                      {activatedTab === 'chatTab' && (
+                        <span className="text-warning">
+                          &nbsp;
+                          <i className="far fa-arrow-alt-circle-right" />
+                        </span>
+                      )}
                     </div>
-                    <div onClick={() => this.onClickOnTab("membersTab")}>
-                      <ListLink className={activatedTab === "membersTab" ? " active" : ""} data-toggle="tab" role="tab" href="#membersTab">Membres</ListLink>
-                      {activatedTab === "membersTab" && <span className="text-warning">&nbsp;<i className="far fa-arrow-alt-circle-right" /></span>}
+                    <div onClick={() => this.onClickOnTab('membersTab')}>
+                      <ListLink
+                        className={
+                          activatedTab === 'membersTab' ? ' active' : ''
+                        }
+                        data-toggle="tab"
+                        role="tab"
+                        href="#membersTab"
+                      >
+                        Membres
+                      </ListLink>
+                      {activatedTab === 'membersTab' && (
+                        <span className="text-warning">
+                          &nbsp;
+                          <i className="far fa-arrow-alt-circle-right" />
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
               </Card>
               <Image
-                src={process.env.PUBLIC_URL+"/img/guild-master.png"}
+                src={process.env.PUBLIC_URL + '/img/guild-master.png'}
                 alt="guild master"
               />
             </div>
 
             <RightBox className="col-sm-9 my-auto">
               <div className="tab-content">
-
                 {/* General */}
-                <div className={`tab-pane${activatedTab === "chatTab" ? " active" : ""}`} id="chatTab" role="tabpanel">
+                <div
+                  className={`tab-pane${
+                    activatedTab === 'chatTab' ? ' active' : ''
+                  }`}
+                  id="chatTab"
+                  role="tabpanel"
+                >
                   <Card className="card">
                     <div className="card-header">
                       <Title>{guild.name}</Title>
@@ -126,9 +156,12 @@ class Guild extends Component {
                     <div className="card-body">
                       <div className="col-sm-12">
                         <ListingMessages>
-                          {_.map(guild.messages, message => (
+                          {_.map(guild.messages, (message) => (
                             <div key={message.id}>
-                              <strong className="text-warning">{message.user.name}:</strong> {message.message}
+                              <strong className="text-warning">
+                                {message.user.name}:
+                              </strong>{' '}
+                              {message.message}
                             </div>
                           ))}
                         </ListingMessages>
@@ -140,7 +173,9 @@ class Guild extends Component {
                               type="text"
                               placeholder="Votre message..."
                             />
-                            <CustomButton className="btn btn-success">Envoyer</CustomButton>
+                            <CustomButton className="btn btn-success">
+                              Envoyer
+                            </CustomButton>
                           </Chat>
                         </form>
                       </div>
@@ -149,26 +184,28 @@ class Guild extends Component {
                 </div>
 
                 {/* Friends */}
-                <div className={`tab-pane${activatedTab === "membersTab" ? " active" : ""}`} id="membersTab" role="tabpanel">
+                <div
+                  className={`tab-pane${
+                    activatedTab === 'membersTab' ? ' active' : ''
+                  }`}
+                  id="membersTab"
+                  role="tabpanel"
+                >
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <Title>
-                          Membres de la guilde
-                        </Title>
+                        <Title>Membres de la guilde</Title>
                       </div>
                       <FriendList friends={guild.users} />
                     </div>
                   </Card>
                 </div>
-
               </div>
             </RightBox>
-
           </div>
         </div>
       </Container>
-    );
+    )
   }
 }
-export default Guild;
+export default Guild

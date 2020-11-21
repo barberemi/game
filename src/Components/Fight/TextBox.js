@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class TextBox extends Component {
   render() {
@@ -9,13 +9,13 @@ class TextBox extends Component {
           {this.props.messageOne} <br /> {this.props.messageTwo}
         </p>
       </div>
-    );
+    )
   }
 }
 
 TextBox.propTypes = {
   messageOne: PropTypes.string,
-  messageTwo: PropTypes.string,
+  messageTwo: PropTypes.string
 }
 
-export default TextBox;
+export default TextBox

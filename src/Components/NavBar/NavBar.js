@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from "@emotion/styled";
+import React from 'react'
+import styled from '@emotion/styled'
 
 const NavBarGlobale = styled.nav`
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -36,20 +36,31 @@ const Avatar = styled.img`
 
 export default ({ children }) => {
   return (
-    <NavBarGlobale className="navbar-dark bg-dark container-fluid" role="navigation">
+    <NavBarGlobale
+      className="navbar-dark bg-dark container-fluid"
+      role="navigation"
+    >
       <Row>
         <DisplayFlex className="col-sm-12 text-white">
           <Brand className="navbar-brand col-sm-1" href="#">
-            <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30"
-                 className="d-inline-block align-top" alt="" />
+            <img
+              src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+              alt=""
+            />
           </Brand>
           {children}
           <div className="col-sm-1">
-            <Avatar src="https://miro.medium.com/max/3150/1*TCbE00-xcH2bOEV_OmHt5w.jpeg" alt="Avatar" className="avatar" />
+            <Avatar
+              src="https://miro.medium.com/max/3150/1*TCbE00-xcH2bOEV_OmHt5w.jpeg"
+              alt="Avatar"
+              className="avatar"
+            />
           </div>
         </DisplayFlex>
       </Row>
     </NavBarGlobale>
   )
 }
-

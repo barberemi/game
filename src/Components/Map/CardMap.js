@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import styled from "@emotion/styled";
-import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
+import React, { Component } from 'react'
+import styled from '@emotion/styled'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 const LevelNeededBackground = styled.div`
   position: absolute;
@@ -19,7 +19,7 @@ const RequirementBlock = styled(LevelNeededBackground)`
 `
 
 const RequirementNotBlock = styled(LevelNeededBackground)`
-  background-color: #FFC312;
+  background-color: #ffc312;
   color: #000;
   text-shadow: 1px 1px 2px white;
 `
@@ -37,9 +37,9 @@ const TitleCard = styled.div`
 `
 
 const AdventureButton = styled(Link)`
-  background-color: #FFC312;
+  background-color: #ffc312;
   color: black;
-  
+
   &:hover {
     color: #fff;
   }
@@ -47,24 +47,25 @@ const AdventureButton = styled(Link)`
 
 class CardMap extends Component {
   cardBlocked() {
-    const { card, user } = this.props;
+    const { card, user } = this.props
 
-    return card.level_min > user.level ?? false;
+    return card.level_min > user.level ?? false
   }
 
   displayCardLevel() {
     if (this.cardBlocked() === true) {
       return (
         <RequirementBlock className="mt-2">
-          <i className="fas fa-lock"/>&nbsp;Niveau {this.props.card.level_min}
+          <i className="fas fa-lock" />
+          &nbsp;Niveau {this.props.card.level_min}
         </RequirementBlock>
-      );
+      )
     } else {
       return (
         <RequirementNotBlock className="mt-2">
           Niveau {this.props.card.level_min}
         </RequirementNotBlock>
-      );
+      )
     }
   }
 
@@ -73,20 +74,29 @@ class CardMap extends Component {
       <div className="col-sm-5 mt-5 mb-5">
         <div className="card">
           {this.displayCardLevel()}
-          <TitleCard>
-            {this.props.card.name}
-          </TitleCard>
+          <TitleCard>{this.props.card.name}</TitleCard>
           <img
             className="card-img-top"
             src={this.props.card.img_url}
             alt={this.props.card.name}
           />
-          <AdventureButton to="/exploration" className={`card-footer btn${this.cardBlocked() ? " disabled" : ""}`}>
-            {this.cardBlocked() === true && (<><i className="fas fa-lock"/>&nbsp;</>)}S'y aventurer
+          <AdventureButton
+            to="/exploration"
+            className={`card-footer btn${
+              this.cardBlocked() ? ' disabled' : ''
+            }`}
+          >
+            {this.cardBlocked() === true && (
+              <>
+                <i className="fas fa-lock" />
+                &nbsp;
+              </>
+            )}
+            S'y aventurer
           </AdventureButton>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -94,11 +104,11 @@ CardMap.propTypes = {
   card: PropTypes.shape({
     name: PropTypes.string,
     level_min: PropTypes.number,
-    img_url: PropTypes.string,
+    img_url: PropTypes.string
   }),
   user: PropTypes.shape({
-    level: PropTypes.number,
-  }),
+    level: PropTypes.number
+  })
 }
 
-export default CardMap;
+export default CardMap

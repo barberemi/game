@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import PropTypes from 'prop-types';
-import styled from "@emotion/styled";
-import { css } from "@emotion/core";
-import { getBorderColorSkill } from "../../utils/skillHelper";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+import { css } from '@emotion/core'
+import { getBorderColorSkill } from '../../utils/skillHelper'
 
 const Container = styled.div`
   float: left;
@@ -13,37 +13,47 @@ const SubContainer = styled.div`
   display: flex;
   float: left;
   width: 100%;
-  
-  ${props => ( props.descriptionDisplayed === false && css`
-    border: 1px solid #504137;
-  `)};
-  
-  ${props => ( props.descriptionDisplayed === false && props.isSelected === true && css`
-    -webkit-box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
-    box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
-    border-color: ${props.hoverColorBorder};
-  `)};
-  
+
+  ${(props) =>
+    props.descriptionDisplayed === false &&
+    css`
+      border: 1px solid #504137;
+    `};
+
+  ${(props) =>
+    props.descriptionDisplayed === false &&
+    props.isSelected === true &&
+    css`
+      -webkit-box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
+      box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
+      border-color: ${props.hoverColorBorder};
+    `};
+
   &:hover {
     cursor: pointer;
-    ${props => ({ borderColor: props.hoverColorBorder })},
+    ${(props) => ({ borderColor: props.hoverColorBorder })},
   }
 `
 
 const BorderBox = styled.div`
-  ${props => ( props.descriptionDisplayed === true && css`
-    border: 1px solid #504137;
-  `)};
-  
-  ${props => ( props.descriptionDisplayed === true && props.isSelected === true && css`
-    -webkit-box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
-    box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
-    border-color: ${props.hoverColorBorder};
-  `)};
-  
+  ${(props) =>
+    props.descriptionDisplayed === true &&
+    css`
+      border: 1px solid #504137;
+    `};
+
+  ${(props) =>
+    props.descriptionDisplayed === true &&
+    props.isSelected === true &&
+    css`
+      -webkit-box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
+      box-shadow: inset 0 -8px 0 ${props.hoverColorBorder};
+      border-color: ${props.hoverColorBorder};
+    `};
+
   &:hover {
     cursor: pointer;
-    ${props => ({ borderColor: props.hoverColorBorder })},
+    ${(props) => ({ borderColor: props.hoverColorBorder })},
   }
 `
 
@@ -59,7 +69,7 @@ const Box = styled.div`
   position: relative;
 `
 
-const ImageSkill= styled.img`
+const ImageSkill = styled.img`
   border: 2px solid #000;
   max-width: 100%;
   position: absolute;
@@ -90,23 +100,23 @@ const DescriptionBox = styled.div`
 
 class SkillBox extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isChecked: this.props.isSelected,
-      descriptionDisplayed: false,
-    };
+      descriptionDisplayed: false
+    }
   }
 
   toggleChecked = () => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isChecked: !prevState.isChecked
-    }));
+    }))
   }
 
   render() {
-    const { skill, isDark, remainingSkillPoints } = this.props;
-    const { isChecked, descriptionDisplayed } = this.state;
+    const { skill, isDark, remainingSkillPoints } = this.props
+    const { isChecked, descriptionDisplayed } = this.state
 
     return (
       <Container className="col-sm-4">
@@ -114,7 +124,9 @@ class SkillBox extends Component {
           hoverColorBorder={getBorderColorSkill(isDark)}
           isSelected={isChecked}
           descriptionDisplayed={descriptionDisplayed}
-          onClick={() => { this.setState({descriptionDisplayed: !descriptionDisplayed})}}
+          onClick={() => {
+            this.setState({ descriptionDisplayed: !descriptionDisplayed })
+          }}
         >
           <SubContainer
             hoverColorBorder={getBorderColorSkill(isDark)}
@@ -123,25 +135,33 @@ class SkillBox extends Component {
           >
             <Level>{skill.level}</Level>
             <Box>
-              <ImageSkill src="https://render-eu.worldofwarcraft.com/icons/56/spell_holy_holyguidance.jpg" alt={skill.name} />
+              <ImageSkill
+                src="https://render-eu.worldofwarcraft.com/icons/56/spell_holy_holyguidance.jpg"
+                alt={skill.name}
+              />
             </Box>
             <Text>{skill.name}</Text>
             <InputCheckBox
               type="checkbox"
-              id={`skill-check-${skill.id}-${isDark ? "dark" : "light"}`}
-              name={`skill-check-${skill.id}-${isDark ? "dark" : "light"}`}
+              id={`skill-check-${skill.id}-${isDark ? 'dark' : 'light'}`}
+              name={`skill-check-${skill.id}-${isDark ? 'dark' : 'light'}`}
               checked={isChecked}
               disabled={!!(!isChecked && remainingSkillPoints === 0)}
-              onClick={(e) => {e.stopPropagation();}}
-              onChange={(e) => {this.toggleChecked();this.props.onCheckSkill(e)}}
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+              onChange={(e) => {
+                this.toggleChecked()
+                this.props.onCheckSkill(e)
+              }}
             />
           </SubContainer>
-          <DescriptionBox className={descriptionDisplayed ? "" : "d-none"}>
+          <DescriptionBox className={descriptionDisplayed ? '' : 'd-none'}>
             {skill.description}
           </DescriptionBox>
         </BorderBox>
       </Container>
-    );
+    )
   }
 }
 
@@ -150,12 +170,12 @@ SkillBox.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     level: PropTypes.number,
-    description: PropTypes.string,
+    description: PropTypes.string
   }),
   isDark: PropTypes.bool,
   isSelected: PropTypes.bool,
   remainingSkillPoints: PropTypes.number,
-  onCheckSkill: PropTypes.func,
+  onCheckSkill: PropTypes.func
 }
 
-export default SkillBox;
+export default SkillBox
