@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 const Background = styled.div`
@@ -8,6 +9,10 @@ const Background = styled.div`
   height: 100vh;
 `
 
-export default ({ children }) => {
-  return <Background>{children}</Background>
+const LoginLayout = ({ children }) => <Background>{children}</Background>
+
+LoginLayout.propTypes = {
+  children: PropTypes.node.isRequired
 }
+
+export default LoginLayout

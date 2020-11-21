@@ -100,6 +100,7 @@ class Exploration extends Component {
     })
   }
 
+  // eslint-disable-next-line
   handleMovement(index) {
     // Call API to change position player in exploration
   }

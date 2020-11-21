@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
 import { css } from '@emotion/core'
+import styled from '@emotion/styled'
 import _ from 'lodash'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import ItemBox from './ItemBox'
 import hammerSvg from './svg/hammer.svg'
 
@@ -36,7 +36,7 @@ class ItemCrafting extends Component {
     this.checkIfItemCanBeCrafted()
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
     if (
       this.props.item !== prevProps.item ||
       this.props.characterItems !== prevProps.characterItems
@@ -131,6 +131,7 @@ class ItemCrafting extends Component {
 }
 
 ItemCrafting.propTypes = {
+  onClick: PropTypes.func.isRequired,
   item: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,

@@ -144,7 +144,7 @@ class Login extends Component {
             </div>
             <div className="card-footer">
               <LinkInput className="d-flex justify-content-center">
-                Pas de compte?&nbsp;<Link to={'/register'}>S'enregistrer</Link>
+                Pas de compte?&nbsp;<Link to={'/register'}>S’enregistrer</Link>
               </LinkInput>
               <LinkInput className="d-flex justify-content-center">
                 <a href="#">Mot de passe oublié?</a>

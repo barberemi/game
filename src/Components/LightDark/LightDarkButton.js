@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import styles from './styles.scss' // dont remove, used to svg animations etc
 import moonSunSvg from './moon-sun.svg'
 import landSvg from './land.svg'
-import PropTypes from 'prop-types'
+import './styles.scss' // dont remove, used to svg animations etc
 
 const Container = styled.div`
   position: absolute;

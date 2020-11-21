@@ -517,7 +517,7 @@ class Fight extends Component {
                 {this.state.textMessageOne === '' &&
                   this.state.gameOver === false &&
                   Object.keys(_.find(this.state.players, 'me').actions).map(
-                    (key, index) => {
+                    (key) => {
                       return (
                         <Actions
                           key={key}

@@ -74,7 +74,7 @@ class Register extends Component {
         <div className="d-flex justify-content-center h-100">
           <Card className="card">
             <div className="card-header">
-              <Title>S'enregistrer</Title>
+              <Title>S’enregistrer</Title>
             </div>
             <div className="card-body">
               <form onSubmit={this.handleSubmit}>

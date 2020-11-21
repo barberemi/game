@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import { boss } from '../../../utils/boss'
@@ -96,11 +96,13 @@ class Boss extends Component {
       id: parseInt(name[2])
     })
 
+    // todo: rework this part: state should never been mutate
     if (exists) {
       _.remove(this.state.selectedBoss.skills[name[3]], {
         id: parseInt(name[2])
       })
     } else {
+      // eslint-disable-next-line
       this.state.selectedBoss.skills[name[3]] = [
         ...this.state.selectedBoss.skills[name[3]],
         { id: parseInt(name[2]) }
@@ -312,4 +314,13 @@ class Boss extends Component {
     )
   }
 }
+
+Boss.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      idboss: PropTypes.string
+    }).isRequired
+  }).isRequired
+}
+
 export default Boss

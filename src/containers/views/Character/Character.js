@@ -80,9 +80,11 @@ class Character extends Component {
       id: parseInt(name[2])
     })
 
+    // todo: rework this part: state should never been mutate
     if (exists) {
       _.remove(this.state.character.skills[name[3]], { id: parseInt(name[2]) })
     } else {
+      // eslint-disable-next-line
       this.state.character.skills[name[3]] = [
         ...this.state.character.skills[name[3]],
         { id: parseInt(name[2]) }
@@ -112,7 +114,7 @@ class Character extends Component {
 
     toast.error(
       <span style={{ fontSize: '14px' }}>
-        Suppression de l'objet réussie !
+        Suppression de l’objet réussie !
       </span>,
       {
         position: 'top-right',
@@ -228,7 +230,7 @@ class Character extends Component {
                         role="tab"
                         href="#friendsTab"
                       >
-                        Liste d'amis
+                        Liste d’amis
                       </ListLink>
                       {activatedTab === 'friendsTab' && (
                         <span className="text-warning">
@@ -316,7 +318,7 @@ class Character extends Component {
                     <div className="card-body">
                       <div className="col-sm-12">
                         <Title>
-                          Compétences d'académie
+                          Compétences d’académie
                           <br />
                           <SubTitle>
                             (
@@ -349,7 +351,7 @@ class Character extends Component {
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <Title>Liste d'amis</Title>
+                        <Title>Liste d’amis</Title>
                       </div>
                       <FriendList friends={character.friends} />
                     </div>

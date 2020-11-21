@@ -53,8 +53,8 @@ class Choice extends Component {
         <SubContainer className="container">
           <div className="row align-items-center">
             <TextDescription className="col-sm-12 mt-5">
-              Vous trouvez une épée plantée dans le sol, mais celle ci n'a pas
-              l'air commode. Que faites-vous?
+              Vous trouvez une épée plantée dans le sol, mais celle ci n’a pas
+              l’air commode. Que faites-vous?
             </TextDescription>
           </div>
           <div className="row align-items-center">

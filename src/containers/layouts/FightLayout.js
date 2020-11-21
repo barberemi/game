@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 const FightContainer = styled.div`
@@ -8,6 +9,12 @@ const FightContainer = styled.div`
   height: 100vh !important;
 `
 
-export default ({ children }) => {
-  return <FightContainer>{children}</FightContainer>
+const FightLayout = ({ children }) => (
+  <FightContainer>{children}</FightContainer>
+)
+
+FightLayout.propTypes = {
+  children: PropTypes.node.isRequired
 }
+
+export default FightLayout

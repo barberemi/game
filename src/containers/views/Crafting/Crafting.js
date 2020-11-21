@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 import { boss } from '../../../utils/boss'
@@ -78,9 +79,11 @@ class Crafting extends Component {
       id: parseInt(name[2])
     })
 
+    // todo: rework this part: state should never been mutate
     if (exists) {
       _.remove(this.state.boss.skills[name[3]], { id: parseInt(name[2]) })
     } else {
+      // eslint-disable-next-line
       this.state.boss.skills[name[3]] = [
         ...this.state.boss.skills[name[3]],
         { id: parseInt(name[2]) }
@@ -128,7 +131,7 @@ class Crafting extends Component {
       })
 
       toast.success(
-        <span style={{ fontSize: '14px' }}>Création de l'objet réussie !</span>,
+        <span style={{ fontSize: '14px' }}>Création de l’objet réussie !</span>,
         {
           position: 'top-right',
           autoClose: 5000,
@@ -187,7 +190,7 @@ class Crafting extends Component {
                         role="tab"
                         href="#itemsCraftingTab"
                       >
-                        Création d'objets
+                        Création d’objets
                       </ListLink>
                       {activatedTab === 'itemsCraftingTab' && (
                         <span className="text-warning">
@@ -314,8 +317,8 @@ class Crafting extends Component {
                   <Card className="card">
                     <div className="card-body">
                       <div className="col-sm-12">
-                        <Title>Liste d'objets pouvant être créés</Title>
-                        <div>Séléctionner l'objet à confectionner.</div>
+                        <Title>Liste d’objets pouvant être créés</Title>
+                        <div>Séléctionner l’objet à confectionner.</div>
                       </div>
                       <ItemList
                         items={selectedBoss.items}
@@ -327,7 +330,7 @@ class Crafting extends Component {
                       {selectedItem && (
                         <div>
                           <div className="col-sm-12">
-                            <Title>Forger l'objet</Title>
+                            <Title>Forger l’objet</Title>
                             <ItemCrafting
                               item={selectedItem}
                               characterItems={character.items}
@@ -365,4 +368,13 @@ class Crafting extends Component {
     )
   }
 }
+
+Crafting.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      idboss: PropTypes.string
+    }).isRequired
+  }).isRequired
+}
+
 export default Crafting

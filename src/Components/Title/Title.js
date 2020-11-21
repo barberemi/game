@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 const TitleBox = styled.div`
@@ -9,10 +10,10 @@ const TitleBox = styled.div`
   -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
 `
 
-export class Title extends Component {
-  render() {
-    return <TitleBox>{this.props.children}</TitleBox>
-  }
+const Title = ({ children }) => <TitleBox>{children}</TitleBox>
+
+Title.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
 export default Title

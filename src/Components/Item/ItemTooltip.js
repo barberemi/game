@@ -180,23 +180,20 @@ class ItemTooltip extends Component {
   }
 }
 
+const propTypeItem = PropTypes.shape({
+  id: PropTypes.number,
+  name: PropTypes.string,
+  cost: PropTypes.number,
+  level: PropTypes.number,
+  type: PropTypes.string,
+  rarity: PropTypes.string,
+  characteristics: PropTypes.arrayOf(PropTypes.shape()),
+  equipped: PropTypes.bool
+})
+
 ItemTooltip.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    cost: PropTypes.number,
-    level: PropTypes.number,
-    type: PropTypes.string,
-    rarity: PropTypes.string
-  }),
-  oldItem: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    cost: PropTypes.number,
-    level: PropTypes.number,
-    type: PropTypes.string,
-    rarity: PropTypes.string
-  })
+  item: propTypeItem,
+  oldItem: propTypeItem
 }
 
 export default ItemTooltip

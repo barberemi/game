@@ -34,7 +34,8 @@ class CardChoice extends Component {
 CardChoice.propTypes = {
   card: PropTypes.shape({
     img_url: PropTypes.string,
-    text_btn: PropTypes.string
+    text_btn: PropTypes.string,
+    name: PropTypes.string
   }),
   className: PropTypes.string
 }
