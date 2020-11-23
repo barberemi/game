@@ -188,7 +188,7 @@ class Crafting extends Component {
                           {_.map(boss, aBoss => (
                             <div key={aBoss.id} className={`carousel-item${selectedBoss.id === aBoss.id ? "active" : ""}`}>
                               <Image src={process.env.PUBLIC_URL+"/img/boss/"+aBoss.image} alt="Third slide"/>
-                              <Title>Tour niveau {aBoss.towerLevel}</Title>
+                              <Title>Tour niveau {aBoss.levelTower}</Title>
                               {aBoss.name} <span className={aBoss.academy.color}>({aBoss.academy.name})</span><LevelBox> - Niv {aBoss.level}</LevelBox>
                             </div>
                           ))}

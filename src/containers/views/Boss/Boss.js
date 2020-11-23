@@ -176,7 +176,7 @@ class Boss extends Component {
                 <div className={`tab-pane${activatedTab === "generalTab" ? " active" : ""}`} id="generalTab" role="tabpanel">
                   <Card className="card">
                     <div className="card-header">
-                      <Title>Tour niveau {selectedBoss.towerLevel}</Title>
+                      <Title>Tour niveau {selectedBoss.levelTower}</Title>
                       {selectedBoss.name} <span className={selectedBoss.academy.color}>({selectedBoss.academy.name})</span><LevelBox> - Niv {selectedBoss.level}</LevelBox>
                     </div>
                     <div className="card-body">
