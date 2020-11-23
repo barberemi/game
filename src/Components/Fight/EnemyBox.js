@@ -1,34 +1,77 @@
-import React, { Component } from "react";
-import Avatar from "./Avatar";
-import PropTypes from "prop-types";
-import _ from "lodash";
-import HpBar from "./HpBar";
+import React, { Component } from 'react'
+import Avatar from './Avatar'
+import PropTypes from 'prop-types'
+import _ from 'lodash'
+import HpBar from './HpBar'
 
 export class EnemyBox extends Component {
   expectedAction(action) {
     if (action !== undefined) {
       switch (action.effect) {
-        case "melee":
-          return <><i className="fas fa-fist-raised"/> <span className="small">{action.amount}</span></>;
-        case "range":
-          return <><i className="fas fa-bolt"/> <span className="small">{action.amount}</span></>;
-        case "dot":
-          return <> <span className="small">({action.duration} <i className="fas fa-clock"/>)</span> <i className="fas fa-burn"/> <span className="small">{action.amount}</span></>;
-        case "heal":
-          return <><i className="fas fa-hand-holding-medical"/> <span className="small">{action.amount}</span></>;
-        case "hot":
-          return <> <span className="small">({action.duration} <i className="fas fa-clock"/>)</span> <i className="fas fa-hand-holding-medical"/> <span className="small">{action.amount}</span></>;
-        case "skill_block":
-          return <><i className="fas fa-lock"/> <span className="small">{action.amount}</span></>;
-        case "movement":
-          return <><i className="fas fa-wind"/> <span className="small">{action.amount}</span></>;
-        case "unknown":
-          return <i className="fas fa-question"/>;
+        case 'melee':
+          return (
+            <>
+              <i className="fas fa-fist-raised" />{' '}
+              <span className="small">{action.amount}</span>
+            </>
+          )
+        case 'range':
+          return (
+            <>
+              <i className="fas fa-bolt" />{' '}
+              <span className="small">{action.amount}</span>
+            </>
+          )
+        case 'dot':
+          return (
+            <>
+              {' '}
+              <span className="small">
+                ({action.duration} <i className="fas fa-clock" />)
+              </span>{' '}
+              <i className="fas fa-burn" />{' '}
+              <span className="small">{action.amount}</span>
+            </>
+          )
+        case 'heal':
+          return (
+            <>
+              <i className="fas fa-hand-holding-medical" />{' '}
+              <span className="small">{action.amount}</span>
+            </>
+          )
+        case 'hot':
+          return (
+            <>
+              {' '}
+              <span className="small">
+                ({action.duration} <i className="fas fa-clock" />)
+              </span>{' '}
+              <i className="fas fa-hand-holding-medical" />{' '}
+              <span className="small">{action.amount}</span>
+            </>
+          )
+        case 'skill_block':
+          return (
+            <>
+              <i className="fas fa-lock" />{' '}
+              <span className="small">{action.amount}</span>
+            </>
+          )
+        case 'movement':
+          return (
+            <>
+              <i className="fas fa-wind" />{' '}
+              <span className="small">{action.amount}</span>
+            </>
+          )
+        case 'unknown':
+          return <i className="fas fa-question" />
         default:
-          return <br />;
+          return <br />
       }
     } else {
-      return <br />;
+      return <br />
     }
   }
 
@@ -54,16 +97,24 @@ export class EnemyBox extends Component {
             logoName={this.props.enemy.name.toLowerCase()}
             className="avatar mt-4"
           />
-          {!this.props.enemy.faint && _.map(this.props.enemy.hot, ({amount}, index) => (
-            <span key={index} className="small avatar-effect">{amount}<i className="fas fa-medkit"/></span>
-          ))}
-          {!this.props.enemy.faint && _.map(this.props.enemy.dot, ({amount}, index) => (
-            <span key={index} className="small avatar-effect">{amount}<i className="fas fa-burn"/></span>
-          ))}
+          {!this.props.enemy.faint &&
+            _.map(this.props.enemy.hot, ({ amount }, index) => (
+              <span key={index} className="small avatar-effect">
+                {amount}
+                <i className="fas fa-medkit" />
+              </span>
+            ))}
+          {!this.props.enemy.faint &&
+            _.map(this.props.enemy.dot, ({ amount }, index) => (
+              <span key={index} className="small avatar-effect">
+                {amount}
+                <i className="fas fa-burn" />
+              </span>
+            ))}
         </div>
         {/* END ENEMY POKEMON AVATAR PICTURE */}
       </div>
-    );
+    )
   }
 }
 
@@ -77,14 +128,14 @@ EnemyBox.propTypes = {
     isHit: PropTypes.bool,
     actions: PropTypes.array,
     dot: PropTypes.array,
-    hot: PropTypes.array,
+    hot: PropTypes.array
   }),
   expectedAction: PropTypes.shape({
     name: PropTypes.string,
     amount: PropTypes.number,
     effect: PropTypes.string,
-    duration: PropTypes.number,
+    duration: PropTypes.number
   })
 }
 
-export default EnemyBox;
+export default EnemyBox

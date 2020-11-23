@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from 'prop-types';
-import styled from "@emotion/styled";
-import _ from "lodash";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+import _ from 'lodash'
 
 const Container = styled.div`
- max-height: 70vh;
- min-height: 70vh;
- overflow-y: scroll;
+  max-height: 70vh;
+  min-height: 70vh;
+  overflow-y: scroll;
 `
 
 const Friend = styled.div`
@@ -35,44 +35,67 @@ const Avatar = styled.img`
 
 const IconAction = styled.span`
   padding-right: 10px;
-  
-  &:hover{
+
+  &:hover {
     cursor: pointer;
   }
 `
 
 class FriendList extends Component {
   render() {
-    const { friends } = this.props;
+    const { friends } = this.props
 
     return (
       <Container>
         {_.map(friends, (friend, index) => (
           <Friend key={index} className="col-sm-12">
             <Name className="col-sm-9">
-              {friend.academy && <><Avatar src={process.env.PUBLIC_URL+"/img/academies/"+friend.academy.name+".png"} alt={friend.name} />&nbsp;</>}
+              {friend.academy && (
+                <>
+                  <Avatar
+                    src={
+                      process.env.PUBLIC_URL +
+                      '/img/academies/' +
+                      friend.academy.name +
+                      '.png'
+                    }
+                    alt={friend.name}
+                  />
+                  &nbsp;
+                </>
+              )}
               (Niv {friend.level}) {friend.name}
             </Name>
             <Actions className="col-sm-3">
-              <IconAction data-tip="Visualiser"><i className="far fa-address-card" /></IconAction>
-              <IconAction data-tip="Grouper"><i className="fas fa-user-friends" /></IconAction>
-              <IconAction data-tip="Discuter"><i className="far fa-comment" /></IconAction>
-              <IconAction data-tip="Supprimer"><i className="fas fa-times text-danger" /></IconAction>
+              <IconAction data-tip="Visualiser">
+                <i className="far fa-address-card" />
+              </IconAction>
+              <IconAction data-tip="Grouper">
+                <i className="fas fa-user-friends" />
+              </IconAction>
+              <IconAction data-tip="Discuter">
+                <i className="far fa-comment" />
+              </IconAction>
+              <IconAction data-tip="Supprimer">
+                <i className="fas fa-times text-danger" />
+              </IconAction>
             </Actions>
           </Friend>
         ))}
       </Container>
-    );
+    )
   }
 }
 
 FriendList.propTypes = {
-  friends: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    level: PropTypes.number,
-    image: PropTypes.string,
-  })),
+  friends: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      level: PropTypes.number,
+      image: PropTypes.string
+    })
+  )
 }
 
-export default FriendList;
+export default FriendList

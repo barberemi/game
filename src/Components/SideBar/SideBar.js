@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import styled from "@emotion/styled";
-import Items from "./Items";
+import React, { Component } from 'react'
+import styled from '@emotion/styled'
+import Items from './Items'
 
 const SideBarGlobale = styled.nav`
   top: 30%;
@@ -11,7 +11,7 @@ const SideBarGlobale = styled.nav`
 
 const Image = styled.img`
   position: absolute;
-  
+
   cursor: pointer;
   -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
   filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
@@ -41,29 +41,41 @@ const OpenMenu = styled(Menu)`
 `
 
 class SideBar extends Component {
-  state = { isActive: undefined };
+  state = { isActive: undefined }
 
   handleToggle = () => {
-    this.setState({ isActive: !this.state.isActive });
-  };
+    this.setState({ isActive: !this.state.isActive })
+  }
 
   render() {
-    const isActive = this.state.isActive;
+    const isActive = this.state.isActive
 
     return (
       <SideBarGlobale className="position-fixed d-flex align-items-center">
-        {isActive === undefined
-          ? <InitialMenu><Items /></InitialMenu>
-          : (isActive
-            ? <OpenMenu className="animated fadeInLeft"><Items /></OpenMenu>
-            : <Menu><Items /></Menu>
-          )
-        }
+        {isActive === undefined ? (
+          <InitialMenu>
+            <Items />
+          </InitialMenu>
+        ) : isActive ? (
+          <OpenMenu className="animated fadeInLeft">
+            <Items />
+          </OpenMenu>
+        ) : (
+          <Menu>
+            <Items />
+          </Menu>
+        )}
         {/*<Image onClick={this.handleToggle} src={require("./moon.svg")} className="menu-button" alt="moon" width="60px" height="60px" />*/}
-        <Image onClick={this.handleToggle} src={require("./sun.svg")} alt="sun" width="70px" height="70px" />
+        <Image
+          onClick={this.handleToggle}
+          src={require('./sun.svg')}
+          alt="sun"
+          width="70px"
+          height="70px"
+        />
       </SideBarGlobale>
     )
   }
 }
 
-export default SideBar;
+export default SideBar

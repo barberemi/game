@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import styled from "@emotion/styled";
-import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
+import React, { Component } from 'react'
+import styled from '@emotion/styled'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 const AdventureButton = styled(Link)`
-  background-color: #FFC312;
+  background-color: #ffc312;
   color: black;
-  
+
   &:hover {
     color: #fff;
   }
@@ -27,7 +27,7 @@ class CardChoice extends Component {
           </AdventureButton>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -35,8 +35,9 @@ CardChoice.propTypes = {
   card: PropTypes.shape({
     img_url: PropTypes.string,
     text_btn: PropTypes.string,
+    name: PropTypes.string
   }),
-  className: PropTypes.string,
+  className: PropTypes.string
 }
 
-export default CardChoice;
+export default CardChoice

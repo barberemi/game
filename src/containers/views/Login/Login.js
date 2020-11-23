@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import styled from "@emotion/styled";
-import {Link} from "react-router-dom";
+import React, { Component } from 'react'
+import styled from '@emotion/styled'
+import { Link } from 'react-router-dom'
 
 const Container = styled.div`
   height: 100%;
@@ -12,7 +12,7 @@ const Card = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   width: 400px;
-  background-color: rgba(0,0,0,0.8) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
 const Title = styled.h3`
@@ -28,8 +28,8 @@ const Social = styled.div`
 const SocialIcon = styled.span`
   font-size: 60px;
   margin-left: 10px;
-  color: #FFC312;
-  
+  color: #ffc312;
+
   &:hover {
     color: white;
     cursor: pointer;
@@ -38,16 +38,16 @@ const SocialIcon = styled.span`
 
 const InputGroup = styled.span`
   width: 50px;
-  background-color: #FFC312;
+  background-color: #ffc312;
   color: black;
-  border:0 !important;
+  border: 0 !important;
 `
 
 const InputSubmit = styled.input`
   color: black;
-  background-color: #FFC312;
+  background-color: #ffc312;
   width: 100px;
-  
+
   &:hover {
     color: black;
     background-color: white;
@@ -56,26 +56,26 @@ const InputSubmit = styled.input`
 
 const LinkInput = styled.div`
   color: white;
-  
+
   a {
-    color: #FFC312;
+    color: #ffc312;
   }
 `
 
 class Login extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       email: null,
-      password: null,
+      password: null
     }
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault()
 
-    console.log("Call API Login");
+    console.log('Call API Login')
   }
 
   render() {
@@ -86,15 +86,21 @@ class Login extends Component {
             <div className="card-header">
               <Title>Se connecter</Title>
               <Social className="d-flex justify-content-end">
-                <SocialIcon><i className="fab fa-facebook-square" /></SocialIcon>
-                <SocialIcon><i className="fab fa-twitter-square" /></SocialIcon>
+                <SocialIcon>
+                  <i className="fab fa-facebook-square" />
+                </SocialIcon>
+                <SocialIcon>
+                  <i className="fab fa-twitter-square" />
+                </SocialIcon>
               </Social>
             </div>
             <div className="card-body">
               <form>
                 <div className="input-group form-group">
                   <div className="input-group-prepend">
-                    <InputGroup className="input-group-text"><i className="fas fa-user" /></InputGroup>
+                    <InputGroup className="input-group-text">
+                      <i className="fas fa-user" />
+                    </InputGroup>
                   </div>
                   <input
                     type="text"
@@ -103,12 +109,16 @@ class Login extends Component {
                     value={this.state.email}
                     className="form-control"
                     placeholder="Email"
-                    onChange={event => this.setState({email: event.target.value})}
+                    onChange={(event) =>
+                      this.setState({ email: event.target.value })
+                    }
                   />
                 </div>
                 <div className="input-group form-group">
                   <div className="input-group-prepend">
-                    <InputGroup className="input-group-text"><i className="fas fa-key" /></InputGroup>
+                    <InputGroup className="input-group-text">
+                      <i className="fas fa-key" />
+                    </InputGroup>
                   </div>
                   <input
                     type="password"
@@ -117,17 +127,24 @@ class Login extends Component {
                     value={this.state.password}
                     className="form-control"
                     placeholder="Mot de passe"
-                    onChange={event => this.setState({password: event.target.value})}
+                    onChange={(event) =>
+                      this.setState({ password: event.target.value })
+                    }
                   />
                 </div>
                 <div className="form-group">
-                  <InputSubmit type="submit" value="Login" className="btn float-right" onClick={this.handleSubmit} />
+                  <InputSubmit
+                    type="submit"
+                    value="Login"
+                    className="btn float-right"
+                    onClick={this.handleSubmit}
+                  />
                 </div>
               </form>
             </div>
             <div className="card-footer">
               <LinkInput className="d-flex justify-content-center">
-                Pas de compte?&nbsp;<Link to={"/register"}>S'enregistrer</Link>
+                Pas de compte?&nbsp;<Link to={'/register'}>S’enregistrer</Link>
               </LinkInput>
               <LinkInput className="d-flex justify-content-center">
                 <a href="#">Mot de passe oublié?</a>
@@ -136,8 +153,8 @@ class Login extends Component {
           </Card>
         </div>
       </Container>
-    );
+    )
   }
 }
 
-export default Login;
+export default Login
