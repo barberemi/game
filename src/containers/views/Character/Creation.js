@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import styled from "@emotion/styled";
-import _ from "lodash";
-import ReactTooltip from "react-tooltip";
-import { academies } from "../../../utils/academies";
-import LightDarkButton from "../../../Components/LightDark/LightDarkButton";
-import Title from "../../../Components/Title/Title";
+import React, { Component } from 'react'
+import styled from '@emotion/styled'
+import _ from 'lodash'
+import ReactTooltip from 'react-tooltip'
+import { academies } from '../../../utils/academies'
+import LightDarkButton from '../../../Components/LightDark/LightDarkButton'
+import Title from '../../../Components/Title/Title'
 
 const Container = styled.div`
-  background-image: url("https://images.alphacoders.com/883/883163.jpg");
+  background-image: url('https://images.alphacoders.com/883/883163.jpg');
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -34,8 +34,8 @@ const Academy = styled.img`
   width: 50px;
   height: 50px;
   border: 2px solid #fff;
-  background-color: #FFC312;
-  
+  background-color: #ffc312;
+
   &:hover {
     cursor: pointer;
   }
@@ -48,11 +48,10 @@ const CenterBox = styled.div`
   align-items: center;
 `
 
-const RightBox = styled.div`
-`
+const RightBox = styled.div``
 
 const Card = styled.div`
-  background-color: rgba(0,0,0,0.7) !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
 `
 
 const Image = styled.img`
@@ -72,7 +71,7 @@ const Skill = styled.img`
   border-radius: 50%;
   border: 2px solid;
   margin-right: 10px;
-  
+
   &:hover {
     cursor: pointer;
   }
@@ -84,10 +83,10 @@ const NameInput = styled.input`
 
 const InputSubmit = styled.input`
   color: black;
-  background-color: #FFC312;
+  background-color: #ffc312;
   width: 100px;
   margin-top: 10px;
-  
+
   &:hover {
     color: black;
     background-color: white;
@@ -96,46 +95,47 @@ const InputSubmit = styled.input`
 
 class Creation extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       academies,
       academySelected: null,
       isAnimated: null,
-      isDark: true,
-    };
+      isDark: true
+    }
   }
 
   selectAcademy(academy) {
     this.setState({
       academySelected: academy,
-      isAnimated: true,
-    });
+      isAnimated: true
+    })
   }
 
   onClickButtonLightdark = (type) => {
     this.setState({
-      isDark: type === "dark",
+      isDark: type === 'dark'
     })
   }
 
   render() {
-    const { academySelected, isAnimated, isDark } = this.state;
+    const { academySelected, isAnimated, isDark } = this.state
 
     return (
       <Container className="container-fluid">
         <div className="container">
           <div className="row">
-
             <TitleBox className="col-sm-12">
               Veuillez sélectionner une académie.
             </TitleBox>
 
             <LeftBox className="col-sm-3 h-100 my-auto">
-              {_.map(academies, academy => (
+              {_.map(academies, (academy) => (
                 <>
                   <Academy
-                    src={process.env.PUBLIC_URL+"/img/academies/"+academy.image}
+                    src={
+                      process.env.PUBLIC_URL + '/img/academies/' + academy.image
+                    }
                     key={academy.name}
                     onClick={() => this.selectAcademy(academy)}
                   />
@@ -148,15 +148,23 @@ class Creation extends Component {
               {academySelected && (
                 <>
                   <Image
-                    src={process.env.PUBLIC_URL+"/img/academies/"+academySelected.image}
+                    src={
+                      process.env.PUBLIC_URL +
+                      '/img/academies/' +
+                      academySelected.image
+                    }
                     alt={academySelected.name}
-                    onAnimationEnd={() => this.setState({isAnimated: false})}
-                    className={isAnimated ? "animated fadeInDown" : null}
+                    onAnimationEnd={() => this.setState({ isAnimated: false })}
+                    className={isAnimated ? 'animated fadeInDown' : null}
                     data-tip="Raoult Raoult !!"
                   />
                   <ReactTooltip />
                   <NameInput type="text" placeholder="Didier Raoult" />
-                  <InputSubmit type="submit" value="Valider" className="btn float-right" />
+                  <InputSubmit
+                    type="submit"
+                    value="Valider"
+                    className="btn float-right"
+                  />
                 </>
               )}
             </CenterBox>
@@ -167,8 +175,10 @@ class Creation extends Component {
                   <LightDarkButton onClick={this.onClickButtonLightdark} />
                   <div className="card-header">
                     <Title>{academySelected.name}</Title>
-                    {_.map(_.split(academySelected.role, ','), role => (
-                      <div key={role} className={academySelected.color}>{role}</div>
+                    {_.map(_.split(academySelected.role, ','), (role) => (
+                      <div key={role} className={academySelected.color}>
+                        {role}
+                      </div>
                     ))}
                   </div>
                   <div className="card-body">
@@ -176,30 +186,36 @@ class Creation extends Component {
                   </div>
                   <div className="card-footer">
                     <Title>Compétences</Title>
-                    <div style={{color: isDark ? "#7730ec" : "#fcce18"}}>
-                      {isDark ? "Ombre" : "Lumière"}
+                    <div style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
+                      {isDark ? 'Ombre' : 'Lumière'}
                     </div>
-                    {_.map(isDark ? academySelected.skills.dark : academySelected.skills.light, skill => (
-                      <>
-                        <Skill
-                          key={skill}
-                          src="https://wiki-fr.guildwars2.com/images/8/88/Dagues_enchant%C3%A9es.png"
-                          alt={skill.name}
-                          data-tip={skill.description}
-                          style={{borderColor: isDark ? "#7730ec" : "#fcce18"}}
-                        />
-                        <ReactTooltip />
-                      </>
-                    ))}
+                    {_.map(
+                      isDark
+                        ? academySelected.skills.dark
+                        : academySelected.skills.light,
+                      (skill) => (
+                        <>
+                          <Skill
+                            key={skill}
+                            src="https://wiki-fr.guildwars2.com/images/8/88/Dagues_enchant%C3%A9es.png"
+                            alt={skill.name}
+                            data-tip={skill.description}
+                            style={{
+                              borderColor: isDark ? '#7730ec' : '#fcce18'
+                            }}
+                          />
+                          <ReactTooltip />
+                        </>
+                      )
+                    )}
                   </div>
                 </Card>
               )}
             </RightBox>
-
           </div>
         </div>
       </Container>
-    );
+    )
   }
 }
-export default Creation;
+export default Creation

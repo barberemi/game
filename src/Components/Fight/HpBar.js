@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export class HpBar extends Component {
   // colorBar(percentage) {
@@ -14,7 +14,7 @@ export class HpBar extends Component {
   // }
   render() {
     // calc player progress bar percentage based on HP
-    let percentage = (this.props.hp / this.props.maxHp) * 100;
+    let percentage = (this.props.hp / this.props.maxHp) * 100
 
     return (
       <div className="d-flex justify-content-between align-items-center">
@@ -23,7 +23,7 @@ export class HpBar extends Component {
             // className={`progress-bar ${this.colorBar(percentage)}`}
             className="progress-bar bg-danger"
             role="progressbar"
-            style={{ width: percentage + "%"}}
+            style={{ width: percentage + '%' }}
             aria-valuemin="0"
             aria-valuemax="100"
           />
@@ -32,13 +32,13 @@ export class HpBar extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
 HpBar.propTypes = {
   hp: PropTypes.number,
-  maxHp: PropTypes.number,
+  maxHp: PropTypes.number
 }
 
-export default HpBar;
+export default HpBar

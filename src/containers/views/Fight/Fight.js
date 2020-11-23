@@ -1,22 +1,28 @@
-import React, { Component } from 'react';
-import TextBox from "../../../Components/Fight/TextBox";
-import Actions from "../../../Components/Fight/Actions";
-import EnemyBox from "../../../Components/Fight/EnemyBox";
-import PlayerBox from "../../../Components/Fight/PlayerBox";
-import "./Fight.scss";
-import _ from 'lodash';
+import React, { Component } from 'react'
+import TextBox from '../../../Components/Fight/TextBox'
+import Actions from '../../../Components/Fight/Actions'
+import EnemyBox from '../../../Components/Fight/EnemyBox'
+import PlayerBox from '../../../Components/Fight/PlayerBox'
+import './Fight.scss'
+import _ from 'lodash'
 import {
-  enemyTurnFinished, enemyMovementAction, enemyBlockAction,
-  playersTurnFinished, playerHealAction, playerMovementAction,
-  selectPlayer, userTakeDot, userTakeHot,
-} from "../../../utils/fightHelper";
-import { characters } from "../../../utils/characters";
+  enemyTurnFinished,
+  enemyMovementAction,
+  enemyBlockAction,
+  playersTurnFinished,
+  playerHealAction,
+  playerMovementAction,
+  selectPlayer,
+  userTakeDot,
+  userTakeHot
+} from '../../../utils/fightHelper'
+import { characters } from '../../../utils/characters'
 
 class Fight extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.state = characters;
+    this.state = characters
   }
 
   componentDidMount() {
@@ -27,98 +33,102 @@ class Fight extends Component {
             textMessageOne: `${this.state.enemy.name} apparait!`,
             enemy: {
               ...this.state.enemy,
-              faint: null,
-            },
-          };
+              faint: null
+            }
+          }
         },
         () => {
           setTimeout(() => {
-            const players = [...this.state.players];
+            const players = [...this.state.players]
             for (let i = 0; i < this.state.players.length; i++) {
-              players[i] = { ...players[i], faint: null };
+              players[i] = { ...players[i], faint: null }
               // Me
               if (i === 0) {
-                players[i] = { ...players[i], me: true };
+                players[i] = { ...players[i], me: true }
               }
             }
 
             this.setState(
               {
-                textMessageOne: "Vous entrez pour le combattre !",
+                textMessageOne: 'Vous entrez pour le combattre !',
                 players
               },
               () => {
                 setTimeout(() => {
                   this.setState({
-                    textMessageOne: ""
-                  });
+                    textMessageOne: ''
+                  })
 
-                  this.nextEnemyAction();
-                }, 3000);
+                  this.nextEnemyAction()
+                }, 3000)
               }
-            );
-          }, 3000);
+            )
+          }, 3000)
         }
-      );
-    }, 1000);
+      )
+    }, 1000)
   }
 
   nextEnemyAction() {
-    const enemyAction = Math.floor(Math.random() * this.state.enemy.actions.length);
+    const enemyAction = Math.floor(
+      Math.random() * this.state.enemy.actions.length
+    )
 
     this.setState({
       enemy: {
         ...this.state.enemy,
-        expectedAction: this.state.enemy.actions[enemyAction],
+        expectedAction: this.state.enemy.actions[enemyAction]
       }
     })
   }
 
   endTurn() {
-    const players = [...this.state.players];
-    const enemy = this.state.enemy;
+    const players = [...this.state.players]
+    const enemy = this.state.enemy
 
     // 1 - DOT ENEMY
     if (enemy.dot.length > 0) {
-      let { user } = userTakeDot(enemy);
+      let { user } = userTakeDot(enemy)
       this.setState({
-        enemy: user,
-      });
+        enemy: user
+      })
     }
 
     if (this.checkIfEnemyAlive()) {
       // 2 - DOT PLAYERS
-      for(let i = 0; i < players.length; i++) {
+      for (let i = 0; i < players.length; i++) {
         if (players[i].dot.length > 0 && players[i].hp > 0) {
-          let { user } = userTakeDot(this.state.players[i]);
-          players[i] = user;
-          this.setState({
-            players,
-          }, () => {
+          let { user } = userTakeDot(this.state.players[i])
+          players[i] = user
+          this.setState(
+            {
+              players
+            },
+            () => {
               setTimeout(() => {
-                this.checkIfPlayerAlive(i);
+                this.checkIfPlayerAlive(i)
               }, 3000)
             }
-          );
+          )
         }
       }
 
       // 3 - HOT ENEMY
       if (enemy.hot.length > 0) {
-        let { user } = userTakeHot(enemy);
+        let { user } = userTakeHot(enemy)
         this.setState({
-          enemy: user,
-        });
+          enemy: user
+        })
       }
 
       // 4 - HOT PLAYERS
-      for(let i = 0; i < players.length; i++) {
+      for (let i = 0; i < players.length; i++) {
         if (players[i].dot.length > 0) {
-          let { user } = userTakeHot(this.state.players[i]);
-          players[i] = user;
+          let { user } = userTakeHot(this.state.players[i])
+          players[i] = user
           this.setState({
-            players,
-          });
+            players
+          })
         }
       }
 
@@ -127,17 +137,21 @@ class Fight extends Component {
         // textMessageOne: "",
         round: this.state.round + 1,
         players: playersTurnFinished(this.state.players),
-        enemy: enemyTurnFinished(this.state.enemy),
-      });
-      this.nextEnemyAction();
+        enemy: enemyTurnFinished(this.state.enemy)
+      })
+      this.nextEnemyAction()
     }
   }
 
   checkIfPlayerAlive(idPlayerSelected) {
-    const players = [...this.state.players];
+    const players = [...this.state.players]
 
     if (players[idPlayerSelected].hp === 0) {
-      players[idPlayerSelected] = {...players[idPlayerSelected], faint: true, isHit: false};
+      players[idPlayerSelected] = {
+        ...players[idPlayerSelected],
+        faint: true,
+        isHit: false
+      }
       this.setState(
         {
           textMessageOne: `${players[idPlayerSelected].name} a été terrassé.`,
@@ -148,35 +162,39 @@ class Fight extends Component {
             //All players dead
             const allPlayersDead = _.find(players, (player) => {
               return player.hp > 0
-            });
+            })
             if (!allPlayersDead) {
               this.setState(
                 {
                   textMessageOne: `Toute l'équipe a perdu.`,
-                  textMessageTwo: `${this.state.enemy.name} a gagné!`,
+                  textMessageTwo: `${this.state.enemy.name} a gagné!`
                 },
                 () => {
                   setTimeout(() => {
                     this.setState({
                       gameOver: true
-                    });
-                  }, 3000);
+                    })
+                  }, 3000)
                 }
-              );
+              )
             } else {
               this.setState({
-                textMessageOne: "",
+                textMessageOne: ''
               })
             }
-          }, 3000);
+          }, 3000)
         }
-      );
+      )
     } else {
-      players[idPlayerSelected] = {...players[idPlayerSelected], isHit: false, faint: false};
+      players[idPlayerSelected] = {
+        ...players[idPlayerSelected],
+        isHit: false,
+        faint: false
+      }
       this.setState({
-        textMessageOne: "",
-        players,
-      });
+        textMessageOne: '',
+        players
+      })
     }
   }
 
@@ -189,69 +207,70 @@ class Fight extends Component {
           enemy: {
             ...this.state.enemy,
             faint: true,
-            isHit: false,
-          },
+            isHit: false
+          }
         },
         () => {
           setTimeout(() => {
             this.setState({
               gameOver: true
-            });
-          }, 3000);
+            })
+          }, 3000)
         }
-      );
-      return false;
+      )
+      return false
     }
 
-    return true;
+    return true
   }
 
   enemyTurn = () => {
-    const { amount, name, effect, duration } = this.state.enemy.expectedAction;
-    const playerSelected = selectPlayer(this.state.players, effect);
+    const { amount, name, effect, duration } = this.state.enemy.expectedAction
+    const playerSelected = selectPlayer(this.state.players, effect)
 
     if (this.checkIfEnemyAlive()) {
-      if (effect === "heal") {
+      if (effect === 'heal') {
         this.setState(
           {
             textMessageOne: `${this.state.enemy.name} se soigne pour ${amount}pts de vie.`,
             enemy: {
               ...this.state.enemy,
-              hp: this.state.enemy.hp + amount,
-            },
+              hp: this.state.enemy.hp + amount
+            }
           },
           () => {
             setTimeout(() => {
               this.setState({
-                textMessageOne: ""
-              });
+                textMessageOne: ''
+              })
               this.endTurn()
-            }, 3000);
+            }, 3000)
           }
-        );
-      } else if (effect === "hot") {
+        )
+      } else if (effect === 'hot') {
         this.setState(
           {
             textMessageOne: `${this.state.enemy.name} se soignera de ${amount}pts de vie à la fin des ${duration} prochains tours.`,
             enemy: {
               ...this.state.enemy,
-              hot: [
-                ...this.state.enemy.hot,
-                {amount, duration}
-              ],
-            },
+              hot: [...this.state.enemy.hot, { amount, duration }]
+            }
           },
           () => {
             setTimeout(() => {
               this.setState({
-                textMessageOne: ""
-              });
+                textMessageOne: ''
+              })
               this.endTurn()
-            }, 3000);
+            }, 3000)
           }
-        );
-      } else if (effect === "movement") {
-        let { players, textMessageOne } = enemyMovementAction(this.state.players, playerSelected, this.state.enemy);
+        )
+      } else if (effect === 'movement') {
+        let { players, textMessageOne } = enemyMovementAction(
+          this.state.players,
+          playerSelected,
+          this.state.enemy
+        )
         this.setState(
           {
             textMessageOne,
@@ -260,15 +279,19 @@ class Fight extends Component {
           () => {
             setTimeout(() => {
               this.setState({
-                textMessageOne: ""
-              });
-              this.checkIfPlayerAlive(playerSelected);
+                textMessageOne: ''
+              })
+              this.checkIfPlayerAlive(playerSelected)
               this.endTurn()
-            }, 3000);
+            }, 3000)
           }
-        );
-      } else if (effect === "skill_block") {
-        let {players, textMessageOne} = enemyBlockAction(this.state.players, playerSelected, this.state.enemy);
+        )
+      } else if (effect === 'skill_block') {
+        let { players, textMessageOne } = enemyBlockAction(
+          this.state.players,
+          playerSelected,
+          this.state.enemy
+        )
         this.setState(
           {
             textMessageOne,
@@ -277,111 +300,122 @@ class Fight extends Component {
           () => {
             setTimeout(() => {
               this.setState({
-                textMessageOne: ""
-              });
-              this.checkIfPlayerAlive(playerSelected);
+                textMessageOne: ''
+              })
+              this.checkIfPlayerAlive(playerSelected)
               this.endTurn()
-            }, 3000);
+            }, 3000)
           }
-        );
-      } else if (effect === "dot") {
+        )
+      } else if (effect === 'dot') {
         this.setState(
-          prevState => {
-            const players = [...this.state.players];
+          (prevState) => {
+            const players = [...this.state.players]
 
             players[playerSelected] = {
               ...players[playerSelected],
               isHit: true,
               dot: [
                 ...prevState.players[playerSelected].dot,
-                {amount, duration}
-              ],
-            };
+                { amount, duration }
+              ]
+            }
 
             return {
               players,
-              textMessageOne: `${
-                this.state.enemy.name
-              } utilise ${name} sur ${this.state.players[playerSelected].name} ce qui fera ${amount}pts de dégats à la fin des ${duration} prochains tours!`
-            };
+              textMessageOne: `${this.state.enemy.name} utilise ${name} sur ${this.state.players[playerSelected].name} ce qui fera ${amount}pts de dégats à la fin des ${duration} prochains tours!`
+            }
           },
           () => {
             setTimeout(() => {
               this.endTurn()
-            }, 3000);
+            }, 3000)
           }
-        );
+        )
       } else {
         this.setState(
-          prevState => {
-            const players = [...this.state.players];
+          (prevState) => {
+            const players = [...this.state.players]
 
             players[playerSelected] = {
               ...players[playerSelected],
               isHit: true,
-              hp: (prevState.players[playerSelected].hp - amount <= 0 ? 0 : prevState.players[playerSelected].hp - amount),
-            };
+              hp:
+                prevState.players[playerSelected].hp - amount <= 0
+                  ? 0
+                  : prevState.players[playerSelected].hp - amount
+            }
 
             return {
               players,
-              textMessageOne: `${
-                this.state.enemy.name
-              } utilise ${name} sur ${this.state.players[playerSelected].name} pour ${amount}pts de dégats!`
-            };
+              textMessageOne: `${this.state.enemy.name} utilise ${name} sur ${this.state.players[playerSelected].name} pour ${amount}pts de dégats!`
+            }
           },
           () => {
             setTimeout(() => {
-              this.checkIfPlayerAlive(playerSelected);
+              this.checkIfPlayerAlive(playerSelected)
               this.endTurn()
-            }, 3000);
+            }, 3000)
           }
-        );
+        )
       }
     }
   }
 
   handleClickOnPlayerToAction = (player) => {
-    const { playerActionSelectable } = this.state;
+    const { playerActionSelectable } = this.state
 
-    if (playerActionSelectable.effect === "heal" || playerActionSelectable.effect === "hot") {
-      let { players, textMessageOne } = playerHealAction([...this.state.players], player, playerActionSelectable);
+    if (
+      playerActionSelectable.effect === 'heal' ||
+      playerActionSelectable.effect === 'hot'
+    ) {
+      let { players, textMessageOne } = playerHealAction(
+        [...this.state.players],
+        player,
+        playerActionSelectable
+      )
       this.setState({
         textMessageOne,
         players
-      });
-    } else if (playerActionSelectable.effect === "movement") {
-      let { players, textMessageOne } = playerMovementAction([...this.state.players], player);
+      })
+    } else if (playerActionSelectable.effect === 'movement') {
+      let { players, textMessageOne } = playerMovementAction(
+        [...this.state.players],
+        player
+      )
       this.setState({
         textMessageOne,
         players
-      });
+      })
     }
     //2 - ENEMY TURN
     setTimeout(() => {
       this.setState({
-        playerActionSelectable: undefined,
-      });
-      this.enemyTurn();
-    }, 3000);
+        playerActionSelectable: undefined
+      })
+      this.enemyTurn()
+    }, 3000)
   }
 
   handleClickOnActionBar = (action) => {
-    const { effect, name, amount, duration } = action;
+    const { effect, name, amount, duration } = action
 
     // 1 - ATTACK
-    if (effect === "melee" || effect === "range" || effect === "dot") {
+    if (effect === 'melee' || effect === 'range' || effect === 'dot') {
       // 1.1 - PLAYER ACTION
-      let dot = [...this.state.enemy.dot];
-      let hp = (this.state.enemy.hp - amount <= 0 ? 0 : this.state.enemy.hp - amount);
-      let textMessageOne = `${_.find(this.state.players, 'me').name} utilise ${name} pour ${amount}pts de dégats!`;
+      let dot = [...this.state.enemy.dot]
+      let hp =
+        this.state.enemy.hp - amount <= 0 ? 0 : this.state.enemy.hp - amount
+      let textMessageOne = `${
+        _.find(this.state.players, 'me').name
+      } utilise ${name} pour ${amount}pts de dégats!`
 
-      if (effect === "dot") {
-        dot = [
-          ...this.state.enemy.dot,
-          {amount, duration}
-        ];
-        hp = this.state.enemy.hp;
-        textMessageOne = `${_.find(this.state.players, 'me').name} utilise ${name} ce qui infligera ${amount}pts de dégats à la fin des ${duration} prochains tours!`;
+      if (effect === 'dot') {
+        dot = [...this.state.enemy.dot, { amount, duration }]
+        hp = this.state.enemy.hp
+        textMessageOne = `${
+          _.find(this.state.players, 'me').name
+        } utilise ${name} ce qui infligera ${amount}pts de dégats à la fin des ${duration} prochains tours!`
       }
 
       this.setState({
@@ -389,10 +423,10 @@ class Fight extends Component {
           ...this.state.enemy,
           hp,
           isHit: true,
-          dot,
+          dot
         },
         textMessageOne
-      });
+      })
       // 1.2 - ENEMY ACTION
       setTimeout(() => {
         // Enemy turn
@@ -400,39 +434,42 @@ class Fight extends Component {
           enemy: {
             ...this.state.enemy,
             isHit: false,
-            faint: false,
+            faint: false
           }
-        });
-        this.enemyTurn();
-      }, 3000);
-    // 2 - HEAL
-    } else if (effect === "heal" || effect === "hot") {
+        })
+        this.enemyTurn()
+      }, 3000)
+      // 2 - HEAL
+    } else if (effect === 'heal' || effect === 'hot') {
       // 2.1 - PLAYER ACTION
-      const players = [...this.state.players];
+      const players = [...this.state.players]
       for (let i = 0; i < this.state.players.length; i++) {
-        if(this.state.players[i].hp > 0) {
-          players[i] = { ...players[i], isSelectable: true };
+        if (this.state.players[i].hp > 0) {
+          players[i] = { ...players[i], isSelectable: true }
         }
       }
       this.setState({
-        textMessageOne: "Veuillez selectionner un joueur à soigner.",
+        textMessageOne: 'Veuillez selectionner un joueur à soigner.',
         playerActionSelectable: action,
         players
-      });
-    // 3 - MOVEMENT
-    } else if (effect === "movement") {
+      })
+      // 3 - MOVEMENT
+    } else if (effect === 'movement') {
       // 3.1 - PLAYER ACTION
-      const players = [...this.state.players];
+      const players = [...this.state.players]
       for (let i = 0; i < this.state.players.length; i++) {
-        if(this.state.players[i] !== _.find(this.state.players, 'me') && this.state.players[i].hp > 0) {
-          players[i] = { ...players[i], isSelectable: true };
+        if (
+          this.state.players[i] !== _.find(this.state.players, 'me') &&
+          this.state.players[i].hp > 0
+        ) {
+          players[i] = { ...players[i], isSelectable: true }
         }
       }
       this.setState({
-        textMessageOne: "Veuillez selectionner la place que vous souhaitez.",
+        textMessageOne: 'Veuillez selectionner la place que vous souhaitez.',
         playerActionSelectable: action,
         players
-      });
+      })
     }
   }
 
@@ -440,15 +477,23 @@ class Fight extends Component {
     return (
       <div className="container h-100">
         <div className="row h-100">
-            {/* BATTLE SCREEN CONTAINER */}
+          {/* BATTLE SCREEN CONTAINER */}
           <div className="col-sm-12">
-            <div id="turn-text-number"><i className="fas fa-dice"/> Tour {this.state.round}</div>
+            <div id="turn-text-number">
+              <i className="fas fa-dice" /> Tour {this.state.round}
+            </div>
             <div className="all-players-box">
-              {_.map(this.state.players, player => (
+              {_.map(this.state.players, (player) => (
                 <PlayerBox
                   key={player.name}
                   player={player}
-                  onClick={player.isSelectable ? this.handleClickOnPlayerToAction : () => { return null }}
+                  onClick={
+                    player.isSelectable
+                      ? this.handleClickOnPlayerToAction
+                      : () => {
+                          return null
+                        }
+                  }
                 />
               ))}
 
@@ -461,26 +506,31 @@ class Fight extends Component {
             {/* TEXT BOX SECTION */}
             <div id="text-box">
               <div id="text-box-content">
-                {this.state.textMessageOne !== "" &&
-                this.state.gameOver === false && (
-                  <TextBox
-                    messageOne={this.state.textMessageOne}
-                    messageTwo={this.state.textMessageTwo}
-                  />
-                )}
-
-                {this.state.textMessageOne === "" &&
-                this.state.gameOver === false &&
-                Object.keys(_.find(this.state.players, 'me').actions).map((key, index) => {
-                  return (
-                    <Actions
-                      key={key}
-                      frontPlayer={_.find(this.state.players, 'me') === _.last(this.state.players)}
-                      action={_.find(this.state.players, 'me').actions[key]}
-                      onClick={this.handleClickOnActionBar}
+                {this.state.textMessageOne !== '' &&
+                  this.state.gameOver === false && (
+                    <TextBox
+                      messageOne={this.state.textMessageOne}
+                      messageTwo={this.state.textMessageTwo}
                     />
-                  );
-                })}
+                  )}
+
+                {this.state.textMessageOne === '' &&
+                  this.state.gameOver === false &&
+                  Object.keys(_.find(this.state.players, 'me').actions).map(
+                    (key) => {
+                      return (
+                        <Actions
+                          key={key}
+                          frontPlayer={
+                            _.find(this.state.players, 'me') ===
+                            _.last(this.state.players)
+                          }
+                          action={_.find(this.state.players, 'me').actions[key]}
+                          onClick={this.handleClickOnActionBar}
+                        />
+                      )
+                    }
+                  )}
               </div>
             </div>
             {/* TEXT BOX SECTION */}
@@ -488,8 +538,8 @@ class Fight extends Component {
           {/* END BATTLE SCREEN CONTAINER */}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Fight;
+export default Fight
