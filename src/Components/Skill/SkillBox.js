@@ -92,9 +92,12 @@ const InputCheckBox = styled.input`
   right: 30px;
 `
 
-const DescriptionBox = styled.div`
+const TextBox = styled.div`
   font-size: 14px;
   padding: 15px;
+`
+
+const DescriptionBox = styled.div`
   text-align: justify;
 `
 
@@ -156,9 +159,28 @@ class SkillBox extends Component {
               }}
             />
           </SubContainer>
-          <DescriptionBox className={descriptionDisplayed ? '' : 'd-none'}>
-            {skill.description}
-          </DescriptionBox>
+          <TextBox className={descriptionDisplayed ? '' : 'd-none'}>
+            {(skill.duration > 0 || skill.type) && (
+              <>
+                <br />
+                <b>Durée :</b> {skill.duration} tours
+              </>
+            )}
+            {(skill.cooldown > 0 || skill.type) && (
+              <>
+                <br />
+                <b>Temps de récupération :</b> {skill.cooldown} tours
+              </>
+            )}
+            <DescriptionBox>
+              <br />
+              {_.replace(
+                skill.description,
+                '#MONTANT#',
+                skill.amount * skill.rate
+              )}
+            </DescriptionBox>
+          </TextBox>
         </BorderBox>
       </Container>
     )
@@ -170,7 +192,12 @@ SkillBox.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     level: PropTypes.number,
-    description: PropTypes.string
+    description: PropTypes.string,
+    duration: PropTypes.number,
+    cooldown: PropTypes.number,
+    amount: PropTypes.number,
+    rate: PropTypes.number,
+    type: PropTypes.string
   }),
   isDark: PropTypes.bool,
   isSelected: PropTypes.bool,
