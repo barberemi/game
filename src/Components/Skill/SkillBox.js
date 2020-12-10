@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
+import _ from 'lodash'
 import { getBorderColorSkill } from '../../utils/skillHelper'
 
 const Container = styled.div`
@@ -160,24 +161,33 @@ class SkillBox extends Component {
             />
           </SubContainer>
           <TextBox className={descriptionDisplayed ? '' : 'd-none'}>
-            {(skill.duration > 0 || skill.type) && (
+            <b>Type de compétence :</b> {skill.type}
+            <br />
+            {skill.duration > 0 && (
               <>
-                <br />
                 <b>Durée :</b> {skill.duration} tours
-              </>
-            )}
-            {(skill.cooldown > 0 || skill.type) && (
-              <>
                 <br />
-                <b>Temps de récupération :</b> {skill.cooldown} tours
               </>
             )}
+            {skill.cooldown > 0 && (
+              <>
+                <b>Temps de récupération :</b> {skill.cooldown} tours
+                <br />
+              </>
+            )}
+            <hr className="my-3" />
             <DescriptionBox>
               <br />
               {_.replace(
                 skill.description,
                 '#MONTANT#',
-                skill.amount * skill.rate
+                skill.amount +
+                  ' + ' +
+                  '(' +
+                  skill.rate +
+                  ' * ' +
+                  skill.scaleType +
+                  ')'
               )}
             </DescriptionBox>
           </TextBox>
@@ -197,7 +207,8 @@ SkillBox.propTypes = {
     cooldown: PropTypes.number,
     amount: PropTypes.number,
     rate: PropTypes.number,
-    type: PropTypes.string
+    type: PropTypes.string,
+    scaleType: PropTypes.string
   }),
   isDark: PropTypes.bool,
   isSelected: PropTypes.bool,
