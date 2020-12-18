@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode'
 
 const Container = styled.div`
   height: 100%;
@@ -8,7 +11,6 @@ const Container = styled.div`
 `
 
 const Card = styled.div`
-  height: 370px;
   margin-top: auto;
   margin-bottom: auto;
   width: 400px;
@@ -54,10 +56,10 @@ const InputSubmit = styled.input`
   }
 `
 
-const LinkInput = styled.div`
-  color: white;
+const LinkInput = styled(Link)`
+  color: #ffc312;
 
-  a {
+  &:hover {
     color: #ffc312;
   }
 `
@@ -67,18 +69,47 @@ class Login extends Component {
     super(props)
 
     this.state = {
-      email: null,
-      password: null
+      error: undefined,
+      redirect: false
     }
+
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleSubmit(event) {
     event.preventDefault()
 
-    console.log('Call API Login')
+    axios
+      .post(process.env.REACT_APP_API_URL + '/auth/login_check', {
+        email: event.target.email.value,
+        password: event.target.password.value
+      })
+      .then((response) => {
+        if (response.data) {
+          let decodeToken = jwtDecode(response.data.token)
+
+          Cookies.set('auth-token', response.data.token, {
+            domain: 'localhost',
+            expires: decodeToken.exp || 10 * 24 * 60 * 60
+          })
+
+          this.setState({ redirect: true })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.status
+        })
+      })
   }
 
   render() {
+    const { error, redirect } = this.state
+
+    if (redirect) {
+      return <Redirect to="/maps" />
+    }
+
     return (
       <Container className="container">
         <div className="d-flex justify-content-center h-100">
@@ -95,7 +126,19 @@ class Login extends Component {
               </Social>
             </div>
             <div className="card-body">
-              <form>
+              <form onSubmit={this.handleSubmit}>
+                {error === 401 && (
+                  <div className="text-danger text-center mb-sm-2">
+                    Impossible de se connecter avec ce <br />
+                    compte / mot de passe.
+                  </div>
+                )}
+                {error === 404 && (
+                  <div className="text-danger text-center mb-sm-2">
+                    Une erreur est survenue lors du contact avec le serveur.
+                    Veuillez réessayer, ou contacter le support.
+                  </div>
+                )}
                 <div className="input-group form-group">
                   <div className="input-group-prepend">
                     <InputGroup className="input-group-text">
@@ -106,12 +149,9 @@ class Login extends Component {
                     type="text"
                     id="email"
                     name="email"
-                    value={this.state.email}
+                    required
                     className="form-control"
                     placeholder="Email"
-                    onChange={(event) =>
-                      this.setState({ email: event.target.value })
-                    }
                   />
                 </div>
                 <div className="input-group form-group">
@@ -124,12 +164,9 @@ class Login extends Component {
                     type="password"
                     id="password"
                     name="password"
-                    value={this.state.password}
+                    required
                     className="form-control"
                     placeholder="Mot de passe"
-                    onChange={(event) =>
-                      this.setState({ password: event.target.value })
-                    }
                   />
                 </div>
                 <div className="form-group">
@@ -137,17 +174,17 @@ class Login extends Component {
                     type="submit"
                     value="Login"
                     className="btn float-right"
-                    onClick={this.handleSubmit}
                   />
                 </div>
               </form>
             </div>
             <div className="card-footer">
+              <div className="d-flex justify-content-center text-white">
+                Pas de compte?&nbsp;
+                <LinkInput to={'/register'}>S’enregistrer</LinkInput>
+              </div>
               <LinkInput className="d-flex justify-content-center">
-                Pas de compte?&nbsp;<Link to={'/register'}>S’enregistrer</Link>
-              </LinkInput>
-              <LinkInput className="d-flex justify-content-center">
-                <a href="#">Mot de passe oublié?</a>
+                Mot de passe oublié?
               </LinkInput>
             </div>
           </Card>

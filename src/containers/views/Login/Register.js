@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
+import { Link, Redirect } from 'react-router-dom'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Container = styled.div`
   height: 100%;
@@ -36,10 +39,10 @@ const InputSubmit = styled.input`
   }
 `
 
-const Link = styled.div`
-  color: white;
+const LinkInput = styled(Link)`
+  color: #ffc312;
 
-  a {
+  &:hover {
     color: #ffc312;
   }
 `
@@ -49,9 +52,8 @@ class Register extends Component {
     super(props)
 
     this.state = {
-      email: null,
-      password: null,
-      repeatPassword: null
+      error: undefined,
+      redirect: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -60,15 +62,52 @@ class Register extends Component {
   handleSubmit(event) {
     event.preventDefault()
 
-    if (this.state.password !== this.state.repeatPassword) {
-      event.target.repeatPassword.setCustomValidity(
-        'Le mot de passe ne correspond pas.'
-      )
+    if (event.target.password.value !== event.target.repeatPassword.value) {
+      this.setState({
+        error: 800
+      })
+    } else {
+      axios
+        .post(process.env.REACT_APP_API_URL + '/auth/signup', {
+          email: event.target.email.value,
+          password: event.target.password.value
+        })
+        .then((response) => {
+          if (response.data) {
+            toast.success(
+              <span style={{ fontSize: '14px' }}>
+                Nouveau compte créé avec succès !
+              </span>,
+              {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              }
+            )
+            setTimeout(() => {
+              this.setState({ redirect: true })
+            }, 3000)
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.status
+          })
+        })
     }
-    console.log('Call API Register')
   }
 
   render() {
+    const { error, redirect } = this.state
+
+    if (redirect) {
+      return <Redirect to="/login" />
+    }
+
     return (
       <Container className="container">
         <div className="d-flex justify-content-center h-100">
@@ -78,6 +117,22 @@ class Register extends Component {
             </div>
             <div className="card-body">
               <form onSubmit={this.handleSubmit}>
+                {error === 400 && (
+                  <div className="text-danger text-center mb-sm-2">
+                    Un utilisateur avec cette adresse email existe déjà.
+                  </div>
+                )}
+                {error === 404 && (
+                  <div className="text-danger text-center mb-sm-2">
+                    Une erreur est survenue lors du contact avec le serveur.
+                    Veuillez réessayer, ou contacter le support.
+                  </div>
+                )}
+                {error === 800 && (
+                  <div className="text-danger text-center mb-sm-2">
+                    Les 2 mots de passe ne sont pas semblables.
+                  </div>
+                )}
                 <div className="input-group form-group">
                   <div className="input-group-prepend">
                     <InputGroup className="input-group-text">
@@ -88,12 +143,8 @@ class Register extends Component {
                     type="text"
                     id="email"
                     name="email"
-                    value={this.state.email}
                     className="form-control"
                     placeholder="Email"
-                    onChange={(event) =>
-                      this.setState({ email: event.target.value })
-                    }
                     required
                   />
                 </div>
@@ -107,12 +158,8 @@ class Register extends Component {
                     type="password"
                     id="password"
                     name="password"
-                    value={this.state.password}
                     className="form-control"
                     placeholder="Mot de passe"
-                    onChange={(event) =>
-                      this.setState({ password: event.target.value })
-                    }
                     required
                   />
                 </div>
@@ -126,12 +173,8 @@ class Register extends Component {
                     type="password"
                     id="repeatPassword"
                     name="repeatPassword"
-                    value={this.state.repeatPassword}
                     className="form-control"
                     placeholder="Confirmer le mot de passe"
-                    onChange={(event) =>
-                      this.setState({ repeatPassword: event.target.value })
-                    }
                     required
                   />
                 </div>
@@ -145,9 +188,9 @@ class Register extends Component {
               </form>
             </div>
             <div className="card-footer">
-              <Link className="d-flex justify-content-center">
-                <a href="#">Mot de passe oublié?</a>
-              </Link>
+              <LinkInput className="d-flex justify-content-center">
+                Mot de passe oublié?
+              </LinkInput>
             </div>
           </Card>
         </div>
