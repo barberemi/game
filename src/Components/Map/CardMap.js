@@ -46,24 +46,24 @@ const AdventureButton = styled(Link)`
 `
 
 class CardMap extends Component {
-  cardBlocked() {
-    const { card, user } = this.props
+  mapBlocked() {
+    const { map, user } = this.props
 
-    return card.level_min > user.level ?? false
+    return map.levelMin > user.level ?? false
   }
 
   displayCardLevel() {
-    if (this.cardBlocked() === true) {
+    if (this.mapBlocked() === true) {
       return (
         <RequirementBlock className="mt-2">
           <i className="fas fa-lock" />
-          &nbsp;Niveau {this.props.card.level_min}
+          &nbsp;Niveau {this.props.map.levelMin}
         </RequirementBlock>
       )
     } else {
       return (
         <RequirementNotBlock className="mt-2">
-          Niveau {this.props.card.level_min}
+          Niveau {this.props.map.levelMin}
         </RequirementNotBlock>
       )
     }
@@ -74,19 +74,20 @@ class CardMap extends Component {
       <div className="col-sm-5 mt-5 mb-5">
         <div className="card">
           {this.displayCardLevel()}
-          <TitleCard>{this.props.card.name}</TitleCard>
+          <TitleCard>{this.props.map.name}</TitleCard>
           <img
             className="card-img-top"
-            src={this.props.card.img_url}
-            alt={this.props.card.name}
+            src={
+              this.props.map.img_url ??
+              'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg'
+            }
+            alt={this.props.map.name}
           />
           <AdventureButton
             to="/exploration"
-            className={`card-footer btn${
-              this.cardBlocked() ? ' disabled' : ''
-            }`}
+            className={`card-footer btn${this.mapBlocked() ? ' disabled' : ''}`}
           >
-            {this.cardBlocked() === true && (
+            {this.mapBlocked() === true && (
               <>
                 <i className="fas fa-lock" />
                 &nbsp;
@@ -101,9 +102,9 @@ class CardMap extends Component {
 }
 
 CardMap.propTypes = {
-  card: PropTypes.shape({
+  map: PropTypes.shape({
     name: PropTypes.string,
-    level_min: PropTypes.number,
+    levelMin: PropTypes.number,
     img_url: PropTypes.string
   }),
   user: PropTypes.shape({
