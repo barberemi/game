@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { getColorItem, isAnEquippedItem } from '../../utils/itemHelper'
 import ReactDOMServer from 'react-dom/server'
 import ItemTooltip from './ItemTooltip'
+import ReactTooltip from 'react-tooltip'
 
 const Box = styled.div`
   border: 2px solid;
@@ -90,38 +91,48 @@ class ItemBox extends Component {
       <>
         <Box
           style={{
-            borderColor: getColorItem(item),
+            borderColor: getColorItem(item.item),
             opacity: withOpacity ? '0.5' : '1'
           }}
           data-tip={ReactDOMServer.renderToStaticMarkup(
-            <ItemTooltip item={item} oldItem={oldItem} />
+            <ItemTooltip item={item.item} oldItem={oldItem} />
           )}
           data-html={true}
           onClick={() => this.setState({ stateActions: !stateActions })}
         >
-          {item.equipped && !displayText && (
+          {item.isEquipped && !displayText && (
             <Equipped className="text-success">
               <i className="far fa-check-square" />
             </Equipped>
           )}
-          <Image src={item.image} alt={item.name} />
-          {item.level && <Level>{item.level}</Level>}
+          <Image
+            src={
+              item.item.image
+                ? item.item.image
+                : 'https://www.gameuionweb.com/zelda-botw/items/weapons/BotW_Ancient_Short_Sword_Icon.png'
+            }
+            alt={item.item.name}
+          />
+          {item.item.level && <Level>{item.item.level}</Level>}
         </Box>
+        <ReactTooltip />
         {displayText && (
-          <Text style={{ color: getColorItem(item) }}>{item.name}</Text>
+          <Text style={{ color: getColorItem(item.item) }}>
+            {item.item.name}
+          </Text>
         )}
         {displayActions && (
           <ActionsBox className={stateActions ? 'd-block' : 'd-none'}>
             <div className="p-3">
-              {isAnEquippedItem(item) && (
+              {isAnEquippedItem(item.item) && (
                 <ActionBtn
                   className="py-2 mb-4 text-warning"
                   onClick={() => {
                     this.toggleDisplayActions()
-                    this.props.onChangeEquippedItem(item)
+                    this.props.onChangeEquippedItem(item.item)
                   }}
                 >
-                  {item.equipped === true ? 'Déséquiper' : "S'équiper"}
+                  {item.isEquipped === true ? 'Déséquiper' : "S'équiper"}
                 </ActionBtn>
               )}
               <ActionBtn
@@ -153,14 +164,16 @@ ItemBox.defaultProps = {
 
 ItemBox.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    image: PropTypes.string,
-    cost: PropTypes.number,
-    level: PropTypes.number,
-    type: PropTypes.string,
-    rarity: PropTypes.string,
-    equipped: PropTypes.bool
+    item: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      image: PropTypes.string,
+      cost: PropTypes.number,
+      level: PropTypes.number,
+      type: PropTypes.string,
+      rarity: PropTypes.string
+    }),
+    isEquipped: PropTypes.bool
   }),
   oldItem: PropTypes.shape({
     id: PropTypes.number,
@@ -169,8 +182,7 @@ ItemBox.propTypes = {
     cost: PropTypes.number,
     level: PropTypes.number,
     type: PropTypes.string,
-    rarity: PropTypes.string,
-    equipped: PropTypes.bool
+    rarity: PropTypes.string
   }),
   withOpacity: PropTypes.bool,
   displayActions: PropTypes.bool,

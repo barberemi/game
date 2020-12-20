@@ -119,7 +119,7 @@ class SkillBox extends Component {
   }
 
   render() {
-    const { skill, isDark, remainingSkillPoints } = this.props
+    const { skill, isDark, remainingSkillPoints, displayCheckbox } = this.props
     const { isChecked, descriptionDisplayed } = this.state
 
     return (
@@ -145,20 +145,22 @@ class SkillBox extends Component {
               />
             </Box>
             <Text>{skill.name}</Text>
-            <InputCheckBox
-              type="checkbox"
-              id={`skill-check-${skill.id}-${isDark ? 'dark' : 'light'}`}
-              name={`skill-check-${skill.id}-${isDark ? 'dark' : 'light'}`}
-              checked={isChecked}
-              disabled={!!(!isChecked && remainingSkillPoints === 0)}
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-              onChange={(e) => {
-                this.toggleChecked()
-                this.props.onCheckSkill(e)
-              }}
-            />
+            {displayCheckbox && (
+              <InputCheckBox
+                type="checkbox"
+                id={`skill-check-${skill.id}-${isDark ? 'dark' : 'light'}`}
+                name={`skill-check-${skill.id}-${isDark ? 'dark' : 'light'}`}
+                checked={isChecked}
+                disabled={!!(!isChecked && remainingSkillPoints === 0)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+                onChange={(e) => {
+                  this.toggleChecked()
+                  this.props.onCheckSkill(e)
+                }}
+              />
+            )}
           </SubContainer>
           <TextBox className={descriptionDisplayed ? '' : 'd-none'}>
             <b>Type de compétence :</b> {skill.type}
@@ -197,6 +199,10 @@ class SkillBox extends Component {
   }
 }
 
+SkillBox.defaultProps = {
+  displayCheckbox: true
+}
+
 SkillBox.propTypes = {
   skill: PropTypes.shape({
     id: PropTypes.number,
@@ -213,7 +219,8 @@ SkillBox.propTypes = {
   isDark: PropTypes.bool,
   isSelected: PropTypes.bool,
   remainingSkillPoints: PropTypes.number,
-  onCheckSkill: PropTypes.func
+  onCheckSkill: PropTypes.func,
+  displayCheckbox: PropTypes.bool
 }
 
 export default SkillBox

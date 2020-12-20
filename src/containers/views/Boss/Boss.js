@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
-import { boss } from '../../../utils/boss'
 import CharacteristicItem from '../../../Components/Characteristic/CharacteristicItem'
 import EquippedSkills from '../../../Components/Skill/EquippedSkills'
 import ItemList from '../../../Components/Item/ItemList'
 import Title from '../../../Components/Title/Title'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg');
@@ -75,13 +76,38 @@ const Image = styled.img`
 class Boss extends Component {
   constructor(props) {
     super(props)
-    const idboss = parseInt(this.props.match.params.idboss)
 
     this.state = {
-      boss,
+      id: parseInt(this.props.match.params.idboss),
+      boss: undefined,
       activatedTab: 'generalTab',
-      selectedBoss: idboss ? _.find(boss, { id: idboss }) : _.first(boss)
+      selectedBoss: undefined
     }
+  }
+
+  componentDidMount() {
+    axios
+      .get(process.env.REACT_APP_API_URL + '/monsters', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      })
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            boss: response.data.items,
+            selectedBoss: this.state.idboss
+              ? _.find(response.data.items, { id: this.state.idboss })
+              : _.first(response.data.items)
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
   }
 
   onClickOnTab = (idTab) => {
@@ -121,194 +147,204 @@ class Boss extends Component {
   }
 
   render() {
-    const { activatedTab, selectedBoss } = this.state
+    const { error, boss, activatedTab, selectedBoss } = this.state
 
     return (
       <Container className="container-fluid">
         <div className="container">
-          <div className="row h-100 mt-5">
-            {selectedBoss.id !== _.first(boss).id && (
-              <LeftArrayBox className="position-fixed h-100">
-                <LinkArrow
-                  arrow="left"
-                  to={
-                    '/boss/' +
-                    boss[_.findIndex(boss, { id: selectedBoss.id }) - 1].id
-                  }
-                >
-                  <i className="fas fa-chevron-left fa-3x" />
-                </LinkArrow>
-              </LeftArrayBox>
-            )}
+          {error && (
+            <span className="text-danger">
+              <b>Erreur :</b> {error.message}
+            </span>
+          )}
+          {boss && (
+            <div className="row h-100 mt-5">
+              {selectedBoss.id !== _.first(boss).id && (
+                <LeftArrayBox className="position-fixed h-100">
+                  <LinkArrow
+                    arrow="left"
+                    to={
+                      '/boss/' +
+                      boss[_.findIndex(boss, { id: selectedBoss.id }) - 1].id
+                    }
+                  >
+                    <i className="fas fa-chevron-left fa-3x" />
+                  </LinkArrow>
+                </LeftArrayBox>
+              )}
 
-            {selectedBoss.id !== _.last(boss).id && (
-              <RightArrayBox className="position-fixed h-100">
-                <LinkArrow
-                  arrow="right"
-                  to={
-                    '/boss/' +
-                    boss[_.findIndex(boss, { id: selectedBoss.id }) + 1].id
-                  }
-                >
-                  <i className="fas fa-chevron-right fa-3x" />
-                </LinkArrow>
-              </RightArrayBox>
-            )}
+              {selectedBoss.id !== _.last(boss).id && (
+                <RightArrayBox className="position-fixed h-100">
+                  <LinkArrow
+                    arrow="right"
+                    to={
+                      '/boss/' +
+                      boss[_.findIndex(boss, { id: selectedBoss.id }) + 1].id
+                    }
+                  >
+                    <i className="fas fa-chevron-right fa-3x" />
+                  </LinkArrow>
+                </RightArrayBox>
+              )}
 
-            <div className="col-sm-3 my-auto">
-              <Card className="card">
-                <div className="card-header">
-                  <Title>Menu</Title>
-                  <div>
-                    <div onClick={() => this.onClickOnTab('generalTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'generalTab' ? 'active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#generalTab"
-                      >
-                        Général
-                      </ListLink>
-                      {activatedTab === 'generalTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    <div onClick={() => this.onClickOnTab('skillsTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'skillsTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#skillsTab"
-                      >
-                        Compétences
-                      </ListLink>
-                      {activatedTab === 'skillsTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    <div onClick={() => this.onClickOnTab('itemsLootTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'itemsLootTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#itemsLootTab"
-                      >
-                        Objets lachés
-                      </ListLink>
-                      {activatedTab === 'itemsLootTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
+              <div className="col-sm-3 my-auto">
+                <Card className="card">
+                  <div className="card-header">
+                    <Title>Menu</Title>
+                    <div>
+                      <div onClick={() => this.onClickOnTab('generalTab')}>
+                        <ListLink
+                          className={
+                            activatedTab === 'generalTab' ? 'active' : ''
+                          }
+                          data-toggle="tab"
+                          role="tab"
+                          href="#generalTab"
+                        >
+                          Général
+                        </ListLink>
+                        {activatedTab === 'generalTab' && (
+                          <span className="text-warning">
+                            &nbsp;
+                            <i className="far fa-arrow-alt-circle-right" />
+                          </span>
+                        )}
+                      </div>
+                      <div onClick={() => this.onClickOnTab('skillsTab')}>
+                        <ListLink
+                          className={
+                            activatedTab === 'skillsTab' ? ' active' : ''
+                          }
+                          data-toggle="tab"
+                          role="tab"
+                          href="#skillsTab"
+                        >
+                          Compétences
+                        </ListLink>
+                        {activatedTab === 'skillsTab' && (
+                          <span className="text-warning">
+                            &nbsp;
+                            <i className="far fa-arrow-alt-circle-right" />
+                          </span>
+                        )}
+                      </div>
+                      <div onClick={() => this.onClickOnTab('itemsLootTab')}>
+                        <ListLink
+                          className={
+                            activatedTab === 'itemsLootTab' ? ' active' : ''
+                          }
+                          data-toggle="tab"
+                          role="tab"
+                          href="#itemsLootTab"
+                        >
+                          Objets lachés
+                        </ListLink>
+                        {activatedTab === 'itemsLootTab' && (
+                          <span className="text-warning">
+                            &nbsp;
+                            <i className="far fa-arrow-alt-circle-right" />
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
-              <Image
-                src={process.env.PUBLIC_URL + '/img/boss/' + selectedBoss.image}
-                alt={selectedBoss.academy.name}
-              />
-            </div>
+                </Card>
+                <Image
+                  src={
+                    process.env.PUBLIC_URL + '/img/boss/' + selectedBoss.image
+                  }
+                  alt={selectedBoss.academy.name}
+                />
+              </div>
 
-            <RightBox className="col-sm-9 my-auto">
-              <div className="tab-content">
-                {/* General */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'generalTab' ? ' active' : ''
-                  }`}
-                  id="generalTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-header">
-                      <Title>Tour niveau {selectedBoss.levelTower}</Title>
-                      {selectedBoss.name}{' '}
-                      <span className={selectedBoss.academy.color}>
-                        ({selectedBoss.academy.name})
-                      </span>
-                      <LevelBox> - Niv {selectedBoss.level}</LevelBox>
-                    </div>
-                    <div className="card-body">
-                      <Title>Caractéristiques</Title>
-                      <div className="col-sm-12">
-                        {_.map(
-                          selectedBoss.characteristics,
-                          (characteristic) => (
-                            <CharacteristicItem
-                              key={characteristic.name}
-                              name={characteristic.name}
-                              amount={characteristic.amount}
-                            />
-                          )
-                        )}
-                        <CharacteristicItem
-                          key="experience"
-                          name="experience"
-                          amount={selectedBoss.givenExperience}
+              <RightBox className="col-sm-9 my-auto">
+                <div className="tab-content">
+                  {/* General */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'generalTab' ? ' active' : ''
+                    }`}
+                    id="generalTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-header">
+                        <Title>Tour niveau {selectedBoss.levelTower}</Title>
+                        {selectedBoss.name}{' '}
+                        <span style={{ color: selectedBoss.academy.color }}>
+                          ({selectedBoss.academy.label})
+                        </span>
+                        <LevelBox> - Niv {selectedBoss.level}</LevelBox>
+                      </div>
+                      <div className="card-body">
+                        <Title>Caractéristiques</Title>
+                        <div className="col-sm-12">
+                          {_.map(
+                            selectedBoss.characteristics,
+                            (characteristic) => (
+                              <CharacteristicItem
+                                key={characteristic.characteristic.name}
+                                name={characteristic.characteristic.name}
+                                amount={characteristic.amount}
+                              />
+                            )
+                          )}
+                          <CharacteristicItem
+                            key="experience"
+                            name="experience"
+                            amount={selectedBoss.givenXp}
+                          />
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Skills */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'skillsTab' ? ' active' : ''
+                    }`}
+                    id="skillsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          <Title>Compétences du boss</Title>
+                        </div>
+                        <EquippedSkills
+                          skills={selectedBoss.skills}
+                          academyId={selectedBoss.academy.id}
+                          displayCheckbox={false}
                         />
                       </div>
-                    </div>
-                  </Card>
-                </div>
+                    </Card>
+                  </div>
 
-                {/* Skills */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'skillsTab' ? ' active' : ''
-                  }`}
-                  id="skillsTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <Title>Compétences du boss</Title>
+                  {/* Items */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'itemsLootTab' ? ' active' : ''
+                    }`}
+                    id="itemsLootTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          <Title>Liste des objets lachés</Title>
+                        </div>
+                        <ItemList
+                          items={selectedBoss.items}
+                          displayActions={false}
+                        />
                       </div>
-                      <EquippedSkills
-                        skills={selectedBoss.skills}
-                        onCheckSkill={this.onCheckSkill}
-                      />
-                    </div>
-                  </Card>
+                    </Card>
+                  </div>
                 </div>
-
-                {/* Items */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'itemsLootTab' ? ' active' : ''
-                  }`}
-                  id="itemsLootTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <Title>Liste des objets lachés</Title>
-                      </div>
-                      <ItemList
-                        items={selectedBoss.items}
-                        displayActions={false}
-                      />
-                    </div>
-                  </Card>
-                </div>
-              </div>
-            </RightBox>
-          </div>
+              </RightBox>
+            </div>
+          )}
         </div>
       </Container>
     )

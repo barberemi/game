@@ -4,7 +4,7 @@ export const boss = [
     name: 'The Lich Skin',
     image: 'lich-skin.png',
     level: 25,
-    givenExperience: 8600,
+    givenXp: 8600,
     levelTower: 1,
     characteristics: [
       { name: 'health', amount: 600 },
@@ -156,7 +156,7 @@ export const boss = [
     name: 'Green Barrow',
     image: 'green-barrow.png',
     level: 45,
-    givenExperience: 11500,
+    givenXp: 11500,
     levelTower: 2,
     characteristics: [
       { name: 'health', amount: 800 },
@@ -252,7 +252,7 @@ export const boss = [
     name: 'Le Berseker',
     image: 'berseker.png',
     level: 55,
-    givenExperience: 16000,
+    givenXp: 16000,
     levelTower: 3,
     characteristics: [
       { name: 'health', amount: 1200 },
