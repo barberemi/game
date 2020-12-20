@@ -35,13 +35,31 @@ class Map extends Component {
     this.state = {
       error: undefined,
       maps: undefined,
-      user: {
-        level: 10
-      }
+      user: undefined
     }
   }
 
   componentDidMount() {
+    axios
+      .get(process.env.REACT_APP_API_URL + '/users/me', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      })
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            user: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
+
     axios
       .get(process.env.REACT_APP_API_URL + '/maps', {
         headers: {
@@ -64,7 +82,7 @@ class Map extends Component {
   }
 
   render() {
-    const { error, maps } = this.state
+    const { error, maps, user } = this.state
     return (
       <Container className="container-fluid align-middle">
         <div className="container">
@@ -73,11 +91,19 @@ class Map extends Component {
               <b>Erreur :</b> {error.message}
             </span>
           )}
-          {maps && (
+          {maps && user && (
             <>
               <RowOverflow className="row align-items-center">
+                {user.guild && (
+                  <CardMap
+                    key={user.guild.name}
+                    map={{ name: user.guild.name }}
+                    isGuild={true}
+                    user={user}
+                  />
+                )}
                 {_.map(this.state.maps, (map) => (
-                  <CardMap key={map.name} map={map} user={this.state.user} />
+                  <CardMap key={map.name} map={map} user={user} />
                 ))}
               </RowOverflow>
               <TextDescription className="col-sm-12">

@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import { guild } from '../../../utils/guild'
 import FriendList from '../../../Components/Friend/FriendList'
 import Title from '../../../Components/Title/Title'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import PropTypes from 'prop-types'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -73,9 +75,33 @@ class Guild extends Component {
     super(props)
 
     this.state = {
-      guild,
+      id: parseInt(this.props.match.params.idguild),
+      error: undefined,
+      guild: undefined,
       activatedTab: 'chatTab'
     }
+  }
+
+  componentDidMount() {
+    axios
+      .get(process.env.REACT_APP_API_URL + '/guilds/' + this.state.id, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      })
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            guild: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
   }
 
   onClickOnTab = (idTab) => {
@@ -85,7 +111,7 @@ class Guild extends Component {
   }
 
   render() {
-    const { guild, activatedTab } = this.state
+    const { error, guild, activatedTab } = this.state
 
     return (
       <Container className="container-fluid">
@@ -141,65 +167,74 @@ class Guild extends Component {
 
             <RightBox className="col-sm-9 my-auto">
               <div className="tab-content">
-                {/* General */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'chatTab' ? ' active' : ''
-                  }`}
-                  id="chatTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-header">
-                      <Title>{guild.name}</Title>
+                {error && (
+                  <span className="text-danger">
+                    <b>Erreur :</b> {error.message}
+                  </span>
+                )}
+                {guild && (
+                  <>
+                    {/* General */}
+                    <div
+                      className={`tab-pane${
+                        activatedTab === 'chatTab' ? ' active' : ''
+                      }`}
+                      id="chatTab"
+                      role="tabpanel"
+                    >
+                      <Card className="card">
+                        <div className="card-header">
+                          <Title>{guild.name}</Title>
+                        </div>
+                        <div className="card-body">
+                          <div className="col-sm-12">
+                            <ListingMessages>
+                              {_.map(guild.messages, (message) => (
+                                <div key={message.id}>
+                                  <strong className="text-warning">
+                                    {message.user.email} :{' '}
+                                  </strong>
+                                  {message.message}
+                                </div>
+                              ))}
+                            </ListingMessages>
+                            <form>
+                              <Chat>
+                                <InputMessage
+                                  id="message"
+                                  name="message"
+                                  type="text"
+                                  placeholder="Votre message..."
+                                />
+                                <CustomButton className="btn btn-success">
+                                  Envoyer
+                                </CustomButton>
+                              </Chat>
+                            </form>
+                          </div>
+                        </div>
+                      </Card>
                     </div>
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <ListingMessages>
-                          {_.map(guild.messages, (message) => (
-                            <div key={message.id}>
-                              <strong className="text-warning">
-                                {message.user.name}:
-                              </strong>{' '}
-                              {message.message}
-                            </div>
-                          ))}
-                        </ListingMessages>
-                        <form>
-                          <Chat>
-                            <InputMessage
-                              id="message"
-                              name="message"
-                              type="text"
-                              placeholder="Votre message..."
-                            />
-                            <CustomButton className="btn btn-success">
-                              Envoyer
-                            </CustomButton>
-                          </Chat>
-                        </form>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
 
-                {/* Friends */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'membersTab' ? ' active' : ''
-                  }`}
-                  id="membersTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <Title>Membres de la guilde</Title>
-                      </div>
-                      <FriendList friends={guild.users} />
+                    {/* Friends */}
+                    <div
+                      className={`tab-pane${
+                        activatedTab === 'membersTab' ? ' active' : ''
+                      }`}
+                      id="membersTab"
+                      role="tabpanel"
+                    >
+                      <Card className="card">
+                        <div className="card-body">
+                          <div className="col-sm-12">
+                            <Title>Membres de la guilde</Title>
+                          </div>
+                          <FriendList friends={guild.users} />
+                        </div>
+                      </Card>
                     </div>
-                  </Card>
-                </div>
+                  </>
+                )}
               </div>
             </RightBox>
           </div>
@@ -208,4 +243,13 @@ class Guild extends Component {
     )
   }
 }
+
+Guild.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      idguild: PropTypes.string
+    }).isRequired
+  }).isRequired
+}
+
 export default Guild

@@ -83,7 +83,7 @@ ReactDOM.render(
 
       <AppRoute path="/reward" component={Reward} layout={RewardLayout} />
 
-      <AppRoute path="/guild" component={Guild} layout={GuildLayout} />
+      <AppRoute path="/guild/:idguild" component={Guild} layout={GuildLayout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout} />
       <AppRoute

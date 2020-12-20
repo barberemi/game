@@ -64,7 +64,7 @@ class FriendList extends Component {
                   &nbsp;
                 </>
               )}
-              (Niv {friend.level}) {friend.name}
+              (Niv {friend.level}) {friend.email}
             </Name>
             <Actions className="col-sm-3">
               <IconAction data-tip="Visualiser">
@@ -91,7 +91,7 @@ FriendList.propTypes = {
   friends: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      name: PropTypes.string,
+      email: PropTypes.string,
       level: PropTypes.number,
       image: PropTypes.string
     })
