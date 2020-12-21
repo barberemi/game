@@ -90,7 +90,7 @@ class CharacteristicItem extends Component {
     let addition = 0
 
     _.map(this.props.equippedItems, (item) => {
-      _.map(item.characteristics, (characteristic) => {
+      _.map(item.item.characteristics, (characteristic) => {
         if (characteristic.characteristic.name === name) {
           addition = addition + characteristic.amount
         }
@@ -124,15 +124,18 @@ CharacteristicItem.propTypes = {
   amount: PropTypes.number,
   equippedItems: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      image: PropTypes.string,
-      cost: PropTypes.number,
-      level: PropTypes.number,
-      type: PropTypes.string,
-      rarity: PropTypes.string,
-      equipped: PropTypes.bool,
-      characteristics: PropTypes.arrayOf(PropTypes.shape({}))
+      item: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        image: PropTypes.string,
+        cost: PropTypes.number,
+        level: PropTypes.number,
+        type: PropTypes.string,
+        rarity: PropTypes.string,
+        equipped: PropTypes.bool,
+        characteristics: PropTypes.arrayOf(PropTypes.shape({}))
+      }),
+      isEquipped: PropTypes.bool
     })
   )
 }

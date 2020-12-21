@@ -17,7 +17,7 @@ class EquippedItems extends Component {
           className="col-sm-12 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'helmet' })}
+            item={_.find(this.props.items, { item: { type: 'helmet' } })}
             {...this.props}
           />
         </Equipment>
@@ -27,7 +27,7 @@ class EquippedItems extends Component {
           className="col-sm-6 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'amulet' })}
+            item={_.find(this.props.items, { item: { type: 'amulet' } })}
             {...this.props}
           />
         </Equipment>
@@ -36,7 +36,7 @@ class EquippedItems extends Component {
           className="col-sm-6 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'shoulders' })}
+            item={_.find(this.props.items, { item: { type: 'shoulders' } })}
             {...this.props}
           />
         </Equipment>
@@ -46,7 +46,7 @@ class EquippedItems extends Component {
           className="col-sm-4 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'glovers' })}
+            item={_.find(this.props.items, { item: { type: 'glovers' } })}
             {...this.props}
           />
         </Equipment>
@@ -55,7 +55,7 @@ class EquippedItems extends Component {
           className="col-sm-4 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'armor' })}
+            item={_.find(this.props.items, { item: { type: 'armor' } })}
             {...this.props}
           />
         </Equipment>
@@ -64,7 +64,7 @@ class EquippedItems extends Component {
           className="col-sm-4 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'belt' })}
+            item={_.find(this.props.items, { item: { type: 'belt' } })}
             {...this.props}
           />
         </Equipment>
@@ -74,7 +74,7 @@ class EquippedItems extends Component {
           className="col-sm-6 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'pants' })}
+            item={_.find(this.props.items, { item: { type: 'pants' } })}
             {...this.props}
           />
         </Equipment>
@@ -83,7 +83,7 @@ class EquippedItems extends Component {
           className="col-sm-6 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'shoes' })}
+            item={_.find(this.props.items, { item: { type: 'shoes' } })}
             {...this.props}
           />
         </Equipment>
@@ -93,7 +93,7 @@ class EquippedItems extends Component {
           className="col-sm-12 float-left d-flex flex-column align-items-center"
         >
           <ItemBox
-            item={_.find(this.props.items, { type: 'weapon' })}
+            item={_.find(this.props.items, { item: { type: 'weapon' } })}
             {...this.props}
           />
         </Equipment>
@@ -105,18 +105,20 @@ class EquippedItems extends Component {
 EquippedItems.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      image: PropTypes.string,
-      cost: PropTypes.number,
-      level: PropTypes.number,
-      type: PropTypes.string,
-      rarity: PropTypes.string,
-      equipped: PropTypes.bool
+      item: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        image: PropTypes.string,
+        cost: PropTypes.number,
+        level: PropTypes.number,
+        type: PropTypes.string,
+        rarity: PropTypes.string,
+        equipped: PropTypes.bool
+      }),
+      isEquipped: PropTypes.bool
     })
   ),
-  displayActions: PropTypes.string,
-  academyImage: PropTypes.string,
+  displayActions: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onChangeEquippedItem: PropTypes.func
 }

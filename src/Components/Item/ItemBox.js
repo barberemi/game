@@ -129,7 +129,7 @@ class ItemBox extends Component {
                   className="py-2 mb-4 text-warning"
                   onClick={() => {
                     this.toggleDisplayActions()
-                    this.props.onChangeEquippedItem(item.item)
+                    this.props.onChangeEquippedItem(item)
                   }}
                 >
                   {item.isEquipped === true ? 'Déséquiper' : "S'équiper"}

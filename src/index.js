@@ -60,6 +60,12 @@ ReactDOM.render(
       />
       <AppRoute
         exact
+        path="/character/:idcharacter"
+        component={Character}
+        layout={CharacterLayout}
+      />
+      <AppRoute
+        exact
         path="/creation"
         component={Creation}
         layout={CharacterLayout}

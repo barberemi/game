@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import { character } from '../../../utils/character'
 import ProgressBar from '../../../Components/Character/ProgressBar'
 import CharacteristicItem from '../../../Components/Characteristic/CharacteristicItem'
 import EquippedItems from '../../../Components/Item/EquippedItems'
@@ -10,6 +9,10 @@ import FriendList from '../../../Components/Friend/FriendList'
 import ItemList from '../../../Components/Item/ItemList'
 import Title from '../../../Components/Title/Title'
 import { toast } from 'react-toastify'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode'
+import PropTypes from 'prop-types'
 
 const Container = styled.div`
   background-image: url('https://images2.alphacoders.com/717/717870.jpg');
@@ -63,9 +66,42 @@ class Character extends Component {
     super(props)
 
     this.state = {
-      character,
+      id: parseInt(this.props.match.params.idcharacter),
+      error: undefined,
+      character: undefined,
+      isMe: false,
       activatedTab: 'generalTab'
     }
+  }
+
+  componentDidMount() {
+    const url = this.state.id
+      ? process.env.REACT_APP_API_URL + '/users/' + this.state.id
+      : process.env.REACT_APP_API_URL + '/users/me'
+
+    axios
+      .get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      })
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            id: response.data.id,
+            isMe:
+              jwtDecode(Cookies.get('auth-token')).email ===
+              response.data.email,
+            character: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
   }
 
   onClickOnTab = (idTab) => {
@@ -74,32 +110,66 @@ class Character extends Component {
     })
   }
 
-  onCheckSkill = (e) => {
-    const name = _.split(e.target.name, '-')
-    const exists = !!_.find(this.state.character.skills[name[3]], {
-      id: parseInt(name[2])
+  onCheckSkill = (skill) => {
+    const exists = !!_.find(this.state.character.skills, {
+      id: skill.id
     })
 
     // todo: rework this part: state should never been mutate
     if (exists) {
-      _.remove(this.state.character.skills[name[3]], { id: parseInt(name[2]) })
+      _.remove(this.state.character.skills, {
+        id: skill.id
+      })
     } else {
       // eslint-disable-next-line
-      this.state.character.skills[name[3]] = [
-        ...this.state.character.skills[name[3]],
-        { id: parseInt(name[2]) }
-      ]
+      this.state.character.skills = [...this.state.character.skills, skill]
     }
 
     this.setState({
       character: {
         ...this.state.character,
-        skills: {
-          ...this.state.character.skills,
-          [name[3]]: [...this.state.character.skills[name[3]]]
-        }
+        skills: this.state.character.skills
       }
     })
+
+    // Save datas
+    let skills = []
+    for (let i = 0; i < this.state.character.skills.length; i++) {
+      const id = this.state.character.skills[i].id
+
+      skills.push({
+        ...(id && { id: id }),
+        skill: {
+          id: this.state.character.skills[i].id
+        },
+        user: {
+          id: this.state.id
+        }
+      })
+    }
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + this.state.id,
+        { skills },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            character: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
   }
 
   onDeleteItem = (item) => {
@@ -111,6 +181,8 @@ class Character extends Component {
         items: this.state.character.items
       }
     })
+
+    this.saveItems()
 
     toast.error(
       <span style={{ fontSize: '14px' }}>
@@ -130,18 +202,22 @@ class Character extends Component {
 
   onChangeEquippedItem = (newEquippedItem) => {
     const items = [...this.state.character.items]
-    // Remove all equipped items with the same item.type
-    if (!newEquippedItem.equipped) {
+    // Remove all isEquipped items with the same item.type
+    if (!newEquippedItem.isEquipped) {
+      console.log('Je passe ici')
       _.map(
-        _.filter(items, { equipped: true, type: newEquippedItem.type }),
+        _.filter(items, {
+          isEquipped: true,
+          item: { type: newEquippedItem.item.type }
+        }),
         (item) => {
-          item.equipped = false
+          item.isEquipped = false
         }
       )
     }
 
     // Equipped/Unequipped item now
-    newEquippedItem.equipped = !newEquippedItem.equipped
+    newEquippedItem.isEquipped = !newEquippedItem.isEquipped
     const indexItem = _.findIndex(items, { id: newEquippedItem.id })
     items[indexItem] = newEquippedItem
 
@@ -151,253 +227,334 @@ class Character extends Component {
         items
       }
     })
+
+    this.saveItems()
+  }
+
+  saveItems = () => {
+    let items = []
+    for (let i = 0; i < this.state.character.items.length; i++) {
+      const id = this.state.character.items[i].id
+      const isEquipped = this.state.character.items[i].isEquipped
+
+      items.push({
+        ...(id && { id: id }),
+        isEquipped: isEquipped,
+        item: {
+          id: this.state.character.items[i].item.id
+        },
+        user: {
+          id: this.state.id
+        }
+      })
+    }
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + this.state.id,
+        { items },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            character: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
   }
 
   render() {
-    const { character, activatedTab } = this.state
-    const remainingSkillPoints =
-      character.skillPoints -
-      (character.skills.dark.length + character.skills.light.length)
-    const remainingItemSpaceNb = character.itemSpaceNb - character.items.length
+    const { error, character, activatedTab } = this.state
 
     return (
       <Container className="container-fluid">
         <div className="container">
-          <div className="row h-100 mt-5">
-            <div className="col-sm-3 my-auto">
-              <Card className="card">
-                <div className="card-header">
-                  <Title>Menu</Title>
-                  <div>
-                    <div onClick={() => this.onClickOnTab('generalTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'generalTab' ? 'active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#generalTab"
-                      >
-                        Général
-                      </ListLink>
-                      {activatedTab === 'generalTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    <div onClick={() => this.onClickOnTab('skillsTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'skillsTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#skillsTab"
-                      >
-                        Compétences
-                      </ListLink>
-                      {activatedTab === 'skillsTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    <div onClick={() => this.onClickOnTab('itemsTab')}>
-                      <ListLink
-                        className={activatedTab === 'itemsTab' ? ' active' : ''}
-                        data-toggle="tab"
-                        role="tab"
-                        href="#itemsTab"
-                      >
-                        Objets
-                      </ListLink>
-                      {activatedTab === 'itemsTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    <div onClick={() => this.onClickOnTab('friendsTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'friendsTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#friendsTab"
-                      >
-                        Liste d’amis
-                      </ListLink>
-                      {activatedTab === 'friendsTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
+          {error && (
+            <span className="text-danger">
+              <b>Erreur :</b> {error.message}
+            </span>
+          )}
+          {character && (
+            <div className="row h-100 mt-5">
+              <div className="col-sm-3 my-auto">
+                <Card className="card">
+                  <div className="card-header">
+                    <Title>Menu</Title>
+                    <div>
+                      <div onClick={() => this.onClickOnTab('generalTab')}>
+                        <ListLink
+                          className={
+                            activatedTab === 'generalTab' ? 'active' : ''
+                          }
+                          data-toggle="tab"
+                          role="tab"
+                          href="#generalTab"
+                        >
+                          Général
+                        </ListLink>
+                        {activatedTab === 'generalTab' && (
+                          <span className="text-warning">
+                            &nbsp;
+                            <i className="far fa-arrow-alt-circle-right" />
+                          </span>
+                        )}
+                      </div>
+                      <div onClick={() => this.onClickOnTab('skillsTab')}>
+                        <ListLink
+                          className={
+                            activatedTab === 'skillsTab' ? ' active' : ''
+                          }
+                          data-toggle="tab"
+                          role="tab"
+                          href="#skillsTab"
+                        >
+                          Compétences
+                        </ListLink>
+                        {activatedTab === 'skillsTab' && (
+                          <span className="text-warning">
+                            &nbsp;
+                            <i className="far fa-arrow-alt-circle-right" />
+                          </span>
+                        )}
+                      </div>
+                      <div onClick={() => this.onClickOnTab('itemsTab')}>
+                        <ListLink
+                          className={
+                            activatedTab === 'itemsTab' ? ' active' : ''
+                          }
+                          data-toggle="tab"
+                          role="tab"
+                          href="#itemsTab"
+                        >
+                          Objets
+                        </ListLink>
+                        {activatedTab === 'itemsTab' && (
+                          <span className="text-warning">
+                            &nbsp;
+                            <i className="far fa-arrow-alt-circle-right" />
+                          </span>
+                        )}
+                      </div>
+                      {this.state.isMe && (
+                        <div onClick={() => this.onClickOnTab('friendsTab')}>
+                          <ListLink
+                            className={
+                              activatedTab === 'friendsTab' ? ' active' : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#friendsTab"
+                          >
+                            Liste d’amis
+                          </ListLink>
+                          {activatedTab === 'friendsTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
-                </div>
-              </Card>
-              <Image
-                src={
-                  process.env.PUBLIC_URL +
-                  '/img/academies/' +
-                  character.academy.image
-                }
-                alt={character.academy.name}
-              />
-            </div>
-
-            <RightBox className="col-sm-9 my-auto">
-              <div className="tab-content">
-                {/* General */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'generalTab' ? ' active' : ''
-                  }`}
-                  id="generalTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-header">
-                      <Title>
-                        {character.name}{' '}
-                        <span className={character.academy.color}>
-                          ({character.academy.name})
-                        </span>
-                        <LevelBox> - Niv {character.level}</LevelBox>
-                      </Title>
-                      <ProgressBar
-                        actual={350}
-                        max={1200}
-                        color="#DC3545"
-                        transparentColor="#e09a9a"
-                      />
-                    </div>
-                    <div className="card-body">
-                      <Title>Caractéristiques</Title>
-                      <div className="col-sm-12">
-                        {_.map(character.characteristics, (characteristic) => (
-                          <CharacteristicItem
-                            key={characteristic.name}
-                            name={characteristic.name}
-                            amount={characteristic.amount}
-                            equippedItems={_.filter(character.items, {
-                              equipped: true
-                            })}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    <div className="card-footer">
-                      <Title>Équipements</Title>
-                      <EquippedItems
-                        items={_.filter(character.items, { equipped: true })}
-                        displayActions={true}
-                        academyImage={character.academy.image}
-                        onDeleteItem={this.onDeleteItem}
-                        onChangeEquippedItem={this.onChangeEquippedItem}
-                      />
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Skills */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'skillsTab' ? ' active' : ''
-                  }`}
-                  id="skillsTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <Title>
-                          Compétences d’académie
-                          <br />
-                          <SubTitle>
-                            (
-                            {remainingSkillPoints === 0
-                              ? 'Aucun point restant'
-                              : remainingSkillPoints === 1
-                              ? '1pt restant'
-                              : remainingSkillPoints + 'pts restants'}
-                            )
-                          </SubTitle>
-                        </Title>
-                      </div>
-                      <EquippedSkills
-                        skills={character.skills}
-                        onCheckSkill={this.onCheckSkill}
-                        remainingSkillPoints={remainingSkillPoints}
-                      />
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Friends */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'friendsTab' ? ' active' : ''
-                  }`}
-                  id="friendsTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <Title>Liste d’amis</Title>
-                      </div>
-                      <FriendList friends={character.friends} />
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Items */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'itemsTab' ? ' active' : ''
-                  }`}
-                  id="itemsTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        <Title>
-                          Listes des objets
-                          <br />
-                          <SubTitle>
-                            (
-                            {remainingItemSpaceNb === 0
-                              ? 'Aucune place restante'
-                              : remainingItemSpaceNb === 1
-                              ? '1 place restante'
-                              : remainingItemSpaceNb + ' places restantes'}
-                            )
-                          </SubTitle>
-                        </Title>
-                      </div>
-                      <ItemList
-                        items={character.items}
-                        displayActions={true}
-                        onDeleteItem={this.onDeleteItem}
-                        onChangeEquippedItem={this.onChangeEquippedItem}
-                      />
-                    </div>
-                  </Card>
-                </div>
+                </Card>
+                <Image
+                  src={
+                    process.env.PUBLIC_URL +
+                    '/img/academies/' +
+                    character.academy.name +
+                    '.png'
+                  }
+                  alt={character.academy.name}
+                />
               </div>
-            </RightBox>
-          </div>
+
+              <RightBox className="col-sm-9 my-auto">
+                <div className="tab-content">
+                  {/* General */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'generalTab' ? ' active' : ''
+                    }`}
+                    id="generalTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-header">
+                        <Title>
+                          {character.email}{' '}
+                          <span style={{ color: character.academy.color }}>
+                            ({character.academy.label})
+                          </span>
+                          <LevelBox> - Niv {character.level}</LevelBox>
+                        </Title>
+                        <ProgressBar
+                          actual={350}
+                          max={1200}
+                          color="#DC3545"
+                          transparentColor="#e09a9a"
+                        />
+                      </div>
+                      <div className="card-body">
+                        <Title>Caractéristiques</Title>
+                        <div className="col-sm-12">
+                          {_.map(
+                            character.characteristics,
+                            (characteristic) => (
+                              <CharacteristicItem
+                                key={characteristic.characteristic.name}
+                                name={characteristic.characteristic.name}
+                                amount={characteristic.amount}
+                                equippedItems={_.filter(character.items, {
+                                  isEquipped: true
+                                })}
+                              />
+                            )
+                          )}
+                        </div>
+                      </div>
+                      <div className="card-footer">
+                        <Title>Équipements</Title>
+                        <EquippedItems
+                          items={_.filter(character.items, {
+                            isEquipped: true
+                          })}
+                          displayActions={this.state.isMe}
+                          onDeleteItem={this.onDeleteItem}
+                          onChangeEquippedItem={this.onChangeEquippedItem}
+                        />
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Skills */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'skillsTab' ? ' active' : ''
+                    }`}
+                    id="skillsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          <Title>
+                            Compétences d’académie
+                            <br />
+                            <SubTitle>
+                              (
+                              {character.skillPoints -
+                                character.skills.length ===
+                              0
+                                ? 'Aucun point restant'
+                                : character.skillPoints -
+                                    character.skills.length ===
+                                  1
+                                ? '1pt restant'
+                                : character.skillPoints -
+                                  character.skills.length +
+                                  'pts restants'}
+                              )
+                            </SubTitle>
+                          </Title>
+                        </div>
+                        <EquippedSkills
+                          skills={character.skills}
+                          academyId={character.academy.id}
+                          onCheckSkill={this.onCheckSkill}
+                          displayCheckbox={this.state.isMe}
+                          remainingSkillPoints={
+                            character.skillPoints - character.skills.length
+                          }
+                        />
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Friends */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'friendsTab' ? ' active' : ''
+                    }`}
+                    id="friendsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          <Title>Liste d’amis</Title>
+                        </div>
+                        <FriendList friends={character.friends} />
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Items */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'itemsTab' ? ' active' : ''
+                    }`}
+                    id="itemsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          <Title>
+                            Listes des objets
+                            <br />
+                            <SubTitle>
+                              (
+                              {character.itemSpaceNb -
+                                character.items.length ===
+                              0
+                                ? 'Aucune place restante'
+                                : character.itemSpaceNb -
+                                    character.items.length ===
+                                  1
+                                ? '1 place restante'
+                                : character.itemSpaceNb -
+                                  character.items.length +
+                                  ' places restantes'}
+                              )
+                            </SubTitle>
+                          </Title>
+                        </div>
+                        <ItemList
+                          items={character.items}
+                          displayActions={this.state.isMe}
+                          onDeleteItem={this.onDeleteItem}
+                          onChangeEquippedItem={this.onChangeEquippedItem}
+                        />
+                      </div>
+                    </Card>
+                  </div>
+                </div>
+              </RightBox>
+            </div>
+          )}
         </div>
       </Container>
     )
   }
 }
+
+Character.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      idcharacter: PropTypes.string
+    }).isRequired
+  }).isRequired
+}
+
 export default Character

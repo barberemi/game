@@ -116,36 +116,6 @@ class Boss extends Component {
     })
   }
 
-  onCheckSkill = (e) => {
-    const name = _.split(e.target.name, '-')
-    const exists = !!_.find(this.state.selectedBoss.skills[name[3]], {
-      id: parseInt(name[2])
-    })
-
-    // todo: rework this part: state should never been mutate
-    if (exists) {
-      _.remove(this.state.selectedBoss.skills[name[3]], {
-        id: parseInt(name[2])
-      })
-    } else {
-      // eslint-disable-next-line
-      this.state.selectedBoss.skills[name[3]] = [
-        ...this.state.selectedBoss.skills[name[3]],
-        { id: parseInt(name[2]) }
-      ]
-    }
-
-    this.setState({
-      boss: {
-        ...this.state.boss,
-        skills: {
-          ...this.state.selectedBoss.skills,
-          [name[3]]: [...this.state.selectedBoss.skills[name[3]]]
-        }
-      }
-    })
-  }
-
   render() {
     const { error, boss, activatedTab, selectedBoss } = this.state
 

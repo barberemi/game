@@ -155,9 +155,9 @@ class SkillBox extends Component {
                 onClick={(e) => {
                   e.stopPropagation()
                 }}
-                onChange={(e) => {
+                onChange={() => {
                   this.toggleChecked()
-                  this.props.onCheckSkill(e)
+                  this.props.onCheckSkill(skill)
                 }}
               />
             )}
