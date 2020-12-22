@@ -105,7 +105,7 @@ class CardMap extends Component {
                 &nbsp;
               </>
             )}
-            S’y aventurer
+            Explorer
           </AdventureButton>
         </div>
       </div>

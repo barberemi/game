@@ -6,6 +6,7 @@ import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -80,9 +81,19 @@ class Guild extends Component {
       guild: undefined,
       activatedTab: 'chatTab'
     }
+
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentDidMount() {
+    this.loadData()
+
+    setInterval(() => {
+      this.loadData()
+    }, 5000)
+  }
+
+  loadData() {
     axios
       .get(process.env.REACT_APP_API_URL + '/guilds/' + this.state.id, {
         headers: {
@@ -100,6 +111,41 @@ class Guild extends Component {
       .catch((error) => {
         this.setState({
           error: error
+        })
+      })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+
+    axios
+      .post(
+        process.env.REACT_APP_API_URL + '/messages',
+        {
+          message: event.target.message.value,
+          topic: 'guildMessage',
+          guild: {
+            id: this.state.guild.id
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        this.setState({
+          guild: {
+            ...this.state.guild,
+            messages: [...this.state.guild.messages, response.data]
+          }
+        })
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.status
         })
       })
   }
@@ -192,13 +238,20 @@ class Guild extends Component {
                               {_.map(guild.messages, (message) => (
                                 <div key={message.id}>
                                   <strong className="text-warning">
+                                    <i>
+                                      (
+                                      {moment(message.createdAt).format(
+                                        'DD/MM à HH:mm'
+                                      )}
+                                      ){' '}
+                                    </i>
                                     {message.user.name} :{' '}
                                   </strong>
                                   {message.message}
                                 </div>
                               ))}
                             </ListingMessages>
-                            <form>
+                            <form onSubmit={this.handleSubmit}>
                               <Chat>
                                 <InputMessage
                                   id="message"
@@ -206,7 +259,10 @@ class Guild extends Component {
                                   type="text"
                                   placeholder="Votre message..."
                                 />
-                                <CustomButton className="btn btn-success">
+                                <CustomButton
+                                  className="btn btn-success"
+                                  type="submit"
+                                >
                                   Envoyer
                                 </CustomButton>
                               </Chat>
