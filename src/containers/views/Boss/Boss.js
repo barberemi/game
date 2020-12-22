@@ -97,7 +97,7 @@ class Boss extends Component {
         if (response.data) {
           this.setState({
             boss: response.data.items,
-            selectedBoss: this.state.idboss
+            selectedBoss: this.state.id
               ? _.find(response.data.items, { id: this.state.idboss })
               : _.first(response.data.items)
           })

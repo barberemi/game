@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const LevelNeededBackground = styled.div`
   position: absolute;
   font-size: 2vw;
-  padding: 10px 25px 5px 10px;
+  padding: 15px 25px 5px 10px;
   margin-left: -2%;
   -moz-box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.4);
@@ -52,11 +52,9 @@ class CardMap extends Component {
     return map.levelMin > user.level ?? false
   }
 
-  displayCardLevel(isGuild) {
-    if (isGuild) {
-      return (
-        <RequirementNotBlock className="mt-2">Ma guilde</RequirementNotBlock>
-      )
+  displayCardLevel() {
+    if (this.props.isGuild || this.props.isCrafting) {
+      return ''
     }
 
     if (this.mapBlocked() === true) {
@@ -79,12 +77,14 @@ class CardMap extends Component {
     return (
       <div className="col-sm-5 mt-5 mb-5">
         <div className="card">
-          {this.displayCardLevel(this.props.isGuild)}
+          {this.displayCardLevel()}
           <TitleCard>{this.props.map.name}</TitleCard>
           <img
             className="card-img-top"
             src={
               this.props.isGuild
+                ? 'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1586838637024-ZX7JWSH8KJYZAJA4P960/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/Pirates-Outlaws1.jpg?format=2500w'
+                : this.props.isCrafting
                 ? 'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1586838637024-ZX7JWSH8KJYZAJA4P960/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/Pirates-Outlaws1.jpg?format=2500w'
                 : this.props.map.img_url ??
                   'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg'
@@ -95,6 +95,8 @@ class CardMap extends Component {
             to={
               this.props.isGuild
                 ? '/guild/' + this.props.user.guild.id
+                : this.props.isCrafting
+                ? '/crafting'
                 : '/exploration'
             }
             className={`card-footer btn${this.mapBlocked() ? ' disabled' : ''}`}
@@ -105,7 +107,9 @@ class CardMap extends Component {
                 &nbsp;
               </>
             )}
-            Explorer
+            {this.props.isGuild && <>Guilder</>}
+            {this.props.isCrafting && <>Forger</>}
+            {!this.props.isCrafting && !this.props.isGuild && <>Explorer</>}
           </AdventureButton>
         </div>
       </div>
@@ -123,7 +127,8 @@ CardMap.propTypes = {
   user: PropTypes.shape({
     level: PropTypes.number
   }),
-  isGuild: PropTypes.bool
+  isGuild: PropTypes.bool,
+  isCrafting: PropTypes.bool
 }
 
 export default CardMap

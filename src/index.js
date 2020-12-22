@@ -25,6 +25,7 @@ import FightLayout from './containers/layouts/FightLayout'
 import MapLayout from './containers/layouts/MapLayout'
 import LoginLayout from './containers/layouts/LoginLayout'
 import CharacterLayout from './containers/layouts/CharacterLayout'
+import CreationLayout from './containers/layouts/CreationLayout'
 import BossLayout from './containers/layouts/BossLayout'
 import CraftingLayout from './containers/layouts/CraftingLayout'
 import ExplorationLayout from './containers/layouts/ExplorationLayout'
@@ -68,7 +69,7 @@ ReactDOM.render(
         exact
         path="/creation"
         component={Creation}
-        layout={CharacterLayout}
+        layout={CreationLayout}
       />
 
       <AppRoute path="/boss/:idboss" component={Boss} layout={BossLayout} />
@@ -89,6 +90,7 @@ ReactDOM.render(
 
       <AppRoute path="/reward" component={Reward} layout={RewardLayout} />
 
+      <AppRoute path="/guild" component={Guild} layout={GuildLayout} />
       <AppRoute path="/guild/:idguild" component={Guild} layout={GuildLayout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout} />

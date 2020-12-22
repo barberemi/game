@@ -77,6 +77,7 @@ class Guild extends Component {
 
     this.state = {
       id: parseInt(this.props.match.params.idguild),
+      user: undefined,
       error: undefined,
       guild: undefined,
       activatedTab: 'chatTab'
@@ -86,7 +87,27 @@ class Guild extends Component {
   }
 
   componentDidMount() {
-    this.loadData()
+    axios
+      .get(process.env.REACT_APP_API_URL + '/users/me', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      })
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            user: response.data,
+            id: response.data.guild ? response.data.guild.id : undefined
+          })
+          this.loadData()
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
 
     setInterval(() => {
       this.loadData()

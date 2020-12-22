@@ -18,6 +18,7 @@ const LinkText = styled(Link)`
 `
 
 const Text = styled.span`
+  font-family: 'Lakki Reddy', cursive !important;
   font-size: 16px;
 `
 
@@ -54,7 +55,8 @@ class Items extends Component {
           <Text>&nbsp;Personnage</Text>
         </LinkText>
         <LinkText
-          className="fa fa-dungeon fa-2x"
+          to={'/boss'}
+          className="fab fa-optin-monster fa-2x"
           style={{
             left:
               (
@@ -68,10 +70,11 @@ class Items extends Component {
               ).toFixed(4) + '%'
           }}
         >
-          <Text>&nbsp;Tour des boss</Text>
+          <Text>&nbsp;Monstres</Text>
         </LinkText>
         <LinkText
-          className="fa fa-user-friends fa-2x"
+          to={'/guild'}
+          className="fa fa-users fa-2x"
           style={{
             left:
               (
@@ -85,7 +88,7 @@ class Items extends Component {
               ).toFixed(4) + '%'
           }}
         >
-          <Text>&nbsp;Amis</Text>
+          <Text>&nbsp;Guilde</Text>
         </LinkText>
         <LinkText
           to={'/login'}

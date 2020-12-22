@@ -7,7 +7,6 @@ import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Redirect } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
 
 const Container = styled.div`
   background-image: url('https://images.alphacoders.com/883/883163.jpg');

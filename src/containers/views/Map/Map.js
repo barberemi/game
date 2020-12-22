@@ -89,6 +89,12 @@ class Map extends Component {
                     user={user}
                   />
                 )}
+                <CardMap
+                  key="crafting"
+                  map={{ name: 'Forge' }}
+                  isCrafting={true}
+                  user={user}
+                />
                 {_.map(this.state.maps, (map) => (
                   <CardMap key={map.name} map={map} user={user} />
                 ))}
