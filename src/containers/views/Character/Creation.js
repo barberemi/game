@@ -1,10 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 import ReactTooltip from 'react-tooltip'
-import { academies } from '../../../utils/academies'
 import LightDarkButton from '../../../Components/LightDark/LightDarkButton'
 import Title from '../../../Components/Title/Title'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { Redirect } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
 
 const Container = styled.div`
   background-image: url('https://images.alphacoders.com/883/883163.jpg');
@@ -98,11 +101,78 @@ class Creation extends Component {
     super(props)
 
     this.state = {
-      academies,
-      academySelected: null,
+      created: false,
+      error: undefined,
+      academies: undefined,
+      academySelected: undefined,
       isAnimated: null,
       isDark: true
     }
+
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    const getMe = axios.get(process.env.REACT_APP_API_URL + '/users/me', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('auth-token')}`
+      }
+    })
+    const getAcademies = axios.get(
+      process.env.REACT_APP_API_URL + '/academies',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      }
+    )
+
+    axios
+      .all([getMe, getAcademies])
+      .then((responses) => {
+        this.setState({
+          user: responses[0].data,
+          academies: responses[1].data.items
+        })
+      })
+      .catch((errors) => {
+        this.setState({
+          error: errors
+        })
+      })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,
+        {
+          name: event.target.name.value,
+          academy: {
+            id: this.state.academySelected.id
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then(() => {
+        this.setState({
+          created: true
+        })
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.status
+        })
+      })
   }
 
   selectAcademy(academy) {
@@ -112,107 +182,148 @@ class Creation extends Component {
     })
   }
 
-  onClickButtonLightdark = (type) => {
-    this.setState({
-      isDark: type === 'dark'
-    })
-  }
-
   render() {
-    const { academySelected, isAnimated, isDark } = this.state
+    const {
+      error,
+      created,
+      user,
+      academies,
+      academySelected,
+      isAnimated,
+      isDark
+    } = this.state
+
+    if ((user && user.academy) || created) {
+      return <Redirect to="/character" />
+    }
 
     return (
       <Container className="container-fluid">
         <div className="container">
-          <div className="row">
-            <TitleBox className="col-sm-12">
-              Veuillez sélectionner une académie.
-            </TitleBox>
+          {error && (
+            <span className="text-danger">
+              <b>Erreur :</b> {error.message}
+            </span>
+          )}
+          {academies && (
+            <div className="row">
+              <TitleBox className="col-sm-12">
+                Veuillez sélectionner une académie.
+              </TitleBox>
 
-            <LeftBox className="col-sm-3 h-100 my-auto">
-              {_.map(academies, (academy) => (
-                <>
-                  <Academy
-                    src={
-                      process.env.PUBLIC_URL + '/img/academies/' + academy.image
-                    }
-                    key={academy.name}
-                    onClick={() => this.selectAcademy(academy)}
-                  />
-                  {academy.name}
-                </>
-              ))}
-            </LeftBox>
+              <LeftBox className="col-sm-3 h-100 my-auto">
+                {_.map(academies, (academy) => (
+                  <Fragment key={academy.id}>
+                    <Academy
+                      src={
+                        process.env.PUBLIC_URL +
+                        '/img/academies/' +
+                        academy.name +
+                        '.png'
+                      }
+                      key={academy.name}
+                      onClick={() => this.selectAcademy(academy)}
+                    />
+                    {academy.label}
+                  </Fragment>
+                ))}
+              </LeftBox>
 
-            <CenterBox className="col-sm-6 my-auto">
-              {academySelected && (
-                <>
-                  <Image
-                    src={
-                      process.env.PUBLIC_URL +
-                      '/img/academies/' +
-                      academySelected.image
-                    }
-                    alt={academySelected.name}
-                    onAnimationEnd={() => this.setState({ isAnimated: false })}
-                    className={isAnimated ? 'animated fadeInDown' : null}
-                    data-tip="Raoult Raoult !!"
-                  />
-                  <ReactTooltip />
-                  <NameInput type="text" placeholder="Didier Raoult" />
-                  <InputSubmit
-                    type="submit"
-                    value="Valider"
-                    className="btn float-right"
-                  />
-                </>
-              )}
-            </CenterBox>
+              <CenterBox className="col-sm-6 my-auto">
+                {academySelected && (
+                  <>
+                    <Image
+                      src={
+                        process.env.PUBLIC_URL +
+                        '/img/academies/' +
+                        academySelected.name +
+                        '.png'
+                      }
+                      alt={academySelected.name}
+                      onAnimationEnd={() =>
+                        this.setState({ isAnimated: false })
+                      }
+                      className={isAnimated ? 'animated fadeInDown' : null}
+                      data-tip={academySelected.label}
+                    />
+                    <ReactTooltip />
+                    <form onSubmit={this.handleSubmit}>
+                      <NameInput
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Rem le chocorem"
+                        required
+                      />
+                      <br />
+                      <InputSubmit
+                        type="submit"
+                        value="Valider"
+                        className="btn"
+                      />
+                    </form>
+                  </>
+                )}
+              </CenterBox>
 
-            <RightBox className="col-sm-3 h-100 my-auto">
-              {academySelected && (
-                <Card className="card">
-                  <LightDarkButton onClick={this.onClickButtonLightdark} />
-                  <div className="card-header">
-                    <Title>{academySelected.name}</Title>
-                    {_.map(_.split(academySelected.role, ','), (role) => (
-                      <div key={role} className={academySelected.color}>
-                        {role}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="card-body">
-                    <i>{academySelected.description}</i>
-                  </div>
-                  <div className="card-footer">
-                    <Title>Compétences</Title>
-                    <div style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
-                      {isDark ? 'Ombre' : 'Lumière'}
+              <RightBox className="col-sm-3 h-100 my-auto">
+                {academySelected && (
+                  <Card className="card">
+                    <LightDarkButton
+                      onClick={(type) =>
+                        this.setState({
+                          isDark: type === 'dark'
+                        })
+                      }
+                    />
+                    <div className="card-header">
+                      <Title>{academySelected.label}</Title>
+                      {_.map(_.split(academySelected.role, ','), (role) => (
+                        <div
+                          key={role}
+                          style={{ color: academySelected.color }}
+                        >
+                          {role}
+                        </div>
+                      ))}
                     </div>
-                    {_.map(
-                      isDark
-                        ? academySelected.skills.dark
-                        : academySelected.skills.light,
-                      (skill) => (
-                        <>
-                          <Skill
-                            key={skill}
-                            src="https://wiki-fr.guildwars2.com/images/8/88/Dagues_enchant%C3%A9es.png"
-                            alt={skill.name}
-                            data-tip={skill.description}
-                            style={{
-                              borderColor: isDark ? '#7730ec' : '#fcce18'
-                            }}
-                          />
-                          <ReactTooltip />
-                        </>
-                      )
-                    )}
-                  </div>
-                </Card>
-              )}
-            </RightBox>
-          </div>
+                    <div className="card-body">
+                      <i>{academySelected.description}</i>
+                    </div>
+                    <div className="card-footer">
+                      <Title>Compétences</Title>
+                      <div style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
+                        {isDark ? 'Ombre' : 'Lumière'}
+                      </div>
+                      {_.map(
+                        isDark
+                          ? _.filter(academySelected.skills, {
+                              treeType: 'dark'
+                            })
+                          : _.filter(academySelected.skills, {
+                              treeType: 'light'
+                            }),
+                        (skill) => (
+                          <>
+                            <Skill
+                              key={skill}
+                              src="https://wiki-fr.guildwars2.com/images/8/88/Dagues_enchant%C3%A9es.png"
+                              alt={skill.name}
+                              data-tip={skill.description}
+                              style={{
+                                borderColor: isDark ? '#7730ec' : '#fcce18'
+                              }}
+                            />
+                            <ReactTooltip />
+                          </>
+                        )
+                      )}
+                    </div>
+                  </Card>
+                )}
+              </RightBox>
+            </div>
+          )}
         </div>
       </Container>
     )

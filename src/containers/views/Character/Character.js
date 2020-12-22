@@ -391,7 +391,7 @@ class Character extends Component {
                     <Card className="card">
                       <div className="card-header">
                         <Title>
-                          {character.email}{' '}
+                          {character.name}{' '}
                           <span style={{ color: character.academy.color }}>
                             ({character.academy.label})
                           </span>

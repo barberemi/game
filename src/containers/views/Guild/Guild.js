@@ -192,7 +192,7 @@ class Guild extends Component {
                               {_.map(guild.messages, (message) => (
                                 <div key={message.id}>
                                   <strong className="text-warning">
-                                    {message.user.email} :{' '}
+                                    {message.user.name} :{' '}
                                   </strong>
                                   {message.message}
                                 </div>

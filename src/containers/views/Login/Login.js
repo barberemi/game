@@ -98,7 +98,7 @@ class Login extends Component {
       })
       .catch((error) => {
         this.setState({
-          error: error.response.status
+          error: error.response
         })
       })
   }
@@ -107,7 +107,7 @@ class Login extends Component {
     const { error, redirect } = this.state
 
     if (redirect) {
-      return <Redirect to="/maps" />
+      return <Redirect to="/creation" />
     }
 
     return (
