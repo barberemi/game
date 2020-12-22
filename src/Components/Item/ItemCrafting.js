@@ -47,13 +47,14 @@ class ItemCrafting extends Component {
 
   checkIfItemCanBeCrafted = () => {
     const { item } = this.props
+
     let count = 0
     let end = false
 
-    while (count < item.itemsToCraft.length && end === false) {
+    while (count < item.item.itemsToCraft.length && end === false) {
       if (
-        this.getOwnedItems(item.itemsToCraft[count].item) <
-        item.itemsToCraft[count].amount
+        this.getOwnedItems(item.item.itemsToCraft[count]) <
+        item.item.itemsToCraft[count].amount
       ) {
         this.setState({
           canBeCrafted: false
@@ -73,7 +74,8 @@ class ItemCrafting extends Component {
   getOwnedItems = (item) => {
     const { characterItems } = this.props
 
-    return _.filter(characterItems, { id: item.id }).length
+    return _.filter(characterItems, { item: { id: item.itemNeededToCraft.id } })
+      .length
   }
 
   render() {
@@ -99,28 +101,30 @@ class ItemCrafting extends Component {
           Composants nécéssaires
         </SubTitle>
         <br />
-        {_.map(item.itemsToCraft, (craft, index) => (
+        {_.map(item.item.itemsToCraft, (craft, index) => (
           <div
             key={index}
             className={`col-sm-${
-              item.itemsToCraft.length > 4 ? 3 : 12 / item.itemsToCraft.length
+              item.item.itemsToCraft.length > 4
+                ? 3
+                : 12 / item.item.itemsToCraft.length
             } float-left d-flex flex-column align-items-center`}
           >
             <ItemBox
-              item={craft.item}
+              item={craft}
               displayText={true}
               displayActions={false}
-              withOpacity={this.getOwnedItems(craft.item) < craft.amount}
+              withOpacity={this.getOwnedItems(craft) < craft.amount}
             />
             <div>(x{craft.amount})</div>
-            {this.getOwnedItems(craft.item) >= craft.amount && (
+            {this.getOwnedItems(craft) >= craft.amount && (
               <div className="text-success">
-                (Possède x{this.getOwnedItems(craft.item)})
+                (Possède x{this.getOwnedItems(craft)})
               </div>
             )}
-            {this.getOwnedItems(craft.item) < craft.amount && (
+            {this.getOwnedItems(craft) < craft.amount && (
               <div className="text-danger">
-                (Manque x{craft.amount - this.getOwnedItems(craft.item)})
+                (Manque x{craft.amount - this.getOwnedItems(craft)})
               </div>
             )}
           </div>

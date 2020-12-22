@@ -40,43 +40,30 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get(process.env.REACT_APP_API_URL + '/users/me', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get('auth-token')}`
-        }
-      })
-      .then((response) => {
-        if (response.data) {
-          this.setState({
-            user: response.data
-          })
-        }
-      })
-      .catch((error) => {
-        this.setState({
-          error: error
-        })
-      })
+    const getMe = axios.get(process.env.REACT_APP_API_URL + '/users/me', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('auth-token')}`
+      }
+    })
+    const getMaps = axios.get(process.env.REACT_APP_API_URL + '/maps', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('auth-token')}`
+      }
+    })
 
     axios
-      .get(process.env.REACT_APP_API_URL + '/maps', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get('auth-token')}`
-        }
-      })
-      .then((response) => {
-        if (response.data) {
-          this.setState({
-            maps: response.data.items
-          })
-        }
-      })
-      .catch((error) => {
+      .all([getMe, getMaps])
+      .then((responses) => {
         this.setState({
-          error: error
+          user: responses[0].data,
+          maps: responses[1].data.items
+        })
+      })
+      .catch((errors) => {
+        this.setState({
+          error: errors
         })
       })
   }

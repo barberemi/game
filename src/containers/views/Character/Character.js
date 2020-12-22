@@ -204,7 +204,6 @@ class Character extends Component {
     const items = [...this.state.character.items]
     // Remove all isEquipped items with the same item.type
     if (!newEquippedItem.isEquipped) {
-      console.log('Je passe ici')
       _.map(
         _.filter(items, {
           isEquipped: true,

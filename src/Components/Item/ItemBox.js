@@ -87,15 +87,17 @@ class ItemBox extends Component {
       return <Box style={{ borderColor: 'grey' }} />
     }
 
+    const trueItem = item.item ? item.item : item.itemNeededToCraft
+
     return (
       <>
         <Box
           style={{
-            borderColor: getColorItem(item.item),
+            borderColor: getColorItem(trueItem),
             opacity: withOpacity ? '0.5' : '1'
           }}
           data-tip={ReactDOMServer.renderToStaticMarkup(
-            <ItemTooltip item={item.item} oldItem={oldItem} />
+            <ItemTooltip item={trueItem} oldItem={oldItem} />
           )}
           data-html={true}
           onClick={() => this.setState({ stateActions: !stateActions })}
@@ -107,24 +109,22 @@ class ItemBox extends Component {
           )}
           <Image
             src={
-              item.item.image
-                ? item.item.image
+              trueItem.image
+                ? trueItem.image
                 : 'https://www.gameuionweb.com/zelda-botw/items/weapons/BotW_Ancient_Short_Sword_Icon.png'
             }
-            alt={item.item.name}
+            alt={trueItem.name}
           />
-          {item.item.level && <Level>{item.item.level}</Level>}
+          {trueItem.level && <Level>{trueItem.level}</Level>}
         </Box>
         <ReactTooltip />
         {displayText && (
-          <Text style={{ color: getColorItem(item.item) }}>
-            {item.item.name}
-          </Text>
+          <Text style={{ color: getColorItem(trueItem) }}>{trueItem.name}</Text>
         )}
         {displayActions && (
           <ActionsBox className={stateActions ? 'd-block' : 'd-none'}>
             <div className="p-3">
-              {isAnEquippedItem(item.item) && (
+              {isAnEquippedItem(trueItem) && (
                 <ActionBtn
                   className="py-2 mb-4 text-warning"
                   onClick={() => {
@@ -164,15 +164,8 @@ ItemBox.defaultProps = {
 
 ItemBox.propTypes = {
   item: PropTypes.shape({
-    item: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      image: PropTypes.string,
-      cost: PropTypes.number,
-      level: PropTypes.number,
-      type: PropTypes.string,
-      rarity: PropTypes.string
-    }),
+    item: PropTypes.shape({}),
+    itemNeededToCraft: PropTypes.shape({}),
     isEquipped: PropTypes.bool
   }),
   oldItem: PropTypes.shape({
