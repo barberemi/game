@@ -1,8 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import { explorations } from '../../../utils/explorations'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import ReactTooltip from 'react-tooltip'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
@@ -71,27 +73,70 @@ class Exploration extends Component {
     this.refScroll = React.createRef()
     this.refMe = React.createRef()
     this.handleScroll = this.handleScroll.bind(this)
+    this.isNext = this.isNext.bind(this)
 
     this.state = {
-      explorations: explorations.explorations,
-      boss: explorations.boss,
-      player: explorations.player,
+      explorations: undefined,
+      boss: undefined,
+      character: undefined,
+      nextPossible: undefined,
       scrollIsTop: true
     }
   }
 
   componentDidMount() {
-    // Scroll if didnt see player
-    setTimeout(() => {
-      if (
-        !(
-          this.refMe.current.getBoundingClientRect().top < window.innerHeight &&
-          this.refMe.current.getBoundingClientRect().bottom >= 0
-        )
-      ) {
-        this.refScroll.current.scrollTop = this.refScroll.current.scrollHeight
-      }
-    }, 1000)
+    axios
+      .get(process.env.REACT_APP_API_URL + '/users/me', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      })
+      .then((response) => {
+        if (response.data) {
+          const results = response.data.exploration
+          const character = results[Object.keys(results).pop()]
+          const boss = results[1]
+
+          delete results[1]
+          delete results[Object.keys(results).pop()]
+
+          this.setState({
+            character: character,
+            boss: boss,
+            explorations: results
+          })
+
+          _.map(results, (aRow) => {
+            _.map(aRow, (aCol) => {
+              if (aCol.id === character.position) {
+                this.setState({
+                  nextPossible: aCol.next
+                })
+              }
+            })
+          })
+
+          // Scroll if didnt see character
+          setTimeout(() => {
+            if (
+              this.refMe.current &&
+              !(
+                this.refMe.current.getBoundingClientRect().top <
+                  window.innerHeight &&
+                this.refMe.current.getBoundingClientRect().bottom >= 0
+              )
+            ) {
+              this.refScroll.current.scrollTop = this.refScroll.current.scrollHeight
+            }
+          }, 1000)
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error
+        })
+      })
   }
 
   handleScroll() {
@@ -102,53 +147,15 @@ class Exploration extends Component {
 
   // eslint-disable-next-line
   handleMovement(index) {
-    // Call API to change position player in exploration
+    // Call API to change position character in exploration
   }
 
-  displayBuildings(exploration, index) {
-    const { position, image } = this.state.player
-
-    if (position === index) {
-      return (
-        <Building
-          src={process.env.PUBLIC_URL + '/img/' + image}
-          alt="pikachu"
-          width={exploration.width}
-          height="100px"
-          ref={this.refMe}
-        />
-      )
-    } else if (
-      _.includes(this.state.explorations[position].next, exploration.id)
-    ) {
-      return (
-        <Link to="/choice" onClick={this.handleMovement(index)}>
-          <Building
-            src={
-              process.env.PUBLIC_URL + '/img/explorations/' + exploration.image
-            }
-            alt={exploration.image}
-            width={exploration.width}
-            height={exploration.height}
-          />
-        </Link>
-      )
-    } else {
-      return (
-        <DisabledBuilding
-          src={
-            process.env.PUBLIC_URL + '/img/explorations/' + exploration.image
-          }
-          alt={exploration.image}
-          width={exploration.width}
-          height={exploration.height}
-        />
-      )
-    }
+  isNext(col) {
+    return _.includes(this.state.nextPossible, col.id)
   }
 
   render() {
-    const { boss, scrollIsTop } = this.state
+    const { boss, character, error, nextPossible, scrollIsTop } = this.state
     let countExplorations = 0
 
     return (
@@ -158,45 +165,129 @@ class Exploration extends Component {
         ref={this.refScroll}
       >
         <div className="container">
-          <div className="row">
-            <StickyBoss
-              src={process.env.PUBLIC_URL + '/img/' + boss.image}
-              alt={boss.name}
-              style={{
-                left: scrollIsTop <= 40 ? '50%' : '90%',
-                transform:
-                  scrollIsTop <= 40 ? 'translateX(-50%)' : 'translateX(-90%)'
-              }}
-              width={boss.width}
-              height={boss.height}
-              data-tip={boss.name}
-              data-place="bottom"
-            />
-            {_.map(this.state.explorations, (exploration, index) => (
-              <div
-                key={index}
-                className={`mt-3 mb-3 col-sm-${exploration.col}${
-                  exploration.offset !== 0
-                    ? ' offset-sm-' + exploration.offset
-                    : ''
-                }`}
-              >
-                {this.displayBuildings(exploration, index)}
-                {_.includes(
-                  this.state.explorations[this.state.player.position].next,
-                  exploration.id
-                ) &&
-                  (countExplorations = countExplorations + 1) && (
-                    <PossibleBuildingText>
-                      {countExplorations}
-                    </PossibleBuildingText>
-                  )}
+          {error && (
+            <span className="text-danger">
+              <b>Erreur :</b> {error.message}
+            </span>
+          )}
+          {boss && character && (
+            <div className="row h-100">
+              <StickyBoss
+                src={process.env.PUBLIC_URL + '/img/' + boss.image}
+                alt={boss.name}
+                style={{
+                  left: scrollIsTop <= 40 ? '50%' : '90%',
+                  transform:
+                    scrollIsTop <= 40 ? 'translateX(-50%)' : 'translateX(-90%)'
+                }}
+                width="60px"
+                height="60px"
+                data-tip={boss.name}
+                data-place="bottom"
+              />
+              <div className="mt-3 mb-3 col-sm-12">
+                {this.isNext(boss) && (
+                  <Link to="/choice" onClick={this.handleMovement(boss.id)}>
+                    <Building
+                      src={
+                        process.env.PUBLIC_URL +
+                        '/img/explorations/' +
+                        boss.type +
+                        '.png'
+                      }
+                      alt={boss.type + '.png'}
+                      width="200px"
+                      data-tip={boss.type}
+                    />
+                  </Link>
+                )}
+                {!this.isNext(boss) && (
+                  <Link to="/choice" onClick={this.handleMovement(boss.id)}>
+                    <DisabledBuilding
+                      src={
+                        process.env.PUBLIC_URL +
+                        '/img/explorations/' +
+                        boss.type +
+                        '.png'
+                      }
+                      alt={boss.type + '.png'}
+                      width="200px"
+                      data-tip={boss.type}
+                    />
+                  </Link>
+                )}
               </div>
-            ))}
-          </div>
+              {_.map(this.state.explorations, (explorationRow, index) => (
+                <Fragment key={index}>
+                  {_.map(explorationRow, (col) => (
+                    <div
+                      key={col.id}
+                      className={`mt-3 mb-3 col-sm-${Math.round(
+                        12 / explorationRow.length
+                      )}`}
+                    >
+                      {character.position === col.id && (
+                        <Building
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/img/academies/' +
+                            character.image +
+                            '.png'
+                          }
+                          alt="me"
+                          width="100px"
+                          ref={this.refMe}
+                          data-tip="Moi"
+                        />
+                      )}
+                      {this.isNext(col) && (
+                        <Link
+                          to="/choice"
+                          onClick={this.handleMovement(col.id)}
+                        >
+                          <Building
+                            src={
+                              process.env.PUBLIC_URL +
+                              '/img/explorations/' +
+                              col.type +
+                              '.png'
+                            }
+                            alt={col.type + '.png'}
+                            width="100px"
+                            data-tip={col.type}
+                          />
+                        </Link>
+                      )}
+                      {character.position !== col.id && !this.isNext(col) && (
+                        <DisabledBuilding
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/img/explorations/' +
+                            col.type +
+                            '.png'
+                          }
+                          alt={col.type + '.png'}
+                          width="100px"
+                          data-tip={col.type}
+                        />
+                      )}
+                      {_.includes(nextPossible, col.id) &&
+                        (countExplorations = countExplorations + 1) && (
+                          <PossibleBuildingText>
+                            {countExplorations}
+                          </PossibleBuildingText>
+                        )}
+                    </div>
+                  ))}
+                </Fragment>
+              ))}
+              <ReactTooltip />
+            </div>
+          )}
         </div>
       </Container>
     )
   }
 }
+
 export default Exploration
