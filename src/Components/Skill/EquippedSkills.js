@@ -47,7 +47,7 @@ class EquippedSkills extends Component {
       })
       .catch((error) => {
         this.setState({
-          error: error
+          error: error.response.data
         })
       })
   }

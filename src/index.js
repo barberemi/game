@@ -47,7 +47,7 @@ ReactDOM.render(
       />
       <AppRoute
         exact
-        path="/choice"
+        path="/choice/:type/:explorationId"
         component={Choice}
         layout={ExplorationLayout}
       />

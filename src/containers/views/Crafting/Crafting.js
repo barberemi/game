@@ -178,7 +178,7 @@ class Crafting extends Component {
         })
         .catch((error) => {
           this.setState({
-            error: error
+            error: error.response.data
           })
         })
     }

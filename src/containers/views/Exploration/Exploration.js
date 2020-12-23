@@ -134,7 +134,7 @@ class Exploration extends Component {
       })
       .catch((error) => {
         this.setState({
-          error: error
+          error: error.response.data
         })
       })
   }
@@ -187,7 +187,10 @@ class Exploration extends Component {
               />
               <div className="mt-3 mb-3 col-sm-12">
                 {this.isNext(boss) && (
-                  <Link to="/choice" onClick={this.handleMovement(boss.id)}>
+                  <Link
+                    to={`/choice/${boss.type}/${boss.id}`}
+                    onClick={this.handleMovement(boss.id)}
+                  >
                     <Building
                       src={
                         process.env.PUBLIC_URL +
@@ -202,7 +205,10 @@ class Exploration extends Component {
                   </Link>
                 )}
                 {!this.isNext(boss) && (
-                  <Link to="/choice" onClick={this.handleMovement(boss.id)}>
+                  <Link
+                    to={`/choice/${boss.type}/${boss.id}`}
+                    onClick={this.handleMovement(boss.id)}
+                  >
                     <DisabledBuilding
                       src={
                         process.env.PUBLIC_URL +
@@ -242,7 +248,7 @@ class Exploration extends Component {
                       )}
                       {this.isNext(col) && (
                         <Link
-                          to="/choice"
+                          to={`/choice/${col.type}/${col.id}`}
                           onClick={this.handleMovement(col.id)}
                         >
                           <Building

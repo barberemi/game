@@ -96,22 +96,29 @@ class Guild extends Component {
       })
       .then((response) => {
         if (response.data) {
-          this.setState({
-            user: response.data,
-            id: response.data.guild ? response.data.guild.id : undefined
-          })
-          this.loadData()
+          if (!response.data.guild) {
+            this.setState({
+              error: {
+                message: "Vous n'êtes dans aucune guilde pour le moment."
+              }
+            })
+          } else {
+            this.setState({
+              user: response.data,
+              id: response.data.guild.id
+            })
+            this.loadData()
+            setInterval(() => {
+              this.loadData()
+            }, 5000)
+          }
         }
       })
       .catch((error) => {
         this.setState({
-          error: error
+          error: error.response.data
         })
       })
-
-    setInterval(() => {
-      this.loadData()
-    }, 5000)
   }
 
   loadData() {
@@ -131,7 +138,7 @@ class Guild extends Component {
       })
       .catch((error) => {
         this.setState({
-          error: error
+          error: error.response.data
         })
       })
   }

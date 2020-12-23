@@ -98,7 +98,7 @@ class Login extends Component {
       })
       .catch((error) => {
         this.setState({
-          error: error.response
+          error: error.response.data
         })
       })
   }
@@ -127,13 +127,13 @@ class Login extends Component {
             </div>
             <div className="card-body">
               <form onSubmit={this.handleSubmit}>
-                {error === 401 && (
+                {error && error.code === 401 && (
                   <div className="text-danger text-center mb-sm-2">
                     Impossible de se connecter avec ce <br />
                     compte / mot de passe.
                   </div>
                 )}
-                {error === 404 && (
+                {error && error.code === 404 && (
                   <div className="text-danger text-center mb-sm-2">
                     Une erreur est survenue lors du contact avec le serveur.
                     Veuillez réessayer, ou contacter le support.

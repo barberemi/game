@@ -14,16 +14,14 @@ const AdventureButton = styled(Link)`
 
 class CardChoice extends Component {
   render() {
+    const { card, className } = this.props
+
     return (
-      <div className={`col-sm-3 mt-5 mb-5 ${this.props.className}`}>
+      <div className={`col-sm-3 mt-5 mb-5 ${className}`}>
         <div className="card">
-          <img
-            className="card-img-top"
-            src={this.props.card.img_url}
-            alt={this.props.card.name}
-          />
+          <img className="card-img-top" src={card.img_url} alt={card.name} />
           <AdventureButton to="/exploration" className={`card-footer btn`}>
-            {this.props.card.text_btn}
+            {card.text_btn}
           </AdventureButton>
         </div>
       </div>
@@ -35,7 +33,8 @@ CardChoice.propTypes = {
   card: PropTypes.shape({
     img_url: PropTypes.string,
     text_btn: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string,
+    action: PropTypes.string
   }),
   className: PropTypes.string
 }

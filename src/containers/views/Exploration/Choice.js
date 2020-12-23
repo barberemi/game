@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 import CardChoice from '../../../Components/Exploration/CardChoice'
+import PropTypes from 'prop-types'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
@@ -32,16 +33,22 @@ class Choice extends Component {
     super(props)
 
     this.state = {
+      type: this.props.match.params.type,
+      explorationId: parseInt(this.props.match.params.explorationId),
+      text:
+        'Vous trouvez une épée plantée dans le sol, mais celle ci n’a pas l’air commode. Que faites-vous?',
       cards: [
         {
           img_url:
             'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
-          text_btn: 'La déterrer'
+          text_btn: 'La déterrer',
+          action: 'fight'
         },
         {
           img_url:
             'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
-          text_btn: 'Partir'
+          text_btn: 'Partir',
+          action: 'leave'
         }
       ]
     }
@@ -53,8 +60,7 @@ class Choice extends Component {
         <SubContainer className="container">
           <div className="row align-items-center">
             <TextDescription className="col-sm-12 mt-5">
-              Vous trouvez une épée plantée dans le sol, mais celle ci n’a pas
-              l’air commode. Que faites-vous?
+              {this.state.text}
             </TextDescription>
           </div>
           <div className="row align-items-center">
@@ -78,4 +84,14 @@ class Choice extends Component {
     )
   }
 }
+
+Choice.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      type: PropTypes.string,
+      explorationId: PropTypes.string
+    }).isRequired
+  }).isRequired
+}
+
 export default Choice
