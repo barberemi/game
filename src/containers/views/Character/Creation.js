@@ -7,6 +7,7 @@ import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Redirect } from 'react-router-dom'
+import Loader from '../../../Components/Loader/Loader'
 
 const Container = styled.div`
   background-image: url('https://images.alphacoders.com/883/883163.jpg');
@@ -100,6 +101,7 @@ class Creation extends Component {
     super(props)
 
     this.state = {
+      loading: true,
       created: false,
       error: undefined,
       academies: undefined,
@@ -132,12 +134,14 @@ class Creation extends Component {
       .all([getMe, getAcademies])
       .then((responses) => {
         this.setState({
+          loading: false,
           user: responses[0].data,
           academies: responses[1].data.items
         })
       })
       .catch((errors) => {
         this.setState({
+          loading: false,
           error: errors
         })
       })
@@ -184,6 +188,7 @@ class Creation extends Component {
   render() {
     const {
       error,
+      loading,
       created,
       user,
       academies,
@@ -198,6 +203,7 @@ class Creation extends Component {
 
     return (
       <Container className="container-fluid">
+        {loading && <Loader />}
         <div className="container">
           {error && (
             <span className="text-danger">

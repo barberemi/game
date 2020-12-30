@@ -9,6 +9,7 @@ import ItemList from '../../../Components/Item/ItemList'
 import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Loader from '../../../Components/Loader/Loader'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg');
@@ -78,6 +79,7 @@ class Boss extends Component {
     super(props)
 
     this.state = {
+      loading: true,
       id: parseInt(this.props.match.params.idboss),
       boss: undefined,
       activatedTab: 'generalTab',
@@ -96,6 +98,7 @@ class Boss extends Component {
       .then((response) => {
         if (response.data) {
           this.setState({
+            loading: false,
             boss: response.data.items,
             selectedBoss: this.state.id
               ? _.find(response.data.items, { id: this.state.idboss })
@@ -105,6 +108,7 @@ class Boss extends Component {
       })
       .catch((error) => {
         this.setState({
+          loading: false,
           error: error.response.data
         })
       })
@@ -117,10 +121,11 @@ class Boss extends Component {
   }
 
   render() {
-    const { error, boss, activatedTab, selectedBoss } = this.state
+    const { error, loading, boss, activatedTab, selectedBoss } = this.state
 
     return (
       <Container className="container-fluid">
+        {loading && <Loader />}
         <div className="container">
           {error && (
             <span className="text-danger">

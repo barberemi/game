@@ -39,12 +39,14 @@ class Choice extends Component {
         'Vous trouvez une épée plantée dans le sol, mais celle ci n’a pas l’air commode. Que faites-vous?',
       cards: [
         {
+          id: 1,
           img_url:
             'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
           text_btn: 'La déterrer',
           action: 'fight'
         },
         {
+          id: 2,
           img_url:
             'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
           text_btn: 'Partir',
@@ -71,11 +73,12 @@ class Choice extends Component {
                 height="250px"
               />
             </div>
-            {_.map(this.state.cards, (card, index) => (
+            {_.map(this.state.cards, (card) => (
               <CardChoice
-                key={index}
+                key={card.id}
                 card={card}
-                className={index === 0 ? 'offset-sm-2' : ''}
+                type={this.state.type}
+                explorationId={this.state.explorationId}
               />
             ))}
           </div>

@@ -7,6 +7,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import Loader from '../../../Components/Loader/Loader'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -79,6 +80,7 @@ class Guild extends Component {
       id: parseInt(this.props.match.params.idguild),
       user: undefined,
       error: undefined,
+      loading: true,
       guild: undefined,
       activatedTab: 'chatTab'
     }
@@ -116,6 +118,7 @@ class Guild extends Component {
       })
       .catch((error) => {
         this.setState({
+          loading: false,
           error: error.response.data
         })
       })
@@ -132,12 +135,14 @@ class Guild extends Component {
       .then((response) => {
         if (response.data) {
           this.setState({
+            loading: false,
             guild: response.data
           })
         }
       })
       .catch((error) => {
         this.setState({
+          loading: false,
           error: error.response.data
         })
       })
@@ -185,10 +190,11 @@ class Guild extends Component {
   }
 
   render() {
-    const { error, guild, activatedTab } = this.state
+    const { error, loading, guild, activatedTab } = this.state
 
     return (
       <Container className="container-fluid">
+        {loading && <Loader />}
         <div className="container">
           <div className="row h-100 mt-5">
             <div className="col-sm-3 my-auto">

@@ -9,6 +9,7 @@ import ItemCrafting from '../../../Components/Item/ItemCrafting'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Loader from '../../../Components/Loader/Loader'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg');
@@ -59,6 +60,7 @@ class Crafting extends Component {
 
     this.state = {
       error: undefined,
+      loading: true,
       boss: undefined,
       character: undefined,
       activatedTab: 'bossChoiceTab',
@@ -85,6 +87,7 @@ class Crafting extends Component {
       .all([getMe, getMonsters])
       .then((responses) => {
         this.setState({
+          loading: false,
           character: responses[0].data,
           boss: responses[1].data.items,
           selectedBoss: this.state.idboss
@@ -94,6 +97,7 @@ class Crafting extends Component {
       })
       .catch((errors) => {
         this.setState({
+          loading: false,
           error: errors
         })
       })
@@ -187,6 +191,7 @@ class Crafting extends Component {
   render() {
     const {
       error,
+      loading,
       boss,
       character,
       activatedTab,
@@ -196,6 +201,7 @@ class Crafting extends Component {
 
     return (
       <Container className="container-fluid">
+        {loading && <Loader />}
         <div className="container">
           <div className="row h-100 mt-5">
             <div className="col-sm-3 my-auto">

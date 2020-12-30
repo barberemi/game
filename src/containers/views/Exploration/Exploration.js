@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactTooltip from 'react-tooltip'
+import Loader from '../../../Components/Loader/Loader'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
@@ -76,6 +77,7 @@ class Exploration extends Component {
     this.isNext = this.isNext.bind(this)
 
     this.state = {
+      loading: true,
       explorations: undefined,
       boss: undefined,
       character: undefined,
@@ -102,6 +104,7 @@ class Exploration extends Component {
           delete results[Object.keys(results).pop()]
 
           this.setState({
+            loading: false,
             character: character,
             boss: boss,
             explorations: results
@@ -134,6 +137,7 @@ class Exploration extends Component {
       })
       .catch((error) => {
         this.setState({
+          loading: false,
           error: error.response.data
         })
       })
@@ -155,7 +159,14 @@ class Exploration extends Component {
   }
 
   render() {
-    const { boss, character, error, nextPossible, scrollIsTop } = this.state
+    const {
+      boss,
+      character,
+      error,
+      loading,
+      nextPossible,
+      scrollIsTop
+    } = this.state
     let countExplorations = 0
 
     return (
@@ -164,6 +175,7 @@ class Exploration extends Component {
         onScroll={this.handleScroll}
         ref={this.refScroll}
       >
+        {loading && <Loader />}
         <div className="container">
           {error && (
             <span className="text-danger">

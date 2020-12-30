@@ -13,6 +13,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 import PropTypes from 'prop-types'
+import Loader from '../../../Components/Loader/Loader'
 
 const Container = styled.div`
   background-image: url('https://images2.alphacoders.com/717/717870.jpg');
@@ -68,6 +69,7 @@ class Character extends Component {
     this.state = {
       id: parseInt(this.props.match.params.idcharacter),
       error: undefined,
+      loading: true,
       character: undefined,
       isMe: false,
       activatedTab: 'generalTab'
@@ -89,6 +91,7 @@ class Character extends Component {
       .then((response) => {
         if (response.data) {
           this.setState({
+            loading: false,
             id: response.data.id,
             isMe:
               jwtDecode(Cookies.get('auth-token')).email ===
@@ -273,10 +276,11 @@ class Character extends Component {
   }
 
   render() {
-    const { error, character, activatedTab } = this.state
+    const { error, loading, character, activatedTab } = this.state
 
     return (
       <Container className="container-fluid">
+        {loading && <Loader />}
         <div className="container">
           {error && (
             <span className="text-danger">

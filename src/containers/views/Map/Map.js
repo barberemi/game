@@ -4,6 +4,8 @@ import _ from 'lodash'
 import CardMap from '../../../Components/Map/CardMap'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Loader from '../../../Components/Loader/Loader'
+import MapNavBar from '../../../Components/NavBar/MapNavBar'
 
 const Container = styled.div`
   background-image: url('https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1568080216644-6QDT21SZICO3TCYGO2GE/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Gallery54.jpg?format=2500w');
@@ -33,6 +35,7 @@ class Map extends Component {
     super(props)
 
     this.state = {
+      loading: true,
       error: undefined,
       maps: undefined,
       user: undefined
@@ -57,55 +60,61 @@ class Map extends Component {
       .all([getMe, getMaps])
       .then((responses) => {
         this.setState({
+          loading: false,
           user: responses[0].data,
           maps: responses[1].data.items
         })
       })
       .catch((errors) => {
         this.setState({
+          loading: false,
           error: errors
         })
       })
   }
 
   render() {
-    const { error, maps, user } = this.state
+    const { error, loading, maps, user } = this.state
     return (
-      <Container className="container-fluid align-middle">
-        <div className="container">
-          {error && (
-            <span className="text-danger">
-              <b>Erreur :</b> {error.message}
-            </span>
-          )}
-          {maps && user && (
-            <>
-              <RowOverflow className="row align-items-center">
-                {user.guild && (
+      <>
+        <MapNavBar />
+        <Container className="container-fluid align-middle">
+          {loading && <Loader />}
+          <div className="container">
+            {error && (
+              <span className="text-danger">
+                <b>Erreur :</b> {error.message}
+              </span>
+            )}
+            {maps && user && (
+              <>
+                <RowOverflow className="row align-items-center">
+                  {user.guild && (
+                    <CardMap
+                      key={user.guild.name}
+                      map={{ name: user.guild.name }}
+                      isGuild={true}
+                      user={user}
+                    />
+                  )}
                   <CardMap
-                    key={user.guild.name}
-                    map={{ name: user.guild.name }}
-                    isGuild={true}
+                    key="crafting"
+                    map={{ name: 'Forge' }}
+                    isCrafting={true}
                     user={user}
                   />
-                )}
-                <CardMap
-                  key="crafting"
-                  map={{ name: 'Forge' }}
-                  isCrafting={true}
-                  user={user}
-                />
-                {_.map(this.state.maps, (map) => (
-                  <CardMap key={map.name} map={map} user={user} />
-                ))}
-              </RowOverflow>
-              <TextDescription className="col-sm-12">
-                Veuillez selectionner une carte sur laquelle voyager !
-              </TextDescription>
-            </>
-          )}
-        </div>
-      </Container>
+                  {_.map(this.state.maps, (map) => (
+                    <CardMap key={map.name} map={map} user={user} />
+                  ))}
+                </RowOverflow>
+                <TextDescription className="col-sm-12">
+                  Veuillez selectionner une carte sur laquelle voyager !
+                </TextDescription>
+              </>
+            )}
+          </div>
+        </Container>
+      </>
     )
   }
 }

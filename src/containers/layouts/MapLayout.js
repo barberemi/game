@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import MapNavBar from '../../Components/NavBar/MapNavBar'
 import SideBar from '../../Components/SideBar/SideBar'
 
 const Background = styled.div`
@@ -11,7 +10,6 @@ const Background = styled.div`
 
 const MapLayout = ({ children }) => (
   <Background>
-    <MapNavBar />
     <SideBar />
     {children}
   </Background>
