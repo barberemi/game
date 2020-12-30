@@ -22,15 +22,9 @@ import Reward from './containers/views/Reward/Reward'
 import Guild from './containers/views/Guild/Guild'
 
 import FightLayout from './containers/layouts/FightLayout'
-import MapLayout from './containers/layouts/MapLayout'
 import LoginLayout from './containers/layouts/LoginLayout'
-import CharacterLayout from './containers/layouts/CharacterLayout'
 import CreationLayout from './containers/layouts/CreationLayout'
-import BossLayout from './containers/layouts/BossLayout'
-import CraftingLayout from './containers/layouts/CraftingLayout'
-import ExplorationLayout from './containers/layouts/ExplorationLayout'
-import RewardLayout from './containers/layouts/RewardLayout'
-import GuildLayout from './containers/layouts/GuildLayout'
+import Layout from './containers/layouts/Layout'
 
 import { ToastContainer } from 'react-toastify'
 // import * as serviceWorker from './serviceWorker';
@@ -38,32 +32,27 @@ import { ToastContainer } from 'react-toastify'
 ReactDOM.render(
   <BrowserRouter forceRefresh={true}>
     <Switch>
-      <AppRoute exact path="/maps" component={Map} layout={MapLayout} />
+      <AppRoute exact path="/maps" component={Map} layout={Layout} />
       <AppRoute
         exact
         path="/exploration"
         component={Exploration}
-        layout={ExplorationLayout}
+        layout={Layout}
       />
       <AppRoute
         exact
         path="/choice/:type/:explorationId"
         component={Choice}
-        layout={ExplorationLayout}
+        layout={Layout}
       />
       <AppRoute exact path="/fight" component={Fight} layout={FightLayout} />
 
-      <AppRoute
-        exact
-        path="/character"
-        component={Character}
-        layout={CharacterLayout}
-      />
+      <AppRoute exact path="/character" component={Character} layout={Layout} />
       <AppRoute
         exact
         path="/character/:idcharacter"
         component={Character}
-        layout={CharacterLayout}
+        layout={Layout}
       />
       <AppRoute
         exact
@@ -72,26 +61,21 @@ ReactDOM.render(
         layout={CreationLayout}
       />
 
-      <AppRoute path="/boss/:idboss" component={Boss} layout={BossLayout} />
-      <AppRoute path="/boss" component={Boss} layout={BossLayout} />
+      <AppRoute path="/boss/:idboss" component={Boss} layout={Layout} />
+      <AppRoute path="/boss" component={Boss} layout={Layout} />
 
-      <AppRoute
-        exact
-        path="/crafting"
-        component={Crafting}
-        layout={CraftingLayout}
-      />
+      <AppRoute exact path="/crafting" component={Crafting} layout={Layout} />
       <AppRoute
         exact
         path="/crafting/:idboss"
         component={Crafting}
-        layout={CraftingLayout}
+        layout={Layout}
       />
 
-      <AppRoute path="/reward" component={Reward} layout={RewardLayout} />
+      <AppRoute path="/reward" component={Reward} layout={Layout} />
 
-      <AppRoute path="/guild" component={Guild} layout={GuildLayout} />
-      <AppRoute path="/guild/:idguild" component={Guild} layout={GuildLayout} />
+      <AppRoute path="/guild" component={Guild} layout={Layout} />
+      <AppRoute path="/guild/:idguild" component={Guild} layout={Layout} />
 
       <AppRoute exact path="/login" component={Login} layout={LoginLayout} />
       <AppRoute

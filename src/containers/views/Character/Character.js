@@ -402,10 +402,14 @@ class Character extends Component {
                           <LevelBox> - Niv {character.level}</LevelBox>
                         </Title>
                         <ProgressBar
-                          actual={350}
-                          max={1200}
-                          color="#DC3545"
-                          transparentColor="#e09a9a"
+                          actual={
+                            character.experience - character.xpToActualLevel
+                          }
+                          max={
+                            character.xpToNextLevel - character.xpToActualLevel
+                          }
+                          color="#FFC312"
+                          transparentColor="#7F8286"
                         />
                       </div>
                       <div className="card-body">

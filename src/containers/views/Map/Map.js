@@ -77,7 +77,7 @@ class Map extends Component {
     const { error, loading, maps, user } = this.state
     return (
       <>
-        <MapNavBar />
+        <MapNavBar user={user} />
         <Container className="container-fluid align-middle">
           {loading && <Loader />}
           <div className="container">

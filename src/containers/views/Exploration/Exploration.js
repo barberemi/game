@@ -6,6 +6,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactTooltip from 'react-tooltip'
 import Loader from '../../../Components/Loader/Loader'
+import ExplorationNavBar from '../../../Components/NavBar/ExplorationNavBar'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
@@ -170,100 +171,118 @@ class Exploration extends Component {
     let countExplorations = 0
 
     return (
-      <Container
-        className="container-fluid"
-        onScroll={this.handleScroll}
-        ref={this.refScroll}
-      >
-        {loading && <Loader />}
-        <div className="container">
-          {error && (
-            <span className="text-danger">
-              <b>Erreur :</b> {error.message}
-            </span>
-          )}
-          {boss && character && (
-            <div className="row h-100">
-              <StickyBoss
-                src={process.env.PUBLIC_URL + '/img/' + boss.image}
-                alt={boss.name}
-                style={{
-                  left: scrollIsTop <= 40 ? '50%' : '90%',
-                  transform:
-                    scrollIsTop <= 40 ? 'translateX(-50%)' : 'translateX(-90%)'
-                }}
-                width="60px"
-                height="60px"
-                data-tip={boss.name}
-                data-place="bottom"
-              />
-              <div className="mt-3 mb-3 col-sm-12">
-                {this.isNext(boss) && (
-                  <Link
-                    to={`/choice/${boss.type}/${boss.id}`}
-                    onClick={this.handleMovement(boss.id)}
-                  >
-                    <Building
-                      src={
-                        process.env.PUBLIC_URL +
-                        '/img/explorations/' +
-                        boss.type +
-                        '.png'
-                      }
-                      alt={boss.type + '.png'}
-                      width="200px"
-                      data-tip={boss.type}
-                    />
-                  </Link>
-                )}
-                {!this.isNext(boss) && (
-                  <Link
-                    to={`/choice/${boss.type}/${boss.id}`}
-                    onClick={this.handleMovement(boss.id)}
-                  >
-                    <DisabledBuilding
-                      src={
-                        process.env.PUBLIC_URL +
-                        '/img/explorations/' +
-                        boss.type +
-                        '.png'
-                      }
-                      alt={boss.type + '.png'}
-                      width="200px"
-                      data-tip={boss.type}
-                    />
-                  </Link>
-                )}
-              </div>
-              {_.map(this.state.explorations, (explorationRow, index) => (
-                <Fragment key={index}>
-                  {_.map(explorationRow, (col) => (
-                    <div
-                      key={col.id}
-                      className={`mt-3 mb-3 col-sm-${Math.round(
-                        12 / explorationRow.length
-                      )}`}
+      <>
+        <ExplorationNavBar user={character} />
+        <Container
+          className="container-fluid"
+          onScroll={this.handleScroll}
+          ref={this.refScroll}
+        >
+          {loading && <Loader />}
+          <div className="container">
+            {error && (
+              <span className="text-danger">
+                <b>Erreur :</b> {error.message}
+              </span>
+            )}
+            {boss && character && (
+              <div className="row h-100">
+                <StickyBoss
+                  src={process.env.PUBLIC_URL + '/img/' + boss.image}
+                  alt={boss.name}
+                  style={{
+                    left: scrollIsTop <= 40 ? '50%' : '90%',
+                    transform:
+                      scrollIsTop <= 40
+                        ? 'translateX(-50%)'
+                        : 'translateX(-90%)'
+                  }}
+                  width="60px"
+                  height="60px"
+                  data-tip={boss.name}
+                  data-place="bottom"
+                />
+                <div className="mt-3 mb-3 col-sm-12">
+                  {this.isNext(boss) && (
+                    <Link
+                      to={`/choice/${boss.type}/${boss.id}`}
+                      onClick={this.handleMovement(boss.id)}
                     >
-                      {character.position === col.id && (
-                        <Building
-                          src={
-                            process.env.PUBLIC_URL +
-                            '/img/academies/' +
-                            character.image +
-                            '.png'
-                          }
-                          alt="me"
-                          width="100px"
-                          ref={this.refMe}
-                          data-tip="Moi"
-                        />
-                      )}
-                      {this.isNext(col) && (
-                        <Link
-                          to={`/choice/${col.type}/${col.id}`}
-                          onClick={this.handleMovement(col.id)}
-                        >
+                      <Building
+                        src={
+                          process.env.PUBLIC_URL +
+                          '/img/explorations/' +
+                          boss.type +
+                          '.png'
+                        }
+                        alt={boss.type + '.png'}
+                        width="200px"
+                        data-tip={boss.type}
+                      />
+                    </Link>
+                  )}
+                  {!this.isNext(boss) && (
+                    <Link
+                      to={`/choice/${boss.type}/${boss.id}`}
+                      onClick={this.handleMovement(boss.id)}
+                    >
+                      <DisabledBuilding
+                        src={
+                          process.env.PUBLIC_URL +
+                          '/img/explorations/' +
+                          boss.type +
+                          '.png'
+                        }
+                        alt={boss.type + '.png'}
+                        width="200px"
+                        data-tip={boss.type}
+                      />
+                    </Link>
+                  )}
+                </div>
+                {_.map(this.state.explorations, (explorationRow, index) => (
+                  <Fragment key={index}>
+                    {_.map(explorationRow, (col) => (
+                      <div
+                        key={col.id}
+                        className={`mt-3 mb-3 col-sm-${Math.round(
+                          12 / explorationRow.length
+                        )}`}
+                      >
+                        {character.position === col.id && (
                           <Building
+                            src={
+                              process.env.PUBLIC_URL +
+                              '/img/academies/' +
+                              character.academy.name +
+                              '.png'
+                            }
+                            alt="me"
+                            width="100px"
+                            ref={this.refMe}
+                            data-tip="Moi"
+                          />
+                        )}
+                        {this.isNext(col) && (
+                          <Link
+                            to={`/choice/${col.type}/${col.id}`}
+                            onClick={this.handleMovement(col.id)}
+                          >
+                            <Building
+                              src={
+                                process.env.PUBLIC_URL +
+                                '/img/explorations/' +
+                                col.type +
+                                '.png'
+                              }
+                              alt={col.type + '.png'}
+                              width="100px"
+                              data-tip={col.type}
+                            />
+                          </Link>
+                        )}
+                        {character.position !== col.id && !this.isNext(col) && (
+                          <DisabledBuilding
                             src={
                               process.env.PUBLIC_URL +
                               '/img/explorations/' +
@@ -274,36 +293,23 @@ class Exploration extends Component {
                             width="100px"
                             data-tip={col.type}
                           />
-                        </Link>
-                      )}
-                      {character.position !== col.id && !this.isNext(col) && (
-                        <DisabledBuilding
-                          src={
-                            process.env.PUBLIC_URL +
-                            '/img/explorations/' +
-                            col.type +
-                            '.png'
-                          }
-                          alt={col.type + '.png'}
-                          width="100px"
-                          data-tip={col.type}
-                        />
-                      )}
-                      {_.includes(nextPossible, col.id) &&
-                        (countExplorations = countExplorations + 1) && (
-                          <PossibleBuildingText>
-                            {countExplorations}
-                          </PossibleBuildingText>
                         )}
-                    </div>
-                  ))}
-                </Fragment>
-              ))}
-              <ReactTooltip />
-            </div>
-          )}
-        </div>
-      </Container>
+                        {_.includes(nextPossible, col.id) &&
+                          (countExplorations = countExplorations + 1) && (
+                            <PossibleBuildingText>
+                              {countExplorations}
+                            </PossibleBuildingText>
+                          )}
+                      </div>
+                    ))}
+                  </Fragment>
+                ))}
+                <ReactTooltip />
+              </div>
+            )}
+          </div>
+        </Container>
+      </>
     )
   }
 }

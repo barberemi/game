@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import _ from 'lodash'
 import CardChoice from '../../../Components/Exploration/CardChoice'
 import PropTypes from 'prop-types'
+import ExplorationNavBar from '../../../Components/NavBar/ExplorationNavBar'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
@@ -58,32 +59,35 @@ class Choice extends Component {
 
   render() {
     return (
-      <Container className="container-fluid align-middle">
-        <SubContainer className="container">
-          <div className="row align-items-center">
-            <TextDescription className="col-sm-12 mt-5">
-              {this.state.text}
-            </TextDescription>
-          </div>
-          <div className="row align-items-center">
-            <div className="col-sm-3 offset-sm-1 mt-5 mb-5">
-              <img
-                src={process.env.PUBLIC_URL + '/img/rubillax.png'}
-                alt="rubillax"
-                height="250px"
-              />
+      <>
+        <ExplorationNavBar />
+        <Container className="container-fluid align-middle">
+          <SubContainer className="container">
+            <div className="row align-items-center">
+              <TextDescription className="col-sm-12 mt-5">
+                {this.state.text}
+              </TextDescription>
             </div>
-            {_.map(this.state.cards, (card) => (
-              <CardChoice
-                key={card.id}
-                card={card}
-                type={this.state.type}
-                explorationId={this.state.explorationId}
-              />
-            ))}
-          </div>
-        </SubContainer>
-      </Container>
+            <div className="row align-items-center">
+              <div className="col-sm-3 offset-sm-1 mt-5 mb-5">
+                <img
+                  src={process.env.PUBLIC_URL + '/img/rubillax.png'}
+                  alt="rubillax"
+                  height="250px"
+                />
+              </div>
+              {_.map(this.state.cards, (card) => (
+                <CardChoice
+                  key={card.id}
+                  card={card}
+                  type={this.state.type}
+                  explorationId={this.state.explorationId}
+                />
+              ))}
+            </div>
+          </SubContainer>
+        </Container>
+      </>
     )
   }
 }

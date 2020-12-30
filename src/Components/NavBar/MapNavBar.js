@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import ProgressBar from '../Character/ProgressBar'
 import NavBar from './NavBar'
+import PropTypes from 'prop-types'
 
 const Bar = styled.div`
   padding-top: 5px;
@@ -10,20 +11,28 @@ const Bar = styled.div`
 
 class MapNavBar extends Component {
   render() {
+    const { user } = this.props
+
     return (
-      <NavBar>
-        <Bar className="col-sm-2 offset-sm-8">
-          <div>Niv 12</div>
-          <ProgressBar
-            actual={120}
-            max={1200}
-            color="#28A745"
-            transparentColor="#A2CCAA"
-          />
-        </Bar>
+      <NavBar user={user}>
+        {user && (
+          <Bar className="col-sm-2 offset-sm-8">
+            <div>Niv {user.level}</div>
+            <ProgressBar
+              actual={user.experience - user.xpToActualLevel}
+              max={user.xpToNextLevel - user.xpToActualLevel}
+              color="#FFC312"
+              transparentColor="#7F8286"
+            />
+          </Bar>
+        )}
       </NavBar>
     )
   }
+}
+
+MapNavBar.propTypes = {
+  user: PropTypes.shape({})
 }
 
 export default MapNavBar

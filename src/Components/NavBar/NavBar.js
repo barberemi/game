@@ -32,10 +32,11 @@ const Avatar = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid #000;
+  background-color: #fff;
 `
 
-const NavBar = ({ children }) => (
+const NavBar = ({ user, children }) => (
   <NavBarGlobale
     className="navbar-dark bg-dark container-fluid"
     role="navigation"
@@ -48,23 +49,31 @@ const NavBar = ({ children }) => (
             width="30"
             height="30"
             className="d-inline-block align-top"
-            alt=""
+            alt="Index jeu"
           />
         </Brand>
         {children}
-        <div className="col-sm-1">
-          <Avatar
-            src="https://miro.medium.com/max/3150/1*TCbE00-xcH2bOEV_OmHt5w.jpeg"
-            alt="Avatar"
-            className="avatar"
-          />
-        </div>
+        {user && (
+          <div className="col-sm-1">
+            <Avatar
+              src={
+                process.env.PUBLIC_URL +
+                '/img/academies/' +
+                user.academy.name +
+                '.png'
+              }
+              alt="Avatar"
+              className="avatar"
+            />
+          </div>
+        )}
       </DisplayFlex>
     </Row>
   </NavBarGlobale>
 )
 
 NavBar.propTypes = {
+  user: PropTypes.shape({}),
   children: PropTypes.node.isRequired
 }
 
