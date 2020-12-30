@@ -15,17 +15,19 @@ class MapNavBar extends Component {
 
     return (
       <NavBar user={user}>
-        {user && (
-          <Bar className="col-sm-2 offset-sm-8">
-            <div>Niv {user.level}</div>
-            <ProgressBar
-              actual={user.experience - user.xpToActualLevel}
-              max={user.xpToNextLevel - user.xpToActualLevel}
-              color="#FFC312"
-              transparentColor="#7F8286"
-            />
-          </Bar>
-        )}
+        <>
+          {user && (
+            <Bar className="col-sm-2 offset-sm-8">
+              <div>Niv {user.level}</div>
+              <ProgressBar
+                actual={user.experience - user.xpToActualLevel}
+                max={user.xpToNextLevel - user.xpToActualLevel}
+                color="#FFC312"
+                transparentColor="#7F8286"
+              />
+            </Bar>
+          )}
+        </>
       </NavBar>
     )
   }

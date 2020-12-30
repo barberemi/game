@@ -87,7 +87,7 @@ class CardMap extends Component {
       this.setState({ redirect: '/guild/' + user.guild.id })
     } else if (isCrafting) {
       this.setState({ redirect: '/crafting' })
-    } else {
+    } else if (this.mapBlocked() === false) {
       if (user.exploration) {
         this.setState({ redirect: '/exploration' })
       } else {
@@ -174,7 +174,7 @@ CardMap.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.number,
     level: PropTypes.number,
-    exploration: PropTypes.string,
+    exploration: PropTypes.shape({}),
     guild: PropTypes.shape({
       id: PropTypes.number
     })

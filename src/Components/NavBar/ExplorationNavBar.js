@@ -20,40 +20,42 @@ class ExplorationNavBar extends Component {
 
     return (
       <NavBar user={user}>
-        {user && (
-          <>
-            <MoneyBox className="col-sm-2 offset-sm-4">
-              <div>
-                <img
-                  src={process.env.PUBLIC_URL + '/img/money.svg'}
-                  width="30"
-                  height="30"
-                  className="d-inline-block align-top"
-                  alt="Thune"
+        <>
+          {user && (
+            <>
+              <MoneyBox className="col-sm-2 offset-sm-4">
+                <div>
+                  <img
+                    src={process.env.PUBLIC_URL + '/img/money.svg'}
+                    width="30"
+                    height="30"
+                    className="d-inline-block align-top"
+                    alt="Thune"
+                  />
+                </div>
+                <div>{user.money ? user.money : 'Aucune'} thune</div>
+              </MoneyBox>
+              <Bar className="col-sm-2">
+                <div>Confiance</div>
+                <ProgressBar
+                  actual={300}
+                  max={1000}
+                  color="#182C51"
+                  transparentColor="#5388A3"
                 />
-              </div>
-              <div>{user.money ? user.money : 'Aucune'} thune</div>
-            </MoneyBox>
-            <Bar className="col-sm-2">
-              <div>Confiance</div>
-              <ProgressBar
-                actual={300}
-                max={1000}
-                color="#182C51"
-                transparentColor="#5388A3"
-              />
-            </Bar>
-            <Bar className="col-sm-2">
-              <div>PV</div>
-              <ProgressBar
-                actual={user.hp}
-                max={user.maxHp}
-                color="#DC3545"
-                transparentColor="#e09a9a"
-              />
-            </Bar>
-          </>
-        )}
+              </Bar>
+              <Bar className="col-sm-2">
+                <div>PV</div>
+                <ProgressBar
+                  actual={user.hp}
+                  max={user.maxHp}
+                  color="#DC3545"
+                  transparentColor="#e09a9a"
+                />
+              </Bar>
+            </>
+          )}
+        </>
       </NavBar>
     )
   }
