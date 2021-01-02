@@ -101,7 +101,7 @@ class Boss extends Component {
             loading: false,
             boss: response.data.items,
             selectedBoss: this.state.id
-              ? _.find(response.data.items, { id: this.state.idboss })
+              ? _.find(response.data.items, { id: this.state.id })
               : _.first(response.data.items)
           })
         }
@@ -109,7 +109,7 @@ class Boss extends Component {
       .catch((error) => {
         this.setState({
           loading: false,
-          error: error.response.data
+          error: error.response.data.error
         })
       })
   }
@@ -129,7 +129,7 @@ class Boss extends Component {
         <div className="container">
           {error && (
             <span className="text-danger">
-              <b>Erreur :</b> {error.message}
+              <b>Erreur :</b> {error}
             </span>
           )}
           {boss && (
@@ -244,7 +244,9 @@ class Boss extends Component {
                   >
                     <Card className="card">
                       <div className="card-header">
-                        <Title>Tour niveau {selectedBoss.levelTower}</Title>
+                        {selectedBoss.levelTower !== 0 && (
+                          <Title>Tour niveau {selectedBoss.levelTower}</Title>
+                        )}
                         {selectedBoss.name}{' '}
                         <span style={{ color: selectedBoss.academy.color }}>
                           ({selectedBoss.academy.label})
