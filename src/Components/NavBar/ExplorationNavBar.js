@@ -47,8 +47,17 @@ class ExplorationNavBar extends Component {
               <Bar className="col-sm-2">
                 <div>PV</div>
                 <ProgressBar
-                  actual={user.hp}
-                  max={user.maxHp}
+                  actual={
+                    user.hp
+                      ? user.hp
+                      : user.exploration[Object.keys(user.exploration).pop()].hp
+                  }
+                  max={
+                    user.maxHp
+                      ? user.maxHp
+                      : user.exploration[Object.keys(user.exploration).pop()]
+                          .maxHp
+                  }
                   color="#DC3545"
                   transparentColor="#e09a9a"
                 />
