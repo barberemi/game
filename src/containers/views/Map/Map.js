@@ -5,6 +5,7 @@ import CardMap from '../../../Components/Map/CardMap'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
+import { Redirect } from 'react-router-dom'
 import MapNavBar from '../../../Components/NavBar/MapNavBar'
 
 const Container = styled.div`
@@ -36,6 +37,7 @@ class Map extends Component {
 
     this.state = {
       loading: true,
+      redirect: false,
       error: undefined,
       maps: undefined,
       user: undefined
@@ -61,6 +63,7 @@ class Map extends Component {
       .then((responses) => {
         this.setState({
           loading: false,
+          redirect: !responses[0].data.academy,
           user: responses[0].data,
           maps: responses[1].data.items
         })
@@ -74,7 +77,12 @@ class Map extends Component {
   }
 
   render() {
-    const { error, loading, maps, user } = this.state
+    const { error, loading, redirect, maps, user } = this.state
+
+    if (redirect) {
+      return <Redirect to="/creation" />
+    }
+
     return (
       <>
         <MapNavBar user={user} />

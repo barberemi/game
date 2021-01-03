@@ -107,7 +107,7 @@ class Login extends Component {
     const { error, redirect } = this.state
 
     if (redirect) {
-      return <Redirect to="/creation" />
+      return <Redirect to="/maps" />
     }
 
     return (
