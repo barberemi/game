@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -48,13 +47,6 @@ const AdventureButton = styled.button`
 `
 
 class CardMap extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      redirect: undefined
-    }
-  }
   mapBlocked() {
     return this.props.map.levelMin > this.props.user.level ?? false
   }
@@ -81,15 +73,15 @@ class CardMap extends Component {
   }
 
   handleClick() {
-    const { map, user, isGuild, isCrafting } = this.props
+    const { map, user, isGuild, isCrafting, redirectTo } = this.props
 
     if (isGuild) {
-      this.setState({ redirect: '/guild/' + user.guild.id })
+      redirectTo('/guild/' + user.guild.id)
     } else if (isCrafting) {
-      this.setState({ redirect: '/crafting' })
+      redirectTo('/crafting')
     } else if (this.mapBlocked() === false) {
       if (user.exploration) {
-        this.setState({ redirect: '/exploration' })
+        redirectTo('/exploration')
       } else {
         axios
           .post(
@@ -107,7 +99,7 @@ class CardMap extends Component {
             }
           )
           .then(() => {
-            this.setState({ redirect: '/exploration' })
+            redirectTo('/exploration')
           })
           .catch((error) => {
             this.setState({
@@ -120,11 +112,6 @@ class CardMap extends Component {
 
   render() {
     const { map, isGuild, isCrafting } = this.props
-    const { redirect } = this.state
-
-    if (redirect) {
-      return <Redirect to={redirect} />
-    }
 
     return (
       <div className="col-sm-5 mt-5 mb-5">
@@ -180,7 +167,8 @@ CardMap.propTypes = {
     })
   }),
   isGuild: PropTypes.bool,
-  isCrafting: PropTypes.bool
+  isCrafting: PropTypes.bool,
+  redirectTo: PropTypes.func
 }
 
 export default CardMap

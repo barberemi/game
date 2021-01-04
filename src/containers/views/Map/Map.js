@@ -37,7 +37,7 @@ class Map extends Component {
 
     this.state = {
       loading: true,
-      redirect: false,
+      redirect: undefined,
       error: undefined,
       maps: undefined,
       user: undefined
@@ -63,7 +63,7 @@ class Map extends Component {
       .then((responses) => {
         this.setState({
           loading: false,
-          redirect: !responses[0].data.academy,
+          redirect: responses[0].data.academy ? undefined : '/creation',
           user: responses[0].data,
           maps: responses[1].data.items
         })
@@ -80,7 +80,7 @@ class Map extends Component {
     const { error, loading, redirect, maps, user } = this.state
 
     if (redirect) {
-      return <Redirect to="/creation" />
+      return <Redirect to={redirect} />
     }
 
     return (
@@ -103,6 +103,9 @@ class Map extends Component {
                       map={{ name: user.guild.name }}
                       isGuild={true}
                       user={user}
+                      redirectTo={(redirect) =>
+                        this.setState({ redirect: redirect })
+                      }
                     />
                   )}
                   <CardMap
@@ -110,9 +113,19 @@ class Map extends Component {
                     map={{ name: 'Forge' }}
                     isCrafting={true}
                     user={user}
+                    redirectTo={(redirect) =>
+                      this.setState({ redirect: redirect })
+                    }
                   />
                   {_.map(this.state.maps, (map) => (
-                    <CardMap key={map.name} map={map} user={user} />
+                    <CardMap
+                      key={map.name}
+                      map={map}
+                      user={user}
+                      redirectTo={(redirect) =>
+                        this.setState({ redirect: redirect })
+                      }
+                    />
                   ))}
                 </RowOverflow>
                 <TextDescription className="col-sm-12">

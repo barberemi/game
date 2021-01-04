@@ -203,7 +203,7 @@ class Exploration extends Component {
             {boss && character && (
               <div className="row h-100">
                 <StickyBoss
-                  src={process.env.PUBLIC_URL + '/img/' + boss.image}
+                  src={process.env.PUBLIC_URL + '/img/boss/' + boss.image}
                   alt={boss.name}
                   style={{
                     left: scrollIsTop <= 40 ? '50%' : '90%',
