@@ -81,8 +81,20 @@ class Choice extends Component {
               index !== String(Object.keys(response.data.exploration).length)
             ) {
               _.map(row, (col) => {
+                // 2.1 - Store the room
                 if (col.id === this.state.explorationId) {
                   room = col
+                }
+                // 2.2 - Url dont exists on rooms of user exploration
+                if (
+                  col.id ===
+                  response.data.exploration[
+                    Object.keys(response.data.exploration).length
+                  ].position
+                ) {
+                  if (!_.includes(col.next, this.state.explorationId)) {
+                    this.setState({ redirect: '/exploration' })
+                  }
                 }
               })
             }
