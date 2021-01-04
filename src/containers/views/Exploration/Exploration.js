@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactTooltip from 'react-tooltip'
@@ -78,6 +78,7 @@ class Exploration extends Component {
     this.isNext = this.isNext.bind(this)
 
     this.state = {
+      redirect: undefined,
       loading: true,
       explorations: undefined,
       boss: undefined,
@@ -97,43 +98,52 @@ class Exploration extends Component {
       })
       .then((response) => {
         if (response.data) {
-          const results = response.data.exploration
-          const character = results[Object.keys(results).pop()]
-          const boss = results[1]
+          // 1 - Check if last fight is waiting
+          if (
+            response.data.fights &&
+            response.data.fights[0].type === 'waiting'
+          ) {
+            this.setState({ redirect: '/fight' })
+          } else {
+            // 2 - Generate exploration
+            const results = response.data.exploration
+            const character = results[Object.keys(results).pop()]
+            const boss = results[1]
 
-          delete results[1]
-          delete results[Object.keys(results).pop()]
+            delete results[1]
+            delete results[Object.keys(results).pop()]
 
-          this.setState({
-            loading: false,
-            character: character,
-            boss: boss,
-            explorations: results
-          })
-
-          _.map(results, (aRow) => {
-            _.map(aRow, (aCol) => {
-              if (aCol.id === character.position) {
-                this.setState({
-                  nextPossible: aCol.next
-                })
-              }
+            this.setState({
+              loading: false,
+              character: character,
+              boss: boss,
+              explorations: results
             })
-          })
 
-          // Scroll if didnt see character
-          setTimeout(() => {
-            if (
-              this.refMe.current &&
-              !(
-                this.refMe.current.getBoundingClientRect().top <
-                  window.innerHeight &&
-                this.refMe.current.getBoundingClientRect().bottom >= 0
-              )
-            ) {
-              this.refScroll.current.scrollTop = this.refScroll.current.scrollHeight
-            }
-          }, 1000)
+            _.map(results, (aRow) => {
+              _.map(aRow, (aCol) => {
+                if (aCol.id === character.position) {
+                  this.setState({
+                    nextPossible: aCol.next
+                  })
+                }
+              })
+            })
+
+            // Scroll if didnt see character
+            setTimeout(() => {
+              if (
+                this.refMe.current &&
+                !(
+                  this.refMe.current.getBoundingClientRect().top <
+                    window.innerHeight &&
+                  this.refMe.current.getBoundingClientRect().bottom >= 0
+                )
+              ) {
+                this.refScroll.current.scrollTop = this.refScroll.current.scrollHeight
+              }
+            }, 1000)
+          }
         }
       })
       .catch((error) => {
@@ -161,6 +171,7 @@ class Exploration extends Component {
 
   render() {
     const {
+      redirect,
       boss,
       character,
       error,
@@ -169,6 +180,10 @@ class Exploration extends Component {
       scrollIsTop
     } = this.state
     let countExplorations = 0
+
+    if (redirect) {
+      return <Redirect to={redirect} />
+    }
 
     return (
       <>

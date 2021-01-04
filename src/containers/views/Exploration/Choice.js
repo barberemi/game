@@ -63,6 +63,15 @@ class Choice extends Component {
       })
       .then((response) => {
         if (response.data) {
+          // 1 - Check if last fight is waiting
+          if (
+            response.data.fights &&
+            response.data.fights[0].type === 'waiting'
+          ) {
+            this.setState({ redirect: '/fight' })
+          }
+
+          // 2 - Get room
           let text = undefined
           let cards = []
           let room = undefined
@@ -78,6 +87,8 @@ class Choice extends Component {
               })
             }
           })
+
+          // 3 - Set cards and other
           switch (this.state.type) {
             case 'arene-boss':
               text =
