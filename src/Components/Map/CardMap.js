@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
+import ReactTooltip from 'react-tooltip'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -23,6 +24,12 @@ const RequirementNotBlock = styled(LevelNeededBackground)`
   background-color: #ffc312;
   color: #000;
   text-shadow: 1px 1px 2px white;
+`
+
+const Pin = styled.img`
+  position: absolute;
+  right: -15px;
+  top: -10px;
 `
 
 const TitleCard = styled.div`
@@ -111,12 +118,26 @@ class CardMap extends Component {
   }
 
   render() {
-    const { map, isGuild, isCrafting } = this.props
+    const { map, user, isGuild, isCrafting } = this.props
 
     return (
       <div className="col-sm-5 mt-5 mb-5">
         <div className="card">
           {this.displayCardLevel()}
+          {user.exploration &&
+            user.exploration[1].map &&
+            user.exploration[1].map === map.id && (
+              <>
+                <Pin
+                  src={process.env.PUBLIC_URL + '/img/pin.svg'}
+                  width="35"
+                  height="35"
+                  alt="in progress pin"
+                  data-tip="Exploration en cours"
+                />
+                <ReactTooltip />
+              </>
+            )}
           <TitleCard>{map.name}</TitleCard>
           <img
             className="card-img-top"
