@@ -187,10 +187,10 @@ class Choice extends Component {
   handleClick = (card) => {
     if (card.action === 'fight-boss') {
       // TODO : fight boss API
-      this.setUserAndRedirect('/fight', false, false)
+      this.createFight(true)
     } else if (card.action === 'fight') {
       // TODO : fight API
-      this.setUserAndRedirect('/fight', false, false)
+      this.createFight(false)
     } else if (card.action === 'deal') {
       if (
         this.state.room.cost &&
@@ -203,6 +203,39 @@ class Choice extends Component {
     } else if (card.action === 'leave') {
       this.setUserAndRedirect('/exploration', false, false)
     }
+  }
+
+  createFight = (isBossFight) => {
+    const { user, room } = this.state
+
+    axios
+      .post(
+        process.env.REACT_APP_API_URL + '/fights',
+        {
+          user: {
+            id: user.id
+          },
+          monster: {
+            id: isBossFight ? user.exploration[1].id : room.monster
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setUserAndRedirect('/fight', false, false)
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
   }
 
   setUserAndRedirect = (redirect, healing, dealing) => {

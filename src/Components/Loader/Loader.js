@@ -43,7 +43,7 @@ const Body = styled.div`
   right: 0;
   width: 180px;
   height: 128px;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/body.png'}) no-repeat
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/body.png'}) no-repeat
     center center;
   background-size: contain;
   z-index: 10;
@@ -55,7 +55,7 @@ const HornLeft = styled.div`
   left: 32px;
   width: 31px;
   height: 31px;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/horn-left.png'})
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/horn-left.png'})
     no-repeat;
   background-size: contain;
   z-index: 9;
@@ -71,7 +71,7 @@ const HornRight = styled.div`
   left: 110px;
   width: 34px;
   height: 31px;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/horn-right.png'})
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/horn-right.png'})
     no-repeat;
   background-size: contain;
   z-index: 9;
@@ -85,7 +85,7 @@ const Eye = styled.div`
   top: 39px;
   width: 11px;
   height: 11px;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/eye.png'}) no-repeat;
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/eye.png'}) no-repeat;
   background-size: contain;
   z-index: 12;
 `
@@ -105,7 +105,7 @@ const Blush = styled.div`
   top: 46px;
   width: 15px;
   height: 9px;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/blush.png'}) no-repeat;
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/blush.png'}) no-repeat;
   background-size: 100% 100%;
   z-index: 11;
   animation: blush 0.5s ease infinite alternate;
@@ -125,7 +125,7 @@ const Mouth = styled.div`
   left: 49px;
   width: 78px;
   height: 56px;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/mouth.png'}) no-repeat;
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/mouth.png'}) no-repeat;
   background-size: 100%;
   z-index: 11;
   animation: openMouth 1s ease infinite;
@@ -137,7 +137,7 @@ const Tail = styled.div`
   left: 139px;
   width: 40px;
   height: 38px;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/tail-sting.png'})
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/tail-sting.png'})
     no-repeat;
   background-size: contain;
   z-index: 9;
@@ -159,7 +159,7 @@ const Fire = styled.div`
   padding-bottom: 135%;
   width: 100%;
   height: 100%;
-  background: url(${process.env.PUBLIC_URL + '/img/loader/fire.png'}) no-repeat;
+  background: url(${process.env.PUBLIC_URL + '/img/dragon/fire.png'}) no-repeat;
   background-size: contain;
   animation: fire 1s ease-out infinite;
 `

@@ -33,8 +33,17 @@ const AdventureButton = styled.button`
 `
 
 class CardChoice extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      loading: false
+    }
+  }
+
   render() {
     const { card, position, room, money } = this.props
+    const { loading } = this.state
 
     return (
       <div
@@ -73,16 +82,29 @@ class CardChoice extends Component {
                 : ''
             }`}
             onClick={() => {
+              this.setState({ loading: true })
               this.props.onClick(card)
             }}
           >
-            {room.cost && position === 0 && room.cost > money && (
+            {loading && (
+              <img
+                src={process.env.PUBLIC_URL + '/img/tail-spinner.svg'}
+                width="20"
+                height="20"
+                alt="spinner"
+              />
+            )}
+            {!loading && (
               <>
-                <i className="fas fa-lock" />
-                &nbsp;
+                {room.cost && position === 0 && room.cost > money && (
+                  <>
+                    <i className="fas fa-lock" />
+                    &nbsp;
+                  </>
+                )}
+                {card.text_btn}
               </>
             )}
-            {card.text_btn}
           </AdventureButton>
         </div>
       </div>

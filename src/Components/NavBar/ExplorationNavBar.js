@@ -29,7 +29,6 @@ class ExplorationNavBar extends Component {
                     src={process.env.PUBLIC_URL + '/img/money.svg'}
                     width="30"
                     height="30"
-                    className="d-inline-block align-top"
                     alt="Thune"
                   />
                 </div>
