@@ -160,11 +160,6 @@ class Exploration extends Component {
     })
   }
 
-  // eslint-disable-next-line
-  handleMovement(index) {
-    // Call API to change position character in exploration
-  }
-
   isNext(col) {
     return _.includes(this.state.nextPossible, col.id)
   }
@@ -180,6 +175,12 @@ class Exploration extends Component {
       scrollIsTop
     } = this.state
     let countExplorations = 0
+    const buildingTypes = {
+      arene: 'Arène',
+      'arene-boss': 'Arène du champion',
+      healer: 'Auberge',
+      dealer: 'Marché'
+    }
 
     if (redirect) {
       return <Redirect to={redirect} />
@@ -219,40 +220,35 @@ class Exploration extends Component {
                 />
                 <div className="mt-3 mb-3 col-sm-12">
                   {this.isNext(boss) && (
-                    <Link
-                      to={`/choice/${boss.type}/${boss.id}`}
-                      onClick={this.handleMovement(boss.id)}
-                    >
-                      <Building
-                        src={
-                          process.env.PUBLIC_URL +
-                          '/img/explorations/' +
-                          boss.type +
-                          '.png'
-                        }
-                        alt={boss.type + '.png'}
-                        width="200px"
-                        data-tip={boss.type}
-                      />
-                    </Link>
+                    <>
+                      <Link to={`/choice/${boss.type}/${boss.id}`}>
+                        <Building
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/img/explorations/' +
+                            boss.type +
+                            '.png'
+                          }
+                          alt={boss.type + '.png'}
+                          width="200px"
+                          data-tip={buildingTypes[boss.type]}
+                        />
+                      </Link>
+                      <ReactTooltip />
+                    </>
                   )}
                   {!this.isNext(boss) && (
-                    <Link
-                      to={`/choice/${boss.type}/${boss.id}`}
-                      onClick={this.handleMovement(boss.id)}
-                    >
-                      <DisabledBuilding
-                        src={
-                          process.env.PUBLIC_URL +
-                          '/img/explorations/' +
-                          boss.type +
-                          '.png'
-                        }
-                        alt={boss.type + '.png'}
-                        width="200px"
-                        data-tip={boss.type}
-                      />
-                    </Link>
+                    <DisabledBuilding
+                      src={
+                        process.env.PUBLIC_URL +
+                        '/img/explorations/' +
+                        boss.type +
+                        '.png'
+                      }
+                      alt={boss.type + '.png'}
+                      width="200px"
+                      data-tip={buildingTypes[boss.type]}
+                    />
                   )}
                 </div>
                 {_.map(this.state.explorations, (explorationRow, index) => (
@@ -279,22 +275,22 @@ class Exploration extends Component {
                           />
                         )}
                         {this.isNext(col) && (
-                          <Link
-                            to={`/choice/${col.type}/${col.id}`}
-                            onClick={this.handleMovement(col.id)}
-                          >
-                            <Building
-                              src={
-                                process.env.PUBLIC_URL +
-                                '/img/explorations/' +
-                                col.type +
-                                '.png'
-                              }
-                              alt={col.type + '.png'}
-                              width="100px"
-                              data-tip={col.type}
-                            />
-                          </Link>
+                          <>
+                            <Link to={`/choice/${col.type}/${col.id}`}>
+                              <Building
+                                src={
+                                  process.env.PUBLIC_URL +
+                                  '/img/explorations/' +
+                                  col.type +
+                                  '.png'
+                                }
+                                alt={col.type + '.png'}
+                                width="100px"
+                                data-tip={buildingTypes[col.type]}
+                              />
+                            </Link>
+                            <ReactTooltip />
+                          </>
                         )}
                         {character.position !== col.id && !this.isNext(col) && (
                           <DisabledBuilding
@@ -306,7 +302,7 @@ class Exploration extends Component {
                             }
                             alt={col.type + '.png'}
                             width="100px"
-                            data-tip={col.type}
+                            data-tip={buildingTypes[col.type]}
                           />
                         )}
                         {_.includes(nextPossible, col.id) &&
