@@ -77,7 +77,7 @@ class Guild extends Component {
     super(props)
 
     this.state = {
-      id: parseInt(this.props.match.params.idguild),
+      id: parseInt(this.props.match.params.idGuild),
       user: undefined,
       error: undefined,
       loading: true,
@@ -337,7 +337,7 @@ class Guild extends Component {
 Guild.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      idguild: PropTypes.string
+      idGuild: PropTypes.string
     }).isRequired
   }).isRequired
 }

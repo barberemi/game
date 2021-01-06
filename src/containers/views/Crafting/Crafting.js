@@ -90,8 +90,10 @@ class Crafting extends Component {
           loading: false,
           character: responses[0].data,
           boss: responses[1].data.items,
-          selectedBoss: this.state.idboss
-            ? _.find(responses[1].data.items, { id: this.state.idboss })
+          selectedBoss: parseInt(this.props.match.params.idBoss)
+            ? _.find(responses[1].data.items, {
+                id: parseInt(this.props.match.params.idBoss)
+              })
             : _.first(responses[1].data.items)
         })
       })
@@ -427,7 +429,7 @@ class Crafting extends Component {
 Crafting.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      idboss: PropTypes.string
+      idBoss: PropTypes.string
     }).isRequired
   }).isRequired
 }

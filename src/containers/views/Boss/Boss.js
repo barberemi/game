@@ -80,7 +80,7 @@ class Boss extends Component {
 
     this.state = {
       loading: true,
-      id: parseInt(this.props.match.params.idboss),
+      id: parseInt(this.props.match.params.idBoss),
       boss: undefined,
       activatedTab: 'generalTab',
       selectedBoss: undefined
@@ -331,7 +331,7 @@ class Boss extends Component {
 Boss.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      idboss: PropTypes.string
+      idBoss: PropTypes.string
     }).isRequired
   }).isRequired
 }

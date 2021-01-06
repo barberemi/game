@@ -67,7 +67,7 @@ class Character extends Component {
     super(props)
 
     this.state = {
-      id: parseInt(this.props.match.params.idcharacter),
+      id: parseInt(this.props.match.params.idCharacter),
       error: undefined,
       loading: true,
       character: undefined,
@@ -559,7 +559,7 @@ class Character extends Component {
 Character.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      idcharacter: PropTypes.string
+      idCharacter: PropTypes.string
     }).isRequired
   }).isRequired
 }

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
-import _ from 'lodash'
-import { character } from '../../../utils/character'
-import { boss } from '../../../utils/boss'
+import { Link, Redirect } from 'react-router-dom'
 import ProgressBar from '../../../Components/Character/ProgressBar'
 import Title from '../../../Components/Title/Title'
 import ItemList from '../../../Components/Item/ItemList'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import Loader from '../../../Components/Loader/Loader'
+import PropTypes from 'prop-types'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/181/600/large/yarki-studio-artstation-3.jpg');
@@ -45,16 +47,52 @@ const Character = styled.div`
   padding-top: 10px;
 `
 
-const Name = styled.div`
-  text-align: left;
+const Versus = styled.img`
+  margin-left: 20px;
+  margin-right: 20px;
 `
 
-const Avatar = styled.img`
-  width: 50px;
-  height: 50px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background-color: #fff;
+const LevelWin = styled.div`
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  top: 40%;
+  left: 40%;
+  width: 230px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  position: fixed;
+  border: 1px solid #ffc312;
+  border-radius: 5px;
+  transform: scale(1);
+  animation: pulse 2s infinite;
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
+`
+
+const Button = styled.button`
+  color: #000;
+  background-color: #ffc312;
+  margin-top: 10px;
+
+  &:hover {
+    color: black;
+    background-color: white;
+  }
 `
 
 class Reward extends Component {
@@ -62,74 +100,200 @@ class Reward extends Component {
     super(props)
 
     this.state = {
-      character,
-      boss: boss[0]
+      id: parseInt(this.props.match.params.idFight),
+      error: undefined,
+      loading: true,
+      monster: undefined,
+      user: undefined,
+      type: undefined,
+      redirect: undefined,
+      levelUp: false
     }
   }
 
+  componentDidMount() {
+    axios
+      .get(process.env.REACT_APP_API_URL + '/fights/' + this.state.id + '/0', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
+      })
+      .then((response) => {
+        if (response.data) {
+          const levelUp =
+            response.data.user.experience - response.data.monster.givenXp <
+            response.data.user.xpToActualLevel
+
+          this.setState({
+            loading: false,
+            monster: response.data.monster,
+            user: response.data.user,
+            type: response.data.type,
+            redirect:
+              response.data.type === 'waiting'
+                ? response.data.user.exploration
+                  ? '/exploration'
+                  : '/maps'
+                : undefined,
+            items: response.data.items,
+            levelUp: levelUp
+          })
+          if (levelUp) {
+            setTimeout(() => {
+              this.setState({
+                levelUp: false
+              })
+            }, 3000)
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        this.setState({
+          loading: false,
+          error: error.response.data
+        })
+      })
+  }
+
   render() {
-    const { character, boss } = this.state
+    const {
+      loading,
+      error,
+      redirect,
+      levelUp,
+      monster,
+      user,
+      items,
+      type
+    } = this.state
+
+    if (redirect) {
+      return <Redirect to={redirect} />
+    }
 
     return (
       <Container className="container-fluid">
+        {loading && <Loader />}
         <div className="container">
+          {user && monster && type === 'won' && levelUp && (
+            <LevelWin>
+              <Title>
+                <span style={{ color: 'white' }}>
+                  Bravo !<br />
+                  Gain de niveau.
+                </span>
+                <br />
+                <span style={{ fontSize: '50px' }}>
+                  {user.level - 1} &gt; {user.level}
+                </span>
+              </Title>
+            </LevelWin>
+          )}
+          {error && (
+            <span className="text-danger">
+              <b>Erreur :</b> {error.error}
+            </span>
+          )}
           <div className="row h-100 mt-5">
             <Box className="col-sm-12 my-auto">
               <Card className="card">
-                <div className="card-header">
-                  <Title>
-                    Victoire <SubTitle>(22 tours)</SubTitle>
-                    <br />
-                    <span className="text-danger">BouBou le petit Bhou</span>
-                    <LevelBox> - Niv {character.level}</LevelBox>
-                  </Title>
-                </div>
-                <div className="card-body">
-                  <div className="col-sm-12">
-                    {_.map(character.friends, (friend, index) => (
-                      <Character key={index} className="col-sm-12">
-                        <Name className="col-sm-4 mt-2">
-                          {friend.academy && (
-                            <>
-                              <Avatar
-                                src={
-                                  process.env.PUBLIC_URL +
-                                  '/img/academies/' +
-                                  friend.academy.name +
-                                  '.png'
-                                }
-                                alt={friend.name}
+                {user && monster && (
+                  <>
+                    <div className="card-header">
+                      <Title>
+                        <span
+                          className={
+                            type === 'lost' ? 'text-danger' : 'text-success'
+                          }
+                        >
+                          {type === 'lost' ? 'Défaite' : 'Victoire'}{' '}
+                        </span>
+                        <SubTitle>(22 tours)</SubTitle>
+                        <br />
+                        {monster.name}{' '}
+                        <span style={{ color: monster.academy.color }}>
+                          ({monster.academy.label})
+                        </span>
+                        <LevelBox> - Niv {user.level}</LevelBox>
+                        <br />
+                        <img
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/img/academies/' +
+                            user.academy.name +
+                            '.png'
+                          }
+                          height="90px"
+                          width="90px"
+                          alt="Avatar mon personnage"
+                        />
+                        <Versus
+                          src={process.env.PUBLIC_URL + '/img/versus.svg'}
+                          width="30px"
+                          height="30px"
+                          alt="versus"
+                        />
+                        <img
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/img/boss/' +
+                            monster.image
+                          }
+                          height="100px"
+                          width="100px"
+                          alt="Avatar monstre"
+                        />
+                      </Title>
+                    </div>
+                    {type === 'won' && (
+                      <div className="card-body">
+                        <Title>Récompenses de bataille</Title>
+                        <div className="col-sm-12">
+                          <Character className="col-sm-12">
+                            <div className="col-sm-4">
+                              <div>
+                                Niv {user.level} (+ {monster.givenXp}xp)
+                              </div>
+                              <ProgressBar
+                                actual={user.experience - user.xpToActualLevel}
+                                max={user.xpToNextLevel - user.xpToActualLevel}
+                                color="#FFC312"
+                                transparentColor="#7F8286"
                               />
-                              &nbsp;
-                            </>
-                          )}
-                          (Niv {friend.level}) {friend.name}
-                        </Name>
-                        <div className="col-sm-2 mt-3">
-                          Expérience
-                          <ProgressBar
-                            actual={350}
-                            max={1200}
-                            color="#DC3545"
-                            transparentColor="#e09a9a"
-                          />
+                            </div>
+                            <div className="col-sm-3 mt-3">
+                              <img
+                                src={process.env.PUBLIC_URL + '/img/money.svg'}
+                                width="30"
+                                height="30"
+                                alt="Thune"
+                              />
+                              <div>{monster.givenMoney} thunes</div>
+                            </div>
+                            <div className="col-sm-5">
+                              <ItemList
+                                items={items}
+                                displayActions={false}
+                                minusPadding={true}
+                              />
+                            </div>
+                          </Character>
                         </div>
-                        <div className="col-sm-1 mt-3">
-                          <i className="far fa-money-bill-alt" />
-                          <br />
-                          1250
-                        </div>
-                        <div className="col-sm-5">
-                          <ItemList
-                            items={boss.items}
-                            displayActions={false}
-                            minusPadding={true}
-                          />
-                        </div>
-                      </Character>
-                    ))}
-                  </div>
-                </div>
+                      </div>
+                    )}
+                    <div className="card-footer">
+                      <Link to={user.exploration ? '/exploration' : '/maps'}>
+                        <Button className="btn">
+                          {user.exploration
+                            ? "Continuer l'exploration"
+                            : 'Nouvelle exploration'}
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
+                )}
               </Card>
             </Box>
           </div>
@@ -138,4 +302,13 @@ class Reward extends Component {
     )
   }
 }
+
+Reward.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      idFight: PropTypes.string
+    }).isRequired
+  }).isRequired
+}
+
 export default Reward

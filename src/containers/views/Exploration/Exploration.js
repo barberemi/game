@@ -103,7 +103,7 @@ class Exploration extends Component {
             response.data.fights &&
             response.data.fights[0].type === 'waiting'
           ) {
-            this.setState({ redirect: '/fight' })
+            this.setState({ redirect: '/fight/' + response.data.fights[0].id })
           } else {
             // 2 - Generate exploration
             const results = response.data.exploration

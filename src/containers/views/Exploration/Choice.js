@@ -39,7 +39,7 @@ class Choice extends Component {
 
     this.state = {
       type: this.props.match.params.type,
-      explorationId: parseInt(this.props.match.params.explorationId),
+      idExploration: parseInt(this.props.match.params.idExploration),
       user: undefined,
       loading: true,
       redirect: undefined,
@@ -68,7 +68,7 @@ class Choice extends Component {
             response.data.fights &&
             response.data.fights[0].type === 'waiting'
           ) {
-            this.setState({ redirect: '/fight' })
+            this.setState({ redirect: '/fight/' + response.data.fights[0].id })
           }
 
           // 2 - Get room
@@ -82,7 +82,7 @@ class Choice extends Component {
             ) {
               _.map(row, (col) => {
                 // 2.1 - Store the room
-                if (col.id === this.state.explorationId) {
+                if (col.id === this.state.idExploration) {
                   room = col
                 }
                 // 2.2 - Url dont exists on rooms of user exploration
@@ -92,7 +92,7 @@ class Choice extends Component {
                     Object.keys(response.data.exploration).length
                   ].position
                 ) {
-                  if (!_.includes(col.next, this.state.explorationId)) {
+                  if (!_.includes(col.next, this.state.idExploration)) {
                     this.setState({ redirect: '/exploration' })
                   }
                 }
@@ -209,10 +209,8 @@ class Choice extends Component {
 
   handleClick = (card) => {
     if (card.action === 'fight-boss') {
-      // TODO : fight boss API
       this.createFight(true)
     } else if (card.action === 'fight') {
-      // TODO : fight API
       this.createFight(false)
     } else if (card.action === 'deal') {
       if (
@@ -262,12 +260,12 @@ class Choice extends Component {
   }
 
   setUserAndRedirect = (redirect, healing, dealing) => {
-    const { explorationId, user, room } = this.state
+    const { idExploration, user, room } = this.state
 
     // 1 - Change position
     user.exploration[
       Object.keys(user.exploration)[Object.keys(user.exploration).length - 1]
-    ].position = explorationId
+    ].position = idExploration
 
     // 2.1 - Change money + add item
     if (dealing) {
@@ -396,7 +394,7 @@ Choice.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       type: PropTypes.string,
-      explorationId: PropTypes.string
+      idExploration: PropTypes.string
     }).isRequired
   }).isRequired
 }
