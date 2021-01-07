@@ -24,7 +24,7 @@ class Avatar extends Component {
       <div className={this.animation()}>
         <img
           className={this.props.className}
-          src={process.env.PUBLIC_URL + '/img/' + this.props.logoName + '.png'}
+          src={process.env.PUBLIC_URL + '/img/' + this.props.logoName}
           alt={this.props.logoName}
         />
       </div>

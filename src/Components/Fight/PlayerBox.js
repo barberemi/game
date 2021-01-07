@@ -19,9 +19,9 @@ export class PlayerBox extends Component {
     return (
       <div
         id="hero-container"
-        className={
-          this.props.player.isSelectable ? 'hero-container-selected' : null
-        }
+        className={`col-sm-3${
+          this.props.player.isSelectable ? ' hero-container-selected' : ''
+        }`}
         onClick={() => this.props.onClick(this.props.player)}
       >
         <div id="hero-info-box">
@@ -39,7 +39,7 @@ export class PlayerBox extends Component {
           <Avatar
             faint={this.props.player.faint}
             isHit={this.props.player.isHit}
-            logoName={this.props.player.name.toLowerCase()}
+            logoName={'academies/' + this.props.player.image + '.png'}
             className={`avatar mt-5 ${
               this.props.player.isSelectable ? 'hero-hover-selected' : ''
             }`}
@@ -75,7 +75,7 @@ PlayerBox.propTypes = {
     faint: PropTypes.bool,
     isHit: PropTypes.bool,
     isSelectable: PropTypes.bool,
-    actions: PropTypes.array,
+    skills: PropTypes.array,
     dot: PropTypes.array,
     hot: PropTypes.array
   }),

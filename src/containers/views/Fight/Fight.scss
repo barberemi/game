@@ -6,8 +6,7 @@
   -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
   filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
   -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
-  width: 70%;
-  height: 70%;
+  height: 200px;
 }
 
 .avatar-effect {
@@ -20,7 +19,6 @@
 
 #enemy-container {
   justify-content: space-between;
-  margin-left: 10%;
   text-align: center;
 }
 

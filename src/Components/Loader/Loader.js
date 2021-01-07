@@ -191,7 +191,7 @@ const Text = styled.div`
 class Loader extends Component {
   render() {
     return (
-      <Container>
+      <Container className="col-sm-12">
         <Main>
           <ShadowWrapper>
             <Shadow />

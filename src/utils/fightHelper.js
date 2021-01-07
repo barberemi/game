@@ -97,13 +97,13 @@ export const enemyMovementAction = (players, idPlayerMove, enemy) => {
 // When an enemy bloc a skill of a player from the battle
 export const enemyBlockAction = (players, idPlayerMove, enemy) => {
   const idSkillBlock = Math.floor(
-    Math.random() * players[idPlayerMove].actions.length
+    Math.random() * players[idPlayerMove].skills.length
   )
-  const textMessageOne = `${enemy.name} utilise ${enemy.expectedAction.name} sur ${players[idPlayerMove].name}, lui inflige ${enemy.expectedAction.amount}pts de dégats et lui bloque la compétence ${players[idPlayerMove].actions[idSkillBlock].name} pour ${enemy.expectedAction.duration} tours.`
-  const actions = [...players[idPlayerMove].actions]
+  const textMessageOne = `${enemy.name} utilise ${enemy.expectedAction.name} sur ${players[idPlayerMove].name}, lui inflige ${enemy.expectedAction.amount}pts de dégats et lui bloque la compétence ${players[idPlayerMove].skills[idSkillBlock].name} pour ${enemy.expectedAction.duration} tours.`
+  const skills = [...players[idPlayerMove].skills]
 
-  actions[idSkillBlock] = {
-    ...actions[idSkillBlock],
+  skills[idSkillBlock] = {
+    ...skills[idSkillBlock],
     nbBlockedTurns: enemy.expectedAction.duration
   }
 
@@ -114,7 +114,7 @@ export const enemyBlockAction = (players, idPlayerMove, enemy) => {
       players[idPlayerMove].hp - enemy.expectedAction.amount <= 0
         ? 0
         : players[idPlayerMove].hp - enemy.expectedAction.amount,
-    actions
+    skills
   }
 
   return { players, textMessageOne }
@@ -166,11 +166,11 @@ export const enemyTurnFinished = (enemy) => {
 
 // When a turn is ended and decrement all blocked skills
 export const decrementBlockedSkill = (user) => {
-  for (let j = 0; j < user.actions.length; j++) {
-    user.actions[j].nbBlockedTurns =
-      user.actions[j].nbBlockedTurns === 0
+  for (let j = 0; j < user.skills.length; j++) {
+    user.skills[j].nbBlockedTurns =
+      user.skills[j].nbBlockedTurns === 0
         ? 0
-        : user.actions[j].nbBlockedTurns - 1
+        : user.skills[j].nbBlockedTurns - 1
   }
 
   return user

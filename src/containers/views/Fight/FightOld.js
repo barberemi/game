@@ -16,117 +16,57 @@ import {
   userTakeDot,
   userTakeHot
 } from '../../../utils/fightHelper'
-import PropTypes from 'prop-types'
-import axios from 'axios'
-import Cookies from 'js-cookie'
-import Loader from '../../../Components/Loader/Loader'
-import { Redirect } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
+import { characters } from '../../../utils/characters'
 
 class Fight extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      id: parseInt(this.props.match.params.idFight),
-      error: undefined,
-      loading: true,
-      redirect: undefined,
-      enemy: undefined,
-      players: undefined,
-      textMessageOne: '',
-      textMessageTwo: '',
-      playerActionSelectable: undefined,
-      round: 1,
-      gameOver: false
-    }
+    this.state = characters
   }
 
   componentDidMount() {
-    axios
-      .get(process.env.REACT_APP_API_URL + '/fights/' + this.state.id + '/1', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get('auth-token')}`
-        }
-      })
-      .then((response) => {
-        if (response.data) {
-          if (
-            response.data.type !== 'waiting' ||
-            jwtDecode(Cookies.get('auth-token')).email !==
-              response.data.user.email
-          ) {
-            this.setState({ redirect: '/maps' })
-          } else {
-            this.setState({
-              loading: false,
-              players: [
-                {
-                  ...response.data.user,
-                  faint: undefined,
-                  isHit: false,
-                  isSelectable: false,
-                  hot: [],
-                  dot: []
-                }
-              ],
-              enemy: {
-                ...response.data.monster,
-                faint: undefined,
-                isHit: false,
-                hot: [],
-                dot: [],
-                expectedAction: undefined
-              }
-            })
-            setTimeout(() => {
-              this.setState(
-                () => {
-                  return {
-                    textMessageOne: `${this.state.enemy.name} apparait!`,
-                    enemy: {
-                      ...this.state.enemy,
-                      faint: null
-                    }
-                  }
-                },
-                () => {
-                  setTimeout(() => {
-                    const players = [...this.state.players]
-                    for (let i = 0; i < this.state.players.length; i++) {
-                      players[i] = { ...players[i], faint: null }
-                      // Me
-                      if (i === 0) {
-                        players[i] = { ...players[i], me: true }
-                      }
-                    }
-
-                    this.setState(
-                      {
-                        textMessageOne: 'Vous entrez pour le combattre !',
-                        players
-                      },
-                      () => {
-                        setTimeout(() => {
-                          this.setState({
-                            textMessageOne: ''
-                          })
-
-                          this.nextEnemyAction()
-                        }, 3000)
-                      }
-                    )
-                  }, 3000)
-                }
-              )
-            }, 1000)
+    setTimeout(() => {
+      this.setState(
+        () => {
+          return {
+            textMessageOne: `${this.state.enemy.name} apparait!`,
+            enemy: {
+              ...this.state.enemy,
+              faint: null
+            }
           }
+        },
+        () => {
+          setTimeout(() => {
+            const players = [...this.state.players]
+            for (let i = 0; i < this.state.players.length; i++) {
+              players[i] = { ...players[i], faint: null }
+              // Me
+              if (i === 0) {
+                players[i] = { ...players[i], me: true }
+              }
+            }
+
+            this.setState(
+              {
+                textMessageOne: 'Vous entrez pour le combattre !',
+                players
+              },
+              () => {
+                setTimeout(() => {
+                  this.setState({
+                    textMessageOne: ''
+                  })
+
+                  this.nextEnemyAction()
+                }, 3000)
+              }
+            )
+          }, 3000)
         }
-      })
-      .catch(() => {
-        this.setState({ redirect: '/maps' })
-      })
+      )
+    }, 1000)
   }
 
   nextEnemyAction() {
@@ -234,7 +174,6 @@ class Fight extends Component {
                     this.setState({
                       gameOver: true
                     })
-                    this.fightFinished('lost')
                   }, 3000)
                 }
               )
@@ -276,7 +215,6 @@ class Fight extends Component {
             this.setState({
               gameOver: true
             })
-            this.fightFinished('won')
           }, 3000)
         }
       )
@@ -535,124 +473,73 @@ class Fight extends Component {
     }
   }
 
-  fightFinished = (type) => {
-    axios
-      .put(
-        process.env.REACT_APP_API_URL + '/fights/' + this.state.id,
-        {
-          round: this.state.round,
-          type: type
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('auth-token')}`
-          }
-        }
-      )
-      .then((response) => {
-        if (response.data) {
-          this.setState({ redirect: '/reward/' + this.state.id })
-        }
-      })
-      .catch((error) => {
-        this.setState({
-          error: error.response.status
-        })
-      })
-  }
-
   render() {
-    const { redirect, loading, error, players, enemy } = this.state
-
-    if (redirect) {
-      return <Redirect to={redirect} />
-    }
-
     return (
       <div className="container h-100">
-        <div className="row h-100 align-middle">
-          {loading && <Loader />}
+        <div className="row h-100">
           {/* BATTLE SCREEN CONTAINER */}
-          {error && (
-            <span className="text-danger">
-              <b>Erreur :</b> {error.error}
-            </span>
-          )}
-          {players && enemy && (
-            <div className="col-sm-12">
-              <div id="turn-text-number">
-                <i className="fas fa-dice" /> Tour {this.state.round}
-              </div>
-              <div className="all-players-box col-sm-12">
-                {_.map(this.state.players, (player) => (
-                  <PlayerBox
-                    key={player.name}
-                    player={player}
-                    onClick={
-                      player.isSelectable
-                        ? this.handleClickOnPlayerToAction
-                        : () => {
-                            return null
-                          }
-                    }
-                  />
-                ))}
-
-                <EnemyBox
-                  enemy={this.state.enemy}
-                  expectedAction={this.state.enemy.expectedAction}
-                />
-              </div>
-
-              {/* TEXT BOX SECTION */}
-              <div id="text-box">
-                <div id="text-box-content">
-                  {this.state.textMessageOne !== '' &&
-                    this.state.gameOver === false && (
-                      <TextBox
-                        messageOne={this.state.textMessageOne}
-                        messageTwo={this.state.textMessageTwo}
-                      />
-                    )}
-
-                  {this.state.textMessageOne === '' &&
-                    this.state.gameOver === false &&
-                    Object.keys(_.find(this.state.players, 'me').skills).map(
-                      (key) => {
-                        return (
-                          <Actions
-                            key={key}
-                            frontPlayer={
-                              _.find(this.state.players, 'me') ===
-                              _.last(this.state.players)
-                            }
-                            action={
-                              _.find(this.state.players, 'me').skills[key]
-                            }
-                            onClick={this.handleClickOnActionBar}
-                          />
-                        )
-                      }
-                    )}
-                </div>
-              </div>
-              {/* TEXT BOX SECTION */}
+          <div className="col-sm-12">
+            <div id="turn-text-number">
+              <i className="fas fa-dice" /> Tour {this.state.round}
             </div>
-          )}
+            <div className="all-players-box">
+              {_.map(this.state.players, (player) => (
+                <PlayerBox
+                  key={player.name}
+                  player={player}
+                  onClick={
+                    player.isSelectable
+                      ? this.handleClickOnPlayerToAction
+                      : () => {
+                          return null
+                        }
+                  }
+                />
+              ))}
+
+              <EnemyBox
+                enemy={this.state.enemy}
+                expectedAction={this.state.enemy.expectedAction}
+              />
+            </div>
+
+            {/* TEXT BOX SECTION */}
+            <div id="text-box">
+              <div id="text-box-content">
+                {this.state.textMessageOne !== '' &&
+                  this.state.gameOver === false && (
+                    <TextBox
+                      messageOne={this.state.textMessageOne}
+                      messageTwo={this.state.textMessageTwo}
+                    />
+                  )}
+
+                {this.state.textMessageOne === '' &&
+                  this.state.gameOver === false &&
+                  Object.keys(_.find(this.state.players, 'me').skills).map(
+                    (key) => {
+                      return (
+                        <Actions
+                          key={key}
+                          frontPlayer={
+                            _.find(this.state.players, 'me') ===
+                            _.last(this.state.players)
+                          }
+                          action={_.find(this.state.players, 'me').skills[key]}
+                          onClick={this.handleClickOnActionBar}
+                        />
+                      )
+                    }
+                  )}
+              </div>
+            </div>
+            {/* TEXT BOX SECTION */}
+          </div>
           {/* END BATTLE SCREEN CONTAINER */}
         </div>
       </div>
     )
   }
-}
-
-Fight.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      idFight: PropTypes.string
-    }).isRequired
-  }).isRequired
 }
 
 export default Fight

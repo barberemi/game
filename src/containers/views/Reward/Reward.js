@@ -106,6 +106,7 @@ class Reward extends Component {
       monster: undefined,
       user: undefined,
       type: undefined,
+      round: undefined,
       redirect: undefined,
       levelUp: false
     }
@@ -130,6 +131,7 @@ class Reward extends Component {
             monster: response.data.monster,
             user: response.data.user,
             type: response.data.type,
+            round: response.data.round,
             redirect:
               response.data.type === 'waiting'
                 ? response.data.user.exploration
@@ -166,7 +168,8 @@ class Reward extends Component {
       monster,
       user,
       items,
-      type
+      type,
+      round
     } = this.state
 
     if (redirect) {
@@ -210,7 +213,9 @@ class Reward extends Component {
                         >
                           {type === 'lost' ? 'Défaite' : 'Victoire'}{' '}
                         </span>
-                        <SubTitle>(22 tours)</SubTitle>
+                        <SubTitle>
+                          ({round} {round > 1 ? 'tours' : 'tour'})
+                        </SubTitle>
                         <br />
                         {monster.name}{' '}
                         <span style={{ color: monster.academy.color }}>

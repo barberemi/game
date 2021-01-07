@@ -9,7 +9,7 @@ export const characters = {
       faint: undefined,
       isHit: false,
       isSelectable: false,
-      actions: [
+      skills: [
         { name: 'Morsure', amount: 30, effect: 'melee', nbBlockedTurns: 0 },
         {
           name: 'Eclair continue',
@@ -51,7 +51,7 @@ export const characters = {
       faint: undefined,
       isHit: false,
       isSelectable: false,
-      actions: [
+      skills: [
         { name: 'Morsure', amount: 10, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Eclair', amount: 30, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Tonnerre', amount: 35, effect: 'melee', nbBlockedTurns: 0 },
@@ -69,7 +69,7 @@ export const characters = {
       faint: undefined,
       isHit: false,
       isSelectable: false,
-      actions: [
+      skills: [
         { name: 'Morsure', amount: 10, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Eclair', amount: 30, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Tonnerre', amount: 35, effect: 'melee', nbBlockedTurns: 0 },
@@ -87,7 +87,7 @@ export const characters = {
       faint: undefined,
       isHit: false,
       isSelectable: false,
-      actions: [
+      skills: [
         { name: 'Morsure', amount: 10, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Eclair', amount: 30, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Tonnerre', amount: 35, effect: 'melee', nbBlockedTurns: 0 },
@@ -105,7 +105,7 @@ export const characters = {
       faint: undefined,
       isHit: false,
       isSelectable: false,
-      actions: [
+      skills: [
         { name: 'Morsure', amount: 10, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Eclair', amount: 30, effect: 'melee', nbBlockedTurns: 0 },
         { name: 'Tonnerre', amount: 35, effect: 'melee', nbBlockedTurns: 0 },
@@ -122,7 +122,7 @@ export const characters = {
     maxHp: 600,
     faint: undefined,
     isHit: false,
-    actions: [
+    skills: [
       { name: 'Frappe', amount: 50, effect: 'melee' },
       { name: "Blocage de l'ombre", amount: 300, effect: 'dot', duration: 5 },
       { name: "Soin de l'ombre", amount: 50, effect: 'hot', duration: 3 },

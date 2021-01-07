@@ -249,7 +249,7 @@ class Choice extends Component {
       )
       .then((response) => {
         if (response.data) {
-          this.setUserAndRedirect('/fight', false, false)
+          this.setUserAndRedirect('/fight/' + response.data.id, false, false)
         }
       })
       .catch((error) => {
