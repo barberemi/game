@@ -100,6 +100,7 @@ class Guild extends Component {
         if (response.data) {
           if (!response.data.guild) {
             this.setState({
+              loading: false,
               error: {
                 message: "Vous n'êtes dans aucune guilde pour le moment."
               }

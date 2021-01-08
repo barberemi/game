@@ -62,6 +62,23 @@ const SubTitle = styled.span`
   font-size: 18px;
 `
 
+const FormAddUser = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`
+
+const InputEmail = styled.input`
+  width: 350px;
+`
+
+const AddUserButton = styled.button`
+  border-radius: inherit;
+
+  &:hover {
+    transform: inherit;
+  }
+`
+
 class Character extends Component {
   constructor(props) {
     super(props)
@@ -72,8 +89,11 @@ class Character extends Component {
       loading: true,
       character: undefined,
       isMe: false,
+      userToAdd: '',
       activatedTab: 'generalTab'
     }
+
+    this.handleAddDeleteUser = this.handleAddDeleteUser.bind(this)
   }
 
   componentDidMount() {
@@ -105,6 +125,51 @@ class Character extends Component {
           error: error.response.data
         })
       })
+  }
+
+  handleAddDeleteUser(type) {
+    if (this.state.userToAdd) {
+      axios[type === 'add' ? 'post' : 'put'](
+        process.env.REACT_APP_API_URL + '/users/' + this.state.id + '/friends',
+        {
+          email: this.state.userToAdd
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+        .then((response) => {
+          toast[type === 'add' ? 'success' : 'error'](
+            <span style={{ fontSize: '14px' }}>
+              {type === 'add'
+                ? 'Ajout du lien d’amitié avec '
+                : 'Suppression du lien d’amité avec '}
+              {this.state.userToAdd} !
+            </span>,
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            }
+          )
+          this.setState({
+            character: response.data,
+            userToAdd: ''
+          })
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.status
+          })
+        })
+    }
   }
 
   onClickOnTab = (idTab) => {
@@ -499,9 +564,43 @@ class Character extends Component {
                     <Card className="card">
                       <div className="card-body">
                         <div className="col-sm-12">
+                          <Title>Ajouter des amis</Title>
+                        </div>
+                        <div className="offset-sm-3 col-sm-6">
+                          <FormAddUser>
+                            <InputEmail
+                              id="email"
+                              name="email"
+                              type="text"
+                              placeholder="Email"
+                              value={this.state.userToAdd}
+                              onChange={(event) =>
+                                this.setState({ userToAdd: event.target.value })
+                              }
+                            />
+                            <AddUserButton
+                              className="btn btn-success"
+                              type="button"
+                              onClick={() => this.handleAddDeleteUser('add')}
+                            >
+                              Ajouter un ami
+                            </AddUserButton>
+                          </FormAddUser>
+                        </div>
+                        <div className="col-sm-12 mt-3">
                           <Title>Liste d’amis</Title>
                         </div>
-                        <FriendList friends={character.friends} />
+                        <FriendList
+                          friends={character.friends}
+                          onDelete={(friend) => {
+                            this.setState(
+                              {
+                                userToAdd: friend.email
+                              },
+                              () => this.handleAddDeleteUser('delete')
+                            )
+                          }}
+                        />
                       </div>
                     </Card>
                   </div>

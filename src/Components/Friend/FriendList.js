@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import _ from 'lodash'
+import ReactTooltip from 'react-tooltip'
+import { Link } from 'react-router-dom'
 
 const Container = styled.div`
-  max-height: 70vh;
-  min-height: 70vh;
+  max-height: 60vh;
+  min-height: 60vh;
   overflow-y: scroll;
 `
 
@@ -13,7 +15,7 @@ const Friend = styled.div`
   display: flex;
   float: left;
   width: 100%;
-  padding-top: 10px;
+  padding-top: 20px;
 `
 
 const Name = styled.div`
@@ -34,7 +36,7 @@ const Avatar = styled.img`
 `
 
 const IconAction = styled.span`
-  padding-right: 10px;
+  padding-right: 15px;
 
   &:hover {
     cursor: pointer;
@@ -67,19 +69,22 @@ class FriendList extends Component {
               (Niv {friend.level}) {friend.name}
             </Name>
             <Actions className="col-sm-3">
-              <IconAction data-tip="Visualiser">
-                <i className="far fa-address-card" />
-              </IconAction>
-              <IconAction data-tip="Grouper">
-                <i className="fas fa-user-friends" />
-              </IconAction>
+              <Link to={'/character/' + friend.id}>
+                <IconAction data-tip="Visualiser">
+                  <i className="far fa-address-card text-success" />
+                </IconAction>
+              </Link>
               <IconAction data-tip="Discuter">
                 <i className="far fa-comment" />
               </IconAction>
-              <IconAction data-tip="Supprimer">
+              <IconAction
+                data-tip="Supprimer"
+                onClick={() => this.props.onDelete(friend)}
+              >
                 <i className="fas fa-times text-danger" />
               </IconAction>
             </Actions>
+            <ReactTooltip />
           </Friend>
         ))}
       </Container>
@@ -95,7 +100,8 @@ FriendList.propTypes = {
       level: PropTypes.number,
       image: PropTypes.string
     })
-  )
+  ),
+  onDelete: PropTypes.func
 }
 
 export default FriendList
