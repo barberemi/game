@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
+import { Redirect } from 'react-router-dom'
 import FriendList from '../../../Components/Friend/FriendList'
 import Title from '../../../Components/Title/Title'
 import axios from 'axios'
@@ -8,6 +9,7 @@ import Cookies from 'js-cookie'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import Loader from '../../../Components/Loader/Loader'
+import { toast } from 'react-toastify'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -50,7 +52,6 @@ const Image = styled.img`
 const ListingMessages = styled.div`
   overflow-y: scroll;
   padding-bottom: 1.5rem;
-  height: 60vh;
   text-align: left;
 `
 
@@ -72,6 +73,23 @@ const CustomButton = styled.button`
   }
 `
 
+const FormAddUser = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`
+
+const InputEmail = styled.input`
+  width: 350px;
+`
+
+const AddUserButton = styled.button`
+  border-radius: inherit;
+
+  &:hover {
+    transform: inherit;
+  }
+`
+
 class Guild extends Component {
   constructor(props) {
     super(props)
@@ -80,12 +98,15 @@ class Guild extends Component {
       id: parseInt(this.props.match.params.idGuild),
       user: undefined,
       error: undefined,
+      redirect: undefined,
       loading: true,
       guild: undefined,
+      userToAdd: '',
       activatedTab: 'chatTab'
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleAddDeleteUser = this.handleAddDeleteUser.bind(this)
   }
 
   componentDidMount() {
@@ -184,6 +205,60 @@ class Guild extends Component {
       })
   }
 
+  handleAddDeleteUser(type) {
+    if (this.state.userToAdd) {
+      axios
+        .put(
+          process.env.REACT_APP_API_URL +
+            '/guilds/' +
+            this.state.id +
+            '/members',
+          {
+            type: type === 'leave' ? 'delete' : type,
+            email: this.state.userToAdd
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
+          }
+        )
+        .then((response) => {
+          toast[type === 'add' ? 'success' : 'error'](
+            <span style={{ fontSize: '14px' }}>
+              {type === 'add'
+                ? 'Ajout du membre ' + this.state.userToAdd + '!'
+                : type === 'leave'
+                ? 'Vous êtes bien parti de la guilde.'
+                : 'Suppression du membre ' + this.state.userToAdd + '!'}
+            </span>,
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            }
+          )
+          setInterval(() => {
+            this.setState({
+              guild: response.data,
+              redirect: type === 'leave' ? '/guild' : undefined,
+              userToAdd: ''
+            })
+          }, 5000)
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.status
+          })
+        })
+    }
+  }
+
   onClickOnTab = (idTab) => {
     this.setState({
       activatedTab: idTab
@@ -191,7 +266,11 @@ class Guild extends Component {
   }
 
   render() {
-    const { error, loading, guild, activatedTab } = this.state
+    const { error, loading, redirect, guild, user, activatedTab } = this.state
+
+    if (redirect) {
+      return <Redirect to={redirect} />
+    }
 
     return (
       <Container className="container-fluid">
@@ -219,24 +298,44 @@ class Guild extends Component {
                         </span>
                       )}
                     </div>
-                    <div onClick={() => this.onClickOnTab('membersTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'membersTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#membersTab"
-                      >
-                        Membres
-                      </ListLink>
-                      {activatedTab === 'membersTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
+                    {guild && (
+                      <>
+                        <div onClick={() => this.onClickOnTab('membersTab')}>
+                          <ListLink
+                            className={
+                              activatedTab === 'membersTab' ? ' active' : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#membersTab"
+                          >
+                            Membres
+                          </ListLink>
+                          {activatedTab === 'membersTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
+                        <br />
+                        <br />
+                        <div
+                          onClick={() =>
+                            this.setState(
+                              {
+                                userToAdd: user.email
+                              },
+                              () => this.handleAddDeleteUser('leave')
+                            )
+                          }
+                        >
+                          <ListLink className="text-danger" href="#leave">
+                            Quitter la guilde
+                          </ListLink>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -248,22 +347,22 @@ class Guild extends Component {
 
             <RightBox className="col-sm-9 my-auto">
               <div className="tab-content">
-                {error && (
-                  <span className="text-danger">
-                    <b>Erreur :</b> {error.message}
-                  </span>
-                )}
-                {guild && (
-                  <>
-                    {/* General */}
-                    <div
-                      className={`tab-pane${
-                        activatedTab === 'chatTab' ? ' active' : ''
-                      }`}
-                      id="chatTab"
-                      role="tabpanel"
-                    >
-                      <Card className="card">
+                {/* General */}
+                <div
+                  className={`tab-pane${
+                    activatedTab === 'chatTab' ? ' active' : ''
+                  }`}
+                  id="chatTab"
+                  role="tabpanel"
+                >
+                  <Card className="card" style={{ height: '60vh' }}>
+                    {error && (
+                      <span className="text-danger">
+                        <b>Erreur :</b> {error.message}
+                      </span>
+                    )}
+                    {guild && (
+                      <>
                         <div className="card-header">
                           <Title>{guild.name}</Title>
                         </div>
@@ -304,27 +403,76 @@ class Guild extends Component {
                             </form>
                           </div>
                         </div>
-                      </Card>
-                    </div>
+                      </>
+                    )}
+                  </Card>
+                </div>
 
-                    {/* Friends */}
-                    <div
-                      className={`tab-pane${
-                        activatedTab === 'membersTab' ? ' active' : ''
-                      }`}
-                      id="membersTab"
-                      role="tabpanel"
-                    >
-                      <Card className="card">
-                        <div className="card-body">
-                          <div className="col-sm-12">
-                            <Title>Membres de la guilde</Title>
-                          </div>
-                          <FriendList friends={guild.users} />
+                {/* Members */}
+                {guild && (
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'membersTab' ? ' active' : ''
+                    }`}
+                    id="membersTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        {(user.role === 'ROLE_ADMIN' ||
+                          user.role === 'ROLE_GUILD_MASTER') && (
+                          <>
+                            <div className="col-sm-12">
+                              <Title>Ajouter des membres</Title>
+                            </div>
+                            <div className="offset-sm-3 col-sm-6">
+                              <FormAddUser>
+                                <InputEmail
+                                  id="email"
+                                  name="email"
+                                  type="text"
+                                  placeholder="Email"
+                                  value={this.state.userToAdd}
+                                  onChange={(event) =>
+                                    this.setState({
+                                      userToAdd: event.target.value
+                                    })
+                                  }
+                                />
+                                <AddUserButton
+                                  className="btn btn-success"
+                                  type="button"
+                                  onClick={() =>
+                                    this.handleAddDeleteUser('add')
+                                  }
+                                >
+                                  Ajouter
+                                </AddUserButton>
+                              </FormAddUser>
+                            </div>
+                          </>
+                        )}
+                        <div className="col-sm-12 mt-3">
+                          <Title>Membres de la guilde</Title>
                         </div>
-                      </Card>
-                    </div>
-                  </>
+                        <FriendList
+                          friends={guild.users}
+                          canDelete={
+                            user.role === 'ROLE_ADMIN' ||
+                            user.role === 'ROLE_GUILD_MASTER'
+                          }
+                          onDelete={(friend) => {
+                            this.setState(
+                              {
+                                userToAdd: friend.email
+                              },
+                              () => this.handleAddDeleteUser('delete')
+                            )
+                          }}
+                        />
+                      </div>
+                    </Card>
+                  </div>
                 )}
               </div>
             </RightBox>

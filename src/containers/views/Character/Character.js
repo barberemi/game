@@ -129,18 +129,23 @@ class Character extends Component {
 
   handleAddDeleteUser(type) {
     if (this.state.userToAdd) {
-      axios[type === 'add' ? 'post' : 'put'](
-        process.env.REACT_APP_API_URL + '/users/' + this.state.id + '/friends',
-        {
-          email: this.state.userToAdd
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('auth-token')}`
+      axios
+        .put(
+          process.env.REACT_APP_API_URL +
+            '/users/' +
+            this.state.id +
+            '/friends',
+          {
+            type: type,
+            email: this.state.userToAdd
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
           }
-        }
-      )
+        )
         .then((response) => {
           toast[type === 'add' ? 'success' : 'error'](
             <span style={{ fontSize: '14px' }}>
@@ -466,6 +471,7 @@ class Character extends Component {
                           </span>
                           <LevelBox> - Niv {character.level}</LevelBox>
                         </Title>
+                        {character.guild && <div>{character.guild.name}</div>}
                         <ProgressBar
                           actual={
                             character.experience - character.xpToActualLevel
@@ -583,7 +589,7 @@ class Character extends Component {
                               type="button"
                               onClick={() => this.handleAddDeleteUser('add')}
                             >
-                              Ajouter un ami
+                              Ajouter
                             </AddUserButton>
                           </FormAddUser>
                         </div>
@@ -592,6 +598,10 @@ class Character extends Component {
                         </div>
                         <FriendList
                           friends={character.friends}
+                          canDelete={
+                            character.role === 'ROLE_ADMIN' ||
+                            character.role === 'ROLE_GUILD_MASTER'
+                          }
                           onDelete={(friend) => {
                             this.setState(
                               {

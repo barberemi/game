@@ -6,8 +6,8 @@ import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router-dom'
 
 const Container = styled.div`
-  max-height: 60vh;
-  min-height: 60vh;
+  max-height: 65vh;
+  min-height: 65vh;
   overflow-y: scroll;
 `
 
@@ -45,7 +45,7 @@ const IconAction = styled.span`
 
 class FriendList extends Component {
   render() {
-    const { friends } = this.props
+    const { friends, onDelete, canDelete } = this.props
 
     return (
       <Container>
@@ -77,12 +77,14 @@ class FriendList extends Component {
               <IconAction data-tip="Discuter">
                 <i className="far fa-comment" />
               </IconAction>
-              <IconAction
-                data-tip="Supprimer"
-                onClick={() => this.props.onDelete(friend)}
-              >
-                <i className="fas fa-times text-danger" />
-              </IconAction>
+              {canDelete && (
+                <IconAction
+                  data-tip="Supprimer"
+                  onClick={() => onDelete(friend)}
+                >
+                  <i className="fas fa-times text-danger" />
+                </IconAction>
+              )}
             </Actions>
             <ReactTooltip />
           </Friend>
@@ -101,7 +103,8 @@ FriendList.propTypes = {
       image: PropTypes.string
     })
   ),
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  canDelete: PropTypes.bool
 }
 
 export default FriendList
