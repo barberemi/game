@@ -541,6 +541,7 @@ class Fight extends Component {
         process.env.REACT_APP_API_URL + '/fights/' + this.state.id,
         {
           round: this.state.round,
+          hp: this.state.players[0].hp,
           type: type
         },
         {

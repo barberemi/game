@@ -43,7 +43,7 @@ const NavBar = ({ user, children }) => (
   >
     <Row>
       <DisplayFlex className="col-sm-12 text-white">
-        <Brand className="navbar-brand col-sm-1" href="#">
+        <Brand className="navbar-brand col-sm-1" href="/maps">
           <img
             src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
             width="30"

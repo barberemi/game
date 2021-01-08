@@ -108,6 +108,7 @@ class Exploration extends Component {
             // 2 - Generate exploration
             const results = response.data.exploration
             const character = results[Object.keys(results).pop()]
+            character.money = response.data.money
             const boss = results[1]
 
             delete results[1]
@@ -132,16 +133,9 @@ class Exploration extends Component {
 
             // Scroll if didnt see character
             setTimeout(() => {
-              if (
-                this.refMe.current &&
-                !(
-                  this.refMe.current.getBoundingClientRect().top <
-                    window.innerHeight &&
-                  this.refMe.current.getBoundingClientRect().bottom >= 0
-                )
-              ) {
-                this.refScroll.current.scrollTop = this.refScroll.current.scrollHeight
-              }
+              this.refScroll.current.scrollTop =
+                this.refMe.current.getBoundingClientRect().top -
+                (this.refMe.current.getBoundingClientRect().height + 100)
             }, 1000)
           }
         }
@@ -217,6 +211,7 @@ class Exploration extends Component {
                   height="60px"
                   data-tip={boss.name}
                   data-place="bottom"
+                  onClick={() => (this.refScroll.current.scrollTop = 0)}
                 />
                 <div className="mt-3 mb-3 col-sm-12">
                   {this.isNext(boss) && (
@@ -234,6 +229,7 @@ class Exploration extends Component {
                           data-tip={buildingTypes[boss.type]}
                         />
                       </Link>
+                      <PossibleBuildingText>1</PossibleBuildingText>
                       <ReactTooltip />
                     </>
                   )}
