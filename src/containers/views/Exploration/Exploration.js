@@ -100,7 +100,7 @@ class Exploration extends Component {
         if (response.data) {
           // 1 - Check if last fight is waiting
           if (
-            response.data.fights &&
+            response.data.fights[0] &&
             response.data.fights[0].type === 'waiting'
           ) {
             this.setState({ redirect: '/fight/' + response.data.fights[0].id })
