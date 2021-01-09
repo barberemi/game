@@ -6,8 +6,8 @@ import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router-dom'
 
 const Container = styled.div`
-  max-height: 65vh;
-  min-height: 65vh;
+  max-height: 60vh;
+  min-height: 60vh;
   overflow-y: scroll;
 `
 

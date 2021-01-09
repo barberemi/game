@@ -53,6 +53,8 @@ const ListingMessages = styled.div`
   overflow-y: scroll;
   padding-bottom: 1.5rem;
   text-align: left;
+  max-height: 60vh;
+  min-height: 60vh;
 `
 
 const Chat = styled.div`
@@ -496,7 +498,7 @@ class Guild extends Component {
                   id="chatTab"
                   role="tabpanel"
                 >
-                  <Card className="card" style={{ height: '60vh' }}>
+                  <Card className="card">
                     {error && (
                       <span className="text-danger">
                         <b>Erreur :</b> {error.error}
@@ -508,41 +510,39 @@ class Guild extends Component {
                           <Title>{guild.name}</Title>
                         </div>
                         <div className="card-body">
-                          <div className="col-sm-12">
-                            <ListingMessages>
-                              {_.map(guild.messages, (message) => (
-                                <div key={message.id}>
-                                  <strong className="text-warning">
-                                    <i>
-                                      (
-                                      {moment(message.createdAt).format(
-                                        'DD/MM à HH:mm'
-                                      )}
-                                      ){' '}
-                                    </i>
-                                    {message.user.name} :{' '}
-                                  </strong>
-                                  {message.message}
-                                </div>
-                              ))}
-                            </ListingMessages>
-                            <form onSubmit={this.handleSubmit}>
-                              <Chat>
-                                <InputMessage
-                                  id="message"
-                                  name="message"
-                                  type="text"
-                                  placeholder="Votre message..."
-                                />
-                                <CustomButton
-                                  className="btn btn-success"
-                                  type="submit"
-                                >
-                                  Envoyer
-                                </CustomButton>
-                              </Chat>
-                            </form>
-                          </div>
+                          <ListingMessages>
+                            {_.map(guild.messages, (message) => (
+                              <div key={message.id}>
+                                <strong className="text-warning">
+                                  <i>
+                                    (
+                                    {moment(message.createdAt).format(
+                                      'DD/MM à HH:mm'
+                                    )}
+                                    ){' '}
+                                  </i>
+                                  {message.user.name} :{' '}
+                                </strong>
+                                {message.message}
+                              </div>
+                            ))}
+                          </ListingMessages>
+                          <form onSubmit={this.handleSubmit}>
+                            <Chat>
+                              <InputMessage
+                                id="message"
+                                name="message"
+                                type="text"
+                                placeholder="Votre message..."
+                              />
+                              <CustomButton
+                                className="btn btn-success"
+                                type="submit"
+                              >
+                                Envoyer
+                              </CustomButton>
+                            </Chat>
+                          </form>
                         </div>
                       </>
                     )}

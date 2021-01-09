@@ -409,7 +409,7 @@ class Character extends Component {
                           role="tab"
                           href="#itemsTab"
                         >
-                          Objets
+                          Inventaire
                         </ListLink>
                         {activatedTab === 'itemsTab' && (
                           <span className="text-warning">
@@ -428,7 +428,7 @@ class Character extends Component {
                             role="tab"
                             href="#friendsTab"
                           >
-                            Liste d’amis
+                            Amis
                           </ListLink>
                           {activatedTab === 'friendsTab' && (
                             <span className="text-warning">
