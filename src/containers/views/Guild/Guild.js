@@ -78,16 +78,20 @@ const FormAddUser = styled.div`
   justify-content: flex-start;
 `
 
-const InputEmail = styled.input`
+const Input = styled.input`
   width: 350px;
 `
 
-const AddUserButton = styled.button`
+const Button = styled.button`
   border-radius: inherit;
 
   &:hover {
     transform: inherit;
   }
+`
+
+const CreateGuildText = styled.div`
+  padding-top: 50px;
 `
 
 class Guild extends Component {
@@ -100,8 +104,10 @@ class Guild extends Component {
       error: undefined,
       redirect: undefined,
       loading: true,
+      displayLeaveButtons: false,
       guild: undefined,
-      userToAdd: '',
+      memberToAddOrRemove: '',
+      newNameGuild: '',
       activatedTab: 'chatTab'
     }
 
@@ -122,9 +128,7 @@ class Guild extends Component {
           if (!response.data.guild) {
             this.setState({
               loading: false,
-              error: {
-                message: "Vous n'êtes dans aucune guilde pour le moment."
-              }
+              user: response.data
             })
           } else {
             this.setState({
@@ -206,7 +210,7 @@ class Guild extends Component {
   }
 
   handleAddDeleteUser(type) {
-    if (this.state.userToAdd) {
+    if (this.state.memberToAddOrRemove) {
       axios
         .put(
           process.env.REACT_APP_API_URL +
@@ -215,7 +219,7 @@ class Guild extends Component {
             '/members',
           {
             type: type === 'leave' ? 'delete' : type,
-            email: this.state.userToAdd
+            email: this.state.memberToAddOrRemove
           },
           {
             headers: {
@@ -228,10 +232,12 @@ class Guild extends Component {
           toast[type === 'add' ? 'success' : 'error'](
             <span style={{ fontSize: '14px' }}>
               {type === 'add'
-                ? 'Ajout du membre ' + this.state.userToAdd + '!'
+                ? 'Ajout du membre ' + this.state.memberToAddOrRemove + '!'
                 : type === 'leave'
                 ? 'Vous êtes bien parti de la guilde.'
-                : 'Suppression du membre ' + this.state.userToAdd + '!'}
+                : 'Suppression du membre ' +
+                  this.state.memberToAddOrRemove +
+                  '!'}
             </span>,
             {
               position: 'top-right',
@@ -247,13 +253,119 @@ class Guild extends Component {
             this.setState({
               guild: response.data,
               redirect: type === 'leave' ? '/guild' : undefined,
-              userToAdd: ''
+              memberToAddOrRemove: ''
             })
           }, 5000)
         })
         .catch((error) => {
           this.setState({
             error: error.response.status
+          })
+        })
+    }
+  }
+
+  handleCreateGuild() {
+    if (this.state.newNameGuild && this.state.user.money >= 20000) {
+      let guildId = null
+      // 1 - Create the guild
+      axios
+        .post(
+          process.env.REACT_APP_API_URL + '/guilds',
+          {
+            name: this.state.newNameGuild
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
+          }
+        )
+        .then((response) => {
+          // 2 - User lost money and become ROLE_GUILD_MASTER
+          if (response.data) {
+            guildId = response.data.id
+            let data = { money: Number(this.state.user.money) - 20000 }
+            if (this.state.user.role !== 'ROLE_ADMIN') {
+              data = {
+                money: Number(this.state.user.money) - 20000,
+                role: 'ROLE_GUILD_MASTER'
+              }
+            }
+
+            axios
+              .put(
+                process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,
+                data,
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${Cookies.get('auth-token')}`
+                  }
+                }
+              )
+              .then((response) => {
+                // 3 - Add user as member of the guild
+                if (response) {
+                  axios
+                    .put(
+                      process.env.REACT_APP_API_URL +
+                        '/guilds/' +
+                        guildId +
+                        '/members',
+                      {
+                        type: 'add',
+                        email: this.state.user.email
+                      },
+                      {
+                        headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${Cookies.get('auth-token')}`
+                        }
+                      }
+                    )
+                    .then((response) => {
+                      toast.success(
+                        <span style={{ fontSize: '14px' }}>
+                          Création de la guilde {this.state.newNameGuild}{' '}
+                          réalisé avec succès!
+                        </span>,
+                        {
+                          position: 'top-right',
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined
+                        }
+                      )
+                      setInterval(() => {
+                        this.setState({
+                          guild: response.data,
+                          redirect: '/guild',
+                          newNameGuild: ''
+                        })
+                      }, 5000)
+                    })
+                    .catch((error) => {
+                      this.setState({
+                        error: error.response.data
+                      })
+                    })
+                }
+              })
+              .catch((error) => {
+                this.setState({
+                  error: error.response.data
+                })
+              })
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.data
           })
         })
     }
@@ -322,16 +434,45 @@ class Guild extends Component {
                         <br />
                         <div
                           onClick={() =>
-                            this.setState(
-                              {
-                                userToAdd: user.email
-                              },
-                              () => this.handleAddDeleteUser('leave')
-                            )
+                            this.setState({
+                              displayLeaveButtons: true
+                            })
                           }
                         >
                           <ListLink className="text-danger" href="#leave">
                             Quitter la guilde
+                          </ListLink>
+                        </div>
+                        <div
+                          className={
+                            this.state.displayLeaveButtons ? '' : 'd-none'
+                          }
+                          style={{ fontSize: '12px' }}
+                        >
+                          <ListLink
+                            className="text-success"
+                            href="#leave-validate"
+                            onClick={() =>
+                              this.setState(
+                                {
+                                  memberToAddOrRemove: user.email
+                                },
+                                () => this.handleAddDeleteUser('delete')
+                              )
+                            }
+                          >
+                            Valider
+                          </ListLink>{' '}
+                          -{' '}
+                          <ListLink
+                            href="#leave-cancel"
+                            onClick={() =>
+                              this.setState({
+                                displayLeaveButtons: false
+                              })
+                            }
+                          >
+                            Annuler
                           </ListLink>
                         </div>
                       </>
@@ -358,7 +499,7 @@ class Guild extends Component {
                   <Card className="card" style={{ height: '60vh' }}>
                     {error && (
                       <span className="text-danger">
-                        <b>Erreur :</b> {error.message}
+                        <b>Erreur :</b> {error.error}
                       </span>
                     )}
                     {guild && (
@@ -405,6 +546,66 @@ class Guild extends Component {
                         </div>
                       </>
                     )}
+                    {!guild && user && (
+                      <>
+                        <div className="card-header">
+                          <Title>Créer sa propre guilde</Title>
+                        </div>
+                        <div className="card-body">
+                          <div className="col-sm-12">
+                            {user.money >= 20000 && (
+                              <div className="offset-sm-3 col-sm-6">
+                                <FormAddUser>
+                                  <Input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    placeholder="Nom de la guilde"
+                                    value={this.state.newNameGuild}
+                                    onChange={(event) =>
+                                      this.setState({
+                                        newNameGuild: event.target.value
+                                      })
+                                    }
+                                  />
+                                  <Button
+                                    className="btn btn-success"
+                                    type="button"
+                                    onClick={() => this.handleCreateGuild()}
+                                  >
+                                    Créer
+                                  </Button>
+                                </FormAddUser>
+                              </div>
+                            )}
+                            <CreateGuildText>
+                              Attention: la création d’une guilde coûte 20 000{' '}
+                              <img
+                                src={process.env.PUBLIC_URL + '/img/money.svg'}
+                                width="30"
+                                height="30"
+                                className="d-inline-block align-top"
+                                alt="Thune"
+                              />
+                              {user.money < 20000 && (
+                                <div className="text-danger">
+                                  Vous ne possèdez actuellement que {user.money}{' '}
+                                  <img
+                                    src={
+                                      process.env.PUBLIC_URL + '/img/money.svg'
+                                    }
+                                    width="30"
+                                    height="30"
+                                    className="d-inline-block align-top"
+                                    alt="Thune"
+                                  />
+                                </div>
+                              )}
+                            </CreateGuildText>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </Card>
                 </div>
 
@@ -427,19 +628,19 @@ class Guild extends Component {
                             </div>
                             <div className="offset-sm-3 col-sm-6">
                               <FormAddUser>
-                                <InputEmail
+                                <Input
                                   id="email"
                                   name="email"
                                   type="text"
                                   placeholder="Email"
-                                  value={this.state.userToAdd}
+                                  value={this.state.memberToAddOrRemove}
                                   onChange={(event) =>
                                     this.setState({
-                                      userToAdd: event.target.value
+                                      memberToAddOrRemove: event.target.value
                                     })
                                   }
                                 />
-                                <AddUserButton
+                                <Button
                                   className="btn btn-success"
                                   type="button"
                                   onClick={() =>
@@ -447,7 +648,7 @@ class Guild extends Component {
                                   }
                                 >
                                   Ajouter
-                                </AddUserButton>
+                                </Button>
                               </FormAddUser>
                             </div>
                           </>
@@ -464,7 +665,7 @@ class Guild extends Component {
                           onDelete={(friend) => {
                             this.setState(
                               {
-                                userToAdd: friend.email
+                                memberToAddOrRemove: friend.email
                               },
                               () => this.handleAddDeleteUser('delete')
                             )

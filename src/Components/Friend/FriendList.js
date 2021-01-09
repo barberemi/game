@@ -66,7 +66,14 @@ class FriendList extends Component {
                   &nbsp;
                 </>
               )}
-              (Niv {friend.level}) {friend.name}
+              Niv {friend.level} - {friend.name}{' '}
+              <span className="text-warning">
+                {friend.role === 'ROLE_GUILD_MASTER'
+                  ? '(Chef de guilde)'
+                  : friend.role === 'ROLE_ADMIN'
+                  ? '(Admin)'
+                  : ''}
+              </span>
             </Name>
             <Actions className="col-sm-3">
               <Link to={'/character/' + friend.id}>

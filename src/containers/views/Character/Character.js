@@ -89,7 +89,7 @@ class Character extends Component {
       loading: true,
       character: undefined,
       isMe: false,
-      userToAdd: '',
+      friendToAddOrRemove: '',
       activatedTab: 'generalTab'
     }
 
@@ -128,7 +128,7 @@ class Character extends Component {
   }
 
   handleAddDeleteUser(type) {
-    if (this.state.userToAdd) {
+    if (this.state.friendToAddOrRemove) {
       axios
         .put(
           process.env.REACT_APP_API_URL +
@@ -137,7 +137,7 @@ class Character extends Component {
             '/friends',
           {
             type: type,
-            email: this.state.userToAdd
+            email: this.state.friendToAddOrRemove
           },
           {
             headers: {
@@ -152,7 +152,7 @@ class Character extends Component {
               {type === 'add'
                 ? 'Ajout du lien d’amitié avec '
                 : 'Suppression du lien d’amité avec '}
-              {this.state.userToAdd} !
+              {this.state.friendToAddOrRemove} !
             </span>,
             {
               position: 'top-right',
@@ -166,7 +166,7 @@ class Character extends Component {
           )
           this.setState({
             character: response.data,
-            userToAdd: ''
+            friendToAddOrRemove: ''
           })
         })
         .catch((error) => {
@@ -579,9 +579,11 @@ class Character extends Component {
                               name="email"
                               type="text"
                               placeholder="Email"
-                              value={this.state.userToAdd}
+                              value={this.state.friendToAddOrRemove}
                               onChange={(event) =>
-                                this.setState({ userToAdd: event.target.value })
+                                this.setState({
+                                  friendToAddOrRemove: event.target.value
+                                })
                               }
                             />
                             <AddUserButton
@@ -605,7 +607,7 @@ class Character extends Component {
                           onDelete={(friend) => {
                             this.setState(
                               {
-                                userToAdd: friend.email
+                                friendToAddOrRemove: friend.email
                               },
                               () => this.handleAddDeleteUser('delete')
                             )
