@@ -107,6 +107,7 @@ class Guild extends Component {
       redirect: undefined,
       loading: true,
       displayLeaveButtons: false,
+      textMessage: '',
       guild: undefined,
       memberToAddOrRemove: '',
       newNameGuild: '',
@@ -179,36 +180,39 @@ class Guild extends Component {
   handleSubmit(event) {
     event.preventDefault()
 
-    axios
-      .post(
-        process.env.REACT_APP_API_URL + '/messages',
-        {
-          message: event.target.message.value,
-          topic: 'guildMessage',
-          guild: {
-            id: this.state.guild.id
+    if (event.target.message.value) {
+      axios
+        .post(
+          process.env.REACT_APP_API_URL + '/messages',
+          {
+            message: event.target.message.value,
+            topic: 'guildMessage',
+            guild: {
+              id: this.state.guild.id
+            }
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
           }
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('auth-token')}`
-          }
-        }
-      )
-      .then((response) => {
-        this.setState({
-          guild: {
-            ...this.state.guild,
-            messages: [...this.state.guild.messages, response.data]
-          }
+        )
+        .then((response) => {
+          this.setState({
+            textMessage: '',
+            guild: {
+              ...this.state.guild,
+              messages: [...this.state.guild.messages, response.data]
+            }
+          })
         })
-      })
-      .catch((error) => {
-        this.setState({
-          error: error.response.status
+        .catch((error) => {
+          this.setState({
+            error: error.response.status
+          })
         })
-      })
+    }
   }
 
   handleAddDeleteUser(type) {
@@ -513,7 +517,7 @@ class Guild extends Component {
                           <ListingMessages>
                             {_.map(guild.messages, (message) => (
                               <div key={message.id}>
-                                <strong className="text-warning">
+                                <strong>
                                   <i>
                                     (
                                     {moment(message.createdAt).format(
@@ -521,7 +525,9 @@ class Guild extends Component {
                                     )}
                                     ){' '}
                                   </i>
-                                  {message.user.name} :{' '}
+                                  <span className="text-warning">
+                                    {message.user.name} :{' '}
+                                  </span>
                                 </strong>
                                 {message.message}
                               </div>
@@ -533,7 +539,13 @@ class Guild extends Component {
                                 id="message"
                                 name="message"
                                 type="text"
+                                value={this.state.textMessage}
                                 placeholder="Votre message..."
+                                onChange={(event) =>
+                                  this.setState({
+                                    textMessage: event.target.value
+                                  })
+                                }
                               />
                               <CustomButton
                                 className="btn btn-success"
