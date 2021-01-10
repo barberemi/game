@@ -1,0 +1,10 @@
+.arrow {
+  z-index: 0;
+}
+
+.arrow__path {
+  stroke: rgba(0, 0, 0, 0.5);
+  fill: transparent;
+  stroke-dasharray: 40 40;
+  stroke-width: 2;
+}

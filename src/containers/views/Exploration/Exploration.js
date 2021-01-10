@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import ReactTooltip from 'react-tooltip'
 import Loader from '../../../Components/Loader/Loader'
 import ExplorationNavBar from '../../../Components/NavBar/ExplorationNavBar'
+import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
@@ -185,7 +186,7 @@ class Exploration extends Component {
         <ExplorationNavBar user={character} />
         <Container
           className="container-fluid"
-          onScroll={this.handleScroll}
+          onScroll={() => this.handleScroll()}
           ref={this.refScroll}
         >
           {loading && <Loader />}
@@ -227,6 +228,7 @@ class Exploration extends Component {
                           alt={boss.type + '.png'}
                           width="200px"
                           data-tip={buildingTypes[boss.type]}
+                          id={`building-${boss.id}`}
                         />
                       </Link>
                       <PossibleBuildingText>1</PossibleBuildingText>
@@ -244,6 +246,7 @@ class Exploration extends Component {
                       alt={boss.type + '.png'}
                       width="200px"
                       data-tip={buildingTypes[boss.type]}
+                      id={`building-${boss.id}`}
                     />
                   )}
                 </div>
@@ -252,23 +255,33 @@ class Exploration extends Component {
                     {_.map(explorationRow, (col) => (
                       <div
                         key={col.id}
-                        className={`mt-3 mb-3 col-sm-${Math.round(
+                        className={`mt-5 mb-5 col-sm-${Math.round(
                           12 / explorationRow.length
                         )}`}
                       >
                         {character.position === col.id && (
-                          <Building
-                            src={
-                              process.env.PUBLIC_URL +
-                              '/img/academies/' +
-                              character.academy.name +
-                              '.png'
-                            }
-                            alt="me"
-                            width="100px"
-                            ref={this.refMe}
-                            data-tip="Moi"
-                          />
+                          <>
+                            <Building
+                              src={
+                                process.env.PUBLIC_URL +
+                                '/img/academies/' +
+                                character.academy.name +
+                                '.png'
+                              }
+                              alt="me"
+                              width="100px"
+                              ref={this.refMe}
+                              data-tip="Moi"
+                              id={`building-${col.id}`}
+                            />
+                            {col.next &&
+                              _.map(col.next, (nextPossible) => (
+                                <ArrowTrait
+                                  from={`building-${col.id}`}
+                                  to={`building-${nextPossible}`}
+                                />
+                              ))}
+                          </>
                         )}
                         {this.isNext(col) && (
                           <>
@@ -283,23 +296,41 @@ class Exploration extends Component {
                                 alt={col.type + '.png'}
                                 width="100px"
                                 data-tip={buildingTypes[col.type]}
+                                id={`building-${col.id}`}
                               />
+                              {col.next &&
+                                _.map(col.next, (nextPossible) => (
+                                  <ArrowTrait
+                                    from={`building-${col.id}`}
+                                    to={`building-${nextPossible}`}
+                                  />
+                                ))}
                             </Link>
                             <ReactTooltip />
                           </>
                         )}
                         {character.position !== col.id && !this.isNext(col) && (
-                          <DisabledBuilding
-                            src={
-                              process.env.PUBLIC_URL +
-                              '/img/explorations/' +
-                              col.type +
-                              '.png'
-                            }
-                            alt={col.type + '.png'}
-                            width="100px"
-                            data-tip={buildingTypes[col.type]}
-                          />
+                          <>
+                            <DisabledBuilding
+                              src={
+                                process.env.PUBLIC_URL +
+                                '/img/explorations/' +
+                                col.type +
+                                '.png'
+                              }
+                              alt={col.type + '.png'}
+                              width="100px"
+                              data-tip={buildingTypes[col.type]}
+                              id={`building-${col.id}`}
+                            />
+                            {col.next &&
+                              _.map(col.next, (nextPossible) => (
+                                <ArrowTrait
+                                  from={`building-${col.id}`}
+                                  to={`building-${nextPossible}`}
+                                />
+                              ))}
+                          </>
                         )}
                         {_.includes(nextPossible, col.id) &&
                           (countExplorations = countExplorations + 1) && (

@@ -2340,6 +2340,13 @@ arrify@^1.0.1:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
 
+arrows-svg@^1.4.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/arrows-svg/-/arrows-svg-1.5.1.tgz#5664df912d15b9041c82b69e1b10d1b685ae9202"
+  integrity sha512-Bra3VrW+QggD+EgR92NBE5o1y30zEZpCPGJlcwR1ce3wL2JkIK6P1GUPPrdIHLiramXDyGANmZbjtj13TGYwWQ==
+  dependencies:
+    preact "^10.5.7"
+
 asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
@@ -9208,6 +9215,11 @@ postcss@^7, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, po
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
+preact@^10.5.7:
+  version "10.5.9"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.9.tgz#8caba9288b4db1d593be2317467f8735e43cda0b"
+  integrity sha512-X4m+4VMVINl/JFQKALOCwa3p8vhMAhBvle0hJ/W44w/WWfNb2TA7RNicDV3K2dNVs57f61GviEnVLiwN+fxiIg==
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
@@ -9488,6 +9500,13 @@ react-app-polyfill@^1.0.6:
     raf "^3.4.1"
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
+
+react-arrows@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-arrows/-/react-arrows-1.2.0.tgz#e2139ed1d1fd7d6f17827e1d61f81b29a02c0642"
+  integrity sha512-jiuOAWAZ+Qka0fvM4MCC5w/nKnyPooBgEMzGTI8cBA0shD7t7NlSkNCStLENFOuYtcR1ERUmIK6KiMvcoRnI9Q==
+  dependencies:
+    arrows-svg "^1.4.1"
 
 react-dev-utils@^10.2.1:
   version "10.2.1"
