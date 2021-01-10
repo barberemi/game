@@ -22,6 +22,7 @@ import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import { Redirect } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
+import SkillCard from '../../../Components/Skill/SkillCard'
 
 class Fight extends Component {
   constructor(props) {
@@ -608,6 +609,7 @@ class Fight extends Component {
 
               {/* TEXT BOX SECTION */}
               <div id="text-box">
+                <SkillCard />
                 <div id="text-box-content">
                   {this.state.textMessageOne !== '' &&
                     this.state.gameOver === false && (
