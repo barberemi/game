@@ -197,7 +197,7 @@ class Choice extends Component {
 
     switch (type) {
       case 'arene-boss':
-        return process.env.PUBLIC_URL + '/img/' + user.exploration[1].image
+        return process.env.PUBLIC_URL + '/img/boss/' + user.exploration[1].image
       case 'dealer':
         return process.env.PUBLIC_URL + '/img/forgeron.png'
       case 'healer':
@@ -237,7 +237,7 @@ class Choice extends Component {
             id: user.id
           },
           monster: {
-            id: isBossFight ? user.exploration[1].id : room.monster
+            id: isBossFight ? user.exploration[1].idBoss : room.monster
           }
         },
         {

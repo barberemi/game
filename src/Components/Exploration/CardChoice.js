@@ -50,7 +50,7 @@ class CardChoice extends Component {
         className={`col-sm-3 mt-5 mb-5 ${position === 0 ? 'offset-sm-2' : ''}`}
       >
         <div className="card">
-          {room.cost && position === 0 && room.cost > money && (
+          {room && room.cost && position === 0 && room.cost > money && (
             <RequirementBlock className="mt-2">
               &nbsp;Prix : {room.cost}&nbsp;
               <img
@@ -62,7 +62,7 @@ class CardChoice extends Component {
               />
             </RequirementBlock>
           )}
-          {room.cost && position === 0 && room.cost <= money && (
+          {room && room.cost && position === 0 && room.cost <= money && (
             <RequirementNotBlock className="mt-2">
               &nbsp;Prix : {room.cost}&nbsp;
               <img
@@ -77,7 +77,7 @@ class CardChoice extends Component {
           <img className="card-img-top" src={card.img_url} alt={card.name} />
           <AdventureButton
             className={`card-footer btn${
-              room.cost && position === 0 && room.cost > money
+              room && room.cost && position === 0 && room.cost > money
                 ? ' disabled'
                 : ''
             }`}
@@ -96,7 +96,7 @@ class CardChoice extends Component {
             )}
             {!loading && (
               <>
-                {room.cost && position === 0 && room.cost > money && (
+                {room && room.cost && position === 0 && room.cost > money && (
                   <>
                     <i className="fas fa-lock" />
                     &nbsp;
