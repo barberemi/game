@@ -1,58 +1,27 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { getIconSkillType } from '../../utils/skillHelper'
+import SkillCard from '../Skill/SkillCard'
 
 class Actions extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      displayCard: false
+    }
+  }
+
   expectedEffect(amount, effect) {
-    switch (effect) {
-      case 'melee':
-        return (
-          <>
-            {' '}
-            <i className="fas fa-fist-raised" />{' '}
-            <span className="small">{amount}</span>
-          </>
-        )
-      case 'range':
-        return (
-          <>
-            {' '}
-            <i className="fas fa-bolt" />{' '}
-            <span className="small">{amount}</span>
-          </>
-        )
-      case 'dot':
-        return (
-          <>
-            {' '}
-            <i className="fas fa-burn" />{' '}
-            <span className="small">{amount}</span>
-          </>
-        )
-      case 'heal':
-        return (
-          <>
-            {' '}
-            <i className="fas fa-hand-holding-medical" />{' '}
-            <span className="small">{amount}</span>
-          </>
-        )
-      case 'hot':
-        return (
-          <>
-            {' '}
-            <i className="fas fa-medkit" />{' '}
-            <span className="small">{amount}</span>
-          </>
-        )
-      case 'movement':
-        return (
-          <>
-            {' '}
-            <i className="fas fa-shoe-prints" />
-          </>
-        )
-      default:
-        return ''
+    if (amount) {
+      return (
+        <>
+          {' '}
+          {getIconSkillType(effect)} <span className="small">{amount}</span>
+        </>
+      )
+    } else {
+      return <> {getIconSkillType(effect)}</>
     }
   }
 
@@ -84,34 +53,43 @@ class Actions extends Component {
     const { name, amount, effect, duration, nbBlockedTurns } = this.props.action
 
     return (
-      <div
-        className={`attack-container btn ${this.disabledAction(
-          this.props.frontPlayer,
-          effect,
-          nbBlockedTurns
-        )}`}
-      >
-        <div>
-          <span
-            className="move-pointer"
-            onClick={() => {
-              if (
-                this.disabledAction(
-                  this.props.frontPlayer,
-                  effect,
-                  nbBlockedTurns
-                ) === ''
-              ) {
-                this.props.onClick(this.props.action)
-              }
-            }}
-          >
-            {this.isBlocked(nbBlockedTurns, duration)}
-            {name}
-            {this.expectedEffect(amount, effect)}
-          </span>
+      <>
+        <div
+          className={`attack-container btn ${this.disabledAction(
+            this.props.frontPlayer,
+            effect,
+            nbBlockedTurns
+          )}`}
+          onDoubleClick={() => {
+            if (
+              this.disabledAction(
+                this.props.frontPlayer,
+                effect,
+                nbBlockedTurns
+              ) === ''
+            ) {
+              this.props.onDoubleClick(this.props.action)
+            }
+          }}
+          onClick={() =>
+            this.setState({
+              displayCard: !this.state.displayCard
+            })
+          }
+        >
+          <div>
+            <span className="move-pointer">
+              {this.isBlocked(nbBlockedTurns, duration)}
+              {name}
+              {this.expectedEffect(amount, effect)}
+            </span>
+          </div>
         </div>
-      </div>
+        <SkillCard
+          className={this.state.displayCard ? 'd-block' : 'd-none'}
+          skill={this.props.action}
+        />
+      </>
     )
   }
 }
@@ -125,7 +103,7 @@ Actions.propTypes = {
     nbBlockedTurns: PropTypes.number
   }),
   frontPlayer: PropTypes.bool,
-  onClick: PropTypes.func
+  onDoubleClick: PropTypes.func
 }
 
 export default Actions

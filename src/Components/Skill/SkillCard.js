@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
+import _ from 'lodash'
+import { getLabelTypeSkill, getIconSkillType } from '../../utils/skillHelper'
 
 const Wrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   width: 325px;
-  margin: 0 auto;
-  padding-top: 20px;
+  height: 415px;
+  margin: auto;
+  overflow-y: auto;
 `
 
 const Card = styled.div`
@@ -24,7 +28,7 @@ const Card = styled.div`
 
 const ImageCard = styled.div`
   position: relative;
-  height: 230px;
+  height: 150px;
   margin-bottom: 35px;
   border-top-left-radius: 14px;
   border-top-right-radius: 14px;
@@ -32,59 +36,65 @@ const ImageCard = styled.div`
 
 const WarriorBg = styled(ImageCard)`
   background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/barbarian-bg.jpg');
-  img {
-    width: 400px;
-    position: absolute;
-    top: -65px;
-    left: -70px;
-  }
+  // img {
+  //   width: 400px;
+  //   position: absolute;
+  //   top: -65px;
+  //   left: -70px;
+  // }
 `
 
-const HunterBg = styled(ImageCard)`
-  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/archer-bg.jpg');
-  img {
-    width: 400px;
-    position: absolute;
-    top: -34px;
-    left: -37px;
-  }
-`
-
-const ProtectorBg = styled(ImageCard)`
-  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/giant-bg.jpg');
-  img {
-    width: 340px;
-    position: absolute;
-    top: -30px;
-    left: -25px;
-  }
-`
-
-const PriestBg = styled(ImageCard)`
-  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/goblin-bg.jpg');
-  img {
-    width: 370px;
-    position: absolute;
-    top: -21px;
-    left: -37px;
-  }
-`
-
-const MagicianBg = styled(ImageCard)`
-  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/wizard-bg.jpg');
-  img {
-    width: 345px;
-    position: absolute;
-    top: -28px;
-    left: -10px;
-  }
-`
+// const HunterBg = styled(ImageCard)`
+//   background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/archer-bg.jpg');
+//   img {
+//     width: 400px;
+//     position: absolute;
+//     top: -34px;
+//     left: -37px;
+//   }
+// `
+//
+// const ProtectorBg = styled(ImageCard)`
+//   background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/giant-bg.jpg');
+//   img {
+//     width: 340px;
+//     position: absolute;
+//     top: -30px;
+//     left: -25px;
+//   }
+// `
+//
+// const PriestBg = styled(ImageCard)`
+//   background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/goblin-bg.jpg');
+//   img {
+//     width: 370px;
+//     position: absolute;
+//     top: -21px;
+//     left: -37px;
+//   }
+// `
+//
+// const MagicianBg = styled(ImageCard)`
+//   background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/wizard-bg.jpg');
+//   img {
+//     width: 345px;
+//     position: absolute;
+//     top: -28px;
+//     left: -10px;
+//   }
+// `
 
 const Level = styled.div`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 700;
   margin-bottom: 3px;
+
+  ${(props) =>
+    props.color &&
+    css`
+      color: ${props.color};
+    `};
 `
 
 const UnitName = styled.div`
@@ -126,12 +136,15 @@ const OneThird = styled.div`
   width: 33%;
   float: left;
   padding: 20px 15px;
+  border-right: 1px solid #fff;
+`
 
-  ${(props) =>
-    props.color &&
-    css`
-      border-right: 1px solid ${props.color};
-    `};
+const Indice = styled.div`
+  position: absolute;
+  bottom: 4px;
+  font-size: 45%;
+  margin-left: 2px;
+  right: 0;
 `
 
 const Stat = styled.div`
@@ -158,46 +171,50 @@ const NoBorder = styled(OneThird)`
   }
 `
 
-//Colors :
-// $barbarian: #EC9B3B;
-// $archer: #EE5487;
-// $giant: #F6901A;
-// $goblin: #82BB30;
-// $wizard: #4FACFF;
-
 class SkillBox extends Component {
   render() {
+    const { skill } = this.props
+
     return (
-      <Wrapper className="col-sm-12">
+      <Wrapper className={`col-sm-12 animated pulse ${this.props.className}`}>
         <Card>
           <WarriorBg>
             <img
-              src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/barbarian.png"
-              alt="barbarian"
+              src={process.env.PUBLIC_URL + '/img/skill.png'}
+              alt="skill"
+              width="150px"
             />
           </WarriorBg>
-          <Level style={{ color: '#EC9B3B' }}>Level 4</Level>
-          <UnitName>The Barbarian</UnitName>
-          <UnitDescription>
-            The Barbarian is a kilt-clad Scottish warrior with an angry,
-            battle-ready expression, hungry for destruction. He has Killer
-            yellow horseshoe mustache.
-          </UnitDescription>
+          <Level color={skill.color}>
+            {getIconSkillType(skill.effect)} {getLabelTypeSkill(skill.effect)}
+          </Level>
+          <UnitName>{skill.name}</UnitName>
+          <UnitDescription
+            dangerouslySetInnerHTML={{
+              __html: _.replace(skill.description, '#MONTANT#', skill.amount)
+            }}
+          />
 
-          <UnitStats color={'#EC9B3B'}>
-            <OneThird color={'#BD7C2F'}>
-              <Stat>20</Stat>
-              <StatValue>Training</StatValue>
+          <UnitStats color={skill.color}>
+            <OneThird>
+              <Stat>{skill.amount ? skill.amount : 0}</Stat>
+              <StatValue>Montant</StatValue>
             </OneThird>
 
-            <OneThird color={'#BD7C2F'}>
-              <Stat>16</Stat>
-              <StatValue>Vitesse</StatValue>
+            <OneThird>
+              <Stat>
+                {skill.cooldown ? skill.cooldown : 0}{' '}
+                <Indice>{skill.cooldown > 0 ? 'tours' : 'tour'}</Indice>
+              </Stat>
+              <StatValue>Récup</StatValue>
             </OneThird>
 
             <NoBorder>
-              <Stat>150</Stat>
-              <StatValue>Coût</StatValue>
+              <Stat>
+                {skill.duration ? skill.duration : 0}{' '}
+                <Indice>{skill.cooldown > 0 ? 'tours' : 'tour'}</Indice>
+              </Stat>
+              <StatValue>Durée</StatValue>
             </NoBorder>
           </UnitStats>
         </Card>

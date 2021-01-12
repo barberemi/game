@@ -3,72 +3,33 @@ import Avatar from './Avatar'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import HpBar from './HpBar'
+import { getIconSkillType } from '../../utils/skillHelper'
 
 export class EnemyBox extends Component {
   expectedAction(action) {
     if (action !== undefined) {
-      switch (action.effect) {
-        case 'melee':
-          return (
-            <>
-              <i className="fas fa-fist-raised" />{' '}
-              <span className="small">{action.amount}</span>
-            </>
-          )
-        case 'range':
-          return (
-            <>
-              <i className="fas fa-bolt" />{' '}
-              <span className="small">{action.amount}</span>
-            </>
-          )
-        case 'dot':
+      if (action.amount) {
+        if (action.duration) {
           return (
             <>
               {' '}
               <span className="small">
                 ({action.duration} <i className="fas fa-clock" />)
               </span>{' '}
-              <i className="fas fa-burn" />{' '}
+              {getIconSkillType(action.effect)}{' '}
               <span className="small">{action.amount}</span>
             </>
           )
-        case 'heal':
+        } else {
           return (
             <>
-              <i className="fas fa-hand-holding-medical" />{' '}
+              {getIconSkillType(action.effect)}{' '}
               <span className="small">{action.amount}</span>
             </>
           )
-        case 'hot':
-          return (
-            <>
-              {' '}
-              <span className="small">
-                ({action.duration} <i className="fas fa-clock" />)
-              </span>{' '}
-              <i className="fas fa-hand-holding-medical" />{' '}
-              <span className="small">{action.amount}</span>
-            </>
-          )
-        case 'skill_block':
-          return (
-            <>
-              <i className="fas fa-lock" />{' '}
-              <span className="small">{action.amount}</span>
-            </>
-          )
-        case 'movement':
-          return (
-            <>
-              <i className="fas fa-wind" />{' '}
-              <span className="small">{action.amount}</span>
-            </>
-          )
-        case 'unknown':
-          return <i className="fas fa-question" />
-        default:
-          return <br />
+        }
+      } else {
+        return <> {getIconSkillType(action.effect)}</>
       }
     } else {
       return <br />
