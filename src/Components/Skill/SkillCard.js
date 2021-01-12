@@ -29,7 +29,7 @@ const Card = styled.div`
 const ImageCard = styled.div`
   position: relative;
   height: 150px;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
   border-top-left-radius: 14px;
   border-top-right-radius: 14px;
 `
@@ -101,12 +101,10 @@ const UnitName = styled.div`
   font-size: 26px;
   color: black;
   font-weight: 900;
-  margin-bottom: 5px;
 `
 
 const UnitDescription = styled.div`
   padding: 20px;
-  margin-bottom: 10px;
   color: #9e9e9e;
 `
 

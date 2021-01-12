@@ -38,7 +38,7 @@ export class EnemyBox extends Component {
 
   render() {
     return (
-      <div id="enemy-container" className="col-sm-3 offset-sm-5">
+      <div id="enemy-container" className="col-sm-4 offset-sm-5">
         {/* ENEMY POKEMON INFO BOX */}
         <div id="enemy-info-box">
           <div className="justify-content-between align-items-center">

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getIconSkillType } from '../../utils/skillHelper'
 import SkillCard from '../Skill/SkillCard'
+import ReactTooltip from 'react-tooltip'
 
 class Actions extends Component {
   constructor(props) {
@@ -78,7 +79,10 @@ class Actions extends Component {
           }
         >
           <div>
-            <span className="move-pointer">
+            <span
+              className="move-pointer"
+              data-tip="1 clic : visualiser, 2 clics : utiliser"
+            >
               {this.isBlocked(nbBlockedTurns, duration)}
               {name}
               {this.expectedEffect(amount, effect)}
@@ -89,6 +93,7 @@ class Actions extends Component {
           className={this.state.displayCard ? 'd-block' : 'd-none'}
           skill={this.props.action}
         />
+        <ReactTooltip />
       </>
     )
   }
