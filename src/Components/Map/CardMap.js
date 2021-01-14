@@ -5,6 +5,10 @@ import ReactTooltip from 'react-tooltip'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
+const Card = styled.div`
+  margin-top: 100px;
+`
+
 const LevelNeededBackground = styled.div`
   position: absolute;
   font-size: 2vw;
@@ -59,10 +63,6 @@ class CardMap extends Component {
   }
 
   displayCardLevel() {
-    if (this.props.isGuild || this.props.isCrafting) {
-      return ''
-    }
-
     if (this.mapBlocked() === true) {
       return (
         <RequirementBlock className="mt-2">
@@ -80,13 +80,9 @@ class CardMap extends Component {
   }
 
   handleClick() {
-    const { map, user, isGuild, isCrafting, redirectTo } = this.props
+    const { map, user, redirectTo } = this.props
 
-    if (isGuild) {
-      redirectTo('/guild/' + user.guild.id)
-    } else if (isCrafting) {
-      redirectTo('/crafting')
-    } else if (this.mapBlocked() === false) {
+    if (this.mapBlocked() === false) {
       if (user.exploration) {
         redirectTo('/exploration')
       } else {
@@ -118,10 +114,10 @@ class CardMap extends Component {
   }
 
   render() {
-    const { map, user, isGuild, isCrafting } = this.props
+    const { map, user } = this.props
 
     return (
-      <div className="col-sm-5 mt-5 mb-5">
+      <Card className="col-sm-5">
         <div className="card">
           {this.displayCardLevel()}
           {user.exploration &&
@@ -142,12 +138,8 @@ class CardMap extends Component {
           <img
             className="card-img-top"
             src={
-              isGuild
-                ? 'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1586838637024-ZX7JWSH8KJYZAJA4P960/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/Pirates-Outlaws1.jpg?format=2500w'
-                : isCrafting
-                ? 'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1586838637024-ZX7JWSH8KJYZAJA4P960/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/Pirates-Outlaws1.jpg?format=2500w'
-                : map.img_url ??
-                  'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg'
+              map.img_url ??
+              'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg'
             }
             alt={map.name}
           />
@@ -161,12 +153,10 @@ class CardMap extends Component {
                 &nbsp;
               </>
             )}
-            {isGuild && <>Guilder</>}
-            {isCrafting && <>Forger</>}
-            {!isCrafting && !isGuild && <>Explorer</>}
+            Explorer
           </AdventureButton>
         </div>
-      </div>
+      </Card>
     )
   }
 }
@@ -187,8 +177,6 @@ CardMap.propTypes = {
       id: PropTypes.number
     })
   }),
-  isGuild: PropTypes.bool,
-  isCrafting: PropTypes.bool,
   redirectTo: PropTypes.func
 }
 

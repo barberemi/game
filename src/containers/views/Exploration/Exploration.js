@@ -6,22 +6,27 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactTooltip from 'react-tooltip'
 import Loader from '../../../Components/Loader/Loader'
-import ExplorationNavBar from '../../../Components/NavBar/ExplorationNavBar'
+import HpNavBar from '../../../Components/NavBar/HpNavBar'
 import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
-  background-size: 100% 100%;
+  background-size: cover;
+  background-attachment: fixed;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  height: calc(100% - 100px);
   text-align: center;
   color: white;
-  min-height: 250px;
+  min-height: 100%;
+  height: 100%;
 
   overflow-y: auto;
   scroll-behavior: smooth;
+`
+
+const SubContainer = styled.div`
+  margin-top: 50px;
 `
 
 const Building = styled.img`
@@ -183,14 +188,14 @@ class Exploration extends Component {
 
     return (
       <>
-        <ExplorationNavBar user={character} />
+        <HpNavBar user={character} />
         <Container
           className="container-fluid"
           onScroll={() => this.handleScroll()}
           ref={this.refScroll}
         >
           {loading && <Loader />}
-          <div className="container">
+          <SubContainer className="container">
             {error && (
               <span className="text-danger">
                 <b>Erreur :</b> {error.message}
@@ -345,7 +350,7 @@ class Exploration extends Component {
                 <ReactTooltip />
               </div>
             )}
-          </div>
+          </SubContainer>
         </Container>
       </>
     )

@@ -8,6 +8,7 @@ const Container = styled.div`
   justify-content: center;
   min-height: 100%;
   height: 100%;
+  z-index: 30;
 `
 
 const Main = styled.div`

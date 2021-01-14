@@ -57,7 +57,7 @@ class Fight extends Component {
             jwtDecode(Cookies.get('auth-token')).email !==
               response.data.user.email
           ) {
-            this.setState({ redirect: '/maps' })
+            this.setState({ redirect: '/home' })
           } else {
             this.setState({
               loading: false,
@@ -125,7 +125,7 @@ class Fight extends Component {
         }
       })
       .catch(() => {
-        this.setState({ redirect: '/maps' })
+        this.setState({ redirect: '/home' })
       })
   }
 

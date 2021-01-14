@@ -6,18 +6,19 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import { Redirect } from 'react-router-dom'
-import MapNavBar from '../../../Components/NavBar/MapNavBar'
+import ExperienceNavBar from '../../../Components/NavBar/ExperienceNavBar'
 
 const Container = styled.div`
   background-image: url('https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1568080216644-6QDT21SZICO3TCYGO2GE/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Gallery54.jpg?format=2500w');
-  background-size: 100% 100%;
+  background-size: cover;
+  background-attachment: fixed;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  height: calc(100% - 100px);
   text-align: center;
   color: white;
-  min-height: 250px;
+  min-height: 100%;
+  height: 100%;
 `
 
 const RowOverflow = styled.div`
@@ -29,9 +30,11 @@ const RowOverflow = styled.div`
 const TextDescription = styled.div`
   font-size: 3vw;
   text-shadow: 1px 1px 2px black;
+  position: fixed;
+  bottom: 0;
 `
 
-class Map extends Component {
+class MapExploration extends Component {
   constructor(props) {
     super(props)
 
@@ -63,7 +66,6 @@ class Map extends Component {
       .then((responses) => {
         this.setState({
           loading: false,
-          redirect: responses[0].data.academy ? undefined : '/creation',
           user: responses[0].data,
           maps: responses[1].data.items
         })
@@ -85,7 +87,7 @@ class Map extends Component {
 
     return (
       <>
-        <MapNavBar user={user} />
+        <ExperienceNavBar user={user} />
         <Container className="container-fluid align-middle">
           {loading && <Loader />}
           <div className="container">
@@ -97,26 +99,6 @@ class Map extends Component {
             {maps && user && (
               <>
                 <RowOverflow className="row align-items-center">
-                  {user.guild && (
-                    <CardMap
-                      key={user.guild.name}
-                      map={{ name: user.guild.name }}
-                      isGuild={true}
-                      user={user}
-                      redirectTo={(redirect) =>
-                        this.setState({ redirect: redirect })
-                      }
-                    />
-                  )}
-                  <CardMap
-                    key="crafting"
-                    map={{ name: 'Forge' }}
-                    isCrafting={true}
-                    user={user}
-                    redirectTo={(redirect) =>
-                      this.setState({ redirect: redirect })
-                    }
-                  />
                   {_.map(this.state.maps, (map) => (
                     <CardMap
                       key={map.name}
@@ -128,8 +110,8 @@ class Map extends Component {
                     />
                   ))}
                 </RowOverflow>
-                <TextDescription className="col-sm-12">
-                  Veuillez selectionner une carte sur laquelle voyager !
+                <TextDescription className="col-sm-10">
+                  Dans quelle expédition partez-vous ?
                 </TextDescription>
               </>
             )}
@@ -139,4 +121,4 @@ class Map extends Component {
     )
   }
 }
-export default Map
+export default MapExploration

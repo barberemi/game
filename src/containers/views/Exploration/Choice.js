@@ -4,28 +4,29 @@ import _ from 'lodash'
 import CardChoice from '../../../Components/Exploration/CardChoice'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
-import ExplorationNavBar from '../../../Components/NavBar/ExplorationNavBar'
+import HpNavBar from '../../../Components/NavBar/HpNavBar'
 import Loader from '../../../Components/Loader/Loader'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
-  background-size: 100% 100%;
+  background-size: cover;
+  background-attachment: fixed;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  height: calc(100% - 100px);
   text-align: center;
   color: white;
-  min-height: 250px;
+  min-height: 100%;
+  height: 100%;
   overflow-y: scroll;
 `
 
 const SubContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.6) !important;
-  margin-top: 50px;
   border-radius: 0.3em;
+  margin-top: 100px;
 `
 
 const TextDescription = styled.div`
@@ -347,7 +348,7 @@ class Choice extends Component {
 
     return (
       <>
-        <ExplorationNavBar user={user} />
+        <HpNavBar user={user} />
         <Container className="container-fluid align-middle">
           {loading && <Loader />}
           {error && (

@@ -1,12 +1,32 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import ProgressBar from '../Character/ProgressBar'
-import NavBar from './NavBar'
 import PropTypes from 'prop-types'
 
-const Bar = styled.div`
+const NavBarGlobale = styled.nav`
+  -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.4) !important;
   padding-top: 5px;
-  text-align: center;
+  padding-bottom: 5px;
+  position: fixed;
+  right: 0;
+  width: 500px;
+  z-index: 20;
+`
+
+const DisplayFlex = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const Avatar = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background-color: #fff;
 `
 
 const MoneyBox = styled.div`
@@ -14,16 +34,21 @@ const MoneyBox = styled.div`
   padding-top: 5px;
 `
 
-class ExplorationNavBar extends Component {
+const Bar = styled.div`
+  padding-top: 5px;
+  text-align: center;
+`
+
+class HpNavBar extends Component {
   render() {
     const { user } = this.props
 
     return (
-      <NavBar user={user}>
-        <>
+      <NavBarGlobale role="navigation">
+        <DisplayFlex className="col-sm-12 text-white justify-content-end">
           {user && (
             <>
-              <MoneyBox className="col-sm-2 offset-sm-4">
+              <MoneyBox>
                 <div>
                   <img
                     src={process.env.PUBLIC_URL + '/img/money.svg'}
@@ -32,18 +57,9 @@ class ExplorationNavBar extends Component {
                     alt="Thune"
                   />
                 </div>
-                <div>{user.money ? user.money : 'Aucune'} thune</div>
+                <div>{user.money ? user.money : 'Aucun'}</div>
               </MoneyBox>
-              <Bar className="col-sm-2">
-                <div>Confiance</div>
-                <ProgressBar
-                  actual={300}
-                  max={1000}
-                  color="#182C51"
-                  transparentColor="#5388A3"
-                />
-              </Bar>
-              <Bar className="col-sm-2">
+              <Bar className="col-sm-9">
                 <div>PV</div>
                 <ProgressBar
                   actual={
@@ -61,16 +77,26 @@ class ExplorationNavBar extends Component {
                   transparentColor="#e09a9a"
                 />
               </Bar>
+              <Avatar
+                src={
+                  process.env.PUBLIC_URL +
+                  '/img/academies/' +
+                  user.academy.name +
+                  '.png'
+                }
+                alt="Avatar"
+                className="avatar"
+              />
             </>
           )}
-        </>
-      </NavBar>
+        </DisplayFlex>
+      </NavBarGlobale>
     )
   }
 }
 
-ExplorationNavBar.propTypes = {
+HpNavBar.propTypes = {
   user: PropTypes.shape({})
 }
 
-export default ExplorationNavBar
+export default HpNavBar

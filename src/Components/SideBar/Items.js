@@ -27,7 +27,7 @@ class Items extends Component {
     return (
       <>
         <LinkText
-          to={'/maps'}
+          to={'/home'}
           className="fa fa-globe-europe fa-2x"
           style={{
             left: (10 - 35 * Math.cos(-0.5 * Math.PI)).toFixed(4) + '%',

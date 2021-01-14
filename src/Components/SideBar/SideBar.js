@@ -6,7 +6,7 @@ const SideBarGlobale = styled.nav`
   top: 30%;
   height: 250px;
   transition: 0.5s;
-  z-index: 1;
+  z-index: 20;
 `
 
 const Image = styled.img`

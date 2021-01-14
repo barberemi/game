@@ -9,7 +9,9 @@ import AppRoute from './containers/AppRoute'
 import ReactTooltip from 'react-tooltip'
 
 import Fight from './containers/views/Fight/Fight'
-import Map from './containers/views/Map/Map'
+import MapExploration from './containers/views/Map/MapExploration'
+import MapHome from './containers/views/Map/MapHome'
+import MapVillage from './containers/views/Map/MapVillage'
 import Exploration from './containers/views/Exploration/Exploration'
 import Choice from './containers/views/Exploration/Choice'
 import Login from './containers/views/Login/Login'
@@ -32,7 +34,9 @@ import { ToastContainer } from 'react-toastify'
 ReactDOM.render(
   <BrowserRouter forceRefresh={true}>
     <Switch>
-      <AppRoute exact path="/maps" component={Map} layout={Layout} />
+      <AppRoute exact path="/maps" component={MapExploration} layout={Layout} />
+      <AppRoute exact path="/home" component={MapHome} layout={Layout} />
+      <AppRoute exact path="/village" component={MapVillage} layout={Layout} />
       <AppRoute
         exact
         path="/exploration"
