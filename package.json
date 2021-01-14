@@ -17,13 +17,13 @@
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
-    "react-arrows": "^1.2.0",
     "react-dom": "^16.13.1",
     "react-image-mapper": "^0.0.15",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "react-toastify": "^6.1.0",
-    "react-tooltip": "^4.2.10"
+    "react-tooltip": "^4.2.10",
+    "react-xarrows": "^1.5.2"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,22 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './styles.scss' // dont remove, used to svg animations etc
-import Arrow, { DIRECTION } from 'react-arrows'
+import Xarrow from 'react-xarrows'
 
 class ArrowTrait extends Component {
   render() {
     return (
-      <Arrow
-        className="arrow"
-        from={{
-          direction: DIRECTION.TOP,
-          node: () => document.getElementById(this.props.from),
-          translation: [0, 0]
-        }}
-        to={{
-          direction: DIRECTION.BOTTOM,
-          node: () => document.getElementById(this.props.to),
-          translation: [0, 0]
+      <Xarrow
+        start={this.props.from}
+        end={this.props.to}
+        color={this.props.isNext ? '#000' : '#fff'}
+        headSize={0}
+        dashness={{
+          strokeLen: 40,
+          nonStrokeLen: 40,
+          animation: this.props.isNext
         }}
       />
     )
@@ -25,7 +23,8 @@ class ArrowTrait extends Component {
 
 ArrowTrait.propTypes = {
   from: PropTypes.string,
-  to: PropTypes.string
+  to: PropTypes.string,
+  isNext: PropTypes.bool
 }
 
 export default ArrowTrait

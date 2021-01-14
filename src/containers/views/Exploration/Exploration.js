@@ -284,6 +284,7 @@ class Exploration extends Component {
                                 <ArrowTrait
                                   from={`building-${col.id}`}
                                   to={`building-${nextPossible}`}
+                                  isNext={true}
                                 />
                               ))}
                           </>
