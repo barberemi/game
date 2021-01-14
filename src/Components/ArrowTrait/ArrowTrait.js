@@ -10,7 +10,6 @@ class ArrowTrait extends Component {
         start={this.props.from}
         end={this.props.to}
         color={this.props.isNext ? '#000' : '#fff'}
-        headSize={0}
         dashness={{
           strokeLen: 40,
           nonStrokeLen: 40,
