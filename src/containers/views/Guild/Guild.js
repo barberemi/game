@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import _ from 'lodash'
 import { Redirect } from 'react-router-dom'
 import FriendList from '../../../Components/Friend/FriendList'
+import MonsterList from '../../../Components/Monster/MonsterList'
 import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -109,6 +110,7 @@ class Guild extends Component {
       displayLeaveButtons: false,
       textMessage: '',
       guild: undefined,
+      monsters: undefined,
       memberToAddOrRemove: '',
       newNameGuild: '',
       activatedTab: 'chatTab'
@@ -116,27 +118,45 @@ class Guild extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAddDeleteUser = this.handleAddDeleteUser.bind(this)
+    this.handleChoiceGuildBoss = this.handleChoiceGuildBoss.bind(this)
   }
 
   componentDidMount() {
-    axios
-      .get(process.env.REACT_APP_API_URL + '/users/me', {
+    const getMe = axios.get(process.env.REACT_APP_API_URL + '/users/me', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('auth-token')}`
+      }
+    })
+    const getMonsters = axios.get(
+      process.env.REACT_APP_API_URL + '/monsters?isGuildBoss=1',
+      {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${Cookies.get('auth-token')}`
         }
-      })
-      .then((response) => {
-        if (response.data) {
-          if (!response.data.guild) {
+      }
+    )
+
+    axios
+      .all([getMe, getMonsters])
+      .then((responses) => {
+        if (responses[0].data) {
+          if (responses[1].data) {
             this.setState({
               loading: false,
-              user: response.data
+              monsters: responses[1].data.items
+            })
+          }
+          if (!responses[0].data.guild) {
+            this.setState({
+              loading: false,
+              user: responses[0].data
             })
           } else {
             this.setState({
-              user: response.data,
-              id: response.data.guild.id
+              user: responses[0].data,
+              id: responses[0].data.guild.id
             })
             this.loadData()
             setInterval(() => {
@@ -145,10 +165,10 @@ class Guild extends Component {
           }
         }
       })
-      .catch((error) => {
+      .catch((errors) => {
         this.setState({
           loading: false,
-          error: error.response.data
+          error: errors[0].response.data
         })
       })
   }
@@ -383,8 +403,58 @@ class Guild extends Component {
     })
   }
 
+  handleChoiceGuildBoss = (monster) => {
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/guilds/' + this.state.guild.id,
+        {
+          monster: {
+            id: monster.id
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        toast.success(
+          <span style={{ fontSize: '14px' }}>
+            Le monstre {monster.name} est maintenant le champion de la guilde!
+          </span>,
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          }
+        )
+        this.setState({
+          guild: response.data
+        })
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
+  }
+
   render() {
-    const { error, loading, redirect, guild, user, activatedTab } = this.state
+    const {
+      error,
+      loading,
+      redirect,
+      guild,
+      user,
+      monsters,
+      activatedTab
+    } = this.state
 
     if (redirect) {
       return <Redirect to={redirect} />
@@ -430,6 +500,42 @@ class Guild extends Component {
                             Membres
                           </ListLink>
                           {activatedTab === 'membersTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
+                        <div onClick={() => this.onClickOnTab('choiceBossTab')}>
+                          <ListLink
+                            className={
+                              activatedTab === 'choiceBossTab' ? ' active' : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#choiceBossTab"
+                          >
+                            Choix du champion
+                          </ListLink>
+                          {activatedTab === 'choiceBossTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
+                        <div onClick={() => this.onClickOnTab('fightBossTab')}>
+                          <ListLink
+                            className={
+                              activatedTab === 'fightBossTab' ? ' active' : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#fightBossTab"
+                          >
+                            Combat du champion
+                          </ListLink>
+                          {activatedTab === 'fightBossTab' && (
                             <span className="text-warning">
                               &nbsp;
                               <i className="far fa-arrow-alt-circle-right" />
@@ -687,6 +793,35 @@ class Guild extends Component {
                     </Card>
                   </div>
                 )}
+
+                {/* ChoiceBoss */}
+                {guild &&
+                  monsters &&
+                  (user.role === 'ROLE_ADMIN' ||
+                    user.role === 'ROLE_GUILD_MASTER') && (
+                    <div
+                      className={`tab-pane${
+                        activatedTab === 'choiceBossTab' ? ' active' : ''
+                      }`}
+                      id="choiceBossTab"
+                      role="tabpanel"
+                    >
+                      <Card className="card">
+                        <div className="card-body">
+                          <div className="col-sm-12">
+                            <Title>Choisir le champion de guilde</Title>
+                          </div>
+                          <MonsterList
+                            monsters={monsters}
+                            selectedMonster={guild.monster}
+                            onChoice={(monster) =>
+                              this.handleChoiceGuildBoss(monster)
+                            }
+                          />
+                        </div>
+                      </Card>
+                    </div>
+                  )}
               </div>
             </RightBox>
           </div>
