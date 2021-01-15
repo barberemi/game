@@ -10,6 +10,7 @@ import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
+import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg');
@@ -244,19 +245,14 @@ class Boss extends Component {
                   >
                     <Card className="card">
                       <div className="card-header">
-                        {selectedBoss.isBoss && selectedBoss.map && (
-                          <Title>
-                            Champion{' '}
-                            <span style={{ color: 'white' }}>de la carte</span>{' '}
-                            {selectedBoss.map.name}
-                          </Title>
-                        )}
-                        {selectedBoss.isGuildBoss && selectedBoss.map && (
-                          <Title>
-                            Champion de guilde{' '}
-                            <span style={{ color: 'white' }}>de la carte</span>{' '}
-                            {selectedBoss.map.name}
-                          </Title>
+                        {(selectedBoss.isBoss || selectedBoss.isGuildBoss) && (
+                          <>
+                            <MonsterTypeBadge
+                              isGuildBoss={selectedBoss.isGuildBoss}
+                              isBoss={selectedBoss.isBoss}
+                            />
+                            <br />
+                          </>
                         )}
                         {selectedBoss.name}{' '}
                         <span style={{ color: selectedBoss.academy.color }}>

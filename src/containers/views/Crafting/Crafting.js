@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
+import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg');
@@ -319,29 +320,28 @@ class Crafting extends Component {
                                   alt="Third slide"
                                 />
                                 <div>
-                                  {aBoss.isBoss && aBoss.map && (
-                                    <Title>
-                                      Champion{' '}
-                                      <span style={{ color: 'white' }}>
-                                        de la carte
-                                      </span>{' '}
-                                      {aBoss.map.name}
-                                    </Title>
+                                  {(selectedBoss.isBoss ||
+                                    selectedBoss.isGuildBoss) && (
+                                    <>
+                                      <MonsterTypeBadge
+                                        isGuildBoss={selectedBoss.isGuildBoss}
+                                        isBoss={selectedBoss.isBoss}
+                                      />
+                                      <br />
+                                    </>
                                   )}
-                                  {aBoss.isGuildBoss && aBoss.map && (
-                                    <Title>
-                                      Champion de guilde{' '}
-                                      <span style={{ color: 'white' }}>
-                                        de la carte
-                                      </span>{' '}
-                                      {aBoss.map.name}
-                                    </Title>
-                                  )}
-                                  {aBoss.name}{' '}
-                                  <span style={{ color: aBoss.academy.color }}>
-                                    ({aBoss.academy.name})
+                                  {selectedBoss.name}{' '}
+                                  <span
+                                    style={{
+                                      color: selectedBoss.academy.color
+                                    }}
+                                  >
+                                    ({selectedBoss.academy.name})
                                   </span>
-                                  <LevelBox> - Niv {aBoss.level}</LevelBox>
+                                  <LevelBox>
+                                    {' '}
+                                    - Niv {selectedBoss.level}
+                                  </LevelBox>
                                 </div>
                               </div>
                             ))}
