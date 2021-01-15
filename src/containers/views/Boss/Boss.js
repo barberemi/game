@@ -244,8 +244,19 @@ class Boss extends Component {
                   >
                     <Card className="card">
                       <div className="card-header">
-                        {selectedBoss.levelTower !== 0 && (
-                          <Title>Tour niveau {selectedBoss.levelTower}</Title>
+                        {selectedBoss.isBoss && selectedBoss.map && (
+                          <Title>
+                            Champion{' '}
+                            <span style={{ color: 'white' }}>de la carte</span>{' '}
+                            {selectedBoss.map.name}
+                          </Title>
+                        )}
+                        {selectedBoss.isGuildBoss && selectedBoss.map && (
+                          <Title>
+                            Champion de guilde{' '}
+                            <span style={{ color: 'white' }}>de la carte</span>{' '}
+                            {selectedBoss.map.name}
+                          </Title>
                         )}
                         {selectedBoss.name}{' '}
                         <span style={{ color: selectedBoss.academy.color }}>

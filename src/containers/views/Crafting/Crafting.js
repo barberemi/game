@@ -220,7 +220,7 @@ class Crafting extends Component {
                         role="tab"
                         href="#bossChoiceTab"
                       >
-                        Choix du boss
+                        Choix du monstre
                       </ListLink>
                       {activatedTab === 'bossChoiceTab' && (
                         <span className="text-warning">
@@ -293,10 +293,10 @@ class Crafting extends Component {
                     <Card className="card">
                       <div className="card-body">
                         <div className="col-sm-12">
-                          <Title>Choix du boss</Title>
+                          <Title>Choix du monstre</Title>
                           <div>
-                            Séléctionner le boss pour visualiser les objets et
-                            compétences que vous pouvez confectionner grâce à
+                            Séléctionner le monstre pour visualiser les objets
+                            et compétences que vous pouvez confectionner grâce à
                             ses composants.
                           </div>
                         </div>
@@ -318,12 +318,31 @@ class Crafting extends Component {
                                   }
                                   alt="Third slide"
                                 />
-                                <Title>Tour niveau {aBoss.levelTower}</Title>
-                                {aBoss.name}{' '}
-                                <span style={{ color: aBoss.academy.color }}>
-                                  ({aBoss.academy.name})
-                                </span>
-                                <LevelBox> - Niv {aBoss.level}</LevelBox>
+                                <div>
+                                  {aBoss.isBoss && aBoss.map && (
+                                    <Title>
+                                      Champion{' '}
+                                      <span style={{ color: 'white' }}>
+                                        de la carte
+                                      </span>{' '}
+                                      {aBoss.map.name}
+                                    </Title>
+                                  )}
+                                  {aBoss.isGuildBoss && aBoss.map && (
+                                    <Title>
+                                      Champion de guilde{' '}
+                                      <span style={{ color: 'white' }}>
+                                        de la carte
+                                      </span>{' '}
+                                      {aBoss.map.name}
+                                    </Title>
+                                  )}
+                                  {aBoss.name}{' '}
+                                  <span style={{ color: aBoss.academy.color }}>
+                                    ({aBoss.academy.name})
+                                  </span>
+                                  <LevelBox> - Niv {aBoss.level}</LevelBox>
+                                </div>
                               </div>
                             ))}
                           </div>
