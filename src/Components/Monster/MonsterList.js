@@ -20,7 +20,7 @@ class MonsterList extends Component {
           <Monster
             key={monster.id}
             monster={monster}
-            isSelected={selectedMonster.id === monster.id}
+            isSelected={selectedMonster && selectedMonster.id === monster.id}
             {...this.props}
           />
         ))}

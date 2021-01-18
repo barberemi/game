@@ -144,7 +144,6 @@ class Guild extends Component {
         if (responses[0].data) {
           if (responses[1].data) {
             this.setState({
-              loading: false,
               monsters: responses[1].data.items
             })
           }
@@ -403,15 +402,20 @@ class Guild extends Component {
     })
   }
 
-  handleChoiceGuildBoss = (monster) => {
+  handleChoiceGuildBoss = (guildMonster) => {
+    const { guild } = this.state
+
+    let monster = null
+    if (!guild.monster || guild.monster.id !== guildMonster.id) {
+      monster = {
+        id: guildMonster.id
+      }
+    }
+
     axios
       .put(
         process.env.REACT_APP_API_URL + '/guilds/' + this.state.guild.id,
-        {
-          monster: {
-            id: monster.id
-          }
-        },
+        { monster },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -422,7 +426,9 @@ class Guild extends Component {
       .then((response) => {
         toast.success(
           <span style={{ fontSize: '14px' }}>
-            Le monstre {monster.name} est maintenant le champion de la guilde!
+            {monster
+              ? `Le monstre ${guildMonster.name} est maintenant le champion de la guilde!`
+              : 'Vous avez supprimer le champion de la guilde!'}
           </span>,
           {
             position: 'top-right',
@@ -664,7 +670,7 @@ class Guild extends Component {
                         </div>
                       </>
                     )}
-                    {!guild && user && (
+                    {!guild && monsters && user && (
                       <>
                         <div className="card-header">
                           <Title>Créer sa propre guilde</Title>

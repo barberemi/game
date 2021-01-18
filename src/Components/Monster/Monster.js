@@ -78,19 +78,17 @@ class Monster extends Component {
             </IconAction>
           </Link>
           <IconAction
-            data-tip="Choisir"
+            data-tip={isSelected ? 'Enlever' : 'Choisir'}
             onClick={() =>
-              !isSelected
-                ? this.setState({
-                    displayChoiceButtons: !this.state.displayChoiceButtons
-                  })
-                : null
+              this.setState({
+                displayChoiceButtons: !this.state.displayChoiceButtons
+              })
             }
           >
             <i
-              className={`far fa-check-circle text-${
-                isSelected ? 'warning' : 'primary'
-              }`}
+              className={`${
+                isSelected ? 'fas fa-times' : 'far fa-check-circle'
+              } text-${isSelected ? 'danger' : 'warning'}`}
             />
           </IconAction>
           <div
