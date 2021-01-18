@@ -105,11 +105,12 @@ class Exploration extends Component {
       .then((response) => {
         if (response.data) {
           // 1 - Check if last fight is waiting
-          if (
-            response.data.fights[0] &&
-            response.data.fights[0].type === 'waiting'
-          ) {
-            this.setState({ redirect: '/fight/' + response.data.fights[0].id })
+          let fightExists = _.filter(response.data.fights, {
+            type: 'waiting',
+            monster: { isGuildBoss: false }
+          })
+          if (fightExists.length > 0) {
+            this.setState({ redirect: '/fight/' + fightExists[0].id })
           } else {
             // 2 - Generate exploration
             const results = response.data.exploration
