@@ -12,6 +12,7 @@ import moment from 'moment'
 import Loader from '../../../Components/Loader/Loader'
 import { toast } from 'react-toastify'
 import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
+import ItemList from '../../../Components/Item/ItemList'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -152,6 +153,7 @@ class Guild extends Component {
     this.handleAddDeleteUser = this.handleAddDeleteUser.bind(this)
     this.handleChoiceGuildBoss = this.handleChoiceGuildBoss.bind(this)
     this.handleCreateGuildBossFight = this.handleCreateGuildBossFight.bind(this)
+    this.handleOnPutOrTakeOnGuild = this.handleOnPutOrTakeOnGuild.bind(this)
   }
 
   componentDidMount() {
@@ -528,6 +530,54 @@ class Guild extends Component {
     }
   }
 
+  handleOnPutOrTakeOnGuild = (ownItem) => {
+    // 1 - Add to user
+    const items = [...this.state.user.items]
+
+    items.push({
+      id: ownItem.id,
+      isEquipped: false,
+      guild: null,
+      user: {
+        id: this.state.user.id
+      }
+    })
+
+    // 2 - Remove from guild
+    _.remove(this.state.guild.items, { id: ownItem.id })
+    this.setState({
+      guild: {
+        ...this.state.guild,
+        items: this.state.guild.items
+      }
+    })
+
+    // 3 - Save on user
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,
+        { items },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            user: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
+  }
+
   render() {
     const {
       error,
@@ -636,6 +686,24 @@ class Guild extends Component {
                             )}
                           </div>
                         )}
+                        <div onClick={() => this.onClickOnTab('itemsGuildTab')}>
+                          <ListLink
+                            className={
+                              activatedTab === 'itemsGuildTab' ? ' active' : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#itemsGuildTab"
+                          >
+                            Coffre de guilde
+                          </ListLink>
+                          {activatedTab === 'itemsGuildTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
                         <br />
                         <br />
                         <div
@@ -1033,6 +1101,30 @@ class Guild extends Component {
                             </Name>
                           </Member>
                         ))}
+                      </div>
+                    </Card>
+                  </div>
+                )}
+
+                {guild && (
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'itemsGuildTab' ? ' active' : ''
+                    }`}
+                    id="itemsGuildTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          <Title>Coffre de guilde</Title>
+                        </div>
+                        <ItemList
+                          items={guild.items}
+                          displayActions={true}
+                          onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
+                          isGuildItem={true}
+                        />
                       </div>
                     </Card>
                   </div>

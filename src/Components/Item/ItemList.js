@@ -7,7 +7,7 @@ import ItemBox from './ItemBox'
 
 const Container = styled.div`
   max-height: 40vh;
-  min-height: 40vh;
+  min-height: 50vh;
   overflow-y: scroll;
   padding-left: 30px;
 
@@ -78,7 +78,10 @@ ItemList.propTypes = {
   minusPadding: PropTypes.bool,
   displayActions: PropTypes.bool,
   onDeleteItem: PropTypes.func,
+  onPutOrTakeOnGuild: PropTypes.func,
   onChangeEquippedItem: PropTypes.func,
+  isGuildItem: PropTypes.bool,
+  hasGuild: PropTypes.bool,
   onClick: PropTypes.func
 }
 

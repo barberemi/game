@@ -87,7 +87,7 @@ class Character extends Component {
       id: parseInt(this.props.match.params.idCharacter),
       error: undefined,
       loading: true,
-      character: undefined,
+      user: undefined,
       isMe: false,
       friendToAddOrRemove: '',
       activatedTab: 'generalTab'
@@ -116,7 +116,7 @@ class Character extends Component {
             isMe:
               jwtDecode(Cookies.get('auth-token')).email ===
               response.data.email,
-            character: response.data
+            user: response.data
           })
         }
       })
@@ -165,7 +165,7 @@ class Character extends Component {
             }
           )
           this.setState({
-            character: response.data,
+            user: response.data,
             friendToAddOrRemove: ''
           })
         })
@@ -184,36 +184,36 @@ class Character extends Component {
   }
 
   onCheckSkill = (skill) => {
-    const exists = !!_.find(this.state.character.skills, {
+    const exists = !!_.find(this.state.user.skills, {
       id: skill.id
     })
 
     // todo: rework this part: state should never been mutate
     if (exists) {
-      _.remove(this.state.character.skills, {
+      _.remove(this.state.user.skills, {
         id: skill.id
       })
     } else {
       // eslint-disable-next-line
-      this.state.character.skills = [...this.state.character.skills, skill]
+      this.state.user.skills = [...this.state.user.skills, skill]
     }
 
     this.setState({
-      character: {
-        ...this.state.character,
-        skills: this.state.character.skills
+      user: {
+        ...this.state.user,
+        skills: this.state.user.skills
       }
     })
 
     // Save datas
     let skills = []
-    for (let i = 0; i < this.state.character.skills.length; i++) {
-      const id = this.state.character.skills[i].id
+    for (let i = 0; i < this.state.user.skills.length; i++) {
+      const id = this.state.user.skills[i].id
 
       skills.push({
         ...(id && { id: id }),
         skill: {
-          id: this.state.character.skills[i].id
+          id: this.state.user.skills[i].id
         },
         user: {
           id: this.state.id
@@ -234,7 +234,7 @@ class Character extends Component {
       .then((response) => {
         if (response.data) {
           this.setState({
-            character: response.data
+            user: response.data
           })
         }
       })
@@ -246,12 +246,12 @@ class Character extends Component {
   }
 
   onDeleteItem = (item) => {
-    _.remove(this.state.character.items, { id: item.id })
+    _.remove(this.state.user.items, { id: item.id })
 
     this.setState({
-      character: {
-        ...this.state.character,
-        items: this.state.character.items
+      user: {
+        ...this.state.user,
+        items: this.state.user.items
       }
     })
 
@@ -274,7 +274,7 @@ class Character extends Component {
   }
 
   onChangeEquippedItem = (newEquippedItem) => {
-    const items = [...this.state.character.items]
+    const items = [...this.state.user.items]
     // Remove all isEquipped items with the same item.type
     if (!newEquippedItem.isEquipped) {
       _.map(
@@ -294,8 +294,8 @@ class Character extends Component {
     items[indexItem] = newEquippedItem
 
     this.setState({
-      character: {
-        ...this.state.character,
+      user: {
+        ...this.state.user,
         items
       }
     })
@@ -305,15 +305,15 @@ class Character extends Component {
 
   saveItems = () => {
     let items = []
-    for (let i = 0; i < this.state.character.items.length; i++) {
-      const id = this.state.character.items[i].id
-      const isEquipped = this.state.character.items[i].isEquipped
+    for (let i = 0; i < this.state.user.items.length; i++) {
+      const id = this.state.user.items[i].id
+      const isEquipped = this.state.user.items[i].isEquipped
 
       items.push({
         ...(id && { id: id }),
         isEquipped: isEquipped,
         item: {
-          id: this.state.character.items[i].item.id
+          id: this.state.user.items[i].item.id
         },
         user: {
           id: this.state.id
@@ -334,7 +334,7 @@ class Character extends Component {
       .then((response) => {
         if (response.data) {
           this.setState({
-            character: response.data
+            user: response.data
           })
         }
       })
@@ -345,8 +345,51 @@ class Character extends Component {
       })
   }
 
+  handleOnPutOrTakeOnGuild = (ownItem) => {
+    if (this.state.user.guild) {
+      // 1 - Add to guild
+      const items = [...this.state.user.guild.items]
+
+      items.push({
+        id: ownItem.id,
+        isEquipped: false,
+        guild: {
+          id: this.state.user.guild.id
+        },
+        user: null
+      })
+
+      // 2 - Remove from user
+      _.remove(this.state.user.items, { id: ownItem.id })
+      this.setState({
+        user: {
+          ...this.state.user,
+          items: this.state.user.items
+        }
+      })
+
+      // 3 - Save on guild
+      axios
+        .put(
+          process.env.REACT_APP_API_URL + '/guilds/' + this.state.user.guild.id,
+          { items },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
+          }
+        )
+        .catch((error) => {
+          this.setState({
+            error: error.response.data
+          })
+        })
+    }
+  }
+
   render() {
-    const { error, loading, character, activatedTab } = this.state
+    const { error, loading, user, activatedTab } = this.state
 
     return (
       <Container className="container-fluid">
@@ -357,7 +400,7 @@ class Character extends Component {
               <b>Erreur :</b> {error.message}
             </span>
           )}
-          {character && (
+          {user && (
             <div className="row h-100 mt-5">
               <div className="col-sm-3 my-auto">
                 <Card className="card">
@@ -445,10 +488,10 @@ class Character extends Component {
                   src={
                     process.env.PUBLIC_URL +
                     '/img/academies/' +
-                    character.academy.name +
+                    user.academy.name +
                     '.png'
                   }
-                  alt={character.academy.name}
+                  alt={user.academy.name}
                 />
               </div>
 
@@ -465,20 +508,16 @@ class Character extends Component {
                     <Card className="card">
                       <div className="card-header">
                         <Title>
-                          {character.name}{' '}
-                          <span style={{ color: character.academy.color }}>
-                            ({character.academy.label})
+                          {user.name}{' '}
+                          <span style={{ color: user.academy.color }}>
+                            ({user.academy.label})
                           </span>
-                          <LevelBox> - Niv {character.level}</LevelBox>
+                          <LevelBox> - Niv {user.level}</LevelBox>
                         </Title>
-                        {character.guild && <div>{character.guild.name}</div>}
+                        {user.guild && <div>{user.guild.name}</div>}
                         <ProgressBar
-                          actual={
-                            character.experience - character.xpToActualLevel
-                          }
-                          max={
-                            character.xpToNextLevel - character.xpToActualLevel
-                          }
+                          actual={user.experience - user.xpToActualLevel}
+                          max={user.xpToNextLevel - user.xpToActualLevel}
                           color="#FFC312"
                           transparentColor="#7F8286"
                         />
@@ -486,25 +525,22 @@ class Character extends Component {
                       <div className="card-body">
                         <Title>Caractéristiques</Title>
                         <div className="col-sm-12">
-                          {_.map(
-                            character.characteristics,
-                            (characteristic) => (
-                              <CharacteristicItem
-                                key={characteristic.characteristic.name}
-                                name={characteristic.characteristic.name}
-                                amount={characteristic.amount}
-                                equippedItems={_.filter(character.items, {
-                                  isEquipped: true
-                                })}
-                              />
-                            )
-                          )}
+                          {_.map(user.characteristics, (characteristic) => (
+                            <CharacteristicItem
+                              key={characteristic.characteristic.name}
+                              name={characteristic.characteristic.name}
+                              amount={characteristic.amount}
+                              equippedItems={_.filter(user.items, {
+                                isEquipped: true
+                              })}
+                            />
+                          ))}
                         </div>
                       </div>
                       <div className="card-footer">
                         <Title>Équipements</Title>
                         <EquippedItems
-                          items={_.filter(character.items, {
+                          items={_.filter(user.items, {
                             isEquipped: true
                           })}
                           displayActions={this.state.isMe}
@@ -531,28 +567,24 @@ class Character extends Component {
                             <br />
                             <SubTitle>
                               (
-                              {character.skillPoints -
-                                character.skills.length ===
-                              0
+                              {user.skillPoints - user.skills.length === 0
                                 ? 'Aucun point restant'
-                                : character.skillPoints -
-                                    character.skills.length ===
-                                  1
+                                : user.skillPoints - user.skills.length === 1
                                 ? '1pt restant'
-                                : character.skillPoints -
-                                  character.skills.length +
+                                : user.skillPoints -
+                                  user.skills.length +
                                   'pts restants'}
                               )
                             </SubTitle>
                           </Title>
                         </div>
                         <EquippedSkills
-                          skills={character.skills}
-                          academyId={character.academy.id}
+                          skills={user.skills}
+                          academyId={user.academy.id}
                           onCheckSkill={this.onCheckSkill}
                           displayCheckbox={this.state.isMe}
                           remainingSkillPoints={
-                            character.skillPoints - character.skills.length
+                            user.skillPoints - user.skills.length
                           }
                         />
                       </div>
@@ -599,10 +631,10 @@ class Character extends Component {
                           <Title>Liste d’amis</Title>
                         </div>
                         <FriendList
-                          friends={character.friends}
+                          friends={user.friends}
                           canDelete={
-                            character.role === 'ROLE_ADMIN' ||
-                            character.role === 'ROLE_GUILD_MASTER'
+                            user.role === 'ROLE_ADMIN' ||
+                            user.role === 'ROLE_GUILD_MASTER'
                           }
                           onDelete={(friend) => {
                             this.setState(
@@ -633,26 +665,24 @@ class Character extends Component {
                             <br />
                             <SubTitle>
                               (
-                              {character.itemSpaceNb -
-                                character.items.length ===
-                              0
+                              {user.itemSpaceNb - user.items.length === 0
                                 ? 'Aucune place restante'
-                                : character.itemSpaceNb -
-                                    character.items.length ===
-                                  1
+                                : user.itemSpaceNb - user.items.length === 1
                                 ? '1 place restante'
-                                : character.itemSpaceNb -
-                                  character.items.length +
+                                : user.itemSpaceNb -
+                                  user.items.length +
                                   ' places restantes'}
                               )
                             </SubTitle>
                           </Title>
                         </div>
                         <ItemList
-                          items={character.items}
+                          items={user.items}
                           displayActions={this.state.isMe}
                           onDeleteItem={this.onDeleteItem}
                           onChangeEquippedItem={this.onChangeEquippedItem}
+                          onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
+                          hasGuild={!!user.guild}
                         />
                       </div>
                     </Card>

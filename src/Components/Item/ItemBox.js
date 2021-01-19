@@ -79,6 +79,8 @@ class ItemBox extends Component {
       displayText,
       oldItem,
       displayActions,
+      isGuildItem,
+      hasGuild,
       withOpacity
     } = this.props
     const { stateActions } = this.state
@@ -124,26 +126,52 @@ class ItemBox extends Component {
         {displayActions && (
           <ActionsBox className={stateActions ? 'd-block' : 'd-none'}>
             <div className="p-3">
-              {isAnEquippedItem(trueItem) && (
+              {isGuildItem && (
                 <ActionBtn
-                  className="py-2 mb-4 text-warning"
+                  className="py-2 mb-4 text-success"
                   onClick={() => {
                     this.toggleDisplayActions()
-                    this.props.onChangeEquippedItem(item)
+                    this.props.onPutOrTakeOnGuild(item)
                   }}
                 >
-                  {item.isEquipped === true ? 'Déséquiper' : "S'équiper"}
+                  Prendre
                 </ActionBtn>
               )}
-              <ActionBtn
-                className="py-2 mb-4 text-danger"
-                onClick={() => {
-                  this.toggleDisplayActions()
-                  this.props.onDeleteItem(item)
-                }}
-              >
-                Supprimer
-              </ActionBtn>
+              {!isGuildItem && (
+                <>
+                  {isAnEquippedItem(trueItem) && (
+                    <ActionBtn
+                      className="py-2 mb-4 text-success"
+                      onClick={() => {
+                        this.toggleDisplayActions()
+                        this.props.onChangeEquippedItem(item)
+                      }}
+                    >
+                      {item.isEquipped === true ? 'Déséquiper' : "S'équiper"}
+                    </ActionBtn>
+                  )}
+                  {hasGuild && (
+                    <ActionBtn
+                      className="py-2 mb-4 text-warning"
+                      onClick={() => {
+                        this.toggleDisplayActions()
+                        this.props.onPutOrTakeOnGuild(item)
+                      }}
+                    >
+                      Envoyer à la guilde
+                    </ActionBtn>
+                  )}
+                  <ActionBtn
+                    className="py-2 mb-4 text-danger"
+                    onClick={() => {
+                      this.toggleDisplayActions()
+                      this.props.onDeleteItem(item)
+                    }}
+                  >
+                    Supprimer
+                  </ActionBtn>
+                </>
+              )}
               <ActionBtn
                 className="py-2 text-white"
                 onClick={() => this.toggleDisplayActions()}
@@ -159,7 +187,8 @@ class ItemBox extends Component {
 }
 
 ItemBox.defaultProps = {
-  displayText: true
+  displayText: true,
+  isGuildItem: false
 }
 
 ItemBox.propTypes = {
@@ -181,6 +210,9 @@ ItemBox.propTypes = {
   displayActions: PropTypes.bool,
   displayText: PropTypes.bool,
   onDeleteItem: PropTypes.func,
+  onPutOrTakeOnGuild: PropTypes.func,
+  isGuildItem: PropTypes.bool,
+  hasGuild: PropTypes.bool,
   onChangeEquippedItem: PropTypes.func
 }
 
