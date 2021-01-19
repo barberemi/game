@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 import ItemBox from './ItemBox'
+import ReactTooltip from 'react-tooltip'
 
 const Equipment = styled.div`
   padding: 10px;
@@ -97,6 +98,7 @@ class EquippedItems extends Component {
             {...this.props}
           />
         </Equipment>
+        <ReactTooltip />
       </div>
     )
   }

@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { getColorItem, isAnEquippedItem } from '../../utils/itemHelper'
 import ReactDOMServer from 'react-dom/server'
 import ItemTooltip from './ItemTooltip'
-import ReactTooltip from 'react-tooltip'
 
 const Box = styled.div`
   border: 2px solid;
@@ -119,7 +118,6 @@ class ItemBox extends Component {
           />
           {trueItem.level && <Level>{trueItem.level}</Level>}
         </Box>
-        <ReactTooltip />
         {displayText && (
           <Text style={{ color: getColorItem(trueItem) }}>{trueItem.name}</Text>
         )}

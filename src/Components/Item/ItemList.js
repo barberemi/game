@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import _ from 'lodash'
 import ItemBox from './ItemBox'
+import ReactTooltip from 'react-tooltip'
 
 const Container = styled.div`
   max-height: 40vh;
@@ -56,6 +57,7 @@ class ItemList extends Component {
               </div>
             </Item>
           ))}
+          <ReactTooltip />
         </Container>
       </>
     )
