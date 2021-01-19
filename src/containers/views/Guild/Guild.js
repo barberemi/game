@@ -103,10 +103,6 @@ const LevelBox = styled.span`
   color: #fff;
 `
 
-const MembersBossFight = styled.div`
-  overflow-y: scroll;
-`
-
 const Member = styled.div`
   display: flex;
   float: left;
@@ -618,24 +614,28 @@ class Guild extends Component {
                             )}
                           </div>
                         )}
-                        <div onClick={() => this.onClickOnTab('fightBossTab')}>
-                          <ListLink
-                            className={
-                              activatedTab === 'fightBossTab' ? ' active' : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#fightBossTab"
+                        {guild && guild.monster && (
+                          <div
+                            onClick={() => this.onClickOnTab('fightBossTab')}
                           >
-                            Combat vs Champion
-                          </ListLink>
-                          {activatedTab === 'fightBossTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
+                            <ListLink
+                              className={
+                                activatedTab === 'fightBossTab' ? ' active' : ''
+                              }
+                              data-toggle="tab"
+                              role="tab"
+                              href="#fightBossTab"
+                            >
+                              Combat vs Champion
+                            </ListLink>
+                            {activatedTab === 'fightBossTab' && (
+                              <span className="text-warning">
+                                &nbsp;
+                                <i className="far fa-arrow-alt-circle-right" />
+                              </span>
+                            )}
+                          </div>
+                        )}
                         <br />
                         <br />
                         <div
@@ -918,7 +918,7 @@ class Guild extends Component {
                   )}
 
                 {/* BossFight */}
-                {guild && monsters && (
+                {guild && guild.monster && (
                   <div
                     className={`tab-pane${
                       activatedTab === 'fightBossTab' ? ' active' : ''
@@ -927,7 +927,10 @@ class Guild extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body">
+                      <div
+                        className="card-body"
+                        style={{ maxHeight: '90vh', overflowY: 'auto' }}
+                      >
                         <div className="col-sm-12">
                           <Title>Champion de guilde actuel</Title>
                         </div>
@@ -983,55 +986,53 @@ class Guild extends Component {
                             )}
                           </Title>
                         </div>
-                        <MembersBossFight>
-                          {_.map(guild.users, (member, index) => (
-                            <Member key={index}>
-                              <Name className="col-sm-9">
-                                {member.academy && (
-                                  <>
-                                    <Avatar
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        '/img/academies/' +
-                                        member.academy.name +
-                                        '.png'
-                                      }
-                                      alt={member.name}
-                                    />
-                                    &nbsp;
-                                  </>
-                                )}
-                                {member.name} -{' '}
-                                {member.lastGuildBossFightOfDay && (
-                                  <span
-                                    className={`text-${
-                                      member.lastGuildBossFightOfDay.type ===
-                                        'waiting' ||
-                                      member.lastGuildBossFightOfDay.type ===
-                                        'won'
-                                        ? 'success'
-                                        : 'warning'
-                                    }`}
-                                  >
-                                    {member.lastGuildBossFightOfDay.type ===
-                                    'waiting'
-                                      ? 'En cours'
-                                      : member.lastGuildBossFightOfDay.type ===
-                                        'won'
-                                      ? 'Victoire'
-                                      : member.lastGuildBossFightOfDay
-                                          .remainingHp + 'pts de vie restant'}
-                                  </span>
-                                )}
-                                {!member.lastGuildBossFightOfDay && (
-                                  <span className="text-danger">
-                                    Pas encore combattu
-                                  </span>
-                                )}
-                              </Name>
-                            </Member>
-                          ))}
-                        </MembersBossFight>
+                        {_.map(guild.users, (member, index) => (
+                          <Member key={index}>
+                            <Name className="col-sm-9">
+                              {member.academy && (
+                                <>
+                                  <Avatar
+                                    src={
+                                      process.env.PUBLIC_URL +
+                                      '/img/academies/' +
+                                      member.academy.name +
+                                      '.png'
+                                    }
+                                    alt={member.name}
+                                  />
+                                  &nbsp;
+                                </>
+                              )}
+                              {member.name} -{' '}
+                              {member.lastGuildBossFightOfDay && (
+                                <span
+                                  className={`text-${
+                                    member.lastGuildBossFightOfDay.type ===
+                                      'waiting' ||
+                                    member.lastGuildBossFightOfDay.type ===
+                                      'won'
+                                      ? 'success'
+                                      : 'warning'
+                                  }`}
+                                >
+                                  {member.lastGuildBossFightOfDay.type ===
+                                  'waiting'
+                                    ? 'En cours'
+                                    : member.lastGuildBossFightOfDay.type ===
+                                      'won'
+                                    ? 'Victoire'
+                                    : member.lastGuildBossFightOfDay
+                                        .remainingHp + 'pts de vie restant'}
+                                </span>
+                              )}
+                              {!member.lastGuildBossFightOfDay && (
+                                <span className="text-danger">
+                                  Pas encore combattu
+                                </span>
+                              )}
+                            </Name>
+                          </Member>
+                        ))}
                       </div>
                     </Card>
                   </div>
