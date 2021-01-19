@@ -8,7 +8,7 @@ class MonsterTypeBadge extends React.Component {
     if (!isBoss && !isGuildBoss) {
       return ''
     }
-    console.log(isGuildBoss)
+
     return (
       <span
         className={`badge badge-pill badge-${

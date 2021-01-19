@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import Loader from '../../../Components/Loader/Loader'
 import { toast } from 'react-toastify'
+import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -97,6 +98,41 @@ const CreateGuildText = styled.div`
   padding-top: 50px;
 `
 
+const LevelBox = styled.span`
+  font-size: 16px;
+  color: #fff;
+`
+
+const MembersBossFight = styled.div`
+  overflow-y: scroll;
+`
+
+const Member = styled.div`
+  display: flex;
+  float: left;
+  width: 100%;
+  padding-top: 20px;
+`
+
+const Name = styled.div`
+  text-align: left;
+`
+
+const Avatar = styled.img`
+  width: 50px;
+  height: 50px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background-color: #fff;
+`
+
+const FightButton = styled.span`
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+`
+
 class Guild extends Component {
   constructor(props) {
     super(props)
@@ -119,6 +155,7 @@ class Guild extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAddDeleteUser = this.handleAddDeleteUser.bind(this)
     this.handleChoiceGuildBoss = this.handleChoiceGuildBoss.bind(this)
+    this.handleCreateGuildBossFight = this.handleCreateGuildBossFight.bind(this)
   }
 
   componentDidMount() {
@@ -451,6 +488,50 @@ class Guild extends Component {
       })
   }
 
+  handleCreateGuildBossFight = () => {
+    const { user, guild } = this.state
+
+    // 1 - Check if waiting guild boss fight
+    if (
+      user.lastGuildBossFightOfDay &&
+      user.lastGuildBossFightOfDay.type === 'waiting'
+    ) {
+      this.setState({ redirect: '/fight/' + user.lastGuildBossFightOfDay.id })
+    } else {
+      // 2 - No waiting fight : create one
+      axios
+        .post(
+          process.env.REACT_APP_API_URL + '/fights',
+          {
+            user: {
+              id: user.id
+            },
+            monster: {
+              id: guild.monster.id
+            }
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
+          }
+        )
+        .then((response) => {
+          if (response.data) {
+            this.setState({
+              redirect: '/fight/' + response.data.id
+            })
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.data
+          })
+        })
+    }
+  }
+
   render() {
     const {
       error,
@@ -512,24 +593,31 @@ class Guild extends Component {
                             </span>
                           )}
                         </div>
-                        <div onClick={() => this.onClickOnTab('choiceBossTab')}>
-                          <ListLink
-                            className={
-                              activatedTab === 'choiceBossTab' ? ' active' : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#choiceBossTab"
+                        {(user.role === 'ROLE_ADMIN' ||
+                          user.role === 'ROLE_GUILD_MASTER') && (
+                          <div
+                            onClick={() => this.onClickOnTab('choiceBossTab')}
                           >
-                            Choix du champion
-                          </ListLink>
-                          {activatedTab === 'choiceBossTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
+                            <ListLink
+                              className={
+                                activatedTab === 'choiceBossTab'
+                                  ? ' active'
+                                  : ''
+                              }
+                              data-toggle="tab"
+                              role="tab"
+                              href="#choiceBossTab"
+                            >
+                              Choix du champion
+                            </ListLink>
+                            {activatedTab === 'choiceBossTab' && (
+                              <span className="text-warning">
+                                &nbsp;
+                                <i className="far fa-arrow-alt-circle-right" />
+                              </span>
+                            )}
+                          </div>
+                        )}
                         <div onClick={() => this.onClickOnTab('fightBossTab')}>
                           <ListLink
                             className={
@@ -539,7 +627,7 @@ class Guild extends Component {
                             role="tab"
                             href="#fightBossTab"
                           >
-                            Combat du champion
+                            Combat vs Champion
                           </ListLink>
                           {activatedTab === 'fightBossTab' && (
                             <span className="text-warning">
@@ -828,6 +916,126 @@ class Guild extends Component {
                       </Card>
                     </div>
                   )}
+
+                {/* BossFight */}
+                {guild && monsters && (
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'fightBossTab' ? ' active' : ''
+                    }`}
+                    id="fightBossTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          <Title>Champion de guilde actuel</Title>
+                        </div>
+                        <Image
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/img/boss/' +
+                            guild.monster.image
+                          }
+                          alt="Third slide"
+                        />
+                        <div>
+                          {(guild.monster.isBoss ||
+                            guild.monster.isGuildBoss) && (
+                            <>
+                              <MonsterTypeBadge
+                                isGuildBoss={guild.monster.isGuildBoss}
+                                isBoss={guild.monster.isBoss}
+                              />
+                              <br />
+                            </>
+                          )}
+                          {guild.monster.name}{' '}
+                          <span
+                            style={{
+                              color: guild.monster.academy.color
+                            }}
+                          >
+                            ({guild.monster.academy.name})
+                          </span>
+                          <LevelBox> - Niv {guild.monster.level}</LevelBox>
+                        </div>
+                        <div className="col-sm-12 mt-3">
+                          <Title>
+                            Combats de la journée{' '}
+                            {user && user.canGuildBossFight && (
+                              <FightButton
+                                onClick={() =>
+                                  this.handleCreateGuildBossFight()
+                                }
+                              >
+                                (Me battre{' '}
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL + '/img/versus.svg'
+                                  }
+                                  width="30px"
+                                  height="30px"
+                                  alt="versus"
+                                />
+                                )
+                              </FightButton>
+                            )}
+                          </Title>
+                        </div>
+                        <MembersBossFight>
+                          {_.map(guild.users, (member, index) => (
+                            <Member key={index}>
+                              <Name className="col-sm-9">
+                                {member.academy && (
+                                  <>
+                                    <Avatar
+                                      src={
+                                        process.env.PUBLIC_URL +
+                                        '/img/academies/' +
+                                        member.academy.name +
+                                        '.png'
+                                      }
+                                      alt={member.name}
+                                    />
+                                    &nbsp;
+                                  </>
+                                )}
+                                {member.name} -{' '}
+                                {member.lastGuildBossFightOfDay && (
+                                  <span
+                                    className={`text-${
+                                      member.lastGuildBossFightOfDay.type ===
+                                        'waiting' ||
+                                      member.lastGuildBossFightOfDay.type ===
+                                        'won'
+                                        ? 'success'
+                                        : 'warning'
+                                    }`}
+                                  >
+                                    {member.lastGuildBossFightOfDay.type ===
+                                    'waiting'
+                                      ? 'En cours'
+                                      : member.lastGuildBossFightOfDay.type ===
+                                        'won'
+                                      ? 'Victoire'
+                                      : member.lastGuildBossFightOfDay
+                                          .remainingHp + 'pts de vie restant'}
+                                  </span>
+                                )}
+                                {!member.lastGuildBossFightOfDay && (
+                                  <span className="text-danger">
+                                    Pas encore combattu
+                                  </span>
+                                )}
+                              </Name>
+                            </Member>
+                          ))}
+                        </MembersBossFight>
+                      </div>
+                    </Card>
+                  </div>
+                )}
               </div>
             </RightBox>
           </div>

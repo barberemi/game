@@ -542,7 +542,8 @@ class Fight extends Component {
         {
           round: this.state.round,
           hp: this.state.players[0].hp,
-          type: type
+          type: type,
+          remainingHp: this.state.enemy.hp
         },
         {
           headers: {

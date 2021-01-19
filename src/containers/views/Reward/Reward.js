@@ -151,7 +151,6 @@ class Reward extends Component {
         }
       })
       .catch((error) => {
-        console.log(error)
         this.setState({
           loading: false,
           error: error.response.data
@@ -289,9 +288,19 @@ class Reward extends Component {
                       </div>
                     )}
                     <div className="card-footer">
-                      <Link to={user.exploration ? '/exploration' : '/maps'}>
+                      <Link
+                        to={
+                          monster.isGuildBoss
+                            ? '/guild'
+                            : user.exploration
+                            ? '/exploration'
+                            : '/maps'
+                        }
+                      >
                         <Button className="btn">
-                          {user.exploration
+                          {monster.isGuildBoss
+                            ? 'Retour à la guilde'
+                            : user.exploration
                             ? "Continuer l'exploration"
                             : 'Nouvelle exploration'}
                         </Button>
