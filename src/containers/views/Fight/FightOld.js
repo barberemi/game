@@ -123,7 +123,7 @@ class Fight extends Component {
 
       // 4 - HOT PLAYERS
       for (let i = 0; i < players.length; i++) {
-        if (players[i].dot.length > 0) {
+        if (players[i].hot.length > 0) {
           let { user } = userTakeHot(this.state.players[i])
           players[i] = user
           this.setState({

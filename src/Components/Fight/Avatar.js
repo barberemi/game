@@ -17,7 +17,7 @@ class Avatar extends Component {
   animation() {
     const { faint, isHit } = this.props
 
-    if (isHit) {
+    if (isHit !== false) {
       return 'animated headShake'
     }
     if (faint === true) {

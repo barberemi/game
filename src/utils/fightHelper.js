@@ -26,7 +26,7 @@ export const playerHealAction = (players, playerHeal, action) => {
       ...players[i],
       hp: newHp,
       hot,
-      isHit: { amount: action.amount, type: 'heal' }
+      isHit: hotMessage === '' ? { amount: action.amount, type: 'heal' } : false
     }
   }
 
@@ -134,6 +134,7 @@ export const userTakeDot = (user) => {
 
   user = {
     ...user,
+    isHit: { amount: damages, type: 'damage' },
     hp: user.hp - damages <= 0 ? 0 : user.hp - damages
   }
 
@@ -148,6 +149,7 @@ export const userTakeHot = (user) => {
 
   user = {
     ...user,
+    isHit: { amount: healing, type: 'heal' },
     hp: user.hp + healing > user.maxHp ? user.maxHp : user.hp + healing
   }
 
