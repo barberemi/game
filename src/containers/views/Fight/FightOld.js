@@ -314,7 +314,7 @@ class Fight extends Component {
 
             players[playerSelected] = {
               ...players[playerSelected],
-              isHit: true,
+              isHit: { amount: amount, type: 'damage' },
               dot: [
                 ...prevState.players[playerSelected].dot,
                 { amount, duration }
@@ -339,7 +339,7 @@ class Fight extends Component {
 
             players[playerSelected] = {
               ...players[playerSelected],
-              isHit: true,
+              isHit: { amount: amount, type: 'damage' },
               hp:
                 prevState.players[playerSelected].hp - amount <= 0
                   ? 0
@@ -422,7 +422,7 @@ class Fight extends Component {
         enemy: {
           ...this.state.enemy,
           hp,
-          isHit: true,
+          isHit: { amount: amount, type: 'damage' },
           dot
         },
         textMessageOne

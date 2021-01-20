@@ -22,7 +22,12 @@ export const playerHealAction = (players, playerHeal, action) => {
       ]
     }
 
-    players[i] = { ...players[i], hp: newHp, hot }
+    players[i] = {
+      ...players[i],
+      hp: newHp,
+      hot,
+      isHit: { amount: action.amount, type: 'heal' }
+    }
   }
 
   const textMessageOne = `${_.find(players, 'me').name}
@@ -74,7 +79,7 @@ export const enemyMovementAction = (players, idPlayerMove, enemy) => {
 
   players[idPlayerMove] = {
     ...players[idPlayerMove],
-    isHit: true,
+    isHit: { amount: enemy.expectedAction.amount, type: 'damage' },
     hp:
       players[idPlayerMove].hp - enemy.expectedAction.amount <= 0
         ? 0
@@ -109,7 +114,7 @@ export const enemyBlockAction = (players, idPlayerMove, enemy) => {
 
   players[idPlayerMove] = {
     ...players[idPlayerMove],
-    isHit: true,
+    isHit: { amount: enemy.expectedAction.amount, type: 'damage' },
     hp:
       players[idPlayerMove].hp - enemy.expectedAction.amount <= 0
         ? 0

@@ -290,6 +290,15 @@ class Fight extends Component {
     const { amount, name, effect, duration } = this.state.enemy.expectedAction
     const playerSelected = selectPlayer(this.state.players, effect)
 
+    // Reset isHit of all users
+    const players = [...this.state.players]
+    for (let i = 0; i < players.length; i++) {
+      players[i] = { ...players[i], isHit: false }
+    }
+    this.setState({
+      players: players
+    })
+
     if (this.checkIfEnemyAlive()) {
       if (effect === 'heal') {
         this.setState(
@@ -297,6 +306,7 @@ class Fight extends Component {
             textMessageOne: `${this.state.enemy.name} se soigne pour ${amount}pts de vie.`,
             enemy: {
               ...this.state.enemy,
+              isHit: { amount: amount, type: 'heal' },
               hp: this.state.enemy.hp + amount
             }
           },
@@ -315,6 +325,7 @@ class Fight extends Component {
             textMessageOne: `${this.state.enemy.name} se soignera de ${amount}pts de vie à la fin des ${duration} prochains tours.`,
             enemy: {
               ...this.state.enemy,
+              isHit: { amount: amount, type: 'heal' },
               hot: [...this.state.enemy.hot, { amount, duration }]
             }
           },
@@ -376,7 +387,7 @@ class Fight extends Component {
 
             players[playerSelected] = {
               ...players[playerSelected],
-              isHit: true,
+              isHit: { amount: amount, type: 'damage' },
               dot: [
                 ...prevState.players[playerSelected].dot,
                 { amount, duration }
@@ -401,7 +412,7 @@ class Fight extends Component {
 
             players[playerSelected] = {
               ...players[playerSelected],
-              isHit: true,
+              isHit: { amount: amount, type: 'damage' },
               hp:
                 prevState.players[playerSelected].hp - amount <= 0
                   ? 0
@@ -484,7 +495,7 @@ class Fight extends Component {
         enemy: {
           ...this.state.enemy,
           hp,
-          isHit: true,
+          isHit: { amount: amount, type: 'damage' },
           dot
         },
         textMessageOne

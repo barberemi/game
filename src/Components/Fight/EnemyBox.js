@@ -55,6 +55,7 @@ export class EnemyBox extends Component {
           <Avatar
             faint={this.props.enemy.faint}
             isHit={this.props.enemy.isHit}
+            isPlayer={false}
             logoName={'boss/' + this.props.enemy.image}
             className="avatar mt-5"
           />
