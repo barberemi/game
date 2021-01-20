@@ -17,8 +17,8 @@ const Box = styled.div`
 `
 
 const Image = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
 `
 
 const Level = styled.div`
@@ -42,7 +42,7 @@ const Equipped = styled.div`
 const Text = styled.div`
   padding: 0 10px;
   display: table-cell;
-  padding-top: 15px;
+  padding-top: 20px;
 `
 
 const ActionsBox = styled.div`
@@ -111,8 +111,8 @@ class ItemBox extends Component {
           <Image
             src={
               trueItem.image
-                ? trueItem.image
-                : 'https://www.gameuionweb.com/zelda-botw/items/weapons/BotW_Ancient_Short_Sword_Icon.png'
+                ? process.env.PUBLIC_URL + '/img/items/' + trueItem.image
+                : process.env.PUBLIC_URL + '/img/items/armor/bandit.png'
             }
             alt={trueItem.name}
           />
