@@ -98,7 +98,11 @@ class ItemBox extends Component {
             opacity: withOpacity ? '0.5' : '1'
           }}
           data-tip={ReactDOMServer.renderToStaticMarkup(
-            <ItemTooltip item={trueItem} oldItem={oldItem} />
+            <ItemTooltip
+              item={trueItem}
+              oldItem={oldItem}
+              isEquipped={item.isEquipped}
+            />
           )}
           data-html={true}
           onClick={() => this.setState({ stateActions: !stateActions })}

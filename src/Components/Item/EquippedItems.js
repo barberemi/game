@@ -115,7 +115,7 @@ EquippedItems.propTypes = {
         level: PropTypes.number,
         type: PropTypes.string,
         rarity: PropTypes.string,
-        equipped: PropTypes.bool
+        isEquipped: PropTypes.bool
       }),
       isEquipped: PropTypes.bool
     })

@@ -144,7 +144,7 @@ ItemCrafting.propTypes = {
     level: PropTypes.number,
     type: PropTypes.string,
     rarity: PropTypes.string,
-    equipped: PropTypes.bool,
+    isEquipped: PropTypes.bool,
     itemsToCraft: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number,
@@ -161,7 +161,7 @@ ItemCrafting.propTypes = {
       level: PropTypes.number,
       type: PropTypes.string,
       rarity: PropTypes.string,
-      equipped: PropTypes.bool
+      isEquipped: PropTypes.bool
     })
   )
 }

@@ -83,7 +83,7 @@ class ItemTooltip extends Component {
   }
 
   render() {
-    const { item, oldItem } = this.props
+    const { item, oldItem, isEquipped } = this.props
     const { svg } = this.state
     let tabCharactersitics = []
 
@@ -104,7 +104,7 @@ class ItemTooltip extends Component {
               {_.map(item.characteristics, (characteristic, index) => (
                 <div
                   key={index}
-                  className={!oldItem && !item.equipped ? 'text-success' : ''}
+                  className={!oldItem && !isEquipped ? 'text-success' : ''}
                 >
                   +{characteristic.amount}{' '}
                   {getCharacteristicTranslationName(
@@ -172,28 +172,46 @@ class ItemTooltip extends Component {
           </>
         )}
         {item.level && <div>Niv {item.level}</div>}
-        <div>
-          Prix de vente : {item.cost} <i className="far fa-money-bill-alt" />
-        </div>
+        {item.dropRate > 0 && <div>Chance : {item.dropRate}%</div>}
+        {item.cost > 0 && (
+          <div>
+            Prix : {item.cost}{' '}
+            <img
+              src={process.env.PUBLIC_URL + '/img/money.svg'}
+              width="20"
+              height="20"
+              className="d-inline-block align-top"
+              alt="Thune"
+            />
+          </div>
+        )}
       </Tooltip>
     )
   }
 }
 
-const propTypeItem = PropTypes.shape({
-  id: PropTypes.number,
-  name: PropTypes.string,
-  cost: PropTypes.number,
-  level: PropTypes.number,
-  type: PropTypes.string,
-  rarity: PropTypes.string,
-  characteristics: PropTypes.arrayOf(PropTypes.shape()),
-  equipped: PropTypes.bool
-})
-
 ItemTooltip.propTypes = {
-  item: propTypeItem,
-  oldItem: propTypeItem
+  item: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    cost: PropTypes.number,
+    level: PropTypes.number,
+    type: PropTypes.string,
+    rarity: PropTypes.string,
+    dropRate: PropTypes.number,
+    characteristics: PropTypes.arrayOf(PropTypes.shape())
+  }),
+  oldItem: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    cost: PropTypes.number,
+    level: PropTypes.number,
+    type: PropTypes.string,
+    rarity: PropTypes.string,
+    dropRate: PropTypes.number,
+    characteristics: PropTypes.arrayOf(PropTypes.shape())
+  }),
+  isEquipped: PropTypes.bool
 }
 
 export default ItemTooltip

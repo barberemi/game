@@ -47,8 +47,8 @@ class ItemList extends Component {
                 <ItemBox
                   item={item}
                   oldItem={
-                    !item.equipped
-                      ? _.find(items, { type: item.type, equipped: true })
+                    !item.isEquipped
+                      ? _.find(items, { type: item.type, isEquipped: true })
                       : null
                   }
                   displayText={false}
@@ -74,7 +74,7 @@ ItemList.propTypes = {
       level: PropTypes.number,
       type: PropTypes.string,
       rarity: PropTypes.string,
-      equipped: PropTypes.bool
+      isEquipped: PropTypes.bool
     })
   ),
   minusPadding: PropTypes.bool,

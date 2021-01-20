@@ -132,7 +132,7 @@ CharacteristicItem.propTypes = {
         level: PropTypes.number,
         type: PropTypes.string,
         rarity: PropTypes.string,
-        equipped: PropTypes.bool,
+        isEquipped: PropTypes.bool,
         characteristics: PropTypes.arrayOf(PropTypes.shape({}))
       }),
       isEquipped: PropTypes.bool
