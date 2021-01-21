@@ -28,25 +28,12 @@ export const getLabelTypeSkill = (type) => {
   }
 }
 
-export const getIconSkillType = (type) => {
-  switch (type) {
-    case 'melee':
-      return <i className="fas fa-fist-raised" />
-    case 'range':
-      return <i className="fas fa-bolt" />
-    case 'heal':
-      return <i className="fas fa-hand-holding-medical" />
-    case 'hot':
-      return <i className="fas fa-medkit" />
-    case 'dot':
-      return <i className="fas fa-burn" />
-    case 'movement':
-      return <i className="fas fa-shoe-prints" />
-    case 'skill_block':
-      return <i className="fas fa-lock" />
-    case 'unknown':
-      return <i className="fas fa-question" />
-    default:
-      return type
-  }
+export const getIconSkillType = (type, isTall) => {
+  return (
+    <img
+      src={process.env.PUBLIC_URL + '/img/skill-types/' + type + '.svg'}
+      width={isTall ? '30px' : '20px'}
+      alt={type}
+    />
+  )
 }

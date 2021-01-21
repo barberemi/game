@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import Avatar from './Avatar'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { getIconSkillType } from '../../utils/skillHelper'
 import HpBar from './HpBar'
 
 export class PlayerBox extends Component {
-  expectedAction(me, isSelectable) {
+  expectedAction(isSelectable) {
     if (isSelectable) {
       return <i className="far fa-hand-point-down" />
-    } else if (me) {
-      return <i className="fas fa-long-arrow-alt-down" />
     } else {
       return <br />
     }
@@ -19,7 +18,7 @@ export class PlayerBox extends Component {
     return (
       <div
         id="hero-container"
-        className={`col-sm-3${
+        className={`col-sm-4${
           this.props.player.isSelectable ? ' hero-container-selected' : ''
         }`}
         onClick={() => this.props.onClick(this.props.player)}
@@ -29,10 +28,7 @@ export class PlayerBox extends Component {
         </div>
 
         <div className="action-intention">
-          {this.expectedAction(
-            this.props.player.me,
-            this.props.player.isSelectable
-          )}
+          {this.expectedAction(this.props.player.isSelectable)}
         </div>
         {/* HERO POKEMON AVATAR PICTURE */}
         <div className="avatar-box">
@@ -49,14 +45,14 @@ export class PlayerBox extends Component {
             _.map(this.props.player.hot, ({ amount }, index) => (
               <span key={index} className="small avatar-effect">
                 {amount}
-                <i className="fas fa-medkit" />
+                {getIconSkillType('hot')}
               </span>
             ))}
           {!this.props.player.faint &&
             _.map(this.props.player.dot, ({ amount }, index) => (
               <span key={index} className="small avatar-effect">
                 {amount}
-                <i className="fas fa-burn" />
+                {getIconSkillType('dot')}
               </span>
             ))}
         </div>

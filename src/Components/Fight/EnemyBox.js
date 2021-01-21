@@ -13,23 +13,19 @@ export class EnemyBox extends Component {
           return (
             <>
               {' '}
-              <span className="small">
-                ({action.duration} <i className="fas fa-clock" />)
-              </span>{' '}
-              {getIconSkillType(action.effect)}{' '}
-              <span className="small">{action.amount}</span>
+              ({action.duration} <i className="fas fa-clock" />){' '}
+              {getIconSkillType(action.effect, true)} {action.amount}
             </>
           )
         } else {
           return (
             <>
-              {getIconSkillType(action.effect)}{' '}
-              <span className="small">{action.amount}</span>
+              {getIconSkillType(action.effect, true)} {action.amount}
             </>
           )
         }
       } else {
-        return <> {getIconSkillType(action.effect)}</>
+        return <> {getIconSkillType(action.effect, true)}</>
       }
     } else {
       return <br />
@@ -38,7 +34,7 @@ export class EnemyBox extends Component {
 
   render() {
     return (
-      <div id="enemy-container" className="col-sm-4 offset-sm-5">
+      <div id="enemy-container" className="col-sm-4 offset-sm-4">
         {/* ENEMY POKEMON INFO BOX */}
         <div id="enemy-info-box">
           <div className="justify-content-between align-items-center">
@@ -63,14 +59,14 @@ export class EnemyBox extends Component {
             _.map(this.props.enemy.hot, ({ amount }, index) => (
               <span key={index} className="small avatar-effect">
                 {amount}
-                <i className="fas fa-medkit" />
+                {getIconSkillType('hot')}
               </span>
             ))}
           {!this.props.enemy.faint &&
             _.map(this.props.enemy.dot, ({ amount }, index) => (
               <span key={index} className="small avatar-effect">
                 {amount}
-                <i className="fas fa-burn" />
+                {getIconSkillType('dot')}
               </span>
             ))}
         </div>
