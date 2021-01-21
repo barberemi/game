@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 import { getIconSkillType } from '../../utils/skillHelper'
 import SkillCard from '../Skill/SkillCard'
 import ReactTooltip from 'react-tooltip'
+
+const Image = styled.img`
+  border: solid #fff;
+`
 
 class Actions extends Component {
   constructor(props) {
@@ -56,7 +61,7 @@ class Actions extends Component {
     return (
       <>
         <div
-          className={`attack-container btn ${this.disabledAction(
+          className={`attack-container ${this.disabledAction(
             this.props.frontPlayer,
             effect,
             nbBlockedTurns
@@ -78,16 +83,18 @@ class Actions extends Component {
             })
           }
         >
-          <div>
-            <span
+          <span data-tip="1 clic : visualiser, 2 clics : utiliser">
+            <Image
+              src={
+                process.env.PUBLIC_URL + '/img/skills/SpellBookPreface_01.png'
+              }
+              width="80px"
               className="move-pointer"
-              data-tip="1 clic : visualiser, 2 clics : utiliser"
-            >
-              {this.isBlocked(nbBlockedTurns, duration)}
-              {name}
-              {this.expectedEffect(amount, effect)}
-            </span>
-          </div>
+            />
+            {/*{this.isBlocked(nbBlockedTurns, duration)}*/}
+            {/*{name}*/}
+            {/*{this.expectedEffect(amount, effect)}*/}
+          </span>
         </div>
         <SkillCard
           className={this.state.displayCard ? 'd-block' : 'd-none'}

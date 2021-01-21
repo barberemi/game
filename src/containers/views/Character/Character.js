@@ -660,21 +660,7 @@ class Character extends Component {
                     <Card className="card">
                       <div className="card-body">
                         <div className="col-sm-12">
-                          <Title>
-                            Listes des objets
-                            <br />
-                            <SubTitle>
-                              (
-                              {user.itemSpaceNb - user.items.length === 0
-                                ? 'Aucune place restante'
-                                : user.itemSpaceNb - user.items.length === 1
-                                ? '1 place restante'
-                                : user.itemSpaceNb -
-                                  user.items.length +
-                                  ' places restantes'}
-                              )
-                            </SubTitle>
-                          </Title>
+                          <Title>Inventaire</Title>
                         </div>
                         <ItemList
                           items={user.items}
@@ -683,6 +669,7 @@ class Character extends Component {
                           onChangeEquippedItem={this.onChangeEquippedItem}
                           onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
                           hasGuild={!!user.guild}
+                          addEmptyZones={true}
                         />
                       </div>
                     </Card>

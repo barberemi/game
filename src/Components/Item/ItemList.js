@@ -32,7 +32,7 @@ const Item = styled.div`
 
 class ItemList extends Component {
   render() {
-    const { items, onClick, minusPadding } = this.props
+    const { items, onClick, minusPadding, addEmptyZones } = this.props
 
     return (
       <>
@@ -57,6 +57,31 @@ class ItemList extends Component {
               </div>
             </Item>
           ))}
+          {addEmptyZones && (
+            <>
+              <Item
+                className="float-left d-flex position-relative"
+                minusPadding={minusPadding}
+                data-tip="Disponible"
+              >
+                <ItemBox />
+              </Item>
+              <Item
+                className="float-left d-flex position-relative"
+                minusPadding={minusPadding}
+                data-tip="Disponible"
+              >
+                <ItemBox />
+              </Item>
+              <Item
+                className="float-left d-flex position-relative"
+                minusPadding={minusPadding}
+                data-tip="Disponible"
+              >
+                <ItemBox />
+              </Item>
+            </>
+          )}
           <ReactTooltip />
         </Container>
       </>
@@ -84,6 +109,7 @@ ItemList.propTypes = {
   onChangeEquippedItem: PropTypes.func,
   isGuildItem: PropTypes.bool,
   hasGuild: PropTypes.bool,
+  addEmptyZones: PropTypes.bool,
   onClick: PropTypes.func
 }
 

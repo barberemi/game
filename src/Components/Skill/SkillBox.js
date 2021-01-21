@@ -140,7 +140,9 @@ class SkillBox extends Component {
             <Level>{skill.level}</Level>
             <Box>
               <ImageSkill
-                src="https://render-eu.worldofwarcraft.com/icons/56/spell_holy_holyguidance.jpg"
+                src={
+                  process.env.PUBLIC_URL + '/img/skills/SpellBookPreface_01.png'
+                }
                 alt={skill.name}
               />
             </Box>

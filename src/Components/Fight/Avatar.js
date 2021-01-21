@@ -44,6 +44,7 @@ class Avatar extends Component {
               this.props.isHit.type === 'heal' ? 'text-success' : 'text-danger'
             }`}
           >
+            {this.props.isHit.type === 'heal' ? '+' : '-'}
             {this.props.isHit.amount}
           </HitNumber>
         )}
