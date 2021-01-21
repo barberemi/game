@@ -1,5 +1,7 @@
 .enemy-name {
   margin: 0;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
 }
 
 .avatar {
@@ -72,14 +74,14 @@
   position: absolute;
   border: thick double #fff;
   bottom: 0;
-  min-width: 400px;
+  min-width: 600px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
 }
 
 #text-box-content {
   text-align: center;
-  height: 100px;
+  height: 130px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -93,7 +95,6 @@
 
 .move-pointer {
   color: white;
-  cursor: pointer;
 }
 
 @media (max-width: 845px) {

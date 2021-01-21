@@ -2,11 +2,28 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { getIconSkillType } from '../../utils/skillHelper'
-import SkillCard from '../Skill/SkillCard'
 import ReactTooltip from 'react-tooltip'
 
 const Image = styled.img`
-  border: solid #fff;
+  border: solid #000;
+`
+
+const SkillEffect = styled.div`
+  position: absolute;
+  color: #fff;
+  background-color: #ffc312;
+  width: 30px;
+  font-size: 16px;
+  right: 17px;
+  border: solid 1px #fff;
+`
+
+const SkillName = styled.div`
+  color: #fff;
+  width: 80px;
+  font-size: 12px;
+  position: absolute;
+  padding-top: 5px;
 `
 
 class Actions extends Component {
@@ -21,13 +38,16 @@ class Actions extends Component {
   expectedEffect(amount, effect) {
     if (amount) {
       return (
-        <>
-          {' '}
-          {getIconSkillType(effect)} <span className="small">{amount}</span>
-        </>
+        <SkillEffect>
+          <span className="small">{amount}</span>
+          <br />
+          {getIconSkillType(effect)}
+        </SkillEffect>
       )
     } else {
-      return <> {getIconSkillType(effect)}</>
+      return (
+        <SkillEffect className="pt-1">{getIconSkillType(effect)}</SkillEffect>
+      )
     }
   }
 
@@ -49,57 +69,58 @@ class Actions extends Component {
     return ''
   }
 
-  disabledAction(isFrontPlayer, effect, nbBlockedTurns) {
-    return (effect === 'melee' && !isFrontPlayer) || nbBlockedTurns !== 0
-      ? 'disabled'
-      : ''
-  }
-
   render() {
-    const { name, amount, effect, duration, nbBlockedTurns } = this.props.action
+    const {
+      name,
+      amount,
+      effect,
+      duration,
+      description,
+      image,
+      nbBlockedTurns
+    } = this.props.action
 
     return (
       <>
         <div
-          className={`attack-container ${this.disabledAction(
-            this.props.frontPlayer,
-            effect,
-            nbBlockedTurns
-          )}`}
-          onDoubleClick={() => {
-            if (
-              this.disabledAction(
-                this.props.frontPlayer,
-                effect,
-                nbBlockedTurns
-              ) === ''
-            ) {
-              this.props.onDoubleClick(this.props.action)
+          className="attack-container position-relative"
+          style={{
+            opacity:
+              (effect === 'melee' && !this.props.frontPlayer) ||
+              nbBlockedTurns !== 0
+                ? '0.65'
+                : '1'
+          }}
+          onClick={() => {
+            if (nbBlockedTurns === 0) {
+              if (
+                (effect === 'melee' && this.props.frontPlayer) ||
+                effect !== 'melee'
+              ) {
+                this.props.onClick(this.props.action)
+              }
             }
           }}
-          onClick={() =>
-            this.setState({
-              displayCard: !this.state.displayCard
-            })
-          }
         >
-          <span data-tip="1 clic : visualiser, 2 clics : utiliser">
-            <Image
-              src={
-                process.env.PUBLIC_URL + '/img/skills/SpellBookPreface_01.png'
-              }
-              width="80px"
-              className="move-pointer"
-            />
-            {/*{this.isBlocked(nbBlockedTurns, duration)}*/}
-            {/*{name}*/}
-            {/*{this.expectedEffect(amount, effect)}*/}
-          </span>
+          {this.expectedEffect(amount, effect)}
+          <Image
+            src={process.env.PUBLIC_URL + '/img/skills/' + image}
+            width="80px"
+            className="move-pointer"
+            style={{
+              cursor:
+                (effect === 'melee' && !this.props.frontPlayer) ||
+                nbBlockedTurns !== 0
+                  ? 'not-allowed'
+                  : 'pointer'
+            }}
+            data-tip={description}
+          />
+          <SkillName>
+            {this.isBlocked(nbBlockedTurns, duration)}
+            {name}
+          </SkillName>
         </div>
-        <SkillCard
-          className={this.state.displayCard ? 'd-block' : 'd-none'}
-          skill={this.props.action}
-        />
         <ReactTooltip />
       </>
     )
@@ -112,10 +133,12 @@ Actions.propTypes = {
     amount: PropTypes.number,
     effect: PropTypes.string,
     duration: PropTypes.number,
+    description: PropTypes.string,
+    image: PropTypes.string,
     nbBlockedTurns: PropTypes.number
   }),
   frontPlayer: PropTypes.bool,
-  onDoubleClick: PropTypes.func
+  onClick: PropTypes.func
 }
 
 export default Actions

@@ -644,7 +644,7 @@ class Fight extends Component {
                               action={
                                 _.find(this.state.players, 'me').skills[key]
                               }
-                              onDoubleClick={this.handleClickOnActionBar}
+                              onClick={this.handleClickOnActionBar}
                             />
                           </>
                         )

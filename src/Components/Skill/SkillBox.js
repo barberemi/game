@@ -140,9 +140,7 @@ class SkillBox extends Component {
             <Level>{skill.level}</Level>
             <Box>
               <ImageSkill
-                src={
-                  process.env.PUBLIC_URL + '/img/skills/SpellBookPreface_01.png'
-                }
+                src={process.env.PUBLIC_URL + '/img/skills/' + skill.image}
                 alt={skill.name}
               />
             </Box>
