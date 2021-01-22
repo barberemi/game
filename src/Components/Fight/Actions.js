@@ -15,7 +15,8 @@ const SkillEffect = styled.div`
   width: 30px;
   font-size: 16px;
   right: 17px;
-  border: solid 1px #fff;
+  border: solid 1px #000;
+  border-radius: 0 0 5px 5px;
 `
 
 const SkillName = styled.div`
@@ -27,14 +28,6 @@ const SkillName = styled.div`
 `
 
 class Actions extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      displayCard: false
-    }
-  }
-
   expectedEffect(amount, effect) {
     if (amount) {
       return (

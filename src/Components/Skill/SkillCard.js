@@ -169,7 +169,7 @@ const NoBorder = styled(OneThird)`
   }
 `
 
-class SkillBox extends Component {
+class SkillCard extends Component {
   render() {
     const { skill } = this.props
 
@@ -178,7 +178,7 @@ class SkillBox extends Component {
         <Card>
           <WarriorBg>
             <img
-              src={process.env.PUBLIC_URL + '/img/skill.png'}
+              src={process.env.PUBLIC_URL + '/img/skills/' + skill.image}
               alt="skill"
               width="150px"
             />
@@ -221,4 +221,4 @@ class SkillBox extends Component {
   }
 }
 
-export default SkillBox
+export default SkillCard

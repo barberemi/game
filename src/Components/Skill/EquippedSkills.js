@@ -53,7 +53,7 @@ class EquippedSkills extends Component {
   }
 
   render() {
-    const { skills, treeType, displayCheckbox } = this.props
+    const { skills, treeType, displayCheckbox, userLevel } = this.props
     const { isDark, items } = this.state
 
     return (
@@ -73,18 +73,26 @@ class EquippedSkills extends Component {
           isDark
             ? _.filter(items, { treeType: 'dark' })
             : _.filter(items, { treeType: 'light' }),
-          (skill) => {
+          (skill, index) => {
             if (
               displayCheckbox ||
               (!displayCheckbox && !!_.find(skills, { id: skill.id }))
             ) {
               return (
                 <SkillBox
-                  key={skill.id}
+                  key={index}
                   skill={skill}
                   isDark={isDark}
+                  zIndex={
+                    isDark
+                      ? _.filter(items, { treeType: 'dark' }).length - index
+                      : _.filter(items, { treeType: 'light' }).length - index
+                  }
                   isSelected={!!_.find(skills, { id: skill.id })}
-                  {...this.props}
+                  displayCheckbox={
+                    displayCheckbox ? userLevel >= skill.level : false
+                  }
+                  {..._.omit(this.props, 'displayCheckbox')}
                 />
               )
             }
@@ -113,6 +121,7 @@ EquippedSkills.propTypes = {
   displayCheckbox: PropTypes.bool,
   onCheckSkill: PropTypes.func,
   academyId: PropTypes.number,
+  userLevel: PropTypes.number,
   treeType: PropTypes.string
 }
 

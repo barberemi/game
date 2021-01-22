@@ -586,6 +586,7 @@ class Character extends Component {
                           remainingSkillPoints={
                             user.skillPoints - user.skills.length
                           }
+                          userLevel={user.level}
                         />
                       </div>
                     </Card>

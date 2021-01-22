@@ -3,11 +3,15 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import _ from 'lodash'
-import { getBorderColorSkill } from '../../utils/skillHelper'
+import {
+  getBorderColorSkill,
+  getIconSkillType,
+  getLabelTypeSkill
+} from '../../utils/skillHelper'
 
 const Container = styled.div`
   float: left;
-  margin-bottom: 15px;
+  height: 100px;
 `
 
 const SubContainer = styled.div`
@@ -37,10 +41,18 @@ const SubContainer = styled.div`
 `
 
 const BorderBox = styled.div`
+  position: relative;
+
   ${(props) =>
     props.descriptionDisplayed === true &&
     css`
       border: 1px solid #504137;
+    `};
+
+  ${(props) =>
+    props.zIndex &&
+    css`
+      z-index: ${props.zIndex};
     `};
 
   ${(props) =>
@@ -71,7 +83,7 @@ const Box = styled.div`
 `
 
 const ImageSkill = styled.img`
-  border: 2px solid #000;
+  border: 1px solid #fff;
   max-width: 100%;
   position: absolute;
   top: 0;
@@ -96,6 +108,8 @@ const InputCheckBox = styled.input`
 const TextBox = styled.div`
   font-size: 14px;
   padding: 15px;
+  background-color: #000;
+  z-index: 10;
 `
 
 const DescriptionBox = styled.div`
@@ -119,7 +133,13 @@ class SkillBox extends Component {
   }
 
   render() {
-    const { skill, isDark, remainingSkillPoints, displayCheckbox } = this.props
+    const {
+      skill,
+      isDark,
+      remainingSkillPoints,
+      displayCheckbox,
+      zIndex
+    } = this.props
     const { isChecked, descriptionDisplayed } = this.state
 
     return (
@@ -128,6 +148,7 @@ class SkillBox extends Component {
           hoverColorBorder={getBorderColorSkill(isDark)}
           isSelected={isChecked}
           descriptionDisplayed={descriptionDisplayed}
+          zIndex={zIndex}
           onClick={() => {
             this.setState({ descriptionDisplayed: !descriptionDisplayed })
           }}
@@ -163,21 +184,27 @@ class SkillBox extends Component {
             )}
           </SubContainer>
           <TextBox className={descriptionDisplayed ? '' : 'd-none'}>
-            <b>Type de compétence :</b> {skill.type}
+            <span style={{ filter: 'invert(100%)' }}>
+              {getIconSkillType(skill.type)}
+            </span>{' '}
+            {getLabelTypeSkill(skill.type)}
             <br />
             {skill.duration > 0 && (
               <>
+                <br />
                 <b>Durée :</b> {skill.duration} tours
                 <br />
               </>
             )}
             {skill.cooldown > 0 && (
               <>
-                <b>Temps de récupération :</b> {skill.cooldown} tours
+                <br />
+                <b>Récupération :</b> {skill.cooldown}{' '}
+                {skill.cooldown > 1 ? 'tours' : 'tour'}
                 <br />
               </>
             )}
-            <hr className="my-3" />
+            <hr className="my-3" style={{ filter: 'invert(100%)' }} />
             <DescriptionBox>
               <br />
               {_.replace(
@@ -220,6 +247,7 @@ SkillBox.propTypes = {
   isSelected: PropTypes.bool,
   remainingSkillPoints: PropTypes.number,
   onCheckSkill: PropTypes.func,
+  zIndex: PropTypes.number,
   displayCheckbox: PropTypes.bool
 }
 

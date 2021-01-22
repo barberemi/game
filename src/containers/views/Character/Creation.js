@@ -312,7 +312,11 @@ class Creation extends Component {
                           <>
                             <Skill
                               key={skill}
-                              src="https://wiki-fr.guildwars2.com/images/8/88/Dagues_enchant%C3%A9es.png"
+                              src={
+                                process.env.PUBLIC_URL +
+                                '/img/skills/' +
+                                skill.image
+                              }
                               alt={skill.name}
                               data-tip={skill.description}
                               style={{
