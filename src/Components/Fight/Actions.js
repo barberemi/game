@@ -16,6 +16,7 @@ const SkillEffect = styled.div`
   font-size: 16px;
   right: 17px;
   border: solid 1px #000;
+  border-top: solid 1px #fff;
   border-radius: 0 0 5px 5px;
 `
 
