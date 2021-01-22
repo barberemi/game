@@ -5,7 +5,7 @@ import { getIconSkillType } from '../../utils/skillHelper'
 import ReactTooltip from 'react-tooltip'
 
 const Image = styled.img`
-  border: solid #000;
+  border: solid 1px #fff;
 `
 
 const SkillEffect = styled.div`

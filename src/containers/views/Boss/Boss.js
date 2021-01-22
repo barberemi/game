@@ -41,13 +41,13 @@ const LevelBox = styled.span`
 
 const LeftArrayBox = styled.div`
   left: 10px;
-  top: 50%;
+  top: 65%;
   z-index: 10;
 `
 
 const RightArrayBox = styled.div`
   right: 10px;
-  top: 50%;
+  top: 65%;
   z-index: 10;
 `
 
@@ -135,34 +135,6 @@ class Boss extends Component {
           )}
           {boss && (
             <div className="row h-100 mt-5">
-              {selectedBoss.id !== _.first(boss).id && (
-                <LeftArrayBox className="position-fixed h-100">
-                  <LinkArrow
-                    arrow="left"
-                    to={
-                      '/boss/' +
-                      boss[_.findIndex(boss, { id: selectedBoss.id }) - 1].id
-                    }
-                  >
-                    <i className="fas fa-chevron-left fa-3x" />
-                  </LinkArrow>
-                </LeftArrayBox>
-              )}
-
-              {selectedBoss.id !== _.last(boss).id && (
-                <RightArrayBox className="position-fixed h-100">
-                  <LinkArrow
-                    arrow="right"
-                    to={
-                      '/boss/' +
-                      boss[_.findIndex(boss, { id: selectedBoss.id }) + 1].id
-                    }
-                  >
-                    <i className="fas fa-chevron-right fa-3x" />
-                  </LinkArrow>
-                </RightArrayBox>
-              )}
-
               <div className="col-sm-3 my-auto">
                 <Card className="card">
                   <div className="card-header">
@@ -225,12 +197,38 @@ class Boss extends Component {
                     </div>
                   </div>
                 </Card>
+                {selectedBoss.id !== _.first(boss).id && (
+                  <LeftArrayBox className="position-absolute">
+                    <LinkArrow
+                      arrow="left"
+                      to={
+                        '/boss/' +
+                        boss[_.findIndex(boss, { id: selectedBoss.id }) - 1].id
+                      }
+                    >
+                      <i className="fas fa-chevron-left fa-3x" />
+                    </LinkArrow>
+                  </LeftArrayBox>
+                )}
                 <Image
                   src={
                     process.env.PUBLIC_URL + '/img/boss/' + selectedBoss.image
                   }
                   alt={selectedBoss.academy.name}
                 />
+                {selectedBoss.id !== _.last(boss).id && (
+                  <RightArrayBox className="position-absolute">
+                    <LinkArrow
+                      arrow="right"
+                      to={
+                        '/boss/' +
+                        boss[_.findIndex(boss, { id: selectedBoss.id }) + 1].id
+                      }
+                    >
+                      <i className="fas fa-chevron-right fa-3x" />
+                    </LinkArrow>
+                  </RightArrayBox>
+                )}
               </div>
 
               <RightBox className="col-sm-9 my-auto">

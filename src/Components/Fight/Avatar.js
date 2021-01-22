@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 const HitNumber = styled.div`
   top: 80px;
   z-index: 10;
-  font-size: 24px;
+  font-size: 28px;
   position: absolute;
 
   -webkit-text-stroke-width: 1px;
