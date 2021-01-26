@@ -14,6 +14,7 @@ import Cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 import PropTypes from 'prop-types'
 import Loader from '../../../Components/Loader/Loader'
+import { selectTabFromUrl } from '../../../utils/routingHelper'
 
 const Container = styled.div`
   background-image: url('https://images2.alphacoders.com/717/717870.jpg');
@@ -90,7 +91,12 @@ class Character extends Component {
       user: undefined,
       isMe: false,
       friendToAddOrRemove: '',
-      activatedTab: 'generalTab'
+      activatedTab: selectTabFromUrl([
+        'generalTab',
+        'skillsTab',
+        'itemsTab',
+        'friendsTab'
+      ])
     }
 
     this.handleAddDeleteUser = this.handleAddDeleteUser.bind(this)

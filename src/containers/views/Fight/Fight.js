@@ -162,7 +162,6 @@ class Fight extends Component {
           }
         }, 3000)
       })
-      timer = timer + 3000
     }
 
     // 3 - DOT PLAYERS
@@ -183,8 +182,8 @@ class Fight extends Component {
               }
             }
           }, 3000)
-          timer = timer + 3000
         })
+        timer = timer + 3000
       } else {
         // 4 - HOT PLAYERS
         if (players[i].hot.length > 0) {

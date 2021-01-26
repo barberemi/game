@@ -13,6 +13,7 @@ import Loader from '../../../Components/Loader/Loader'
 import { toast } from 'react-toastify'
 import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 import ItemList from '../../../Components/Item/ItemList'
+import { selectTabFromUrl } from '../../../utils/routingHelper'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -146,7 +147,13 @@ class Guild extends Component {
       monsters: undefined,
       memberToAddOrRemove: '',
       newNameGuild: '',
-      activatedTab: 'chatTab'
+      activatedTab: selectTabFromUrl([
+        'chatTab',
+        'membersTab',
+        'choiceBossTab',
+        'fightBossTab',
+        'itemsGuildTab'
+      ])
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)

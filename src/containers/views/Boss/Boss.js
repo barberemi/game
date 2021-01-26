@@ -11,6 +11,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
+import { selectTabFromUrl } from '../../../utils/routingHelper'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg');
@@ -83,7 +84,11 @@ class Boss extends Component {
       loading: true,
       id: parseInt(this.props.match.params.idBoss),
       boss: undefined,
-      activatedTab: 'generalTab',
+      activatedTab: selectTabFromUrl([
+        'generalTab',
+        'skillsTab',
+        'itemsLootTab'
+      ]),
       selectedBoss: undefined
     }
   }

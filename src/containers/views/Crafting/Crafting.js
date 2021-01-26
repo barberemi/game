@@ -11,6 +11,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
+import { selectTabFromUrl } from '../../../utils/routingHelper'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg');
@@ -64,7 +65,11 @@ class Crafting extends Component {
       loading: true,
       boss: undefined,
       character: undefined,
-      activatedTab: 'bossChoiceTab',
+      activatedTab: selectTabFromUrl([
+        'bossChoiceTab',
+        'itemsCraftingTab',
+        'skillsCraftingTab'
+      ]),
       selectedBoss: undefined,
       selectedItem: undefined
     }
