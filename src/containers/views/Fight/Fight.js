@@ -137,6 +137,7 @@ class Fight extends Component {
     this.setState({
       enemy: {
         ...this.state.enemy,
+        isHit: false,
         expectedAction: this.state.enemy.skills[enemyAction]
       }
     })
@@ -145,44 +146,47 @@ class Fight extends Component {
   endTurn() {
     const players = [...this.state.players]
     const enemy = this.state.enemy
+    let timer = 0
 
     // 1 - DOT ENEMY
     if (enemy.dot.length > 0) {
       let { user } = userTakeDot(enemy)
-      this.setState({
-        enemy: user
+      this.setState({ enemy: user }, () => {
+        setTimeout(() => {
+          if (this.checkIfEnemyAlive()) {
+            // 2 - HOT ENEMY
+            if (enemy.hot.length > 0) {
+              let { user } = userTakeHot(enemy)
+              this.setState({ enemy: user })
+            }
+          }
+        }, 3000)
       })
+      timer = timer + 3000
     }
 
-    if (this.checkIfEnemyAlive()) {
-      // 2 - DOT PLAYERS
-      for (let i = 0; i < players.length; i++) {
-        if (players[i].dot.length > 0 && players[i].hp > 0) {
-          let { user } = userTakeDot(this.state.players[i])
-          players[i] = user
-          this.setState(
-            {
-              players
-            },
-            () => {
-              setTimeout(() => {
-                this.checkIfPlayerAlive(i)
-              }, 3000)
+    // 3 - DOT PLAYERS
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].dot.length > 0 && players[i].hp > 0) {
+        let { user } = userTakeDot(this.state.players[i])
+        players[i] = user
+        this.setState({ players }, () => {
+          setTimeout(() => {
+            if (this.checkIfPlayerAlive(i)) {
+              // 4 - HOT PLAYERS
+              if (players[i].hot.length > 0) {
+                let { user } = userTakeHot(this.state.players[i])
+                players[i] = user
+                this.setState({
+                  players
+                })
+              }
             }
-          )
-        }
-      }
-
-      // 3 - HOT ENEMY
-      if (enemy.hot.length > 0) {
-        let { user } = userTakeHot(enemy)
-        this.setState({
-          enemy: user
+          }, 3000)
+          timer = timer + 3000
         })
-      }
-
-      // 4 - HOT PLAYERS
-      for (let i = 0; i < players.length; i++) {
+      } else {
+        // 4 - HOT PLAYERS
         if (players[i].hot.length > 0) {
           let { user } = userTakeHot(this.state.players[i])
           players[i] = user
@@ -191,16 +195,18 @@ class Fight extends Component {
           })
         }
       }
+    }
 
-      // 5 - DECREMENT ALL DOT/HOT/BLOCKED SKILLS
+    // 5 - DECREMENT ALL DOT/HOT/BLOCKED SKILLS
+    setTimeout(() => {
       this.setState({
-        // textMessageOne: "",
         round: this.state.round + 1,
         players: playersTurnFinished(this.state.players),
-        enemy: enemyTurnFinished(this.state.enemy)
+        enemy: enemyTurnFinished(this.state.enemy),
+        textMessageOne: ''
       })
       this.nextEnemyAction()
-    }
+    }, timer)
   }
 
   checkIfPlayerAlive(idPlayerSelected) {
@@ -246,17 +252,18 @@ class Fight extends Component {
           }, 3000)
         }
       )
-    } else {
-      players[idPlayerSelected] = {
-        ...players[idPlayerSelected],
-        isHit: false,
-        faint: false
-      }
-      this.setState({
-        textMessageOne: '',
-        players
-      })
     }
+
+    players[idPlayerSelected] = {
+      ...players[idPlayerSelected],
+      isHit: false,
+      faint: false
+    }
+    this.setState({
+      players
+    })
+
+    return true
   }
 
   checkIfEnemyAlive() {
@@ -283,6 +290,13 @@ class Fight extends Component {
       return false
     }
 
+    this.setState({
+      enemy: {
+        ...this.state.enemy,
+        isHit: false
+      }
+    })
+
     return true
   }
 
@@ -296,7 +310,10 @@ class Fight extends Component {
       players[i] = { ...players[i], isHit: false }
     }
     this.setState({
-      players: players
+      players: players,
+      enemy: {
+        ...this.state.enemy
+      }
     })
 
     if (this.checkIfEnemyAlive()) {
@@ -312,9 +329,9 @@ class Fight extends Component {
           },
           () => {
             setTimeout(() => {
-              this.setState({
-                textMessageOne: ''
-              })
+              // this.setState({
+              //   textMessageOne: ''
+              // })
               this.endTurn()
             }, 3000)
           }
@@ -325,15 +342,15 @@ class Fight extends Component {
             textMessageOne: `${this.state.enemy.name} se soignera de ${amount}pts de vie à la fin des ${duration} prochains tours.`,
             enemy: {
               ...this.state.enemy,
-              isHit: { amount: amount, type: 'heal' },
+              // isHit: { amount: amount, type: 'heal' },
               hot: [...this.state.enemy.hot, { amount, duration }]
             }
           },
           () => {
             setTimeout(() => {
-              this.setState({
-                textMessageOne: ''
-              })
+              // this.setState({
+              //   textMessageOne: ''
+              // })
               this.endTurn()
             }, 3000)
           }
@@ -351,9 +368,9 @@ class Fight extends Component {
           },
           () => {
             setTimeout(() => {
-              this.setState({
-                textMessageOne: ''
-              })
+              // this.setState({
+              //   textMessageOne: ''
+              // })
               this.checkIfPlayerAlive(playerSelected)
               this.endTurn()
             }, 3000)
@@ -372,9 +389,9 @@ class Fight extends Component {
           },
           () => {
             setTimeout(() => {
-              this.setState({
-                textMessageOne: ''
-              })
+              // this.setState({
+              //   textMessageOne: ''
+              // })
               this.checkIfPlayerAlive(playerSelected)
               this.endTurn()
             }, 3000)
@@ -387,7 +404,7 @@ class Fight extends Component {
 
             players[playerSelected] = {
               ...players[playerSelected],
-              isHit: { amount: amount, type: 'damage' },
+              // isHit: { amount: amount, type: 'damage' },
               dot: [
                 ...prevState.players[playerSelected].dot,
                 { amount, duration }
@@ -447,6 +464,14 @@ class Fight extends Component {
         player,
         playerActionSelectable
       )
+
+      // 1.2 - INCREMENT COOLDOWN SKILL
+      for (let i = 0; i < players[0].skills.length; i++) {
+        if (players[0].skills[i].id === playerActionSelectable.id) {
+          players[0].skills[i].nbBlockedTurns = playerActionSelectable.cooldown
+        }
+      }
+
       this.setState({
         textMessageOne,
         players
@@ -491,27 +516,40 @@ class Fight extends Component {
         } utilise ${name} ce qui infligera ${amount}pts de dégats à la fin des ${duration} prochains tours!`
       }
 
-      this.setState({
-        enemy: {
-          ...this.state.enemy,
-          hp,
-          isHit: { amount: amount, type: 'damage' },
-          dot
-        },
-        textMessageOne
-      })
-      // 1.2 - ENEMY ACTION
-      setTimeout(() => {
-        // Enemy turn
-        this.setState({
+      // 1.2 - INCREMENT COOLDOWN SKILL
+      const players = [...this.state.players]
+      for (let i = 0; i < players[0].skills.length; i++) {
+        if (players[0].skills[i].id === action.id) {
+          players[0].skills[i].nbBlockedTurns = action.cooldown
+        }
+      }
+      this.setState(
+        {
           enemy: {
             ...this.state.enemy,
-            isHit: false,
-            faint: false
-          }
-        })
-        this.enemyTurn()
-      }, 3000)
+            hp,
+            isHit:
+              effect === 'dot' ? false : { amount: amount, type: 'damage' },
+            dot
+          },
+          players: players,
+          textMessageOne
+        },
+        // 1.2 - ENEMY ACTION
+        () => {
+          setTimeout(() => {
+            // Enemy turn
+            this.setState({
+              enemy: {
+                ...this.state.enemy,
+                isHit: false,
+                faint: false
+              }
+            })
+            this.enemyTurn()
+          }, 3000)
+        }
+      )
       // 2 - HEAL
     } else if (effect === 'heal' || effect === 'hot') {
       // 2.1 - PLAYER ACTION
