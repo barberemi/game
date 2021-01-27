@@ -10,7 +10,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 const Container = styled.div`
-  background-image: url('https://cdnb.artstation.com/p/assets/images/images/028/312/273/large/yarki-studio-treasure-island-artstation-1.jpg?1594115694');
+  background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
   background-size: cover;
   background-attachment: fixed;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);

@@ -8,18 +8,31 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import PropTypes from 'prop-types'
+import HpNavBar from '../../../Components/NavBar/HpNavBar'
 
 const Container = styled.div`
-  background-image: url('https://cdna.artstation.com/p/assets/images/images/022/181/600/large/yarki-studio-artstation-3.jpg');
+  background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
   background-size: 100% 100%;
-  -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   height: 100%;
+  -webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  -o-filter: blur(3px);
+  -ms-filter: blur(3px);
+  filter: blur(3px);
+  top: 0;
+  left: 0;
+`
+
+const SubContainer = styled.div`
   text-align: center;
   color: white;
   min-height: 250px;
   overflow-y: scroll;
+`
+
+const AvatarBox = styled.div`
+  bottom: 20%;
+  left: 15%;
 `
 
 const LevelBox = styled.span`
@@ -176,9 +189,26 @@ class Reward extends Component {
     }
 
     return (
-      <Container className="container-fluid">
+      <>
+        <Container className="position-fixed container-fluid">
+          {user && (
+            <AvatarBox className="col-sm-6 position-absolute">
+              <img
+                src={
+                  process.env.PUBLIC_URL +
+                  '/img/academies/' +
+                  user.academy.name +
+                  '.png'
+                }
+                width="200px"
+                alt="Avatar mon personnage"
+              />
+            </AvatarBox>
+          )}
+        </Container>
         {loading && <Loader />}
-        <div className="container">
+        {user && <HpNavBar user={user} />}
+        <SubContainer className="container-fluid">
           {user && monster && type === 'won' && levelUp && (
             <LevelWin>
               <Title>
@@ -199,7 +229,7 @@ class Reward extends Component {
             </span>
           )}
           <div className="row h-100 mt-5">
-            <Box className="col-sm-12 my-auto">
+            <Box className="offset-2 col-sm-8 my-auto">
               <Card className="card">
                 {user && monster && (
                   <>
@@ -216,29 +246,19 @@ class Reward extends Component {
                           ({round} {round > 1 ? 'tours' : 'tour'})
                         </SubTitle>
                         <br />
-                        {monster.name}{' '}
-                        <span style={{ color: monster.academy.color }}>
-                          ({monster.academy.label})
-                        </span>
-                        <LevelBox> - Niv {user.level}</LevelBox>
-                        <br />
-                        <img
-                          src={
-                            process.env.PUBLIC_URL +
-                            '/img/academies/' +
-                            user.academy.name +
-                            '.png'
-                          }
-                          height="90px"
-                          width="90px"
-                          alt="Avatar mon personnage"
-                        />
                         <Versus
                           src={process.env.PUBLIC_URL + '/img/versus.svg'}
                           width="30px"
                           height="30px"
                           alt="versus"
                         />
+                        <br />
+                        {monster.name}{' '}
+                        <span style={{ color: monster.academy.color }}>
+                          ({monster.academy.label})
+                        </span>
+                        <LevelBox> - Niv {user.level}</LevelBox>
+                        <br />
                         <img
                           src={
                             process.env.PUBLIC_URL +
@@ -311,8 +331,8 @@ class Reward extends Component {
               </Card>
             </Box>
           </div>
-        </div>
-      </Container>
+        </SubContainer>
+      </>
     )
   }
 }

@@ -16,27 +16,17 @@ const Container = styled.div`
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  color: white;
+  min-height: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
+
+  overflow-y: auto;
+  scroll-behavior: smooth;
 `
 
 const SubContainer = styled.div`
-  text-align: center;
-  color: white;
-  min-height: 250px;
-  overflow-y: scroll;
-`
-
-const ExplorationBox = styled.div`
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  text-align: center;
-`
-
-const AvatarBox = styled.div`
-  bottom: 20%;
-  left: 15%;
+  margin-top: 50px;
 `
 
 const Building = styled.img`
@@ -200,23 +190,7 @@ class Exploration extends Component {
     return (
       <>
         <HpNavBar user={character} />
-        <Container className="position-fixed container-fluid">
-          {character && (
-            <AvatarBox className="col-sm-6 position-absolute">
-              <img
-                src={
-                  process.env.PUBLIC_URL +
-                  '/img/academies/' +
-                  character.academy.name +
-                  '.png'
-                }
-                width="200px"
-                alt="Avatar mon personnage"
-              />
-            </AvatarBox>
-          )}
-        </Container>
-        <ExplorationBox
+        <Container
           className="container-fluid"
           onScroll={() => this.handleScroll()}
           ref={this.refScroll}
@@ -379,7 +353,7 @@ class Exploration extends Component {
               </div>
             )}
           </SubContainer>
-        </ExplorationBox>
+        </Container>
       </>
     )
   }
