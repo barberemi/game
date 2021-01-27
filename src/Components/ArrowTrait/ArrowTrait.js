@@ -15,6 +15,7 @@ class ArrowTrait extends Component {
           nonStrokeLen: 40,
           animation: this.props.isNext
         }}
+        curveness={0}
       />
     )
   }

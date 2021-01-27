@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import _ from 'lodash'
 import { Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
@@ -11,32 +12,53 @@ import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
-  background-size: cover;
   background-attachment: fixed;
-  -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+  background-size: 100% 100%;
   height: 100%;
   top: 0;
   left: 0;
+
+  ${(props) =>
+    props.isBlur &&
+    css`
+      -webkit-filter: blur(3px);
+      -moz-filter: blur(3px);
+      -o-filter: blur(3px);
+      -ms-filter: blur(3px);
+      filter: blur(3px);
+    `};
 `
 
 const SubContainer = styled.div`
   text-align: center;
-  color: white;
-  min-height: 250px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  max-height: 450px;
 `
 
 const ExplorationBox = styled.div`
+  background-color: transparent;
+  background-image: url(${process.env.PUBLIC_URL + '/img/pancarte-bis.png'});
+  background-size: 100% 100%;
+
+  position: relative;
+  padding-top: 100px;
+  height: 100%;
   overflow-y: auto;
   scroll-behavior: smooth;
-  text-align: center;
+  color: white;
+  max-height: 600px;
+  max-width: 800px;
 `
 
 const AvatarBox = styled.div`
   bottom: 20%;
   left: 15%;
+`
+
+const Compass = styled.div`
+  right: 15%;
+  top: 15%;
 `
 
 const Building = styled.img`
@@ -58,7 +80,7 @@ const DisabledBuilding = styled.img`
 const StickyBoss = styled.img`
   border: 3px solid #000;
   border-radius: 50%;
-  position: fixed;
+  position: absolute;
   margin-top: 20px;
   background-color: white;
   z-index: 1;
@@ -79,9 +101,8 @@ const PossibleBuildingText = styled.div`
   width: 25px;
   height: 25px;
   position: absolute;
-  left: 50%;
-  top: 90%;
-  padding-top: 2px; // Font is too up
+  left: 30%;
+  padding-top: 2px; // Font is too big
 `
 
 class Exploration extends Component {
@@ -100,7 +121,8 @@ class Exploration extends Component {
       boss: undefined,
       character: undefined,
       nextPossible: undefined,
-      scrollIsTop: true
+      scrollIsTop: true,
+      displayMap: true
     }
   }
 
@@ -200,29 +222,57 @@ class Exploration extends Component {
     return (
       <>
         <HpNavBar user={character} />
-        <Container className="position-fixed container-fluid">
+        <Container
+          className="position-fixed container-fluid"
+          onClick={() =>
+            this.state.displayMap ? this.setState({ displayMap: false }) : null
+          }
+          isBlur={this.state.displayMap}
+        >
+          {loading && <Loader />}
           {character && (
-            <AvatarBox className="col-sm-6 position-absolute">
-              <img
-                src={
-                  process.env.PUBLIC_URL +
-                  '/img/academies/' +
-                  character.academy.name +
-                  '.png'
+            <>
+              <AvatarBox className="col-sm-6 position-absolute">
+                <img
+                  src={
+                    process.env.PUBLIC_URL +
+                    '/img/academies/' +
+                    character.academy.name +
+                    '.png'
+                  }
+                  width="200px"
+                  alt="Avatar mon personnage"
+                  data-tip="Moi"
+                />
+              </AvatarBox>
+              <Compass
+                className="position-absolute"
+                onClick={() =>
+                  this.setState({ displayMap: !this.state.displayMap })
                 }
-                width="200px"
-                alt="Avatar mon personnage"
-              />
-            </AvatarBox>
+              >
+                <img
+                  src={process.env.PUBLIC_URL + '/img/compass-1.svg'}
+                  width="70px"
+                  alt="Compass"
+                  style={{ cursor: 'pointer' }}
+                  data-tip="Carte de navigation"
+                />
+              </Compass>
+              <ReactTooltip />
+            </>
           )}
         </Container>
         <ExplorationBox
-          className="container-fluid"
-          onScroll={() => this.handleScroll()}
-          ref={this.refScroll}
+          className={`container-fluid animated fadeInDown ${
+            this.state.displayMap ? 'fadeInDown' : 'fadeOutUp'
+          }`}
         >
-          {loading && <Loader />}
-          <SubContainer className="container">
+          <SubContainer
+            className="container"
+            onScroll={() => this.handleScroll()}
+            ref={this.refScroll}
+          >
             {error && (
               <span className="text-danger">
                 <b>Erreur :</b> {error.message}
@@ -234,11 +284,7 @@ class Exploration extends Component {
                   src={process.env.PUBLIC_URL + '/img/boss/' + boss.image}
                   alt={boss.name}
                   style={{
-                    left: scrollIsTop <= 40 ? '50%' : '90%',
-                    transform:
-                      scrollIsTop <= 40
-                        ? 'translateX(-50%)'
-                        : 'translateX(-90%)'
+                    left: scrollIsTop <= 40 ? '47%' : '90%'
                   }}
                   width="60px"
                   height="60px"
@@ -287,7 +333,7 @@ class Exploration extends Component {
                     {_.map(explorationRow, (col) => (
                       <div
                         key={col.id}
-                        className={`mt-5 mb-5 col-sm-${Math.round(
+                        className={`mt-5 col-sm-${Math.round(
                           12 / explorationRow.length
                         )}`}
                       >
