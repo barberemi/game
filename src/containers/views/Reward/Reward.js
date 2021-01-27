@@ -192,7 +192,7 @@ class Reward extends Component {
       <>
         <Container className="position-fixed container-fluid">
           {user && (
-            <AvatarBox className="col-sm-6 position-absolute">
+            <AvatarBox className="position-absolute">
               <img
                 src={
                   process.env.PUBLIC_URL +
@@ -202,6 +202,7 @@ class Reward extends Component {
                 }
                 width="200px"
                 alt="Avatar mon personnage"
+                className="animated fadeInLeft slow"
               />
             </AvatarBox>
           )}

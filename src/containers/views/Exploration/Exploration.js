@@ -232,7 +232,7 @@ class Exploration extends Component {
           {loading && <Loader />}
           {character && (
             <>
-              <AvatarBox className="col-sm-6 position-absolute">
+              <AvatarBox className="position-absolute">
                 <img
                   src={
                     process.env.PUBLIC_URL +
@@ -243,6 +243,7 @@ class Exploration extends Component {
                   width="200px"
                   alt="Avatar mon personnage"
                   data-tip="Moi"
+                  className="animated fadeInLeft slow"
                 />
               </AvatarBox>
               <Compass

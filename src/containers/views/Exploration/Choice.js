@@ -11,26 +11,37 @@ import Cookies from 'js-cookie'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
-  background-size: cover;
-  background-attachment: fixed;
-  -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
-  text-align: center;
-  color: white;
-  min-height: 100%;
+  background-size: 100% 100%;
   height: 100%;
-  overflow-y: scroll;
+  top: 0;
+  left: 0;
 `
 
 const SubContainer = styled.div`
+  text-align: center;
+  color: white;
+  min-height: 250px;
+  overflow-y: scroll;
+`
+
+const AvatarBox = styled.div`
+  bottom: 20%;
+  left: 15%;
+`
+
+const EventCharacterBox = styled.div`
+  bottom: 20%;
+  right: 15%;
+`
+
+const SubSubContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.6) !important;
   border-radius: 0.3em;
   margin-top: 100px;
 `
 
 const TextDescription = styled.div`
-  font-size: 20px;
+  font-size: 24px;
   text-shadow: 1px 1px 2px black;
 `
 
@@ -349,30 +360,50 @@ class Choice extends Component {
 
     return (
       <>
-        <HpNavBar user={user} />
-        <Container className="container-fluid align-middle">
-          {loading && <Loader />}
+        <Container className="position-fixed container-fluid">
+          {user && (
+            <>
+              <AvatarBox className="position-absolute">
+                <img
+                  src={
+                    process.env.PUBLIC_URL +
+                    '/img/academies/' +
+                    user.academy.name +
+                    '.png'
+                  }
+                  width="200px"
+                  alt="Avatar mon personnage"
+                  className="animated fadeInLeft slow"
+                />
+              </AvatarBox>
+              <EventCharacterBox className="position-absolute">
+                <img
+                  src={this.getHandleImage()}
+                  width="200px"
+                  alt="personnage de exploration"
+                  className="animated fadeInRight slow"
+                />
+              </EventCharacterBox>
+            </>
+          )}
+        </Container>
+        {loading && <Loader />}
+        {user && <HpNavBar user={user} />}
+        <SubContainer className="container-fluid">
           {error && (
             <span className="text-danger">
               <b>Erreur :</b> {error.message}
             </span>
           )}
           {user && (
-            <SubContainer className="container">
+            <SubSubContainer className="container">
               <div className="row align-items-center">
                 <TextDescription
-                  className="col-sm-12 mt-5"
+                  className="col-sm-12"
                   dangerouslySetInnerHTML={{ __html: text }}
                 />
               </div>
               <div className="row align-items-center">
-                <div className="col-sm-3 offset-sm-1 mt-5 mb-5">
-                  <img
-                    src={this.getHandleImage()}
-                    alt="personnage de exploration"
-                    height="250px"
-                  />
-                </div>
                 {_.map(this.state.cards, (card, index) => (
                   <CardChoice
                     key={index}
@@ -384,9 +415,9 @@ class Choice extends Component {
                   />
                 ))}
               </div>
-            </SubContainer>
+            </SubSubContainer>
           )}
-        </Container>
+        </SubContainer>
       </>
     )
   }

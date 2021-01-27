@@ -15,7 +15,7 @@ const HitNumber = styled.div`
 
 class Avatar extends Component {
   animation() {
-    const { faint, isHit } = this.props
+    const { faint, isHit, isPlayer } = this.props
 
     if (isHit !== false) {
       return 'animated headShake'
@@ -24,7 +24,10 @@ class Avatar extends Component {
       return 'animated fadeOut slow'
     }
     if (faint === null) {
-      return 'animated fadeInUp'
+      if (isPlayer) {
+        return 'animated fadeInLeft slow'
+      }
+      return 'animated fadeInRight slow'
     }
     if (faint === undefined) {
       return 'hide'

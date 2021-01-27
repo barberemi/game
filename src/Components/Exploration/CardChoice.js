@@ -47,7 +47,8 @@ class CardChoice extends Component {
 
     return (
       <div
-        className={`col-sm-3 mt-5 mb-5 ${position === 0 ? 'offset-sm-2' : ''}`}
+        className={`col-sm-3 mt-3 ${position === 0 ? 'offset-sm-3' : ''}`}
+        style={{ fontSize: '2hv' }}
       >
         <div className="card">
           {room && room.cost && position === 0 && room.cost > money && (
