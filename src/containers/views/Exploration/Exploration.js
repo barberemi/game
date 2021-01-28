@@ -56,9 +56,10 @@ const AvatarBox = styled.div`
   left: 15%;
 `
 
-const Compass = styled.div`
-  right: 15%;
-  top: 15%;
+const Text = styled.div`
+  color: white;
+  font-size: 22px;
+  padding-left: 50px;
 `
 
 const Building = styled.img`
@@ -122,7 +123,7 @@ class Exploration extends Component {
       character: undefined,
       nextPossible: undefined,
       scrollIsTop: true,
-      displayMap: true
+      displayMap: undefined
     }
   }
 
@@ -169,13 +170,6 @@ class Exploration extends Component {
                 }
               })
             })
-
-            // Scroll if didnt see character
-            setTimeout(() => {
-              this.refScroll.current.scrollTop =
-                this.refMe.current.getBoundingClientRect().top -
-                (this.refMe.current.getBoundingClientRect().height + 100)
-            }, 1000)
           }
         }
       })
@@ -233,6 +227,7 @@ class Exploration extends Component {
           {character && (
             <>
               <AvatarBox className="position-absolute">
+                <Text>Que faire ?</Text>
                 <img
                   src={
                     process.env.PUBLIC_URL +
@@ -242,131 +237,166 @@ class Exploration extends Component {
                   }
                   width="200px"
                   alt="Avatar mon personnage"
-                  data-tip="Moi"
                   className="animated fadeInLeft slow"
                 />
-              </AvatarBox>
-              <Compass
-                className="position-absolute"
-                onClick={() =>
-                  this.setState({ displayMap: !this.state.displayMap })
-                }
-              >
                 <img
                   src={process.env.PUBLIC_URL + '/img/compass-1.svg'}
                   width="70px"
                   alt="Compass"
                   style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    this.setState({ displayMap: !this.state.displayMap })
+                    // Scroll if didnt see character
+                    setTimeout(() => {
+                      this.refScroll.current.scrollTop =
+                        this.refMe.current.getBoundingClientRect().top -
+                        (this.refMe.current.getBoundingClientRect().height +
+                          100)
+                    }, 1000)
+                  }}
                   data-tip="Carte de navigation"
                 />
-              </Compass>
+                <Text>(Other actions are coming)</Text>
+              </AvatarBox>
               <ReactTooltip />
             </>
           )}
         </Container>
         <ExplorationBox
-          className={`container-fluid animated fadeInDown ${
-            this.state.displayMap ? 'fadeInDown' : 'fadeOutUp'
+          className={`container-fluid animated ${
+            this.state.displayMap === undefined
+              ? 'd-none'
+              : this.state.displayMap
+              ? 'fadeInDown'
+              : 'fadeOutUp'
           }`}
         >
-          <SubContainer
-            className="container"
-            onScroll={() => this.handleScroll()}
-            ref={this.refScroll}
-          >
-            {error && (
-              <span className="text-danger">
-                <b>Erreur :</b> {error.message}
-              </span>
-            )}
-            {boss && character && (
-              <div className="row h-100">
-                <StickyBoss
-                  src={process.env.PUBLIC_URL + '/img/boss/' + boss.image}
-                  alt={boss.name}
-                  style={{
-                    left: scrollIsTop <= 40 ? '47%' : '90%'
-                  }}
-                  width="60px"
-                  height="60px"
-                  data-tip={boss.name}
-                  data-place="bottom"
-                  onClick={() => (this.refScroll.current.scrollTop = 0)}
-                />
-                <div className="mt-3 mb-3 col-sm-12">
-                  {this.isNext(boss) && (
-                    <>
-                      <Link to={`/choice/${boss.type}/${boss.id}`}>
-                        <Building
-                          src={
-                            process.env.PUBLIC_URL +
-                            '/img/explorations/' +
-                            boss.type +
-                            '.png'
-                          }
-                          alt={boss.type + '.png'}
-                          width="200px"
-                          data-tip={buildingTypes[boss.type]}
-                          id={`building-${boss.id}`}
-                        />
-                      </Link>
-                      <PossibleBuildingText>1</PossibleBuildingText>
-                      <ReactTooltip />
-                    </>
-                  )}
-                  {!this.isNext(boss) && (
-                    <DisabledBuilding
-                      src={
-                        process.env.PUBLIC_URL +
-                        '/img/explorations/' +
-                        boss.type +
-                        '.png'
-                      }
-                      alt={boss.type + '.png'}
-                      width="200px"
-                      data-tip={buildingTypes[boss.type]}
-                      id={`building-${boss.id}`}
-                    />
-                  )}
-                </div>
-                {_.map(this.state.explorations, (explorationRow, index) => (
-                  <Fragment key={index}>
-                    {_.map(explorationRow, (col) => (
-                      <div
-                        key={col.id}
-                        className={`mt-5 col-sm-${Math.round(
-                          12 / explorationRow.length
-                        )}`}
-                      >
-                        {character.position === col.id && (
-                          <>
-                            <Building
-                              src={
-                                process.env.PUBLIC_URL +
-                                '/img/academies/' +
-                                character.academy.name +
-                                '.png'
-                              }
-                              alt="me"
-                              width="100px"
-                              ref={this.refMe}
-                              data-tip="Moi"
-                              id={`building-${col.id}`}
-                            />
-                            {col.next &&
-                              _.map(col.next, (nextPossible) => (
-                                <ArrowTrait
-                                  from={`building-${col.id}`}
-                                  to={`building-${nextPossible}`}
-                                  isNext={true}
-                                />
-                              ))}
-                          </>
-                        )}
-                        {this.isNext(col) && (
-                          <>
-                            <Link to={`/choice/${col.type}/${col.id}`}>
+          {this.state.displayMap !== undefined && (
+            <SubContainer
+              className="container"
+              onScroll={() => this.handleScroll()}
+              ref={this.refScroll}
+            >
+              {error && (
+                <span className="text-danger">
+                  <b>Erreur :</b> {error.message}
+                </span>
+              )}
+              {boss && character && (
+                <div className="row h-100">
+                  <StickyBoss
+                    src={process.env.PUBLIC_URL + '/img/boss/' + boss.image}
+                    alt={boss.name}
+                    style={{
+                      left: scrollIsTop <= 40 ? '47%' : '90%'
+                    }}
+                    width="60px"
+                    height="60px"
+                    data-tip={boss.name}
+                    data-place="bottom"
+                    onClick={() => (this.refScroll.current.scrollTop = 0)}
+                  />
+                  <div className="mt-3 mb-3 col-sm-12">
+                    {this.isNext(boss) && (
+                      <>
+                        <Link to={`/choice/${boss.type}/${boss.id}`}>
+                          <Building
+                            src={
+                              process.env.PUBLIC_URL +
+                              '/img/explorations/' +
+                              boss.type +
+                              '.png'
+                            }
+                            alt={boss.type + '.png'}
+                            width="200px"
+                            data-tip={buildingTypes[boss.type]}
+                            id={`building-${boss.id}`}
+                          />
+                        </Link>
+                        <PossibleBuildingText>1</PossibleBuildingText>
+                        <ReactTooltip />
+                      </>
+                    )}
+                    {!this.isNext(boss) && (
+                      <DisabledBuilding
+                        src={
+                          process.env.PUBLIC_URL +
+                          '/img/explorations/' +
+                          boss.type +
+                          '.png'
+                        }
+                        alt={boss.type + '.png'}
+                        width="200px"
+                        data-tip={buildingTypes[boss.type]}
+                        id={`building-${boss.id}`}
+                      />
+                    )}
+                  </div>
+                  {_.map(this.state.explorations, (explorationRow, index) => (
+                    <Fragment key={index}>
+                      {_.map(explorationRow, (col) => (
+                        <div
+                          key={col.id}
+                          className={`mt-5 col-sm-${Math.round(
+                            12 / explorationRow.length
+                          )}`}
+                        >
+                          {character.position === col.id && (
+                            <>
                               <Building
+                                src={
+                                  process.env.PUBLIC_URL +
+                                  '/img/academies/' +
+                                  character.academy.name +
+                                  '.png'
+                                }
+                                alt="me"
+                                width="100px"
+                                ref={this.refMe}
+                                data-tip="Moi"
+                                id={`building-${col.id}`}
+                              />
+                              {col.next &&
+                                _.map(col.next, (nextPossible, index) => (
+                                  <ArrowTrait
+                                    key={index}
+                                    from={`building-${col.id}`}
+                                    to={`building-${nextPossible}`}
+                                    isNext={true}
+                                  />
+                                ))}
+                            </>
+                          )}
+                          {this.isNext(col) && (
+                            <>
+                              <Link to={`/choice/${col.type}/${col.id}`}>
+                                <Building
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    '/img/explorations/' +
+                                    col.type +
+                                    '.png'
+                                  }
+                                  alt={col.type + '.png'}
+                                  width="100px"
+                                  data-tip={buildingTypes[col.type]}
+                                  id={`building-${col.id}`}
+                                />
+                                {col.next &&
+                                  _.map(col.next, (nextPossible, index) => (
+                                    <ArrowTrait
+                                      key={index}
+                                      from={`building-${col.id}`}
+                                      to={`building-${nextPossible}`}
+                                    />
+                                  ))}
+                              </Link>
+                              <ReactTooltip />
+                            </>
+                          )}
+                          {character.position !== col.id && !this.isNext(col) && (
+                            <>
+                              <DisabledBuilding
                                 src={
                                   process.env.PUBLIC_URL +
                                   '/img/explorations/' +
@@ -379,53 +409,30 @@ class Exploration extends Component {
                                 id={`building-${col.id}`}
                               />
                               {col.next &&
-                                _.map(col.next, (nextPossible) => (
+                                _.map(col.next, (nextPossible, index) => (
                                   <ArrowTrait
+                                    key={index}
                                     from={`building-${col.id}`}
                                     to={`building-${nextPossible}`}
                                   />
                                 ))}
-                            </Link>
-                            <ReactTooltip />
-                          </>
-                        )}
-                        {character.position !== col.id && !this.isNext(col) && (
-                          <>
-                            <DisabledBuilding
-                              src={
-                                process.env.PUBLIC_URL +
-                                '/img/explorations/' +
-                                col.type +
-                                '.png'
-                              }
-                              alt={col.type + '.png'}
-                              width="100px"
-                              data-tip={buildingTypes[col.type]}
-                              id={`building-${col.id}`}
-                            />
-                            {col.next &&
-                              _.map(col.next, (nextPossible) => (
-                                <ArrowTrait
-                                  from={`building-${col.id}`}
-                                  to={`building-${nextPossible}`}
-                                />
-                              ))}
-                          </>
-                        )}
-                        {_.includes(nextPossible, col.id) &&
-                          (countExplorations = countExplorations + 1) && (
-                            <PossibleBuildingText>
-                              {countExplorations}
-                            </PossibleBuildingText>
+                            </>
                           )}
-                      </div>
-                    ))}
-                  </Fragment>
-                ))}
-                <ReactTooltip />
-              </div>
-            )}
-          </SubContainer>
+                          {_.includes(nextPossible, col.id) &&
+                            (countExplorations = countExplorations + 1) && (
+                              <PossibleBuildingText>
+                                {countExplorations}
+                              </PossibleBuildingText>
+                            )}
+                        </div>
+                      ))}
+                    </Fragment>
+                  ))}
+                  <ReactTooltip />
+                </div>
+              )}
+            </SubContainer>
+          )}
         </ExplorationBox>
       </>
     )

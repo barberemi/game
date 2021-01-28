@@ -141,6 +141,9 @@ class MapHome extends Component {
             imgWidth={1920}
             width={this.state.imageWidth}
             strokeColor={'#ede1b0'}
+            onMouseEnter={(area) => {
+              console.log(area)
+            }}
           />
           <TextBottomLeft className="col-sm-12">
             Selectionner une zone dans laquelle naviguer.
