@@ -48,13 +48,24 @@ const TitleCard = styled.div`
   text-shadow: 1px 1px 2px black;
 `
 
-const AdventureButton = styled.button`
-  background-color: #ffc312;
-  color: black;
+const IconBoss = styled.img`
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background-color: #fff;
+  margin-right: 10px;
+  cursor: pointer;
+`
 
-  &:hover {
-    color: #fff;
-  }
+const IconTreasure = styled.div`
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background-color: #fff;
+  margin-right: 10px;
+  cursor: pointer;
 `
 
 class CardMap extends Component {
@@ -79,7 +90,7 @@ class CardMap extends Component {
     }
   }
 
-  handleClick() {
+  handleClick(type) {
     const { map, user, redirectTo } = this.props
 
     if (this.mapBlocked() === false) {
@@ -93,7 +104,7 @@ class CardMap extends Component {
               user.id +
               '/map/' +
               map.id,
-            {},
+            { type: type },
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -118,7 +129,7 @@ class CardMap extends Component {
 
     return (
       <Card className="col-sm-5">
-        <div className="card">
+        <div className={`card mt-5`}>
           {this.displayCardLevel()}
           {user.exploration &&
             user.exploration[1].map &&
@@ -136,26 +147,45 @@ class CardMap extends Component {
             )}
           <TitleCard>{map.name}</TitleCard>
           <img
-            className="card-img-top"
             src={
               map.img_url ??
               'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg'
             }
             alt={map.name}
           />
-          <AdventureButton
-            onClick={() => this.handleClick()}
-            className={`card-footer btn${this.mapBlocked() ? ' disabled' : ''}`}
-          >
-            {this.mapBlocked() === true && (
-              <>
-                <i className="fas fa-lock" />
-                &nbsp;
-              </>
-            )}
-            Explorer
-          </AdventureButton>
         </div>
+        {!this.mapBlocked() && (
+          <div className="d-flex justify-content-center">
+            <IconTreasure onClick={() => this.handleClick('treasure')}>
+              <img
+                src={process.env.PUBLIC_URL + '/img/treasure.svg'}
+                width="50px"
+                style={{ paddingTop: '7px' }}
+                data-tip="Chasse au trésor"
+              />
+            </IconTreasure>
+            {map.boss && (
+              <IconBoss
+                src={process.env.PUBLIC_URL + '/img/boss/' + map.boss.image}
+                onClick={() => this.handleClick('boss')}
+                data-tip="Champion en fin d'exploration"
+              />
+            )}
+          </div>
+        )}
+
+        {/*<AdventureButton*/}
+        {/*  onClick={() => this.handleClick()}*/}
+        {/*  className={`card-footer btn${this.mapBlocked() ? ' disabled' : ''}`}*/}
+        {/*>*/}
+        {/*  {this.mapBlocked() === true && (*/}
+        {/*    <>*/}
+        {/*      <i className="fas fa-lock" />*/}
+        {/*      &nbsp;*/}
+        {/*    </>*/}
+        {/*  )}*/}
+        {/*  Explorer*/}
+        {/*</AdventureButton>*/}
       </Card>
     )
   }
@@ -167,7 +197,10 @@ CardMap.propTypes = {
     name: PropTypes.string,
     levelMin: PropTypes.number,
     nbFloors: PropTypes.number,
-    img_url: PropTypes.string
+    img_url: PropTypes.string,
+    boss: PropTypes.shape({
+      image: PropTypes.string
+    })
   }),
   user: PropTypes.shape({
     id: PropTypes.number,

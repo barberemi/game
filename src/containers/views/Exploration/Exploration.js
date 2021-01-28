@@ -240,7 +240,7 @@ class Exploration extends Component {
                   className="animated fadeInLeft slow"
                 />
                 <img
-                  src={process.env.PUBLIC_URL + '/img/compass-1.svg'}
+                  src={process.env.PUBLIC_URL + '/img/map.svg'}
                   width="70px"
                   alt="Compass"
                   style={{ cursor: 'pointer' }}

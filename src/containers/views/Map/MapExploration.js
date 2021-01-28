@@ -98,7 +98,7 @@ class MapExploration extends Component {
             )}
             {maps && user && (
               <>
-                <RowOverflow className="row align-items-center">
+                <RowOverflow className="row">
                   {_.map(this.state.maps, (map) => (
                     <CardMap
                       key={map.name}
