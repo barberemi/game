@@ -436,7 +436,7 @@ class Crafting extends Component {
                         <div className="col-sm-12">
                           <Title>Création de compétences</Title>
                         </div>
-                        Coming soon...
+                        Arrive bientôt...
                       </div>
                     </Card>
                   </div>

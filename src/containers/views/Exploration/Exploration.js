@@ -296,7 +296,7 @@ class Exploration extends Component {
                   treasureItem === undefined && (
                     <Text>Nous voici enfin face à notre récompense !</Text>
                   )}
-                {boss.type !== 'treasure' && <Text>Que faire ?</Text>}
+                {character.position !== 1 && <Text>Que faire ?</Text>}
                 <img
                   src={
                     process.env.PUBLIC_URL +
@@ -332,7 +332,7 @@ class Exploration extends Component {
                       }}
                       data-tip="Carte de navigation"
                     />
-                    <Text>(Other actions are coming)</Text>
+                    <Text>(D'autres actions viendront par la suite)</Text>
                   </>
                 )}
               </AvatarBox>
