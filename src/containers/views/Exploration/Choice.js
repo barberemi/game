@@ -230,7 +230,7 @@ class Choice extends Component {
       case 'arene-boss':
         return process.env.PUBLIC_URL + '/img/boss/' + user.exploration[1].image
       case 'treasure':
-        return process.env.PUBLIC_URL + '/img/treasure.svg'
+        return process.env.PUBLIC_URL + '/img/chest-close.svg'
       case 'dealer':
         return process.env.PUBLIC_URL + '/img/forgeron.png'
       case 'healer':

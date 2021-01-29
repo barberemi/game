@@ -116,11 +116,11 @@ class ItemTooltip extends Component {
             <br />
           </>
         )}
-        {oldItem && (
+        {oldItem && oldItem.item.id !== item.id && (
           <>
             <div className="text-warning">Comparatif : </div>
-            {oldItem.characteristics &&
-              _.map(oldItem.characteristics, (oldCharac) => {
+            {oldItem.item.characteristics &&
+              _.map(oldItem.item.characteristics, (oldCharac) => {
                 const newCharac = _.find(item.characteristics, {
                   characteristic: { name: oldCharac.characteristic.name }
                 })
@@ -202,14 +202,16 @@ ItemTooltip.propTypes = {
     characteristics: PropTypes.arrayOf(PropTypes.shape())
   }),
   oldItem: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    cost: PropTypes.number,
-    level: PropTypes.number,
-    type: PropTypes.string,
-    rarity: PropTypes.string,
-    dropRate: PropTypes.number,
-    characteristics: PropTypes.arrayOf(PropTypes.shape())
+    item: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      cost: PropTypes.number,
+      level: PropTypes.number,
+      type: PropTypes.string,
+      rarity: PropTypes.string,
+      dropRate: PropTypes.number,
+      characteristics: PropTypes.arrayOf(PropTypes.shape())
+    })
   }),
   isEquipped: PropTypes.bool
 }

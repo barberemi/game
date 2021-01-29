@@ -9,6 +9,7 @@ import ReactTooltip from 'react-tooltip'
 import Loader from '../../../Components/Loader/Loader'
 import HpNavBar from '../../../Components/NavBar/HpNavBar'
 import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
+import ItemBox from '../../../Components/Item/ItemBox'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
@@ -56,10 +57,34 @@ const AvatarBox = styled.div`
   left: 15%;
 `
 
+const EventCharacterBox = styled.div`
+  bottom: 20%;
+  right: 15%;
+  cursor: pointer;
+`
+
+const CenterItemBox = styled.div`
+  padding-left: 30px;
+  padding-bottom: 20px;
+  color: white;
+  text-align: center;
+`
+
 const Text = styled.div`
   color: white;
   font-size: 22px;
   padding-left: 50px;
+`
+
+const Button = styled.button`
+  color: #000;
+  background-color: #ffc312;
+  margin-top: 10px;
+
+  &:hover {
+    color: black;
+    background-color: white;
+  }
 `
 
 const Building = styled.img`
@@ -114,6 +139,7 @@ class Exploration extends Component {
     this.refMe = React.createRef()
     this.handleScroll = this.handleScroll.bind(this)
     this.isNext = this.isNext.bind(this)
+    this.handleOpenTreasure = this.handleOpenTreasure.bind(this)
 
     this.state = {
       redirect: undefined,
@@ -123,6 +149,8 @@ class Exploration extends Component {
       character: undefined,
       nextPossible: undefined,
       scrollIsTop: true,
+      chestIcon: 'chest-close',
+      treasureItem: undefined,
       displayMap: undefined
     }
   }
@@ -144,6 +172,8 @@ class Exploration extends Component {
           })
           if (fightExists.length > 0) {
             this.setState({ redirect: '/fight/' + fightExists[0].id })
+          } else if (!response.data.exploration) {
+            this.setState({ redirect: '/maps' })
           } else {
             // 2 - Generate exploration
             const results = response.data.exploration
@@ -156,6 +186,7 @@ class Exploration extends Component {
 
             this.setState({
               loading: false,
+              equippedItems: response.data.equippedItems,
               character: character,
               boss: boss,
               explorations: results
@@ -191,11 +222,43 @@ class Exploration extends Component {
     return _.includes(this.state.nextPossible, col.id)
   }
 
+  handleOpenTreasure() {
+    const { character, treasureItem } = this.state
+
+    if (treasureItem === undefined) {
+      axios
+        .post(
+          process.env.REACT_APP_API_URL +
+            '/users/' +
+            character.id +
+            '/exploration',
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
+          }
+        )
+        .then((response) => {
+          if (response.data) {
+            this.setState({ treasureItem: response.data })
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.status
+          })
+        })
+    }
+  }
+
   render() {
     const {
       redirect,
       boss,
       character,
+      treasureItem,
       error,
       loading,
       nextPossible,
@@ -228,7 +291,12 @@ class Exploration extends Component {
           {character && (
             <>
               <AvatarBox className="position-absolute">
-                <Text>Que faire ?</Text>
+                {boss.type === 'treasure' &&
+                  character.position === 1 &&
+                  treasureItem === undefined && (
+                    <Text>Nous voici enfin face à notre récompense !</Text>
+                  )}
+                {boss.type !== 'treasure' && <Text>Que faire ?</Text>}
                 <img
                   src={
                     process.env.PUBLIC_URL +
@@ -240,25 +308,69 @@ class Exploration extends Component {
                   alt="Avatar mon personnage"
                   className="animated fadeInLeft slow"
                 />
-                <img
-                  src={process.env.PUBLIC_URL + '/img/map.svg'}
-                  width="70px"
-                  alt="Compass"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    this.setState({ displayMap: !this.state.displayMap })
-                    // Scroll if didnt see character
-                    setTimeout(() => {
-                      this.refScroll.current.scrollTop =
-                        this.refMe.current.getBoundingClientRect().top -
-                        (this.refMe.current.getBoundingClientRect().height +
-                          100)
-                    }, 1000)
-                  }}
-                  data-tip="Carte de navigation"
-                />
-                <Text>(Other actions are coming)</Text>
+                {boss.type === 'treasure' && treasureItem !== undefined && (
+                  <Link to={'/maps'}>
+                    <Button className="btn">Nouvelle exploration</Button>
+                  </Link>
+                )}
+                {character.position !== 1 && (
+                  <>
+                    <img
+                      src={process.env.PUBLIC_URL + '/img/map.svg'}
+                      width="70px"
+                      alt="Compass"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        this.setState({ displayMap: !this.state.displayMap })
+                        // Scroll if didnt see character
+                        setTimeout(() => {
+                          this.refScroll.current.scrollTop =
+                            this.refMe.current.getBoundingClientRect().top -
+                            (this.refMe.current.getBoundingClientRect().height +
+                              100)
+                        }, 1000)
+                      }}
+                      data-tip="Carte de navigation"
+                    />
+                    <Text>(Other actions are coming)</Text>
+                  </>
+                )}
               </AvatarBox>
+              {boss.type === 'treasure' && character.position === 1 && (
+                <EventCharacterBox className="position-absolute">
+                  {this.state.treasureItem && (
+                    <CenterItemBox>
+                      <ItemBox
+                        displayActions={false}
+                        displayText={false}
+                        item={this.state.treasureItem}
+                        oldItem={
+                          _.filter(this.state.equippedItems, (item) => {
+                            return item.item.type === treasureItem.item.type
+                          })[0]
+                        }
+                      />
+                      <ReactTooltip />
+                    </CenterItemBox>
+                  )}
+                  <img
+                    src={
+                      process.env.PUBLIC_URL +
+                      '/img/' +
+                      this.state.chestIcon +
+                      '.svg'
+                    }
+                    width="120px"
+                    alt="personnage de exploration"
+                    className="animated fadeInRight slow"
+                    data-tip="Ouvrir le coffre"
+                    onClick={() => {
+                      this.setState({ chestIcon: 'chest-open' })
+                      this.handleOpenTreasure()
+                    }}
+                  />
+                </EventCharacterBox>
+              )}
               <ReactTooltip />
             </>
           )}
@@ -291,7 +403,7 @@ class Exploration extends Component {
                       '/img/' +
                       (boss.type === 'arene-boss'
                         ? 'boss/' + boss.image
-                        : 'treasure.svg')
+                        : 'chest-close.svg')
                     }
                     alt={boss.name}
                     style={{

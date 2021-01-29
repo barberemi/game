@@ -158,9 +158,10 @@ class CardMap extends Component {
           <div className="d-flex justify-content-center">
             <IconTreasure onClick={() => this.handleClick('treasure')}>
               <img
-                src={process.env.PUBLIC_URL + '/img/treasure.svg'}
+                src={process.env.PUBLIC_URL + '/img/chest-close.svg'}
                 width="50px"
                 style={{ paddingTop: '7px' }}
+                alt="chasse au trésor"
                 data-tip="Chasse au trésor"
               />
             </IconTreasure>
