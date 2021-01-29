@@ -179,6 +179,7 @@ class Exploration extends Component {
     const buildingTypes = {
       arene: 'Arène',
       'arene-boss': 'Arène du champion',
+      treasure: 'Trésor',
       healer: 'Auberge',
       dealer: 'Marché'
     }

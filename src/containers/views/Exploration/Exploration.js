@@ -205,6 +205,7 @@ class Exploration extends Component {
     const buildingTypes = {
       arene: 'Arène',
       'arene-boss': 'Arène du champion',
+      treasure: 'Île aux trésors',
       healer: 'Auberge',
       dealer: 'Marché'
     }
@@ -285,7 +286,13 @@ class Exploration extends Component {
               {boss && character && (
                 <div className="row h-100">
                   <StickyBoss
-                    src={process.env.PUBLIC_URL + '/img/boss/' + boss.image}
+                    src={
+                      process.env.PUBLIC_URL +
+                      '/img/' +
+                      (boss.type === 'arene-boss'
+                        ? 'boss/' + boss.image
+                        : 'treasure.svg')
+                    }
                     alt={boss.name}
                     style={{
                       left: scrollIsTop <= 40 ? '47%' : '90%'

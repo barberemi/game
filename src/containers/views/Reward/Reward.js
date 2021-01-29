@@ -208,7 +208,7 @@ class Reward extends Component {
           )}
         </Container>
         {loading && <Loader />}
-        {user && <HpNavBar user={user} />}
+        {user && (user.hp || user.exploration) && <HpNavBar user={user} />}
         <SubContainer className="container-fluid">
           {user && monster && type === 'won' && levelUp && (
             <LevelWin>

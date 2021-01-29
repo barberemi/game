@@ -173,19 +173,7 @@ class CardMap extends Component {
             )}
           </div>
         )}
-
-        {/*<AdventureButton*/}
-        {/*  onClick={() => this.handleClick()}*/}
-        {/*  className={`card-footer btn${this.mapBlocked() ? ' disabled' : ''}`}*/}
-        {/*>*/}
-        {/*  {this.mapBlocked() === true && (*/}
-        {/*    <>*/}
-        {/*      <i className="fas fa-lock" />*/}
-        {/*      &nbsp;*/}
-        {/*    </>*/}
-        {/*  )}*/}
-        {/*  Explorer*/}
-        {/*</AdventureButton>*/}
+        <ReactTooltip />
       </Card>
     )
   }

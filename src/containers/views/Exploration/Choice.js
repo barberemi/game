@@ -133,6 +133,24 @@ class Choice extends Component {
                 }
               ]
               break
+            case 'treasure':
+              text =
+                'Vous êtes sur le point de vous battre pour récupérer le <span class="text-warning"><i>trésor</i></span> de la carte, êtes-vous prêt ?'
+              cards = [
+                {
+                  img_url:
+                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
+                  text_btn: 'Euh ben go...',
+                  action: 'fight-boss'
+                },
+                {
+                  img_url:
+                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
+                  text_btn: 'Foncer!',
+                  action: 'fight-boss'
+                }
+              ]
+              break
             case 'dealer':
               text =
                 "Oh mais dites-donc, vous êtes tombé nez à nez avec le forgeron!<br/> Il souhaite vous aider à <span class='text-warning'><i>forger un objet</i></span>, moyennant finance, bien évidemment."
@@ -211,6 +229,8 @@ class Choice extends Component {
     switch (type) {
       case 'arene-boss':
         return process.env.PUBLIC_URL + '/img/boss/' + user.exploration[1].image
+      case 'treasure':
+        return process.env.PUBLIC_URL + '/img/treasure.svg'
       case 'dealer':
         return process.env.PUBLIC_URL + '/img/forgeron.png'
       case 'healer':
@@ -379,7 +399,7 @@ class Choice extends Component {
               <EventCharacterBox className="position-absolute">
                 <img
                   src={this.getHandleImage()}
-                  width="200px"
+                  width={this.state.type === 'treasure' ? '150px' : '200px'}
                   alt="personnage de exploration"
                   className="animated fadeInRight slow"
                 />
