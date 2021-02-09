@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
+import Cookies from 'js-cookie'
 
 const Container = styled.div`
   display: flex;
@@ -55,7 +57,13 @@ class Friend extends Component {
   }
 
   render() {
-    const { friend, onDelete, canDelete } = this.props
+    const {
+      friend,
+      onDelete,
+      canDelete,
+      onPromoteToOfficer,
+      canPromote
+    } = this.props
 
     return (
       <Container className="col-sm-12">
@@ -76,61 +84,83 @@ class Friend extends Component {
           )}
           Niv {friend.level} - {friend.name}{' '}
           <span className="text-warning">
-            {friend.role === 'ROLE_GUILD_MASTER'
+            {friend.guildRole && friend.guildRole === 'master'
               ? '(Chef de guilde)'
-              : friend.role === 'ROLE_ADMIN'
-              ? '(Admin)'
+              : friend.guildRole === 'officer'
+              ? '(Officier)'
               : ''}
           </span>
         </Name>
-        <Actions className="col-sm-3">
-          <Link to={'/character/' + friend.id}>
-            <IconAction data-tip="Visualiser">
-              <i className="far fa-address-card text-success" />
-            </IconAction>
-          </Link>
-          <IconAction data-tip="Discuter">
-            <i className="far fa-comment" />
-          </IconAction>
-          {canDelete && (
-            <>
-              <IconAction
-                data-tip="Supprimer"
-                onClick={() =>
-                  this.setState({
-                    displayLeaveButtons: !this.state.displayLeaveButtons
-                  })
-                }
-              >
-                <i className="fas fa-times text-danger" />
+        {jwtDecode(Cookies.get('auth-token')).email !== friend.email && (
+          <>
+            <Actions className="col-sm-3">
+              <Link to={'/character/' + friend.id}>
+                <IconAction data-tip="Visualiser">
+                  <i className="far fa-address-card text-success" />
+                </IconAction>
+              </Link>
+              <IconAction data-tip="Discuter">
+                <i className="far fa-comment" />
               </IconAction>
-              <div
-                className={this.state.displayLeaveButtons ? '' : 'd-none'}
-                style={{ fontSize: '12px' }}
-              >
-                <ListLink
-                  className="text-success"
-                  href="#leave-validate"
-                  onClick={() => onDelete(friend)}
-                >
-                  Valider
-                </ListLink>{' '}
-                -{' '}
-                <ListLink
-                  href="#leave-cancel"
-                  onClick={() =>
-                    this.setState({
-                      displayLeaveButtons: false
-                    })
+              {friend.guildRole !== 'master' && canPromote && (
+                <IconAction
+                  data-tip={
+                    friend.guildRole === 'officer'
+                      ? 'Rétrograder'
+                      : 'Promouvoir'
                   }
+                  onClick={() => onPromoteToOfficer(friend)}
                 >
-                  Annuler
-                </ListLink>
-              </div>
-            </>
-          )}
-        </Actions>
-        <ReactTooltip />
+                  <i
+                    className={`fas fa-user-graduate ${
+                      friend.guildRole === 'officer'
+                        ? 'text-danger'
+                        : 'text-warning'
+                    }`}
+                  />
+                </IconAction>
+              )}
+              {canDelete && (
+                <>
+                  <IconAction
+                    data-tip="Supprimer"
+                    onClick={() =>
+                      this.setState({
+                        displayLeaveButtons: !this.state.displayLeaveButtons
+                      })
+                    }
+                  >
+                    <i className="fas fa-times text-danger" />
+                  </IconAction>
+                  <div
+                    className={this.state.displayLeaveButtons ? '' : 'd-none'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    <ListLink
+                      className="text-success"
+                      href="#leave-validate"
+                      onClick={() => onDelete(friend)}
+                    >
+                      Valider
+                    </ListLink>{' '}
+                    -{' '}
+                    <ListLink
+                      href="#leave-cancel"
+                      onClick={() =>
+                        this.setState({
+                          displayLeaveButtons: false
+                        })
+                      }
+                    >
+                      Annuler
+                    </ListLink>
+                  </div>
+                </>
+              )}
+            </Actions>
+            <ReactTooltip />
+          </>
+        )}
       </Container>
     )
   }
@@ -139,16 +169,20 @@ class Friend extends Component {
 Friend.propTypes = {
   friend: PropTypes.shape({
     id: PropTypes.number,
+    email: PropTypes.string,
     name: PropTypes.string,
     role: PropTypes.string,
     level: PropTypes.number,
     image: PropTypes.string,
+    guildRole: PropTypes.string,
     academy: PropTypes.shape({
       name: PropTypes.string
     })
   }),
   onDelete: PropTypes.func,
-  canDelete: PropTypes.bool
+  canDelete: PropTypes.bool,
+  onPromoteToOfficer: PropTypes.bool,
+  canPromote: PropTypes.bool
 }
 
 export default Friend

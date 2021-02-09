@@ -161,6 +161,7 @@ class Guild extends Component {
     this.handleChoiceGuildBoss = this.handleChoiceGuildBoss.bind(this)
     this.handleCreateGuildBossFight = this.handleCreateGuildBossFight.bind(this)
     this.handleOnPutOrTakeOnGuild = this.handleOnPutOrTakeOnGuild.bind(this)
+    this.handlePromoteToOfficer = this.handlePromoteToOfficer.bind(this)
   }
 
   componentDidMount() {
@@ -350,15 +351,13 @@ class Guild extends Component {
           }
         )
         .then((response) => {
-          // 2 - User lost money and become ROLE_GUILD_MASTER
+          // 2 - User lost money and become Guild's Master
           if (response.data) {
             guildId = response.data.id
             let data = { money: Number(this.state.user.money) - 20000 }
-            if (this.state.user.role !== 'ROLE_ADMIN') {
-              data = {
-                money: Number(this.state.user.money) - 20000,
-                role: 'ROLE_GUILD_MASTER'
-              }
+            data = {
+              money: Number(this.state.user.money) - 20000,
+              guildRole: 'master'
             }
 
             axios
@@ -585,6 +584,47 @@ class Guild extends Component {
       })
   }
 
+  handlePromoteToOfficer = (user) => {
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + user.id,
+        {
+          guildRole: user.guildRole === 'officer' ? 'member' : 'officer'
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        toast.success(
+          <span style={{ fontSize: '14px' }}>
+            {user.name} est devenu{' '}
+            {user.guildRole === 'officer' ? 'Membre' : 'Officier'} !
+          </span>,
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          }
+        )
+        this.setState({
+          guild: response.data.guild
+        })
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.status
+        })
+      })
+  }
+
   render() {
     const {
       error,
@@ -647,7 +687,8 @@ class Guild extends Component {
                           )}
                         </div>
                         {(user.role === 'ROLE_ADMIN' ||
-                          user.role === 'ROLE_GUILD_MASTER') && (
+                          user.guildRole === 'master' ||
+                          user.guildRole === 'officer') && (
                           <div
                             onClick={() => this.onClickOnTab('choiceBossTab')}
                           >
@@ -908,7 +949,8 @@ class Guild extends Component {
                     <Card className="card">
                       <div className="card-body">
                         {(user.role === 'ROLE_ADMIN' ||
-                          user.role === 'ROLE_GUILD_MASTER') && (
+                          user.guildRole === 'master' ||
+                          user.guildRole === 'officer') && (
                           <>
                             <div className="col-sm-12">
                               <Title>Ajouter des membres</Title>
@@ -947,7 +989,8 @@ class Guild extends Component {
                           friends={guild.users}
                           canDelete={
                             user.role === 'ROLE_ADMIN' ||
-                            user.role === 'ROLE_GUILD_MASTER'
+                            user.guildRole === 'master' ||
+                            user.guildRole === 'officer'
                           }
                           onDelete={(friend) => {
                             this.setState(
@@ -957,6 +1000,13 @@ class Guild extends Component {
                               () => this.handleAddDeleteUser('delete')
                             )
                           }}
+                          canPromote={
+                            user.role === 'ROLE_ADMIN' ||
+                            user.guildRole === 'master'
+                          }
+                          onPromoteToOfficer={(member) =>
+                            this.handlePromoteToOfficer(member)
+                          }
                         />
                       </div>
                     </Card>
@@ -967,7 +1017,8 @@ class Guild extends Component {
                 {guild &&
                   monsters &&
                   (user.role === 'ROLE_ADMIN' ||
-                    user.role === 'ROLE_GUILD_MASTER') && (
+                    user.guildRole === 'master' ||
+                    user.guildRole === 'officer') && (
                     <div
                       className={`tab-pane${
                         activatedTab === 'choiceBossTab' ? ' active' : ''

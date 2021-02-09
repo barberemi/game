@@ -128,6 +128,7 @@ class Character extends Component {
       })
       .catch((error) => {
         this.setState({
+          loading: false,
           error: error.response.data
         })
       })
@@ -641,7 +642,8 @@ class Character extends Component {
                           friends={user.friends}
                           canDelete={
                             user.role === 'ROLE_ADMIN' ||
-                            user.role === 'ROLE_GUILD_MASTER'
+                            user.email ===
+                              jwtDecode(Cookies.get('auth-token')).email
                           }
                           onDelete={(friend) => {
                             this.setState(
