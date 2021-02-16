@@ -312,20 +312,23 @@ class Reward extends Component {
                       <Link
                         to={
                           monster.isGuildBoss
-                            ? '/guild'
+                            ? '/guild_exploration'
                             : user.exploration
                             ? '/exploration'
                             : '/maps'
                         }
                       >
                         <Button className="btn">
-                          {monster.isGuildBoss
-                            ? 'Retour à la guilde'
-                            : user.exploration
-                            ? "Continuer l'exploration"
+                          {monster.isGuildBoss || user.exploration
+                            ? 'Continuer l’exploration'
                             : 'Nouvelle exploration'}
                         </Button>
                       </Link>
+                      {monster.isGuildBoss && (
+                        <Link to="/guild" style={{ marginLeft: '10px' }}>
+                          <Button className="btn">Retour à la guilde</Button>
+                        </Link>
+                      )}
                     </div>
                   </>
                 )}

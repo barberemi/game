@@ -13,6 +13,7 @@ import MapExploration from './containers/views/Map/MapExploration'
 import MapHome from './containers/views/Map/MapHome'
 import MapVillage from './containers/views/Map/MapVillage'
 import Exploration from './containers/views/Exploration/Exploration'
+import GuildExploration from './containers/views/Exploration/GuildExploration'
 import Choice from './containers/views/Exploration/Choice'
 import Login from './containers/views/Login/Login'
 import Register from './containers/views/Login/Register'
@@ -45,7 +46,13 @@ ReactDOM.render(
       />
       <AppRoute
         exact
-        path="/choice/:type/:idExploration"
+        path="/guild_exploration"
+        component={GuildExploration}
+        layout={Layout}
+      />
+      <AppRoute
+        exact
+        path="/:typeExploration/:type/:idExploration"
         component={Choice}
         layout={Layout}
       />
@@ -55,7 +62,6 @@ ReactDOM.render(
         component={Fight}
         layout={FightLayout}
       />
-
       <AppRoute exact path="/character" component={Character} layout={Layout} />
       <AppRoute
         exact
@@ -69,10 +75,8 @@ ReactDOM.render(
         component={Creation}
         layout={CreationLayout}
       />
-
       <AppRoute path="/boss/:idBoss" component={Boss} layout={Layout} />
       <AppRoute path="/boss" component={Boss} layout={Layout} />
-
       <AppRoute exact path="/crafting" component={Crafting} layout={Layout} />
       <AppRoute
         exact
@@ -80,12 +84,9 @@ ReactDOM.render(
         component={Crafting}
         layout={Layout}
       />
-
       <AppRoute path="/reward/:idFight" component={Reward} layout={Layout} />
-
       <AppRoute path="/guild" component={Guild} layout={Layout} />
       <AppRoute path="/guild/:idGuild" component={Guild} layout={Layout} />
-
       <AppRoute exact path="/login" component={Login} layout={LoginLayout} />
       <AppRoute
         exact
@@ -93,7 +94,6 @@ ReactDOM.render(
         component={Register}
         layout={LoginLayout}
       />
-
       <Redirect from="/" to="/login" />
     </Switch>
     <ToastContainer />

@@ -332,7 +332,6 @@ class Exploration extends Component {
                       }}
                       data-tip="Carte de navigation"
                     />
-                    <Text>(D'autres actions viendront par la suite)</Text>
                   </>
                 )}
               </AvatarBox>
@@ -418,7 +417,7 @@ class Exploration extends Component {
                   <div className="mt-3 mb-3 col-sm-12">
                     {this.isNext(boss) && (
                       <>
-                        <Link to={`/choice/${boss.type}/${boss.id}`}>
+                        <Link to={`/user_exploration/${boss.type}/${boss.id}`}>
                           <Building
                             src={
                               process.env.PUBLIC_URL +
@@ -488,7 +487,9 @@ class Exploration extends Component {
                           )}
                           {this.isNext(col) && (
                             <>
-                              <Link to={`/choice/${col.type}/${col.id}`}>
+                              <Link
+                                to={`/user_exploration/${col.type}/${col.id}`}
+                              >
                                 <Building
                                   src={
                                     process.env.PUBLIC_URL +

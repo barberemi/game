@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import jwtDecode from 'jwt-decode'
+import Cookies from 'js-cookie'
+import { Redirect } from 'react-router-dom'
 
 // background-image: url('https://mfiles.alphacoders.com/828/828646.jpg');
 // background-image: url('${process.env.PUBLIC_URL + '/img/fight-neige.jpg'}');
@@ -12,9 +15,13 @@ const FightContainer = styled.div`
   height: 100vh !important;
 `
 
-const FightLayout = ({ children }) => (
-  <FightContainer>{children}</FightContainer>
-)
+const FightLayout = ({ children }) => {
+  if (jwtDecode(Cookies.get('auth-token')).exp < Date.now() / 1000) {
+    return <Redirect to="/login" />
+  }
+
+  return <FightContainer>{children}</FightContainer>
+}
 
 FightLayout.propTypes = {
   children: PropTypes.node.isRequired

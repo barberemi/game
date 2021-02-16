@@ -52,6 +52,7 @@ class Choice extends Component {
     this.state = {
       type: this.props.match.params.type,
       idExploration: parseInt(this.props.match.params.idExploration),
+      typeExploration: this.props.match.params.typeExploration,
       user: undefined,
       loading: true,
       redirect: undefined,
@@ -75,49 +76,61 @@ class Choice extends Component {
       })
       .then((response) => {
         if (response.data) {
-          // 1 - Check if last fight is waiting
-          let fightExists = _.filter(response.data.fights, {
-            type: 'waiting',
-            monster: { isGuildBoss: false }
-          })
-          if (fightExists.length > 0) {
-            this.setState({ redirect: '/fight/' + fightExists[0].id })
-          }
-
           // 2 - Get room
           let text = undefined
           let cards = []
           let room = undefined
-          _.map(response.data.exploration, (row, index) => {
-            if (
-              index !== '1' &&
-              index !== String(Object.keys(response.data.exploration).length)
-            ) {
-              _.map(row, (col) => {
-                // 2.1 - Store the room
-                if (col.id === this.state.idExploration) {
-                  room = col
-                }
-                // 2.2 - Url dont exists on rooms of user exploration
-                if (
-                  col.id ===
-                  response.data.exploration[
-                    Object.keys(response.data.exploration).length
-                  ].position
-                ) {
-                  if (!_.includes(col.next, this.state.idExploration)) {
-                    this.setState({ redirect: '/exploration' })
-                  }
-                }
-              })
+          if (this.state.typeExploration === 'guild_exploration') {
+            _.map(response.data.guild.exploration, (row) => {
+              // 2.1 - Store the room
+              if (row[0].id === this.state.idExploration) {
+                room = row[0]
+              }
+            })
+            // 2.2 - Url dont exists on rooms of guild exploration
+            const nextPossible = response.data.guild.exploration.slice(
+              -(response.data.guild.position + 1)
+            )[0][0].next
+
+            if (!_.includes(nextPossible, this.state.idExploration)) {
+              this.setState({ redirect: '/guild_exploration' })
             }
-          })
+          } else {
+            _.map(response.data.exploration, (row, index) => {
+              if (
+                index !== '1' &&
+                index !== String(Object.keys(response.data.exploration).length)
+              ) {
+                _.map(row, (col) => {
+                  // 2.1 - Store the room
+                  if (col.id === this.state.idExploration) {
+                    room = col
+                  }
+                  // 2.2 - Url dont exists on rooms of user exploration
+                  if (
+                    col.id ===
+                    response.data.exploration[
+                      Object.keys(response.data.exploration).length
+                    ].position
+                  ) {
+                    if (!_.includes(col.next, this.state.idExploration)) {
+                      this.setState({ redirect: '/exploration' })
+                    }
+                  }
+                })
+              }
+            })
+          }
 
           // 3 - Set cards and other
           switch (this.state.type) {
             case 'arene-boss':
               text =
-                'Vous êtes sur le point de vous battre contre le <span class="text-warning"><i>champion</i></span> de la carte, êtes-vous prêt ?'
+                this.state.typeExploration === 'guild_exploration'
+                  ? 'Vous êtes sur le point de vous battre contre <span class="text-warning"><i>' +
+                    room.name +
+                    '</i></span>. Etes-vous prêt ?'
+                  : 'Vous êtes sur le point de vous battre contre le <span class="text-warning"><i>champion</i></span> de la carte, êtes-vous prêt ?'
               cards = [
                 {
                   img_url:
@@ -224,10 +237,13 @@ class Choice extends Component {
   }
 
   getHandleImage = () => {
-    const { type, user } = this.state
+    const { type, user, room, typeExploration } = this.state
 
     switch (type) {
       case 'arene-boss':
+        if (typeExploration === 'guild_exploration') {
+          return process.env.PUBLIC_URL + '/img/boss/' + room.image
+        }
         return process.env.PUBLIC_URL + '/img/boss/' + user.exploration[1].image
       case 'treasure':
         return process.env.PUBLIC_URL + '/img/chest-close.svg'
@@ -242,7 +258,19 @@ class Choice extends Component {
 
   handleClick = (card) => {
     if (card.action === 'fight-boss') {
-      this.createFight(true)
+      if (this.state.typeExploration === 'guild_exploration') {
+        let fightExists = _.filter(this.state.user.fights, {
+          type: 'waiting',
+          monster: { id: this.state.room.monster }
+        })
+        if (fightExists.length > 0) {
+          this.setState({ redirect: '/fight/' + fightExists[0].id })
+        } else {
+          this.createFight(false)
+        }
+      } else {
+        this.createFight(true)
+      }
     } else if (card.action === 'fight') {
       this.createFight(false)
     } else if (card.action === 'deal') {
@@ -447,7 +475,8 @@ Choice.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       type: PropTypes.string,
-      idExploration: PropTypes.string
+      idExploration: PropTypes.string,
+      typeExploration: PropTypes.string
     }).isRequired
   }).isRequired
 }

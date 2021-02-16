@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import FriendList from '../../../Components/Friend/FriendList'
 import MonsterList from '../../../Components/Monster/MonsterList'
 import Title from '../../../Components/Title/Title'
@@ -131,6 +131,24 @@ const FightButton = styled.span`
   cursor: pointer;
 `
 
+const InputSubmit = styled.input`
+  margin-top: 15px;
+  color: black;
+  background-color: #ffc312;
+  width: 100px;
+
+  &:hover {
+    color: black;
+    background-color: white;
+  }
+`
+
+const LinkToGuildExploration = styled(Link)`
+  &:hover {
+    text-decoration: none;
+  }
+`
+
 class Guild extends Component {
   constructor(props) {
     super(props)
@@ -143,11 +161,13 @@ class Guild extends Component {
       loading: true,
       displayLeaveButtons: false,
       textMessage: '',
+      textAnnouncement: '',
       guild: undefined,
       monsters: undefined,
       memberToAddOrRemove: '',
       newNameGuild: '',
       activatedTab: selectTabFromUrl([
+        'generalTab',
         'chatTab',
         'membersTab',
         'choiceBossTab',
@@ -185,11 +205,6 @@ class Guild extends Component {
       .all([getMe, getMonsters])
       .then((responses) => {
         if (responses[0].data) {
-          if (responses[1].data) {
-            this.setState({
-              monsters: responses[1].data.items
-            })
-          }
           if (!responses[0].data.guild) {
             this.setState({
               loading: false,
@@ -198,6 +213,11 @@ class Guild extends Component {
           } else {
             this.setState({
               user: responses[0].data,
+              monsters: responses[1].data.items.slice(
+                0,
+                responses[0].data.guild.position
+              ),
+              textAnnouncement: responses[0].data.guild.announcement,
               id: responses[0].data.guild.id
             })
             this.loadData()
@@ -625,6 +645,48 @@ class Guild extends Component {
       })
   }
 
+  handleChangeGuildAnnouncement = (event) => {
+    event.preventDefault()
+    const { guild } = this.state
+
+    if (event.target.announcement.value) {
+      axios
+        .put(
+          process.env.REACT_APP_API_URL + '/guilds/' + guild.id,
+          {
+            announcement: event.target.announcement.value
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
+          }
+        )
+        .then(() => {
+          toast.success(
+            <span style={{ fontSize: '14px' }}>
+              Annonce modifiée avec succès!
+            </span>,
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            }
+          )
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.status
+          })
+        })
+    }
+  }
+
   render() {
     const {
       error,
@@ -650,16 +712,18 @@ class Guild extends Component {
                 <div className="card-header">
                   <Title>Menu</Title>
                   <div>
-                    <div onClick={() => this.onClickOnTab('chatTab')}>
+                    <div onClick={() => this.onClickOnTab('generalTab')}>
                       <ListLink
-                        className={activatedTab === 'chatTab' ? 'active' : ''}
+                        className={
+                          activatedTab === 'generalTab' ? 'active' : ''
+                        }
                         data-toggle="tab"
                         role="tab"
-                        href="#chatTab"
+                        href="#generalTab"
                       >
-                        Discussion
+                        Général
                       </ListLink>
-                      {activatedTab === 'chatTab' && (
+                      {activatedTab === 'generalTab' && (
                         <span className="text-warning">
                           &nbsp;
                           <i className="far fa-arrow-alt-circle-right" />
@@ -668,6 +732,24 @@ class Guild extends Component {
                     </div>
                     {guild && (
                       <>
+                        <div onClick={() => this.onClickOnTab('chatTab')}>
+                          <ListLink
+                            className={
+                              activatedTab === 'chatTab' ? 'active' : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#chatTab"
+                          >
+                            Discussion
+                          </ListLink>
+                          {activatedTab === 'chatTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
                         <div onClick={() => this.onClickOnTab('membersTab')}>
                           <ListLink
                             className={
@@ -712,7 +794,7 @@ class Guild extends Component {
                             )}
                           </div>
                         )}
-                        {guild && guild.monster && (
+                        {guild.monster && (
                           <div
                             onClick={() => this.onClickOnTab('fightBossTab')}
                           >
@@ -813,9 +895,9 @@ class Guild extends Component {
                 {/* General */}
                 <div
                   className={`tab-pane${
-                    activatedTab === 'chatTab' ? ' active' : ''
+                    activatedTab === 'generalTab' ? ' active' : ''
                   }`}
-                  id="chatTab"
+                  id="generalTab"
                   role="tabpanel"
                 >
                   <Card className="card">
@@ -824,57 +906,79 @@ class Guild extends Component {
                         <b>Erreur :</b> {error.error}
                       </span>
                     )}
-                    {guild && (
+                    {guild && user && (
                       <>
                         <div className="card-header">
                           <Title>{guild.name}</Title>
                         </div>
                         <div className="card-body">
-                          <ListingMessages>
-                            {_.map(guild.messages, (message) => (
-                              <div key={message.id}>
-                                <strong>
-                                  <i>
-                                    (
-                                    {moment(message.createdAt).format(
-                                      'DD/MM à HH:mm'
-                                    )}
-                                    ){' '}
-                                  </i>
-                                  <span className="text-warning">
-                                    {message.user.name} :{' '}
-                                  </span>
-                                </strong>
-                                {message.message}
-                              </div>
-                            ))}
-                          </ListingMessages>
-                          <form onSubmit={this.handleSubmit}>
-                            <Chat>
-                              <InputMessage
-                                id="message"
-                                name="message"
-                                type="text"
-                                value={this.state.textMessage}
-                                placeholder="Votre message..."
-                                onChange={(event) =>
+                          {user.canGuildBossFight && (
+                            <FightButton
+                              onClick={() => this.handleCreateGuildBossFight()}
+                              className="col-sm-6"
+                            >
+                              Combat de la journée{' '}
+                              <img
+                                src={process.env.PUBLIC_URL + '/img/versus.svg'}
+                                width="30px"
+                                height="30px"
+                                alt="versus"
+                              />
+                            </FightButton>
+                          )}
+                          <LinkToGuildExploration to={'/guild_exploration'}>
+                            <FightButton className="col-sm-6">
+                              Exploration de guilde{' '}
+                              <img
+                                src={process.env.PUBLIC_URL + '/img/map.svg'}
+                                width="30px"
+                                height="30px"
+                                alt="map"
+                              />
+                            </FightButton>
+                          </LinkToGuildExploration>
+                        </div>
+                        <div className="card-footer">
+                          <Title>Annonce de la guilde</Title>
+                          {(user.role === 'ROLE_ADMIN' ||
+                            user.guildRole === 'master' ||
+                            user.guildRole === 'officer') && (
+                            <form onSubmit={this.handleChangeGuildAnnouncement}>
+                              <textarea
+                                name="announcement"
+                                id="announcement"
+                                className="form-control"
+                                rows="5"
+                                value={this.state.textAnnouncement}
+                                onChange={(e) =>
                                   this.setState({
-                                    textMessage: event.target.value
+                                    textAnnouncement: e.target.value
                                   })
                                 }
                               />
-                              <CustomButton
-                                className="btn btn-success"
+                              <InputSubmit
                                 type="submit"
-                              >
-                                Envoyer
-                              </CustomButton>
-                            </Chat>
-                          </form>
+                                value="Valider"
+                                className="btn"
+                              />
+                            </form>
+                          )}
+                          {user.role !== 'ROLE_ADMIN' &&
+                            user.guildRole === 'member' && (
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: guild.announcement.replace(
+                                    // eslint-disable-next-line
+                                    new RegExp('\r?\n', 'g'),
+                                    '<br />'
+                                  )
+                                }}
+                              />
+                            )}
                         </div>
                       </>
                     )}
-                    {!guild && monsters && user && (
+                    {!guild && user && (
                       <>
                         <div className="card-header">
                           <Title>Créer sa propre guilde</Title>
@@ -936,6 +1040,66 @@ class Guild extends Component {
                     )}
                   </Card>
                 </div>
+
+                {/* Chat */}
+                {guild && (
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'chatTab' ? ' active' : ''
+                    }`}
+                    id="chatTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-header">
+                        <Title>{guild.name}</Title>
+                      </div>
+                      <div className="card-body">
+                        <ListingMessages>
+                          {_.map(guild.messages, (message) => (
+                            <div key={message.id}>
+                              <strong>
+                                <i>
+                                  (
+                                  {moment(message.createdAt).format(
+                                    'DD/MM à HH:mm'
+                                  )}
+                                  ){' '}
+                                </i>
+                                <span className="text-warning">
+                                  {message.user.name} :{' '}
+                                </span>
+                              </strong>
+                              {message.message}
+                            </div>
+                          ))}
+                        </ListingMessages>
+                        <form onSubmit={this.handleSubmit}>
+                          <Chat>
+                            <InputMessage
+                              id="message"
+                              name="message"
+                              type="text"
+                              value={this.state.textMessage}
+                              placeholder="Votre message..."
+                              onChange={(event) =>
+                                this.setState({
+                                  textMessage: event.target.value
+                                })
+                              }
+                            />
+                            <CustomButton
+                              className="btn btn-success"
+                              type="submit"
+                            >
+                              Envoyer
+                            </CustomButton>
+                          </Chat>
+                        </form>
+                      </div>
+                    </Card>
+                  </div>
+                )}
 
                 {/* Members */}
                 {guild && (
