@@ -36,7 +36,7 @@ FriendList.propTypes = {
   onDelete: PropTypes.func,
   canDelete: PropTypes.bool,
   canPromote: PropTypes.bool,
-  onPromoteToOfficer: PropTypes.bool
+  onPromoteToOfficer: PropTypes.func
 }
 
 export default FriendList

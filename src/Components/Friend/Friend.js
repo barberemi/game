@@ -181,7 +181,7 @@ Friend.propTypes = {
   }),
   onDelete: PropTypes.func,
   canDelete: PropTypes.bool,
-  onPromoteToOfficer: PropTypes.bool,
+  onPromoteToOfficer: PropTypes.func,
   canPromote: PropTypes.bool
 }
 

@@ -634,9 +634,6 @@ class Guild extends Component {
             progress: undefined
           }
         )
-        this.setState({
-          guild: response.data.guild
-        })
       })
       .catch((error) => {
         this.setState({
