@@ -4,6 +4,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Redirect } from 'react-router-dom'
 import ExperienceNavBar from '../../../Components/NavBar/ExperienceNavBar'
+import Tutorial from '../../../Components/Tutorial/Tutorial'
 import ImageMapper from 'react-image-mapper'
 
 const Container = styled(ImageMapper)`
@@ -30,6 +31,8 @@ class MapHome extends Component {
       redirect: undefined,
       error: undefined,
       user: undefined,
+      stepsEnabled: false,
+      stepName: 'homeVillage',
       imageWidth: undefined,
       imageHeight: undefined,
       imageUrl: process.env.PUBLIC_URL + '/img/maps/home.jpg',
@@ -37,7 +40,7 @@ class MapHome extends Component {
         name: 'map-interactive',
         areas: [
           {
-            name: 'Village',
+            name: 'homeVillage',
             shape: 'poly',
             href: '/village',
             // eslint-disable-next-line
@@ -45,17 +48,8 @@ class MapHome extends Component {
             preFillColor: 'rgba(0, 0, 0, 0.2)',
             fillColor: 'rgba(0, 0, 0, 0.4)'
           },
-          // {
-          //   name: 'Pont',
-          //   shape: 'poly',
-          //   href: '/maps',
-          //   // eslint-disable-next-line
-          //   coords: [314,671,399,642,511,638,524,643,517,866,431,896,326,954,297,952],
-          //   preFillColor: 'rgba(0, 0, 0, 0.2)',
-          //   fillColor: 'rgba(0, 0, 0, 0.4)'
-          // },
           {
-            name: 'Tour',
+            name: 'homeBoss',
             shape: 'poly',
             href: '/boss',
             // eslint-disable-next-line
@@ -64,7 +58,7 @@ class MapHome extends Component {
             fillColor: 'rgba(0, 0, 0, 0.4)'
           },
           {
-            name: 'Personnage',
+            name: 'homeCharacter',
             shape: 'poly',
             href: '/character',
             // eslint-disable-next-line
@@ -73,7 +67,7 @@ class MapHome extends Component {
             fillColor: 'rgba(0, 0, 0, 0.4)'
           },
           {
-            name: 'Foret',
+            name: 'homeMap',
             shape: 'poly',
             href: '/maps',
             // eslint-disable-next-line
@@ -119,6 +113,28 @@ class MapHome extends Component {
       })
   }
 
+  redirectToPage = () => {
+    const { stepName } = this.state
+
+    let url = '/character'
+    switch (stepName) {
+      case 'homeVillage':
+        url = '/village'
+        break
+      case 'homeBoss':
+        url = '/boss'
+        break
+      case 'homeMap':
+        url = '/maps'
+        break
+      default:
+        url = '/character'
+        break
+    }
+
+    this.setState({ redirect: url })
+  }
+
   render() {
     const { error, redirect, user, interactiveMap, imageUrl } = this.state
 
@@ -142,8 +158,19 @@ class MapHome extends Component {
             width={this.state.imageWidth}
             strokeColor={'#ede1b0'}
             onMouseEnter={(area) => {
-              console.log(area)
+              setTimeout(() => {
+                this.setState({ stepsEnabled: true, stepName: area.name })
+              }, 500)
             }}
+          />
+          <Tutorial
+            stepsEnabled={this.state.stepsEnabled}
+            stepName={this.state.stepName}
+            showBullets={false}
+            doneLabel={'Accéder'}
+            customTooltipClass={'disabledCrossButton'}
+            onExit={() => this.setState({ stepsEnabled: false })}
+            onComplete={() => this.redirectToPage()}
           />
           <TextBottomLeft className="col-sm-12">
             Selectionner une zone dans laquelle naviguer.

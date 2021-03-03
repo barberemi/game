@@ -1,0 +1,51 @@
+.introjsCustomTooltip {
+  font-family: 'Lakki Reddy', cursive !important;
+  border: 1px solid white;
+  background-color: black;
+
+  .introjs-skipbutton {
+    color: rgb(220, 53, 69);
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  .introjs-arrow.bottom, .introjs-arrow.bottom-middle, .introjs-arrow.bottom-right {
+    border-color: rgba(255, 255, 255, 1) transparent transparent;
+  }
+
+  .introjs-arrow.left, .introjs-arrow.left-bottom {
+    border-color: transparent rgba(255, 255, 255, 1) transparent transparent;
+  }
+
+  .introjs-arrow.top, .introjs-arrow.top-middle, .introjs-arrow.top-right {
+    border-color: transparent transparent rgba(255, 255, 255, 1);
+  }
+
+  .introjs-arrow.right, .introjs-arrow.right-bottom {
+    border-color: transparent transparent transparent rgba(255, 255, 255, 1);
+  }
+
+  .introjs-tooltip-title {
+    color: #ffc312;
+    font-family: 'Lakki Reddy', cursive !important;
+  }
+
+  .introjs-tooltiptext {
+    font-family: 'Lakki Reddy', cursive !important;
+  }
+
+  .introjs-button {
+    font-family: 'Lakki Reddy', cursive !important;
+    &:hover {
+      color: #ffc312;
+    }
+  }
+}
+
+.disabledCrossButton {
+  .introjs-skipbutton {
+    visibility: hidden;
+  }
+}

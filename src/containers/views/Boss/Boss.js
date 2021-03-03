@@ -12,6 +12,7 @@ import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 import { selectTabFromUrl } from '../../../utils/routingHelper'
+import Tutorial from '../../../Components/Tutorial/Tutorial'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg');
@@ -84,6 +85,7 @@ class Boss extends Component {
       loading: true,
       id: parseInt(this.props.match.params.idBoss),
       boss: undefined,
+      stepsEnabled: false,
       activatedTab: selectTabFromUrl([
         'generalTab',
         'skillsTab',
@@ -94,28 +96,47 @@ class Boss extends Component {
   }
 
   componentDidMount() {
+    const getMonsters = axios.get(process.env.REACT_APP_API_URL + '/monsters', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('auth-token')}`
+      }
+    })
+    const getMe = axios.get(process.env.REACT_APP_API_URL + '/users/me', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('auth-token')}`
+      }
+    })
+
     axios
-      .get(process.env.REACT_APP_API_URL + '/monsters', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get('auth-token')}`
-        }
-      })
-      .then((response) => {
-        if (response.data) {
+      .all([getMonsters, getMe])
+      .then((responses) => {
+        if (responses[0].data) {
           this.setState({
             loading: false,
-            boss: response.data.items,
+            boss: responses[0].data.items,
             selectedBoss: this.state.id
-              ? _.find(response.data.items, { id: this.state.id })
-              : _.first(response.data.items)
+              ? _.find(responses[0].data.items, { id: this.state.id })
+              : _.first(responses[0].data.items)
           })
+
+          if (
+            this.state.activatedTab === 'generalTab' &&
+            responses[1].data.isNoob
+          ) {
+            setTimeout(() => {
+              this.setState({
+                stepsEnabled: true
+              })
+            }, 500)
+          }
         }
       })
-      .catch((error) => {
+      .catch((errors) => {
         this.setState({
           loading: false,
-          error: error.response.data.error
+          error: errors[0].response.data.error
         })
       })
   }
@@ -140,8 +161,14 @@ class Boss extends Component {
           )}
           {boss && (
             <div className="row h-100 mt-5">
+              <Tutorial
+                stepsEnabled={this.state.stepsEnabled}
+                stepName="monsters"
+                onExit={() => this.setState({ stepsEnabled: false })}
+              />
+
               <div className="col-sm-3 my-auto">
-                <Card className="card">
+                <Card className="card" id="tutorialMenu">
                   <div className="card-header">
                     <Title>Menu</Title>
                     <div>
@@ -220,9 +247,13 @@ class Boss extends Component {
                     process.env.PUBLIC_URL + '/img/boss/' + selectedBoss.image
                   }
                   alt={selectedBoss.academy.name}
+                  id="tutorialMonsterImage"
                 />
                 {selectedBoss.id !== _.last(boss).id && (
-                  <RightArrayBox className="position-absolute">
+                  <RightArrayBox
+                    className="position-absolute"
+                    id="tutorialNextMonster"
+                  >
                     <LinkArrow
                       arrow="right"
                       to={
@@ -247,7 +278,10 @@ class Boss extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-header">
+                      <div
+                        className="card-header"
+                        id="tutorialDescriptionMonster"
+                      >
                         {(selectedBoss.isBoss || selectedBoss.isGuildBoss) && (
                           <>
                             <MonsterTypeBadge
@@ -263,7 +297,10 @@ class Boss extends Component {
                         </span>
                         <LevelBox> - Niv {selectedBoss.level}</LevelBox>
                       </div>
-                      <div className="card-body">
+                      <div
+                        className="card-body"
+                        id="tutorialCharacteristicsMonster"
+                      >
                         <Title>Caractéristiques</Title>
                         <div className="col-sm-12">
                           {_.map(
@@ -295,7 +332,7 @@ class Boss extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body">
+                      <div className="card-body" id="tutorialSkills">
                         <div className="col-sm-12">
                           <Title>Compétences du boss</Title>
                         </div>
@@ -317,7 +354,7 @@ class Boss extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body">
+                      <div className="card-body" id="tutorialItems">
                         <div className="col-sm-12">
                           <Title>Liste des objets lachés</Title>
                         </div>

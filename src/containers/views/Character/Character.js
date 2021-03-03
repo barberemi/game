@@ -8,6 +8,7 @@ import EquippedSkills from '../../../Components/Skill/EquippedSkills'
 import FriendList from '../../../Components/Friend/FriendList'
 import ItemList from '../../../Components/Item/ItemList'
 import Title from '../../../Components/Title/Title'
+import Tutorial from '../../../Components/Tutorial/Tutorial'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -91,6 +92,7 @@ class Character extends Component {
       user: undefined,
       isMe: false,
       friendToAddOrRemove: '',
+      stepsEnabled: false,
       activatedTab: selectTabFromUrl([
         'generalTab',
         'skillsTab',
@@ -124,6 +126,16 @@ class Character extends Component {
               response.data.email,
             user: response.data
           })
+          if (
+            this.state.activatedTab === 'generalTab' &&
+            response.data.isNoob
+          ) {
+            setTimeout(() => {
+              this.setState({
+                stepsEnabled: true
+              })
+            }, 500)
+          }
         }
       })
       .catch((error) => {
@@ -395,6 +407,32 @@ class Character extends Component {
     }
   }
 
+  handleChangeNoob = () => {
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,
+        { isNoob: !this.state.user.isNoob },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            user: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
+  }
+
   render() {
     const { error, loading, user, activatedTab } = this.state
 
@@ -409,8 +447,14 @@ class Character extends Component {
           )}
           {user && (
             <div className="row h-100 mt-5">
-              <div className="col-sm-3 my-auto">
-                <Card className="card">
+              <Tutorial
+                stepsEnabled={this.state.stepsEnabled}
+                stepName="character"
+                onExit={() => this.setState({ stepsEnabled: false })}
+              />
+
+              <div className="col-sm-3 mt-5">
+                <Card className="card" id="tutorialMenu">
                   <div className="card-header">
                     <Title>Menu</Title>
                     <div>
@@ -500,6 +544,22 @@ class Character extends Component {
                   }
                   alt={user.academy.name}
                 />
+                <div
+                  className="form-check"
+                  data-tip="Permet d'activer/désactiver le tutoriel sur chaque page."
+                >
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="isNoob"
+                    name="isNoob"
+                    checked={user.isNoob}
+                    onChange={this.handleChangeNoob}
+                  />
+                  <label className="form-check-label mt-1" htmlFor="isNoob">
+                    Je suis un noob (débutant)
+                  </label>
+                </div>
               </div>
 
               <RightBox className="col-sm-9 my-auto">
@@ -513,7 +573,7 @@ class Character extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-header">
+                      <div className="card-header" id="tutorialExperience">
                         <Title>
                           {user.name}{' '}
                           <span style={{ color: user.academy.color }}>
@@ -529,7 +589,7 @@ class Character extends Component {
                           transparentColor="#7F8286"
                         />
                       </div>
-                      <div className="card-body">
+                      <div className="card-body" id="tutorialCharacteristics">
                         <Title>Caractéristiques</Title>
                         <div className="col-sm-12">
                           {_.map(user.characteristics, (characteristic) => (
@@ -537,6 +597,9 @@ class Character extends Component {
                               key={characteristic.characteristic.name}
                               name={characteristic.characteristic.name}
                               amount={characteristic.amount}
+                              description={
+                                characteristic.characteristic.description
+                              }
                               equippedItems={_.filter(user.items, {
                                 isEquipped: true
                               })}
@@ -544,7 +607,7 @@ class Character extends Component {
                           ))}
                         </div>
                       </div>
-                      <div className="card-footer">
+                      <div className="card-footer" id="tutorialEquipments">
                         <Title>Équipements</Title>
                         <EquippedItems
                           items={_.filter(user.items, {
@@ -567,7 +630,10 @@ class Character extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body">
+                      <div
+                        className="card-header"
+                        id="tutorialSkillsPointsRemaining"
+                      >
                         <div className="col-sm-12">
                           <Title>
                             Compétences d’académie
@@ -585,6 +651,8 @@ class Character extends Component {
                             </SubTitle>
                           </Title>
                         </div>
+                      </div>
+                      <div className="card-body" id="tutorialSkills">
                         <EquippedSkills
                           skills={user.skills}
                           academyId={user.academy.id}
@@ -599,6 +667,32 @@ class Character extends Component {
                     </Card>
                   </div>
 
+                  {/* Items */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'itemsTab' ? ' active' : ''
+                    }`}
+                    id="itemsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body" id="tutorialItems">
+                        <div className="col-sm-12">
+                          <Title>Inventaire</Title>
+                        </div>
+                        <ItemList
+                          items={user.items}
+                          displayActions={this.state.isMe}
+                          onDeleteItem={this.onDeleteItem}
+                          onChangeEquippedItem={this.onChangeEquippedItem}
+                          onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
+                          hasGuild={!!user.guild}
+                          addEmptyZones={true}
+                        />
+                      </div>
+                    </Card>
+                  </div>
+
                   {/* Friends */}
                   <div
                     className={`tab-pane${
@@ -608,7 +702,7 @@ class Character extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body">
+                      <div className="card-header" id="tutorialAddFriends">
                         <div className="col-sm-12">
                           <Title>Ajouter des amis</Title>
                         </div>
@@ -635,6 +729,8 @@ class Character extends Component {
                             </AddUserButton>
                           </FormAddUser>
                         </div>
+                      </div>
+                      <div className="card-body" id="tutorialFriendsList">
                         <div className="col-sm-12 mt-3">
                           <Title>Liste d’amis</Title>
                         </div>
@@ -653,32 +749,6 @@ class Character extends Component {
                               () => this.handleAddDeleteUser('delete')
                             )
                           }}
-                        />
-                      </div>
-                    </Card>
-                  </div>
-
-                  {/* Items */}
-                  <div
-                    className={`tab-pane${
-                      activatedTab === 'itemsTab' ? ' active' : ''
-                    }`}
-                    id="itemsTab"
-                    role="tabpanel"
-                  >
-                    <Card className="card">
-                      <div className="card-body">
-                        <div className="col-sm-12">
-                          <Title>Inventaire</Title>
-                        </div>
-                        <ItemList
-                          items={user.items}
-                          displayActions={this.state.isMe}
-                          onDeleteItem={this.onDeleteItem}
-                          onChangeEquippedItem={this.onChangeEquippedItem}
-                          onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
-                          hasGuild={!!user.guild}
-                          addEmptyZones={true}
                         />
                       </div>
                     </Card>

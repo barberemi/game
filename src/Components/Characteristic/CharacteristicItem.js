@@ -101,12 +101,12 @@ class CharacteristicItem extends Component {
   }
 
   render() {
-    const { amount, name } = this.props
+    const { amount, name, description } = this.props
     const { label, color, svg } = this.state
 
     return (
       <Characteristic className="col-md-4 col-sm-5">
-        <Image src={svg} alt="img" />
+        <Image src={svg} alt="img" data-tip={description} />
         <TextBox>
           <div style={{ color }}>
             {amount}
@@ -122,6 +122,7 @@ class CharacteristicItem extends Component {
 CharacteristicItem.propTypes = {
   name: PropTypes.string,
   amount: PropTypes.number,
+  description: PropTypes.string,
   equippedItems: PropTypes.arrayOf(
     PropTypes.shape({
       item: PropTypes.shape({

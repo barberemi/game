@@ -14,6 +14,7 @@ import { toast } from 'react-toastify'
 import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 import ItemList from '../../../Components/Item/ItemList'
 import { selectTabFromUrl } from '../../../utils/routingHelper'
+import Tutorial from '../../../Components/Tutorial/Tutorial'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -166,6 +167,7 @@ class Guild extends Component {
       monsters: undefined,
       memberToAddOrRemove: '',
       newNameGuild: '',
+      stepsEnabled: false,
       activatedTab: selectTabFromUrl([
         'generalTab',
         'chatTab',
@@ -249,6 +251,17 @@ class Guild extends Component {
             loading: false,
             guild: response.data
           })
+
+          if (
+            this.state.activatedTab === 'generalTab' &&
+            this.state.user.isNoob
+          ) {
+            setTimeout(() => {
+              this.setState({
+                stepsEnabled: true
+              })
+            }, 500)
+          }
         }
       })
       .catch((error) => {
@@ -704,8 +717,14 @@ class Guild extends Component {
         {loading && <Loader />}
         <div className="container">
           <div className="row h-100 mt-5">
+            <Tutorial
+              stepsEnabled={this.state.stepsEnabled}
+              stepName="guild"
+              onExit={() => this.setState({ stepsEnabled: false })}
+            />
+
             <div className="col-sm-3 my-auto">
-              <Card className="card">
+              <Card className="card" id="tutorialMenu">
                 <div className="card-header">
                   <Title>Menu</Title>
                   <div>
@@ -905,10 +924,10 @@ class Guild extends Component {
                     )}
                     {guild && user && (
                       <>
-                        <div className="card-header">
+                        <div className="card-header" id="tutorialGuildName">
                           <Title>{guild.name}</Title>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body" id="tutorialGuildActions">
                           {user.canGuildBossFight && (
                             <FightButton
                               onClick={() => this.handleCreateGuildBossFight()}
@@ -935,7 +954,10 @@ class Guild extends Component {
                             </FightButton>
                           </LinkToGuildExploration>
                         </div>
-                        <div className="card-footer">
+                        <div
+                          className="card-footer"
+                          id="tutorialGuildAnnouncement"
+                        >
                           <Title>Annonce de la guilde</Title>
                           {(user.role === 'ROLE_ADMIN' ||
                             user.guildRole === 'master' ||
@@ -1051,7 +1073,7 @@ class Guild extends Component {
                       <div className="card-header">
                         <Title>{guild.name}</Title>
                       </div>
-                      <div className="card-body">
+                      <div className="card-body" id="tutorialGuildChat">
                         <ListingMessages>
                           {_.map(guild.messages, (message) => (
                             <div key={message.id}>
@@ -1108,7 +1130,7 @@ class Guild extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body">
+                      <div className="card-body" id="tutorialGuildMembers">
                         {(user.role === 'ROLE_ADMIN' ||
                           user.guildRole === 'master' ||
                           user.guildRole === 'officer') && (
@@ -1190,7 +1212,9 @@ class Guild extends Component {
                       <Card className="card">
                         <div className="card-body">
                           <div className="col-sm-12">
-                            <Title>Choisir le champion de guilde</Title>
+                            <Title>
+                              Choisir le champion de guilde à combattre
+                            </Title>
                           </div>
                           <MonsterList
                             monsters={monsters}
@@ -1334,7 +1358,7 @@ class Guild extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body">
+                      <div className="card-body" id="tutorialGuildItems">
                         <div className="col-sm-12">
                           <Title>Coffre de guilde</Title>
                         </div>

@@ -6009,6 +6009,16 @@ internal-slot@^1.0.2:
     has "^1.0.3"
     side-channel "^1.0.2"
 
+intro.js-react@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/intro.js-react/-/intro.js-react-0.3.0.tgz#d37e69beae9d732551c37050a739bd7330da3a57"
+  integrity sha512-9rIAZ4k1eh2J06XNWIg43RnG1GmFuCtpnTpf0u4lGW7X4ARh+ZjDVh/r2P8SO45+QOhYi45hy+ql2ASLOe6HoA==
+
+intro.js@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/intro.js/-/intro.js-3.3.1.tgz#f9fa4253b159bd640f06d86ca67248bab7f6579f"
+  integrity sha512-Y+iMbIzVQou9PDRP5miKa7NNQeUkSA6XFp+atnGiTarEi2jghthSLK+9JUvdM6QvQ9G+bpOEfKd+DNtWJlGb9w==
+
 invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
