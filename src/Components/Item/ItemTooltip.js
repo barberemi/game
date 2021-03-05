@@ -19,6 +19,7 @@ import pantsSvg from './svg/pants.svg'
 import shoesSvg from './svg/shoes.svg'
 import weaponSvg from './svg/weapon.svg'
 import craftSvg from './svg/craft.svg'
+import ItemBox from './ItemBox'
 
 const Tooltip = styled.div`
   text-align: left;
@@ -171,7 +172,11 @@ class ItemTooltip extends Component {
             <br />
           </>
         )}
-        {item.level && <div>Niv {item.level}</div>}
+        {item.level && (
+          <div className={!this.props.canEquiped ? 'text-danger' : ''}>
+            Niv {item.level}
+          </div>
+        )}
         {item.dropRate > 0 && <div>Chance : {item.dropRate}%</div>}
         {item.cost > 0 && (
           <div>
@@ -188,6 +193,10 @@ class ItemTooltip extends Component {
       </Tooltip>
     )
   }
+}
+
+ItemTooltip.defaultProps = {
+  canEquiped: true
 }
 
 ItemTooltip.propTypes = {
@@ -213,7 +222,8 @@ ItemTooltip.propTypes = {
       characteristics: PropTypes.arrayOf(PropTypes.shape())
     })
   }),
-  isEquipped: PropTypes.bool
+  isEquipped: PropTypes.bool,
+  canEquiped: PropTypes.bool
 }
 
 export default ItemTooltip

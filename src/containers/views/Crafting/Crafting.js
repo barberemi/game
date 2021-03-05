@@ -406,6 +406,7 @@ class Crafting extends Component {
                           onClick={(item) =>
                             this.setState({ selectedItem: item })
                           }
+                          userLevel={character.level}
                         />
                         {selectedItem && (
                           <div>

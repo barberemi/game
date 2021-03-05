@@ -302,6 +302,7 @@ class Reward extends Component {
                                 items={items}
                                 displayActions={false}
                                 minusPadding={true}
+                                userLevel={user.level}
                               />
                             </div>
                           </Character>

@@ -122,7 +122,8 @@ EquippedItems.propTypes = {
   ),
   displayActions: PropTypes.bool,
   onDeleteItem: PropTypes.func,
-  onChangeEquippedItem: PropTypes.func
+  onChangeEquippedItem: PropTypes.func,
+  userLevel: PropTypes.number
 }
 
 export default EquippedItems

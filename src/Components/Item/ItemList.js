@@ -110,7 +110,8 @@ ItemList.propTypes = {
   isGuildItem: PropTypes.bool,
   hasGuild: PropTypes.bool,
   addEmptyZones: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  userLevel: PropTypes.number
 }
 
 export default ItemList

@@ -80,7 +80,8 @@ class ItemBox extends Component {
       displayActions,
       isGuildItem,
       hasGuild,
-      withOpacity
+      withOpacity,
+      userLevel
     } = this.props
     const { stateActions } = this.state
 
@@ -102,6 +103,7 @@ class ItemBox extends Component {
               item={trueItem}
               oldItem={oldItem}
               isEquipped={item.isEquipped}
+              canEquiped={userLevel >= trueItem.level}
             />
           )}
           data-html={true}
@@ -141,7 +143,7 @@ class ItemBox extends Component {
               )}
               {!isGuildItem && (
                 <>
-                  {isAnEquippedItem(trueItem) && (
+                  {isAnEquippedItem(trueItem) && userLevel >= trueItem.level && (
                     <ActionBtn
                       className="py-2 mb-4 text-success"
                       onClick={() => {
@@ -190,7 +192,8 @@ class ItemBox extends Component {
 
 ItemBox.defaultProps = {
   displayText: true,
-  isGuildItem: false
+  isGuildItem: false,
+  userLevel: 999
 }
 
 ItemBox.propTypes = {
@@ -215,7 +218,8 @@ ItemBox.propTypes = {
   onPutOrTakeOnGuild: PropTypes.func,
   isGuildItem: PropTypes.bool,
   hasGuild: PropTypes.bool,
-  onChangeEquippedItem: PropTypes.func
+  onChangeEquippedItem: PropTypes.func,
+  userLevel: PropTypes.number
 }
 
 export default ItemBox

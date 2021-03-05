@@ -616,6 +616,7 @@ class Character extends Component {
                           displayActions={this.state.isMe}
                           onDeleteItem={this.onDeleteItem}
                           onChangeEquippedItem={this.onChangeEquippedItem}
+                          userLevel={user.level}
                         />
                       </div>
                     </Card>
@@ -688,6 +689,7 @@ class Character extends Component {
                           onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
                           hasGuild={!!user.guild}
                           addEmptyZones={true}
+                          userLevel={user.level}
                         />
                       </div>
                     </Card>

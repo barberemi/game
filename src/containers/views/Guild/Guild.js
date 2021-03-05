@@ -1367,6 +1367,7 @@ class Guild extends Component {
                           displayActions={true}
                           onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
                           isGuildItem={true}
+                          userLevel={user.level}
                         />
                       </div>
                     </Card>

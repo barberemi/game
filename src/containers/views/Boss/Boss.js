@@ -85,6 +85,7 @@ class Boss extends Component {
       loading: true,
       id: parseInt(this.props.match.params.idBoss),
       boss: undefined,
+      user: undefined,
       stepsEnabled: false,
       activatedTab: selectTabFromUrl([
         'generalTab',
@@ -112,10 +113,11 @@ class Boss extends Component {
     axios
       .all([getMonsters, getMe])
       .then((responses) => {
-        if (responses[0].data) {
+        if (responses[0].data && responses[1].data) {
           this.setState({
             loading: false,
             boss: responses[0].data.items,
+            user: responses[1].data,
             selectedBoss: this.state.id
               ? _.find(responses[0].data.items, { id: this.state.id })
               : _.first(responses[0].data.items)
@@ -148,7 +150,14 @@ class Boss extends Component {
   }
 
   render() {
-    const { error, loading, boss, activatedTab, selectedBoss } = this.state
+    const {
+      error,
+      loading,
+      boss,
+      user,
+      activatedTab,
+      selectedBoss
+    } = this.state
 
     return (
       <Container className="container-fluid">
@@ -361,6 +370,7 @@ class Boss extends Component {
                         <ItemList
                           items={selectedBoss.items}
                           displayActions={false}
+                          userLevel={user.level}
                         />
                       </div>
                     </Card>
