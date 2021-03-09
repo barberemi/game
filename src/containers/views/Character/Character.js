@@ -408,10 +408,18 @@ class Character extends Component {
   }
 
   handleChangeNoob = () => {
+    const isNoob = !this.state.user.isNoob
+    this.setState({
+      user: {
+        ...this.state.user,
+        isNoob
+      }
+    })
+
     axios
       .put(
         process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,
-        { isNoob: !this.state.user.isNoob },
+        { isNoob: isNoob },
         {
           headers: {
             'Content-Type': 'application/json',
