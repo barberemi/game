@@ -53,13 +53,22 @@ class EquippedSkills extends Component {
   }
 
   render() {
-    const { skills, treeType, displayCheckbox, userLevel } = this.props
+    const {
+      skills,
+      treeType,
+      displayCheckbox,
+      userLevel,
+      buttonOnRight
+    } = this.props
     const { isDark, items } = this.state
 
     return (
       <div className="col-sm-12">
         {!treeType && (
-          <LightDarkButton onClick={() => this.setState({ isDark: !isDark })} />
+          <LightDarkButton
+            onRight={buttonOnRight}
+            onClick={() => this.setState({ isDark: !isDark })}
+          />
         )}
         {!treeType && (
           <div
@@ -92,7 +101,7 @@ class EquippedSkills extends Component {
                   displayCheckbox={
                     displayCheckbox ? userLevel >= skill.level : false
                   }
-                  {..._.omit(this.props, 'displayCheckbox')}
+                  {..._.omit(this.props, 'displayCheckbox', 'buttonOnRight')}
                 />
               )
             }
@@ -105,7 +114,8 @@ class EquippedSkills extends Component {
 
 EquippedSkills.defaultProps = {
   treeType: null,
-  displayCheckbox: true
+  displayCheckbox: true,
+  buttonOnRight: false
 }
 
 EquippedSkills.propTypes = {
@@ -122,7 +132,8 @@ EquippedSkills.propTypes = {
   onCheckSkill: PropTypes.func,
   academyId: PropTypes.number,
   userLevel: PropTypes.number,
-  treeType: PropTypes.string
+  treeType: PropTypes.string,
+  buttonOnRight: PropTypes.bool
 }
 
 export default EquippedSkills

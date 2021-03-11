@@ -302,7 +302,7 @@ class Boss extends Component {
                         )}
                         {selectedBoss.name}{' '}
                         <span style={{ color: selectedBoss.academy.color }}>
-                          ({selectedBoss.academy.label})
+                          ({selectedBoss.academy.labelLight})
                         </span>
                         <LevelBox> - Niv {selectedBoss.level}</LevelBox>
                       </div>
@@ -349,6 +349,7 @@ class Boss extends Component {
                           skills={selectedBoss.skills}
                           academyId={selectedBoss.academy.id}
                           displayCheckbox={false}
+                          buttonOnRight={true}
                         />
                       </div>
                     </Card>

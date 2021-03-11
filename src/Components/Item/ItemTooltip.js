@@ -19,7 +19,6 @@ import pantsSvg from './svg/pants.svg'
 import shoesSvg from './svg/shoes.svg'
 import weaponSvg from './svg/weapon.svg'
 import craftSvg from './svg/craft.svg'
-import ItemBox from './ItemBox'
 
 const Tooltip = styled.div`
   text-align: left;

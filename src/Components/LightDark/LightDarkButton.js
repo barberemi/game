@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import moonSunSvg from './moon-sun.svg'
 import landSvg from './land.svg'
 import './styles.scss' // dont remove, used to svg animations etc
@@ -8,8 +9,19 @@ import './styles.scss' // dont remove, used to svg animations etc
 const Container = styled.div`
   position: absolute;
   z-index: 10;
-  top: -60px;
-  right: -40px;
+
+  ${(props) =>
+    props.onRight &&
+    css`
+      top: -60px;
+      right: -40px;
+    `};
+
+  ${(props) =>
+    !props.onRight &&
+    css`
+      left: -15px;
+    `};
 `
 
 const Circle = styled.div`
@@ -79,7 +91,10 @@ class LightDarkButton extends Component {
   render() {
     return (
       <>
-        <Container data-tip="Cliquer pour switch entre Dark et Light.">
+        <Container
+          data-tip="Cliquer pour switch entre Lumière et Ombre."
+          onRight={this.props.onRight}
+        >
           <Circle
             className={`cont_circle ${
               this.state.type === 'dark'
@@ -105,7 +120,8 @@ class LightDarkButton extends Component {
 }
 
 LightDarkButton.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  onRight: PropTypes.bool
 }
 
 export default LightDarkButton

@@ -8,6 +8,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Redirect } from 'react-router-dom'
 import Loader from '../../../Components/Loader/Loader'
+import AcademyCard from '../../../Components/Academy/AcademyCard'
 
 const Container = styled.div`
   background-image: url('https://images.alphacoders.com/883/883163.jpg');
@@ -33,39 +34,10 @@ const LeftBox = styled.div`
   align-items: center;
 `
 
-const Academy = styled.img`
-  width: 50px;
-  height: 50px;
-  border: 2px solid #fff;
-  background-color: #ffc312;
-
-  &:hover {
-    cursor: pointer;
-  }
-`
-
-const CenterBox = styled.div`
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-
 const RightBox = styled.div``
 
 const Card = styled.div`
   background-color: rgba(0, 0, 0, 0.7) !important;
-`
-
-const Image = styled.img`
-  width: 200px;
-  margin-top: 100px;
-  &:hover {
-    cursor: pointer;
-    -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-    filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
-  }
 `
 
 const Skill = styled.img`
@@ -81,7 +53,7 @@ const Skill = styled.img`
 `
 
 const NameInput = styled.input`
-  margin-top: 50px;
+  margin-top: 20px;
 `
 
 const InputSubmit = styled.input`
@@ -96,6 +68,20 @@ const InputSubmit = styled.input`
   }
 `
 
+const Champs = styled.div`
+  flex-wrap: nowrap;
+
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 1360px;
+  -webkit-filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.3));
+`
+
 class Creation extends Component {
   constructor(props) {
     super(props)
@@ -106,7 +92,7 @@ class Creation extends Component {
       error: undefined,
       academies: undefined,
       academySelected: undefined,
-      isAnimated: null,
+      displayForm: false,
       isDark: true
     }
 
@@ -155,6 +141,7 @@ class Creation extends Component {
         process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,
         {
           name: event.target.name.value,
+          isDark: this.state.isDark,
           academy: {
             id: this.state.academySelected.id
           }
@@ -181,7 +168,7 @@ class Creation extends Component {
   selectAcademy(academy) {
     this.setState({
       academySelected: academy,
-      isAnimated: true
+      displayForm: true
     })
   }
 
@@ -193,7 +180,6 @@ class Creation extends Component {
       user,
       academies,
       academySelected,
-      isAnimated,
       isDark
     } = this.state
 
@@ -212,77 +198,68 @@ class Creation extends Component {
           )}
           {academies && (
             <div className="row">
-              <TitleBox className="col-sm-12">
+              <TitleBox className="col-sm-12 mb-5">
                 Veuillez sélectionner une académie.
               </TitleBox>
 
-              <LeftBox className="col-sm-3 h-100 my-auto">
-                {_.map(academies, (academy) => (
-                  <Fragment key={academy.id}>
-                    <Academy
-                      src={
-                        process.env.PUBLIC_URL +
-                        '/img/academies/' +
-                        academy.name +
-                        '.png'
-                      }
-                      key={academy.name}
-                      onClick={() => this.selectAcademy(academy)}
-                    />
-                    {academy.label}
-                  </Fragment>
-                ))}
-              </LeftBox>
-
-              <CenterBox className="col-sm-6 my-auto">
-                {academySelected && (
-                  <>
-                    <Image
-                      src={
-                        process.env.PUBLIC_URL +
-                        '/img/academies/' +
-                        academySelected.name +
-                        '.png'
-                      }
-                      alt={academySelected.name}
-                      onAnimationEnd={() =>
-                        this.setState({ isAnimated: false })
-                      }
-                      className={isAnimated ? 'animated fadeInDown' : null}
-                      data-tip={academySelected.label}
-                    />
-                    <ReactTooltip />
-                    <form onSubmit={this.handleSubmit}>
-                      <NameInput
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="Rem le chocorem"
-                        required
+              <LeftBox className="col-sm-9 h-100 mt-5">
+                <svg className="clip-svg champ position-absolute">
+                  <clipPath
+                    id="champ-clip-path-1"
+                    clipPathUnits="objectBoundingBox"
+                    style={{ transform: 'scale(0.00455, 0.00185)' }}
+                  >
+                    <polygon points="217.07 1.19 205.89 0 200.75 0 197.75 2.68 193.44 2.5 183.87 1.75 171.49 0 165.68 2.5 164.55 0 124.61 1.56 87.1 0.81 66.28 0 60.28 2.12 62.34 0 25.39 0 26.7 3.62 13.99 0 1.39 1.93 0.45 19.64 1.82 35.4 1.82 48.49 2.31 57.47 4.01 67.4 0.45 70.8 0.45 77.34 5.47 75.16 5.21 79.51 0.45 83.65 0.45 99.65 1.82 117.59 0.45 138.19 3.83 156.85 2.31 176.5 1.58 201.22 0 221.58 3.53 248.74 0.45 253.1 0.45 275.4 2.56 289.71 0.45 297.46 0.45 315.89 7.42 311.04 0 321.46 4.26 326.8 6.14 335.06 0.45 350.8 0.45 365.83 3.29 374.8 0.45 376.01 0 400.5 2.07 405.34 4.99 458.19 0.45 509.38 0.45 526.11 1.95 537.32 17.52 540 34.77 540 37.96 536.01 46.96 537.88 49.02 540 52.4 536.75 59.9 538.44 72.84 540 85.41 540 99.85 537.32 122.17 538.06 132.3 540 140.36 537.69 137.74 540 169.81 539 167.56 536.94 175.43 540 197.38 538.06 217.44 536.57 220 522.47 218.57 510.58 217.63 494.32 220 488.9 217.82 410.95 218.57 387.39 218.76 349.45 214.63 354.49 217.88 346.55 217.07 336.92 219.95 328.29 217.07 306.08 217.44 267.38 214.5 268.71 217.44 264.95 220 238.41 218.03 221.29 214.82 207.94 218.94 203.82 218.76 116.53 220 112.97 220 31.66 217.44 24.55 220 21.38 220 11.93 217.07 1.19" />
+                  </clipPath>
+                </svg>
+                <LightDarkButton
+                  onClick={(type) =>
+                    this.setState({
+                      isDark: type === 'dark'
+                    })
+                  }
+                />
+                <Champs className="champs mt-5">
+                  {_.map(academies, (academy) => (
+                    <Fragment key={academy.id}>
+                      <AcademyCard
+                        isDark={isDark}
+                        academy={academy}
+                        onClick={() => this.selectAcademy(academy)}
                       />
-                      <br />
-                      <InputSubmit
-                        type="submit"
-                        value="Valider"
-                        className="btn"
-                      />
-                    </form>
-                  </>
+                    </Fragment>
+                  ))}
+                </Champs>
+                {this.state.displayForm && (
+                  <form onSubmit={this.handleSubmit}>
+                    <NameInput
+                      type="text"
+                      id="name"
+                      name="name"
+                      placeholder="Rem le chocorem"
+                      required
+                    />
+                    <br />
+                    <InputSubmit
+                      type="submit"
+                      value="Valider"
+                      className="btn"
+                    />
+                  </form>
                 )}
-              </CenterBox>
+              </LeftBox>
 
               <RightBox className="col-sm-3 h-100 my-auto">
                 {academySelected && (
                   <Card className="card">
-                    <LightDarkButton
-                      onClick={(type) =>
-                        this.setState({
-                          isDark: type === 'dark'
-                        })
-                      }
-                    />
                     <div className="card-header">
-                      <Title>{academySelected.label}</Title>
+                      <Title>
+                        <span style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
+                          {isDark
+                            ? academySelected.labelDark
+                            : academySelected.labelLight}
+                        </span>
+                      </Title>
                       {_.map(_.split(academySelected.role, ','), (role) => (
                         <div
                           key={role}
@@ -296,10 +273,11 @@ class Creation extends Component {
                       <i>{academySelected.description}</i>
                     </div>
                     <div className="card-footer">
-                      <Title>Compétences</Title>
-                      <div style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
-                        {isDark ? 'Ombre' : 'Lumière'}
-                      </div>
+                      <Title>
+                        <span style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
+                          Compétences
+                        </span>
+                      </Title>
                       {_.map(
                         isDark
                           ? _.filter(academySelected.skills, {

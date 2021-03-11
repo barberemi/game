@@ -128,6 +128,7 @@ class Character extends Component {
           })
           if (
             this.state.activatedTab === 'generalTab' &&
+            this.state.isMe &&
             response.data.isNoob
           ) {
             setTimeout(() => {
@@ -552,22 +553,24 @@ class Character extends Component {
                   }
                   alt={user.academy.name}
                 />
-                <div
-                  className="form-check"
-                  data-tip="Permet d'activer/désactiver le tutoriel sur chaque page."
-                >
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="isNoob"
-                    name="isNoob"
-                    checked={user.isNoob}
-                    onChange={this.handleChangeNoob}
-                  />
-                  <label className="form-check-label mt-1" htmlFor="isNoob">
-                    Je suis un noob (débutant)
-                  </label>
-                </div>
+                {this.state.isMe && (
+                  <div
+                    className="form-check"
+                    data-tip="Permet d'activer/désactiver le tutoriel sur chaque page."
+                  >
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="isNoob"
+                      name="isNoob"
+                      checked={user.isNoob}
+                      onChange={this.handleChangeNoob}
+                    />
+                    <label className="form-check-label mt-1" htmlFor="isNoob">
+                      Je suis un noob (débutant)
+                    </label>
+                  </div>
+                )}
               </div>
 
               <RightBox className="col-sm-9 my-auto">
@@ -585,7 +588,11 @@ class Character extends Component {
                         <Title>
                           {user.name}{' '}
                           <span style={{ color: user.academy.color }}>
-                            ({user.academy.label})
+                            (
+                            {user.isDark
+                              ? user.academy.labelDark
+                              : user.academy.labelLight}
+                            )
                           </span>
                           <LevelBox> - Niv {user.level}</LevelBox>
                         </Title>
@@ -670,6 +677,7 @@ class Character extends Component {
                           remainingSkillPoints={
                             user.skillPoints - user.skills.length
                           }
+                          treeType={user.isDark ? 'dark' : 'light'}
                           userLevel={user.level}
                         />
                       </div>

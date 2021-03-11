@@ -11,9 +11,8 @@ class MonsterTypeBadge extends React.Component {
 
     return (
       <span
-        className={`badge badge-pill badge-${
-          isGuildBoss ? 'danger' : 'primary'
-        }`}
+        className="badge badge-pill"
+        style={{ backgroundColor: isGuildBoss ? '#ff8000' : '#c600ff' }}
       >
         <div className="pt-1">
           {isGuildBoss ? 'Champion de guilde' : 'Champion'}
