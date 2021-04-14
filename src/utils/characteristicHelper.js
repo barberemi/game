@@ -3,8 +3,6 @@ export const getCharacteristicTranslationName = (characteristic) => {
   switch (characteristic.name) {
     case 'focus':
       return 'Confiance'
-    case 'haste':
-      return 'Hâte'
     case 'intelligence':
       return 'Intelligence'
     case 'strength':
@@ -13,6 +11,10 @@ export const getCharacteristicTranslationName = (characteristic) => {
       return 'Expérience'
     case 'health':
       return 'Vie'
+    case 'remainingActions':
+      return 'Actions restantes'
+    case 'defense':
+      return 'Défense'
     default:
       return characteristic.name
   }

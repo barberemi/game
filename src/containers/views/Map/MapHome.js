@@ -157,10 +157,8 @@ class MapHome extends Component {
             imgWidth={1920}
             width={this.state.imageWidth}
             strokeColor={'#ede1b0'}
-            onMouseEnter={(area) => {
-              setTimeout(() => {
-                this.setState({ stepsEnabled: true, stepName: area.name })
-              }, 500)
+            onClick={(area) => {
+              this.setState({ stepsEnabled: true, stepName: area.name })
             }}
           />
           <Tutorial
@@ -173,7 +171,7 @@ class MapHome extends Component {
             onComplete={() => this.redirectToPage()}
           />
           <TextBottomLeft className="col-sm-12">
-            Selectionner une zone dans laquelle naviguer.
+            Sélectionner une zone dans laquelle naviguer.
           </TextBottomLeft>
         </div>
       </>

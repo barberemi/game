@@ -5,11 +5,12 @@ import _ from 'lodash'
 import { getCharacteristicTranslationName } from '../../utils/characteristicHelper'
 
 import focusSvg from './focus.svg'
-import hasteSvg from './haste.svg'
+import actionSvg from './action.svg'
 import healthSvg from './health.svg'
 import intelligenceSvg from './intelligence.svg'
 import strengthSvg from './strength.svg'
 import experienceSvg from './experience.svg'
+import defenseSvg from './defense.svg'
 
 const Characteristic = styled.div`
   display: flex;
@@ -48,13 +49,6 @@ class CharacteristicItem extends Component {
           svg: focusSvg
         })
         break
-      case 'haste':
-        this.setState({
-          label: getCharacteristicTranslationName(this.props),
-          color: '#ff8b2d',
-          svg: hasteSvg
-        })
-        break
       case 'intelligence':
         this.setState({
           label: getCharacteristicTranslationName(this.props),
@@ -76,11 +70,25 @@ class CharacteristicItem extends Component {
           svg: experienceSvg
         })
         break
-      default:
+      case 'health':
         this.setState({
           label: getCharacteristicTranslationName(this.props),
           color: '#27cc4e',
           svg: healthSvg
+        })
+        break
+      case 'remainingActions':
+        this.setState({
+          label: getCharacteristicTranslationName(this.props),
+          color: '#ff8b2d',
+          svg: actionSvg
+        })
+        break
+      default:
+        this.setState({
+          label: getCharacteristicTranslationName(this.props),
+          color: '#808080',
+          svg: defenseSvg
         })
         break
     }

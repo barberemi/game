@@ -605,7 +605,20 @@ class Character extends Component {
                         />
                       </div>
                       <div className="card-body" id="tutorialCharacteristics">
-                        <Title>Caractéristiques</Title>
+                        <Title>Caractéristiques générales</Title>
+                        <div className="col-sm-12" style={{ height: '100px' }}>
+                          <CharacteristicItem
+                            name="defense"
+                            amount={user.defense}
+                            description="Points de défense, permettant de mieux résister aux attaques enemis et donner de la défense à sa guilde."
+                          />
+                          <CharacteristicItem
+                            name="remainingActions"
+                            amount={user.remainingActions}
+                            description="Points d’actions permettants d’effectuer des activités de guilde (constructions, explorations, minage etc...)"
+                          />
+                        </div>
+                        <Title>Caractéristiques personnage</Title>
                         <div className="col-sm-12">
                           {_.map(user.characteristics, (characteristic) => (
                             <CharacteristicItem
