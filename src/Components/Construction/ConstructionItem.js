@@ -86,10 +86,21 @@ class ConstructionItem extends Component {
           </TD>
           <TD>
             +{building.amount}{' '}
-            <img
-              src={process.env.PUBLIC_URL + '/img/defense.gif'}
-              alt="defense"
-            />
+            {building.type === 'defense' && (
+              <img
+                src={process.env.PUBLIC_URL + '/img/defense.gif'}
+                alt="defense"
+              />
+            )}
+            {building.type === 'action' && (
+              <img
+                src={process.env.PUBLIC_URL + '/img/pa.gif'}
+                alt="point action"
+              />
+            )}
+            {building.type === 'user_bag' && (
+              <img src={process.env.PUBLIC_URL + '/img/bag.gif'} alt="sac" />
+            )}
           </TD>
           <TD>
             {this.getConstruction().remainingActions === 0 ? (
@@ -186,6 +197,7 @@ ConstructionItem.propTypes = {
   building: PropTypes.shape({
     id: PropTypes.number,
     label: PropTypes.string,
+    type: PropTypes.string,
     description: PropTypes.string,
     amount: PropTypes.number,
     hasParentId: PropTypes.number,

@@ -60,7 +60,7 @@ class ConstructionList extends Component {
           <tr>
             <TH />
             <TH>Avancement</TH>
-            <TH>Défense</TH>
+            <TH>Récompense</TH>
             <TH>Points Actions</TH>
             <TH>Matériaux</TH>
           </tr>
