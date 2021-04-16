@@ -7,6 +7,7 @@ import EquippedItems from '../../../Components/Item/EquippedItems'
 import EquippedSkills from '../../../Components/Skill/EquippedSkills'
 import FriendList from '../../../Components/Friend/FriendList'
 import ItemList from '../../../Components/Item/ItemList'
+import ConstructionList from '../../../Components/Construction/ConstructionList'
 import Title from '../../../Components/Title/Title'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 import { toast } from 'react-toastify'
@@ -97,6 +98,7 @@ class Character extends Component {
         'generalTab',
         'skillsTab',
         'itemsTab',
+        'constructionsTab',
         'friendsTab'
       ])
     }
@@ -442,6 +444,34 @@ class Character extends Component {
       })
   }
 
+  giveActionOrMaterial = (type, construction) => {
+    axios
+      .put(
+        process.env.REACT_APP_API_URL +
+          '/constructions/giveData/' +
+          construction.id,
+        { type: type },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            user: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
+  }
+
   render() {
     const { error, loading, user, activatedTab } = this.state
 
@@ -521,6 +551,30 @@ class Character extends Component {
                           </span>
                         )}
                       </div>
+                      {this.state.isMe && (
+                        <div
+                          onClick={() => this.onClickOnTab('constructionsTab')}
+                        >
+                          <ListLink
+                            className={
+                              activatedTab === 'constructionsTab'
+                                ? ' active'
+                                : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#constructionsTab"
+                          >
+                            Constructions
+                          </ListLink>
+                          {activatedTab === 'constructionsTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
+                      )}
                       {this.state.isMe && (
                         <div onClick={() => this.onClickOnTab('friendsTab')}>
                           <ListLink
@@ -719,6 +773,32 @@ class Character extends Component {
                           hasGuild={!!user.guild}
                           addEmptyZones={true}
                           userLevel={user.level}
+                        />
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Constructions */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'constructionsTab' ? ' active' : ''
+                    }`}
+                    id="constructionsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body" id="tutorialConstructions">
+                        <div className="col-sm-12">
+                          <Title>Constructions</Title>
+                        </div>
+                        <ConstructionList
+                          user={user}
+                          giveAction={(construction) =>
+                            this.giveActionOrMaterial('action', construction)
+                          }
+                          giveMaterial={(construction) =>
+                            this.giveActionOrMaterial('material', construction)
+                          }
                         />
                       </div>
                     </Card>

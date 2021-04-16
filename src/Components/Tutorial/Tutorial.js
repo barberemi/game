@@ -62,6 +62,17 @@ class Tutorial extends Component {
           {
             element: '#tutorialMenu',
             title: 'Navigation',
+            intro: 'Cliquer sur "Constructions" afin de voir la suite.'
+          },
+          {
+            element: '#tutorialConstructions',
+            title: 'Constructions',
+            intro:
+              'Toutes les constructions que vous pouvez effectuer pour votre personnage.<br/>Elles permettent d’améliorer la défense de votre personnage et d’aider votre guilde.'
+          },
+          {
+            element: '#tutorialMenu',
+            title: 'Navigation',
             intro: 'Cliquer sur "Amis" afin de voir la suite.'
           },
           {
@@ -174,6 +185,17 @@ class Tutorial extends Component {
             element: '#tutorialGuildChat',
             title: 'Discussion de guilde',
             intro: 'Permet de chatter avec tous les membres de la guilde.'
+          },
+          {
+            element: '#tutorialMenu',
+            title: 'Navigation',
+            intro: 'Cliquer sur "Constructions" afin de voir la suite.'
+          },
+          {
+            element: '#tutorialConstructions',
+            title: 'Constructions',
+            intro:
+              'Toutes les constructions que vous pouvez effectuer pour la guilde pour l’améliorer.'
           },
           {
             element: '#tutorialMenu',

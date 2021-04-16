@@ -15,6 +15,7 @@ import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 import ItemList from '../../../Components/Item/ItemList'
 import { selectTabFromUrl } from '../../../utils/routingHelper'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
+import ConstructionList from '../../../Components/Construction/ConstructionList'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -171,6 +172,7 @@ class Guild extends Component {
       activatedTab: selectTabFromUrl([
         'generalTab',
         'chatTab',
+        'constructionsTab',
         'membersTab',
         'choiceBossTab',
         'fightBossTab',
@@ -697,6 +699,34 @@ class Guild extends Component {
     }
   }
 
+  giveActionOrMaterial = (type, construction) => {
+    axios
+      .put(
+        process.env.REACT_APP_API_URL +
+          '/constructions/giveData/' +
+          construction.id,
+        { type: type },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            user: response.data
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
+  }
+
   render() {
     const {
       error,
@@ -760,6 +790,28 @@ class Guild extends Component {
                             Discussion
                           </ListLink>
                           {activatedTab === 'chatTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          onClick={() => this.onClickOnTab('constructionsTab')}
+                        >
+                          <ListLink
+                            className={
+                              activatedTab === 'constructionsTab'
+                                ? ' active'
+                                : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#constructionsTab"
+                          >
+                            Constructions
+                          </ListLink>
+                          {activatedTab === 'constructionsTab' && (
                             <span className="text-warning">
                               &nbsp;
                               <i className="far fa-arrow-alt-circle-right" />
@@ -926,8 +978,6 @@ class Guild extends Component {
                       <>
                         <div className="card-header" id="tutorialGuildName">
                           <Title>{guild.name}</Title>
-                        </div>
-                        <div className="card-body" id="tutorialGuildActions">
                           {user.canGuildBossFight && (
                             <FightButton
                               onClick={() => this.handleCreateGuildBossFight()}
@@ -953,6 +1003,38 @@ class Guild extends Component {
                               />
                             </FightButton>
                           </LinkToGuildExploration>
+                        </div>
+                        <div className="card-body" id="tutorialGuildActions">
+                          <Title>
+                            Estimation de l’attaque{' '}
+                            <span style={{ fontSize: '10px' }}>
+                              (de 00h00 à 00h15)
+                            </span>
+                          </Title>
+                          <table className="table">
+                            <tr>
+                              <th style={{ borderTop: 0 }}>
+                                Attaque des monstres
+                              </th>
+                              <th style={{ borderTop: 0 }}>
+                                Défense de la guilde
+                              </th>
+                            </tr>
+                            <tr>
+                              <td style={{ borderTop: 0 }}>
+                                <i className="fas fa-question" />
+                              </td>
+                              <td style={{ borderTop: 0 }}>
+                                {guild.defense}{' '}
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL + '/img/defense.gif'
+                                  }
+                                  alt="defense"
+                                />
+                              </td>
+                            </tr>
+                          </table>
                         </div>
                         <div
                           className="card-footer"
@@ -1115,6 +1197,35 @@ class Guild extends Component {
                             </CustomButton>
                           </Chat>
                         </form>
+                      </div>
+                    </Card>
+                  </div>
+                )}
+
+                {/* Constructions */}
+                {guild && (
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'constructionsTab' ? ' active' : ''
+                    }`}
+                    id="constructionsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body" id="tutorialConstructions">
+                        <div className="col-sm-12">
+                          <Title>Constructions</Title>
+                        </div>
+                        <ConstructionList
+                          user={user}
+                          isGuild={true}
+                          giveAction={(construction) =>
+                            this.giveActionOrMaterial('action', construction)
+                          }
+                          giveMaterial={(construction) =>
+                            this.giveActionOrMaterial('material', construction)
+                          }
+                        />
                       </div>
                     </Card>
                   </div>
