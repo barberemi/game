@@ -57,8 +57,8 @@ class ItemList extends Component {
               </div>
             </Item>
           ))}
-          {addEmptyZones && (
-            <>
+          {addEmptyZones > 0 &&
+            _.map(Array(addEmptyZones), () => (
               <Item
                 className="float-left d-flex position-relative"
                 minusPadding={minusPadding}
@@ -66,22 +66,7 @@ class ItemList extends Component {
               >
                 <ItemBox />
               </Item>
-              <Item
-                className="float-left d-flex position-relative"
-                minusPadding={minusPadding}
-                data-tip="Disponible"
-              >
-                <ItemBox />
-              </Item>
-              <Item
-                className="float-left d-flex position-relative"
-                minusPadding={minusPadding}
-                data-tip="Disponible"
-              >
-                <ItemBox />
-              </Item>
-            </>
-          )}
+            ))}
           <ReactTooltip />
         </Container>
       </>
@@ -104,12 +89,13 @@ ItemList.propTypes = {
   ),
   minusPadding: PropTypes.bool,
   displayActions: PropTypes.bool,
+  displayPutOrTakeOnGuild: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onPutOrTakeOnGuild: PropTypes.func,
   onChangeEquippedItem: PropTypes.func,
   isGuildItem: PropTypes.bool,
   hasGuild: PropTypes.bool,
-  addEmptyZones: PropTypes.bool,
+  addEmptyZones: PropTypes.number,
   onClick: PropTypes.func,
   userLevel: PropTypes.number
 }

@@ -402,6 +402,31 @@ class Character extends Component {
             }
           }
         )
+        .then((response) => {
+          if (response.data) {
+            this.setState({
+              user: {
+                ...this.state.user,
+                remainingBagSpace: this.state.user.remainingBagSpace - 1
+              }
+            })
+
+            toast.success(
+              <span style={{ fontSize: '14px' }}>
+                Objet envoyé dans le coffre de la guilde avec succès !
+              </span>,
+              {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              }
+            )
+          }
+        })
         .catch((error) => {
           this.setState({
             error: error.response.data
@@ -762,7 +787,20 @@ class Character extends Component {
                     <Card className="card">
                       <div className="card-body" id="tutorialItems">
                         <div className="col-sm-12">
-                          <Title>Inventaire</Title>
+                          <Title>
+                            Inventaire
+                            <br />
+                            <SubTitle>
+                              (
+                              {user.remainingBagSpace === 0
+                                ? 'Aucune place restante'
+                                : user.remainingBagSpace === 1
+                                ? '1 place disponible'
+                                : user.remainingBagSpace +
+                                  ' places disponibles'}
+                              )
+                            </SubTitle>
+                          </Title>
                         </div>
                         <ItemList
                           items={user.items}
@@ -771,7 +809,7 @@ class Character extends Component {
                           onChangeEquippedItem={this.onChangeEquippedItem}
                           onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
                           hasGuild={!!user.guild}
-                          addEmptyZones={true}
+                          addEmptyZones={user.remainingBagSpace}
                           userLevel={user.level}
                         />
                       </div>

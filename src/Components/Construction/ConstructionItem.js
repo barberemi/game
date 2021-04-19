@@ -10,7 +10,7 @@ const Label = styled.span`
   cursor: pointer;
 
   ${(props) =>
-    props.display &&
+    props.displayLabel &&
     css`
       color: #ffc312;
     `};
@@ -63,12 +63,12 @@ class ConstructionItem extends Component {
               {count > 0 ? this.getSubMenu() : ''}
               <Label
                 onClick={() => this.setState({ display: !display })}
-                display={display}
+                displayLabel={display}
               >
                 {building.label}
               </Label>
             </span>
-            {this.state.display && (
+            {display && (
               <>
                 <br />
                 {building.description}

@@ -78,6 +78,7 @@ class ItemBox extends Component {
       displayText,
       oldItem,
       displayActions,
+      displayPutOrTakeOnGuild,
       isGuildItem,
       hasGuild,
       withOpacity,
@@ -130,7 +131,7 @@ class ItemBox extends Component {
         {displayActions && (
           <ActionsBox className={stateActions ? 'd-block' : 'd-none'}>
             <div className="p-3">
-              {isGuildItem && (
+              {displayPutOrTakeOnGuild && isGuildItem && (
                 <ActionBtn
                   className="py-2 mb-4 text-success"
                   onClick={() => {
@@ -141,7 +142,7 @@ class ItemBox extends Component {
                   Prendre
                 </ActionBtn>
               )}
-              {!isGuildItem && (
+              {displayPutOrTakeOnGuild && !isGuildItem && (
                 <>
                   {isAnEquippedItem(trueItem) && userLevel >= trueItem.level && (
                     <ActionBtn
@@ -193,6 +194,7 @@ class ItemBox extends Component {
 ItemBox.defaultProps = {
   displayText: true,
   isGuildItem: false,
+  displayPutOrTakeOnGuild: true,
   userLevel: 999
 }
 
@@ -213,6 +215,7 @@ ItemBox.propTypes = {
   }),
   withOpacity: PropTypes.bool,
   displayActions: PropTypes.bool,
+  displayPutOrTakeOnGuild: PropTypes.bool,
   displayText: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onPutOrTakeOnGuild: PropTypes.func,

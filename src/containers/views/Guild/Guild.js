@@ -610,12 +610,38 @@ class Guild extends Component {
           this.setState({
             user: response.data
           })
+
+          toast.success(
+            <span style={{ fontSize: '14px' }}>
+              Objet envoyé dans dans votre inventaire avec succès !
+            </span>,
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            }
+          )
         }
       })
       .catch((error) => {
-        this.setState({
-          error: error.response.data
-        })
+        toast.error(
+          <span style={{ fontSize: '14px' }}>
+            Impossible, il vous manque de la place dans votre inventaire !
+          </span>,
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          }
+        )
       })
   }
 
@@ -1012,28 +1038,31 @@ class Guild extends Component {
                             </span>
                           </Title>
                           <table className="table">
-                            <tr>
-                              <th style={{ borderTop: 0 }}>
-                                Attaque des monstres
-                              </th>
-                              <th style={{ borderTop: 0 }}>
-                                Défense de la guilde
-                              </th>
-                            </tr>
-                            <tr>
-                              <td style={{ borderTop: 0 }}>
-                                <i className="fas fa-question" />
-                              </td>
-                              <td style={{ borderTop: 0 }}>
-                                {guild.defense}{' '}
-                                <img
-                                  src={
-                                    process.env.PUBLIC_URL + '/img/defense.gif'
-                                  }
-                                  alt="defense"
-                                />
-                              </td>
-                            </tr>
+                            <thead>
+                              <tr>
+                                <th style={{ borderTop: 0 }}>
+                                  Attaque des monstres
+                                </th>
+                                <th style={{ borderTop: 0 }}>
+                                  Défense de la guilde
+                                </th>
+                              </tr>
+                              <tr>
+                                <td style={{ borderTop: 0 }}>
+                                  <i className="fas fa-question" />
+                                </td>
+                                <td style={{ borderTop: 0 }}>
+                                  {guild.defense}{' '}
+                                  <img
+                                    src={
+                                      process.env.PUBLIC_URL +
+                                      '/img/defense.gif'
+                                    }
+                                    alt="defense"
+                                  />
+                                </td>
+                              </tr>
+                            </thead>
                           </table>
                         </div>
                         <div
@@ -1476,6 +1505,7 @@ class Guild extends Component {
                         <ItemList
                           items={guild.items}
                           displayActions={true}
+                          displayPutOrTakeOnGuild={user.remainingBagSpace > 0}
                           onPutOrTakeOnGuild={this.handleOnPutOrTakeOnGuild}
                           isGuildItem={true}
                           userLevel={user.level}

@@ -57,13 +57,15 @@ class ConstructionList extends Component {
     return (
       <div className="col-sm-12 text-left">
         <table className="table">
-          <tr>
-            <TH />
-            <TH>Avancement</TH>
-            <TH>Récompense</TH>
-            <TH>Points Actions</TH>
-            <TH>Matériaux</TH>
-          </tr>
+          <thead>
+            <tr>
+              <TH />
+              <TH>Avancement</TH>
+              <TH>Récompense</TH>
+              <TH>Points Actions</TH>
+              <TH>Matériaux</TH>
+            </tr>
+          </thead>
           <tbody>
             {_.map(buildings, (building, index) => {
               return (
