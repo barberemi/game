@@ -16,6 +16,7 @@ import ItemList from '../../../Components/Item/ItemList'
 import { selectTabFromUrl } from '../../../utils/routingHelper'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 import ConstructionList from '../../../Components/Construction/ConstructionList'
+import { getDaysDateDiff } from '../../../utils/guildHelper'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -627,7 +628,7 @@ class Guild extends Component {
           )
         }
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(
           <span style={{ fontSize: '14px' }}>
             Impossible, il vous manque de la place dans votre inventaire !
@@ -1003,7 +1004,12 @@ class Guild extends Component {
                     {guild && user && (
                       <>
                         <div className="card-header" id="tutorialGuildName">
-                          <Title>{guild.name}</Title>
+                          <Title>
+                            {guild.name}{' '}
+                            <span style={{ fontSize: '18px', color: 'white' }}>
+                              ({getDaysDateDiff(guild)} jours)
+                            </span>
+                          </Title>
                           {user.canGuildBossFight && (
                             <FightButton
                               onClick={() => this.handleCreateGuildBossFight()}
