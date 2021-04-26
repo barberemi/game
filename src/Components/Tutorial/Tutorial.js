@@ -62,6 +62,17 @@ class Tutorial extends Component {
           {
             element: '#tutorialMenu',
             title: 'Navigation',
+            intro: 'Cliquer sur "Métier" afin de voir la suite.'
+          },
+          {
+            element: '#tutorialJobs',
+            title: 'Métier',
+            intro:
+              'Vous pouvez choisir ici un métier pour votre personnage.<br/>Attention, le choix d’un métier est payant (autre que celui par défaut).'
+          },
+          {
+            element: '#tutorialMenu',
+            title: 'Navigation',
             intro: 'Cliquer sur "Constructions" afin de voir la suite.'
           },
           {

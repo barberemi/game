@@ -16,7 +16,7 @@ import ItemList from '../../../Components/Item/ItemList'
 import { selectTabFromUrl } from '../../../utils/routingHelper'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 import ConstructionList from '../../../Components/Construction/ConstructionList'
-import { getDaysDateDiff } from '../../../utils/guildHelper'
+import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
 
 const Container = styled.div`
   background-image: url('https://cdna.artstation.com/p/assets/images/images/022/688/120/large/matt-sanz-town-centre-2019.jpg');
@@ -1007,7 +1007,8 @@ class Guild extends Component {
                           <Title>
                             {guild.name}{' '}
                             <span style={{ fontSize: '18px', color: 'white' }}>
-                              ({getDaysDateDiff(guild)} jours)
+                              ({getDaysDateDiffBetweenNowAnd(guild.createdAt)}{' '}
+                              jours)
                             </span>
                           </Title>
                           {user.canGuildBossFight && (

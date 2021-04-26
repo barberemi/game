@@ -17,6 +17,9 @@ import jwtDecode from 'jwt-decode'
 import PropTypes from 'prop-types'
 import Loader from '../../../Components/Loader/Loader'
 import { selectTabFromUrl } from '../../../utils/routingHelper'
+import StyledCards from '../../../Components/Card/StyledCards'
+import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
+import moment from 'moment'
 
 const Container = styled.div`
   background-image: url('https://images2.alphacoders.com/717/717870.jpg');
@@ -82,6 +85,17 @@ const AddUserButton = styled.button`
   }
 `
 
+const InputSubmit = styled.input`
+  color: black;
+  background-color: #ffc312;
+  width: 100px;
+
+  &:hover {
+    color: black;
+    background-color: white;
+  }
+`
+
 class Character extends Component {
   constructor(props) {
     super(props)
@@ -92,18 +106,22 @@ class Character extends Component {
       loading: true,
       user: undefined,
       isMe: false,
+      displayForm: false,
       friendToAddOrRemove: '',
+      jobSelected: undefined,
       stepsEnabled: false,
       activatedTab: selectTabFromUrl([
         'generalTab',
         'skillsTab',
         'itemsTab',
+        'jobsTab',
         'constructionsTab',
         'friendsTab'
       ])
     }
 
     this.handleAddDeleteUser = this.handleAddDeleteUser.bind(this)
+    this.handleChoiceJob = this.handleChoiceJob.bind(this)
   }
 
   componentDidMount() {
@@ -126,7 +144,8 @@ class Character extends Component {
             isMe:
               jwtDecode(Cookies.get('auth-token')).email ===
               response.data.email,
-            user: response.data
+            user: response.data,
+            jobSelected: response.data.job ?? undefined
           })
           if (
             this.state.activatedTab === 'generalTab' &&
@@ -407,7 +426,7 @@ class Character extends Component {
             this.setState({
               user: {
                 ...this.state.user,
-                remainingBagSpace: this.state.user.remainingBagSpace - 1
+                remainingBagSpace: this.state.user.remainingBagSpace + 1
               }
             })
 
@@ -469,6 +488,58 @@ class Character extends Component {
       })
   }
 
+  handleChoiceJob(event) {
+    event.preventDefault()
+    // console.log(moment().format('YYYY-MM-DD HH:mm:ss'))
+    var date = moment().format('YYYY-MM-DD HH:mm:ss')
+    // Add 2 hours to UTC Paris
+    // var date = new Date()
+    // date.setHours(date.getHours() + 2)
+    //
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,
+        {
+          jobUpdatedAt: date,
+          job: {
+            id: this.state.jobSelected.id
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            user: response.data
+          })
+          toast.success(
+            <span style={{ fontSize: '14px' }}>
+              Changement de métier effectué !
+            </span>,
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            }
+          )
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
+  }
+
   giveActionOrMaterial = (type, construction) => {
     axios
       .put(
@@ -497,8 +568,22 @@ class Character extends Component {
       })
   }
 
+  selectJob(job) {
+    this.setState({
+      jobSelected: job,
+      displayForm: true
+    })
+  }
+
   render() {
-    const { error, loading, user, activatedTab } = this.state
+    const {
+      error,
+      loading,
+      user,
+      activatedTab,
+      jobSelected,
+      displayForm
+    } = this.state
 
     return (
       <Container className="container-fluid">
@@ -576,6 +661,26 @@ class Character extends Component {
                           </span>
                         )}
                       </div>
+                      {this.state.isMe && (
+                        <div onClick={() => this.onClickOnTab('jobsTab')}>
+                          <ListLink
+                            className={
+                              activatedTab === 'jobsTab' ? ' active' : ''
+                            }
+                            data-toggle="tab"
+                            role="tab"
+                            href="#jobsTab"
+                          >
+                            Métier{' '}
+                          </ListLink>
+                          {activatedTab === 'jobsTab' && (
+                            <span className="text-warning">
+                              &nbsp;
+                              <i className="far fa-arrow-alt-circle-right" />
+                            </span>
+                          )}
+                        </div>
+                      )}
                       {this.state.isMe && (
                         <div
                           onClick={() => this.onClickOnTab('constructionsTab')}
@@ -812,6 +917,82 @@ class Character extends Component {
                           addEmptyZones={user.remainingBagSpace}
                           userLevel={user.level}
                         />
+                      </div>
+                    </Card>
+                  </div>
+
+                  {/* Jobs */}
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'jobsTab' ? ' active' : ''
+                    }`}
+                    id="jobsTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body" id="tutorialJobs">
+                        <div className="col-sm-12">
+                          <Title>Métier</Title>
+                        </div>
+                        Un métier vous permet d’effectuer des actions en plus
+                        tous les jours afin de progresser plus rapidement.
+                        <br />
+                        {getDaysDateDiffBetweenNowAnd(user.jobUpdatedAt) >=
+                          30 && (
+                          <span style={{ color: '#fcce18' }}>
+                            Changement de métier possible
+                          </span>
+                        )}
+                        {getDaysDateDiffBetweenNowAnd(user.jobUpdatedAt) <
+                          30 && (
+                          <>
+                            Possibilité de changement de métier dans{' '}
+                            <span style={{ color: '#fcce18' }}>
+                              {30 -
+                                getDaysDateDiffBetweenNowAnd(
+                                  user.jobUpdatedAt
+                                )}{' '}
+                              jour
+                              {30 -
+                                getDaysDateDiffBetweenNowAnd(
+                                  user.jobUpdatedAt
+                                ) >
+                                1 && 's'}
+                            </span>
+                            .
+                          </>
+                        )}
+                        <br />
+                        <span style={{ fontSize: '12px' }}>
+                          Cette fonctionnalité sera payante par la suite{' '}
+                          <span style={{ color: '#fcce18' }}>(5€/mois)</span>.
+                        </span>
+                        <StyledCards
+                          isDark={user.isDark}
+                          type={'jobs'}
+                          displayLightDarkButton={false}
+                          onClick={(job) => this.selectJob(job)}
+                          selectedId={jobSelected ? jobSelected.id : undefined}
+                        />
+                        {jobSelected && displayForm && (
+                          <>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: jobSelected.description
+                              }}
+                            />
+                            {getDaysDateDiffBetweenNowAnd(user.jobUpdatedAt) >=
+                              30 && (
+                              <form onSubmit={this.handleChoiceJob}>
+                                <InputSubmit
+                                  type="submit"
+                                  value="Choisir"
+                                  className="btn"
+                                />
+                              </form>
+                            )}
+                          </>
+                        )}
                       </div>
                     </Card>
                   </div>
