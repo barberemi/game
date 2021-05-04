@@ -173,19 +173,20 @@ class Tutorial extends Component {
           {
             element: '#tutorialGuildName',
             title: 'Guilde',
-            intro: 'Nom de la guilde.'
-          },
-          {
-            element: '#tutorialGuildActions',
-            title: 'Actions',
             intro:
-              'Les boutons présents ici permettent d‘effectuer le combat journalier contre le champion de la guilde, ainsi que de s‘élancer dans l‘exploration de guilde.'
+              'Nom de la guilde (nombre jours ayant survécu) ainsi que les boutons d’actions de guilde et de métier.'
           },
           {
             element: '#tutorialGuildAnnouncement',
             title: 'Annonce',
             intro:
               'Permet de visualiser l‘annonce de la guilde, faite par le chef de la guilde.'
+          },
+          {
+            element: '#tutorialGuildEstimation',
+            title: 'Estimation',
+            intro:
+              'Permet de visualiser rapidement la défense de votre guilde, et l’attaque des monstres de la soirée.'
           },
           {
             element: '#tutorialMenu',

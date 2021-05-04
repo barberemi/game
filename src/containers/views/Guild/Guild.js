@@ -127,11 +127,9 @@ const Avatar = styled.img`
   background-color: #fff;
 `
 
-const FightButton = styled.span`
+const FightButton = styled.button`
   color: white;
   font-size: 14px;
-  text-decoration: none;
-  cursor: pointer;
 `
 
 const InputSubmit = styled.input`
@@ -162,6 +160,7 @@ class Guild extends Component {
       error: undefined,
       redirect: undefined,
       loading: true,
+      estimationLoader: false,
       displayLeaveButtons: false,
       textMessage: '',
       textAnnouncement: '',
@@ -169,7 +168,7 @@ class Guild extends Component {
       monsters: undefined,
       memberToAddOrRemove: '',
       newNameGuild: '',
-      stepsEnabled: false,
+      stepsEnabled: 'waiting',
       activatedTab: selectTabFromUrl([
         'generalTab',
         'chatTab',
@@ -187,6 +186,7 @@ class Guild extends Component {
     this.handleCreateGuildBossFight = this.handleCreateGuildBossFight.bind(this)
     this.handleOnPutOrTakeOnGuild = this.handleOnPutOrTakeOnGuild.bind(this)
     this.handlePromoteToOfficer = this.handlePromoteToOfficer.bind(this)
+    this.handleDoJob = this.handleDoJob.bind(this)
   }
 
   componentDidMount() {
@@ -252,12 +252,14 @@ class Guild extends Component {
         if (response.data) {
           this.setState({
             loading: false,
+            estimationLoader: false,
             guild: response.data
           })
 
           if (
             this.state.activatedTab === 'generalTab' &&
-            this.state.user.isNoob
+            this.state.user.isNoob &&
+            this.state.stepsEnabled === 'waiting'
           ) {
             setTimeout(() => {
               this.setState({
@@ -660,7 +662,7 @@ class Guild extends Component {
           }
         }
       )
-      .then((response) => {
+      .then(() => {
         toast.success(
           <span style={{ fontSize: '14px' }}>
             {user.name} est devenu{' '}
@@ -754,6 +756,72 @@ class Guild extends Component {
       })
   }
 
+  handleDoJob = (job) => {
+    const { user } = this.state
+    const nbOldItems = user.items.length
+
+    if (job === 'minor' && user.remainingBagSpace <= 0) {
+      toast.error(
+        <span style={{ fontSize: '14px' }}>
+          Vous n’avez plus d’emplacements d’objets disponibles.
+        </span>,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        }
+      )
+    } else if (user.canAction) {
+      axios
+        .put(
+          process.env.REACT_APP_API_URL + '/users/' + user.id,
+          { canAction: false },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('auth-token')}`
+            }
+          }
+        )
+        .then((response) => {
+          if (response.data) {
+            this.setState({
+              estimationLoader: job !== 'minor',
+              user: {
+                ...this.state.user,
+                canAction: false
+              }
+            })
+            let text = 'Scouting effectué avec succès !'
+
+            if (job === 'minor') {
+              const nbNewItems = response.data.items.length
+              text = 'Récupération de ' + (nbNewItems - nbOldItems) + ' de Bois'
+            }
+
+            toast.success(<span style={{ fontSize: '14px' }}>{text}</span>, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.response.data
+          })
+        })
+    }
+  }
+
   render() {
     const {
       error,
@@ -762,7 +830,8 @@ class Guild extends Component {
       guild,
       user,
       monsters,
-      activatedTab
+      activatedTab,
+      estimationLoader
     } = this.state
 
     if (redirect) {
@@ -774,11 +843,13 @@ class Guild extends Component {
         {loading && <Loader />}
         <div className="container">
           <div className="row h-100 mt-5">
-            <Tutorial
-              stepsEnabled={this.state.stepsEnabled}
-              stepName="guild"
-              onExit={() => this.setState({ stepsEnabled: false })}
-            />
+            {this.state.stepsEnabled === true && (
+              <Tutorial
+                stepsEnabled={this.state.stepsEnabled}
+                stepName="guild"
+                onExit={() => this.setState({ stepsEnabled: false })}
+              />
+            )}
 
             <div className="col-sm-3 my-auto">
               <Card className="card" id="tutorialMenu">
@@ -1012,21 +1083,27 @@ class Guild extends Component {
                             </span>
                           </Title>
                           {user.canGuildBossFight && (
-                            <FightButton
-                              onClick={() => this.handleCreateGuildBossFight()}
-                              className="col-sm-6"
-                            >
-                              Combat de la journée{' '}
-                              <img
-                                src={process.env.PUBLIC_URL + '/img/versus.svg'}
-                                width="30px"
-                                height="30px"
-                                alt="versus"
-                              />
-                            </FightButton>
+                            <>
+                              <FightButton
+                                onClick={() =>
+                                  this.handleCreateGuildBossFight()
+                                }
+                                className="btn btn-outline-warning"
+                              >
+                                Combat de la journée{' '}
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL + '/img/versus.svg'
+                                  }
+                                  width="30px"
+                                  height="30px"
+                                  alt="versus"
+                                />
+                              </FightButton>{' '}
+                            </>
                           )}
                           <LinkToGuildExploration to={'/guild_exploration'}>
-                            <FightButton className="col-sm-6">
+                            <FightButton className="btn btn-outline-warning">
                               Exploration de guilde{' '}
                               <img
                                 src={process.env.PUBLIC_URL + '/img/map.svg'}
@@ -1035,45 +1112,52 @@ class Guild extends Component {
                                 alt="map"
                               />
                             </FightButton>
-                          </LinkToGuildExploration>
-                        </div>
-                        <div className="card-body" id="tutorialGuildActions">
-                          <Title>
-                            Estimation de l’attaque{' '}
-                            <span style={{ fontSize: '10px' }}>
-                              (de 00h00 à 00h15)
-                            </span>
-                          </Title>
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th style={{ borderTop: 0 }}>
-                                  Attaque des monstres
-                                </th>
-                                <th style={{ borderTop: 0 }}>
-                                  Défense de la guilde
-                                </th>
-                              </tr>
-                              <tr>
-                                <td style={{ borderTop: 0 }}>
-                                  <i className="fas fa-question" />
-                                </td>
-                                <td style={{ borderTop: 0 }}>
-                                  {guild.defense}{' '}
+                          </LinkToGuildExploration>{' '}
+                          {user.job && user.canAction && (
+                            <>
+                              {user.job.name === 'scout' && (
+                                <FightButton
+                                  onClick={() =>
+                                    this.handleDoJob(user.job.name)
+                                  }
+                                  className="btn btn-outline-warning"
+                                >
+                                  Compter les ennemis{' '}
                                   <img
                                     src={
                                       process.env.PUBLIC_URL +
-                                      '/img/defense.gif'
+                                      '/img/jobs/scout.svg'
                                     }
-                                    alt="defense"
+                                    width="30px"
+                                    height="30px"
+                                    alt="scout"
                                   />
-                                </td>
-                              </tr>
-                            </thead>
-                          </table>
+                                </FightButton>
+                              )}
+                              {user.job.name === 'minor' && (
+                                <FightButton
+                                  onClick={() =>
+                                    this.handleDoJob(user.job.name)
+                                  }
+                                  className="btn btn-outline-warning"
+                                >
+                                  Chercher des matériaux{' '}
+                                  <img
+                                    src={
+                                      process.env.PUBLIC_URL +
+                                      '/img/jobs/minor.svg'
+                                    }
+                                    width="30px"
+                                    height="30px"
+                                    alt="minor"
+                                  />
+                                </FightButton>
+                              )}
+                            </>
+                          )}
                         </div>
                         <div
-                          className="card-footer"
+                          className="card-body"
                           id="tutorialGuildAnnouncement"
                         >
                           <Title>Annonce de la guilde</Title>
@@ -1106,12 +1190,82 @@ class Guild extends Component {
                                 dangerouslySetInnerHTML={{
                                   __html: guild.announcement.replace(
                                     // eslint-disable-next-line
-                                    new RegExp('\r?\n', 'g'),
+                                  new RegExp('\r?\n', 'g'),
                                     '<br />'
                                   )
                                 }}
                               />
                             )}
+                        </div>
+                        <div
+                          className="card-footer"
+                          id="tutorialGuildEstimation"
+                        >
+                          <Title>
+                            Estimation de l’attaque{' '}
+                            <span style={{ fontSize: '10px' }}>
+                              (de 00h00 à 00h15)
+                            </span>
+                          </Title>
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th style={{ borderTop: 0 }}>
+                                  Attaque des monstres
+                                </th>
+                                <th style={{ borderTop: 0 }}>
+                                  Défense de la guilde
+                                </th>
+                              </tr>
+                              <tr>
+                                <td style={{ borderTop: 0 }}>
+                                  {estimationLoader && (
+                                    <img
+                                      src={
+                                        process.env.PUBLIC_URL +
+                                        '/img/tail-spinner.svg'
+                                      }
+                                      width="20"
+                                      height="20"
+                                      alt="spinner"
+                                    />
+                                  )}
+                                  {!estimationLoader &&
+                                    !guild.minAttack &&
+                                    !guild.maxAttack && (
+                                      <i className="fas fa-question" />
+                                    )}
+                                  {!estimationLoader &&
+                                    (guild.minAttack || guild.maxAttack) && (
+                                      <>
+                                        Entre{' '}
+                                        {guild.minAttack ? (
+                                          guild.minAttack
+                                        ) : (
+                                          <i className="fas fa-question" />
+                                        )}{' '}
+                                        et{' '}
+                                        {guild.maxAttack ? (
+                                          guild.maxAttack
+                                        ) : (
+                                          <i className="fas fa-question" />
+                                        )}
+                                      </>
+                                    )}
+                                </td>
+                                <td style={{ borderTop: 0 }}>
+                                  {guild.defense}{' '}
+                                  <img
+                                    src={
+                                      process.env.PUBLIC_URL +
+                                      '/img/defense.gif'
+                                    }
+                                    alt="defense"
+                                  />
+                                </td>
+                              </tr>
+                            </thead>
+                          </table>
                         </div>
                       </>
                     )}
@@ -1429,6 +1583,7 @@ class Guild extends Component {
                                 onClick={() =>
                                   this.handleCreateGuildBossFight()
                                 }
+                                className="btn btn-outline-warning"
                               >
                                 (Me battre{' '}
                                 <img

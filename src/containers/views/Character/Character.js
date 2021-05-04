@@ -794,11 +794,13 @@ class Character extends Component {
                           <CharacteristicItem
                             name="defense"
                             amount={user.defense}
-                            description="Points de défense, permettant de mieux résister aux attaques enemis et donner de la défense à sa guilde."
+                            displayJob={user.job.name === 'defender'}
+                            description="Points de défense, permettant de mieux résister aux attaques ennemis et donner de la défense à sa guilde."
                           />
                           <CharacteristicItem
                             name="remainingActions"
                             amount={user.remainingActions}
+                            displayJob={user.job.name === 'engineer'}
                             description="Points d’actions permettants d’effectuer des activités de guilde (constructions, explorations, minage etc...)"
                           />
                         </div>

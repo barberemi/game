@@ -108,8 +108,50 @@ class CharacteristicItem extends Component {
     return addition !== 0 ? ' + ' + addition : ''
   }
 
+  getAmount(name, amount, displayJob) {
+    if (name === 'defense' && displayJob) {
+      return amount / 2
+    }
+    if (name === 'remainingActions' && displayJob) {
+      return amount > 1 ? amount - 1 : 0
+    }
+
+    return amount
+  }
+
+  getAdditionalJobCharacteristic(name, amount, displayJob) {
+    if (name === 'defense' && displayJob) {
+      return (
+        <>
+          {' '}
+          + {amount / 2}
+          <img
+            src={process.env.PUBLIC_URL + '/img/jobs/defender.svg'}
+            alt="defenseur"
+            width="30px"
+          />
+        </>
+      )
+    }
+    if (name === 'remainingActions' && displayJob) {
+      return (
+        <>
+          {' '}
+          + {amount > 0 ? 1 : 0}
+          <img
+            src={process.env.PUBLIC_URL + '/img/jobs/engineer.svg'}
+            alt="ingenieur"
+            width="30px"
+          />
+        </>
+      )
+    }
+
+    return ''
+  }
+
   render() {
-    const { amount, name, description } = this.props
+    const { amount, name, description, displayJob } = this.props
     const { label, color, svg } = this.state
 
     return (
@@ -117,8 +159,9 @@ class CharacteristicItem extends Component {
         <Image src={svg} alt="img" data-tip={description} />
         <TextBox>
           <div style={{ color }}>
-            {amount}
+            {this.getAmount(name, amount, displayJob)}
             {this.getAdditionalCharacteristic(name)}
+            {this.getAdditionalJobCharacteristic(name, amount, displayJob)}
           </div>
           <span>{label}</span>
         </TextBox>
@@ -131,6 +174,7 @@ CharacteristicItem.propTypes = {
   name: PropTypes.string,
   amount: PropTypes.number,
   description: PropTypes.string,
+  displayJob: PropTypes.bool,
   equippedItems: PropTypes.arrayOf(
     PropTypes.shape({
       item: PropTypes.shape({
