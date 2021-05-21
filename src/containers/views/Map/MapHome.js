@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom'
 import ExperienceNavBar from '../../../Components/NavBar/ExperienceNavBar'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 import ImageMapper from 'react-image-mapper'
+import jwtDecode from 'jwt-decode'
 
 const Container = styled(ImageMapper)`
   background-size: 100% 100%;
@@ -35,7 +36,12 @@ class MapHome extends Component {
       stepName: 'homeVillage',
       imageWidth: undefined,
       imageHeight: undefined,
-      imageUrl: process.env.PUBLIC_URL + '/img/maps/home.jpg',
+      imageUrl: jwtDecode(Cookies.get('auth-token')).academy
+        ? process.env.PUBLIC_URL +
+          '/img/maps/home-' +
+          jwtDecode(Cookies.get('auth-token')).academy.name +
+          '.jpg'
+        : process.env.PUBLIC_URL + '/img/maps/home.jpg',
       interactiveMap: {
         name: 'map-interactive',
         areas: [
