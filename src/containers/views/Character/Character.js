@@ -965,10 +965,6 @@ class Character extends Component {
                           </>
                         )}
                         <br />
-                        <span style={{ fontSize: '12px' }}>
-                          Cette fonctionnalité sera payante par la suite{' '}
-                          <span style={{ color: '#fcce18' }}>(5€/mois)</span>.
-                        </span>
                         <StyledCards
                           isDark={user.isDark}
                           type={'jobs'}

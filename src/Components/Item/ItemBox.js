@@ -25,9 +25,7 @@ const Level = styled.div`
   z-index: 1;
   background-color: #000;
   width: 25px;
-  height: 20px;
   border: 1px solid #fff;
-  padding-top: 2px;
 `
 
 const Equipped = styled.div`

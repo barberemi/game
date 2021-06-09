@@ -18,7 +18,7 @@ const LinkText = styled(Link)`
 `
 
 const Text = styled.span`
-  font-family: 'Lakki Reddy', cursive !important;
+  font-family: 'Bangers', sans-serif !important;
   font-size: 16px;
 `
 
