@@ -34,12 +34,11 @@ const Container = styled.div`
   overflow-y: scroll;
 `
 
-const ListLink = styled.a`
-  color: #fff;
+const SubContainer = styled.div`
+  margin-left: 150px;
 
-  &:hover {
-    color: #ffc312;
-    text-decoration: none;
+  @media (max-width: 768px) {
+    margin-left: inherit;
   }
 `
 
@@ -110,6 +109,7 @@ class Character extends Component {
       friendToAddOrRemove: '',
       jobSelected: undefined,
       stepsEnabled: false,
+      stepName: 'character#generalTab',
       activatedTab: selectTabFromUrl([
         'generalTab',
         'skillsTab',
@@ -147,14 +147,11 @@ class Character extends Component {
             user: response.data,
             jobSelected: response.data.job ?? undefined
           })
-          if (
-            this.state.activatedTab === 'generalTab' &&
-            this.state.isMe &&
-            response.data.isNoob
-          ) {
+          if (this.state.isMe && response.data.isNoob) {
             setTimeout(() => {
               this.setState({
-                stepsEnabled: true
+                stepsEnabled: true,
+                stepName: 'character#' + this.state.activatedTab
               })
             }, 500)
           }
@@ -166,6 +163,30 @@ class Character extends Component {
           error: error.response.data
         })
       })
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const anchor = selectTabFromUrl([
+      'generalTab',
+      'skillsTab',
+      'itemsTab',
+      'jobsTab',
+      'constructionsTab',
+      'friendsTab'
+    ])
+
+    if (prevState.activatedTab !== anchor) {
+      this.setState({
+        activatedTab: anchor
+      })
+
+      if (this.state.user && this.state.user.isNoob) {
+        this.setState({
+          stepsEnabled: true,
+          stepName: 'character#' + anchor
+        })
+      }
+    }
   }
 
   handleAddDeleteUser(type) {
@@ -595,169 +616,14 @@ class Character extends Component {
             </span>
           )}
           {user && (
-            <div className="row h-100 mt-5">
+            <SubContainer className="row h-100 mt-3 mb-3">
               <Tutorial
                 stepsEnabled={this.state.stepsEnabled}
-                stepName="character"
+                stepName={this.state.stepName}
                 onExit={() => this.setState({ stepsEnabled: false })}
               />
 
-              <div className="col-sm-3 mt-5">
-                <Card className="card" id="tutorialMenu">
-                  <div className="card-header">
-                    <Title>Menu</Title>
-                    <div>
-                      <div onClick={() => this.onClickOnTab('generalTab')}>
-                        <ListLink
-                          className={
-                            activatedTab === 'generalTab' ? 'active' : ''
-                          }
-                          data-toggle="tab"
-                          role="tab"
-                          href="#generalTab"
-                        >
-                          Général
-                        </ListLink>
-                        {activatedTab === 'generalTab' && (
-                          <span className="text-warning">
-                            &nbsp;
-                            <i className="far fa-arrow-alt-circle-right" />
-                          </span>
-                        )}
-                      </div>
-                      <div onClick={() => this.onClickOnTab('skillsTab')}>
-                        <ListLink
-                          className={
-                            activatedTab === 'skillsTab' ? ' active' : ''
-                          }
-                          data-toggle="tab"
-                          role="tab"
-                          href="#skillsTab"
-                        >
-                          Compétences
-                        </ListLink>
-                        {activatedTab === 'skillsTab' && (
-                          <span className="text-warning">
-                            &nbsp;
-                            <i className="far fa-arrow-alt-circle-right" />
-                          </span>
-                        )}
-                      </div>
-                      <div onClick={() => this.onClickOnTab('itemsTab')}>
-                        <ListLink
-                          className={
-                            activatedTab === 'itemsTab' ? ' active' : ''
-                          }
-                          data-toggle="tab"
-                          role="tab"
-                          href="#itemsTab"
-                        >
-                          Inventaire
-                        </ListLink>
-                        {activatedTab === 'itemsTab' && (
-                          <span className="text-warning">
-                            &nbsp;
-                            <i className="far fa-arrow-alt-circle-right" />
-                          </span>
-                        )}
-                      </div>
-                      {this.state.isMe && (
-                        <div onClick={() => this.onClickOnTab('jobsTab')}>
-                          <ListLink
-                            className={
-                              activatedTab === 'jobsTab' ? ' active' : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#jobsTab"
-                          >
-                            Métier{' '}
-                          </ListLink>
-                          {activatedTab === 'jobsTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      {this.state.isMe && (
-                        <div
-                          onClick={() => this.onClickOnTab('constructionsTab')}
-                        >
-                          <ListLink
-                            className={
-                              activatedTab === 'constructionsTab'
-                                ? ' active'
-                                : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#constructionsTab"
-                          >
-                            Constructions
-                          </ListLink>
-                          {activatedTab === 'constructionsTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      {this.state.isMe && (
-                        <div onClick={() => this.onClickOnTab('friendsTab')}>
-                          <ListLink
-                            className={
-                              activatedTab === 'friendsTab' ? ' active' : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#friendsTab"
-                          >
-                            Amis
-                          </ListLink>
-                          {activatedTab === 'friendsTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </Card>
-                <Image
-                  src={
-                    process.env.PUBLIC_URL +
-                    '/img/academies/' +
-                    user.academy.name +
-                    '.png'
-                  }
-                  alt={user.academy.name}
-                />
-                {this.state.isMe && (
-                  <div
-                    className="form-check"
-                    data-tip="Permet d'activer/désactiver le tutoriel sur chaque page."
-                  >
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="isNoob"
-                      name="isNoob"
-                      checked={user.isNoob}
-                      onChange={this.handleChangeNoob}
-                    />
-                    <label className="form-check-label mt-1" htmlFor="isNoob">
-                      Je suis un noob (débutant)
-                    </label>
-                  </div>
-                )}
-              </div>
-
-              <RightBox className="col-sm-9 my-auto">
+              <RightBox className="col-sm-12 my-auto">
                 <div className="tab-content">
                   {/* General */}
                   <div
@@ -778,17 +644,56 @@ class Character extends Component {
                               : user.academy.labelLight}
                             )
                           </span>
-                          <LevelBox> - Niv {user.level}</LevelBox>
+                          <br />
+                          <ProgressBar
+                            actual={user.experience - user.xpToActualLevel}
+                            max={user.xpToNextLevel - user.xpToActualLevel}
+                            color="#FFC312"
+                            transparentColor="#7F8286"
+                          />
+                          <LevelBox>Niveau {user.level}</LevelBox>
+                          <br />
+                          <Image
+                            src={
+                              process.env.PUBLIC_URL +
+                              '/img/academies/' +
+                              user.academy.name +
+                              '.png'
+                            }
+                            alt={user.academy.name}
+                          />
                         </Title>
-                        {user.guild && <div>{user.guild.name}</div>}
-                        <ProgressBar
-                          actual={user.experience - user.xpToActualLevel}
-                          max={user.xpToNextLevel - user.xpToActualLevel}
-                          color="#FFC312"
-                          transparentColor="#7F8286"
-                        />
+                        {user.guild && (
+                          <span data-tip="Guilde de l'utilisateur">
+                            {user.guild.name}
+                          </span>
+                        )}
+                        {this.state.isMe && (
+                          <>
+                            <br />
+                            <span data-tip="Permet d'activer/désactiver le tutoriel sur chaque page.">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id="isNoob"
+                                name="isNoob"
+                                checked={user.isNoob}
+                                onChange={this.handleChangeNoob}
+                              />
+                              <label
+                                className="form-check-label mt-1"
+                                htmlFor="isNoob"
+                              >
+                                Je suis un noob (débutant)
+                              </label>
+                            </span>
+                          </>
+                        )}
                       </div>
-                      <div className="card-body" id="tutorialCharacteristics">
+                      <div
+                        className="card-body"
+                        id="tutorialCharacteristicsGenerales"
+                      >
                         <Title>Caractéristiques générales</Title>
                         <div className="col-sm-12" style={{ height: '100px' }}>
                           <CharacteristicItem
@@ -804,6 +709,8 @@ class Character extends Component {
                             description="Points d’actions permettants d’effectuer des activités de guilde (constructions, explorations, minage etc...)"
                           />
                         </div>
+                      </div>
+                      <div className="card-body" id="tutorialCharacteristics">
                         <Title>Caractéristiques personnage</Title>
                         <div className="col-sm-12">
                           {_.map(user.characteristics, (characteristic) => (
@@ -892,12 +799,12 @@ class Character extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-body" id="tutorialItems">
+                      <div className="card-body">
                         <div className="col-sm-12">
                           <Title>
                             Inventaire
                             <br />
-                            <SubTitle>
+                            <SubTitle id="tutorialNbRemainingItems">
                               (
                               {user.remainingBagSpace === 0
                                 ? 'Aucune place restante'
@@ -910,6 +817,7 @@ class Character extends Component {
                           </Title>
                         </div>
                         <ItemList
+                          id="tutorialItems"
                           items={user.items}
                           displayActions={this.state.isMe}
                           onDeleteItem={this.onDeleteItem}
@@ -1083,7 +991,7 @@ class Character extends Component {
                   </div>
                 </div>
               </RightBox>
-            </div>
+            </SubContainer>
           )}
         </div>
       </Container>

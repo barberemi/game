@@ -16,7 +16,10 @@ const FightContainer = styled.div`
 `
 
 const FightLayout = ({ children }) => {
-  if (jwtDecode(Cookies.get('auth-token')).exp < Date.now() / 1000) {
+  if (
+    !Cookies.get('auth-token') ||
+    jwtDecode(Cookies.get('auth-token')).exp < Date.now() / 1000
+  ) {
     return <Redirect to="/login" />
   }
 

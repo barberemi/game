@@ -8,7 +8,7 @@ import ReactTooltip from 'react-tooltip'
 
 const Container = styled.div`
   max-height: 40vh;
-  min-height: 50vh;
+  min-height: 100px;
   overflow-y: scroll;
   padding-left: 30px;
 
@@ -32,11 +32,22 @@ const Item = styled.div`
 
 class ItemList extends Component {
   render() {
-    const { items, onClick, minusPadding, addEmptyZones } = this.props
+    const {
+      items,
+      onClick,
+      minusPadding,
+      addEmptyZones,
+      trueItem,
+      id
+    } = this.props
 
     return (
       <>
-        <Container className="position-relative" minusPadding={minusPadding}>
+        <Container
+          className="position-relative"
+          minusPadding={minusPadding}
+          id={id}
+        >
           {_.map(items, (item) => (
             <Item
               className="float-left d-flex position-relative"
@@ -45,7 +56,7 @@ class ItemList extends Component {
             >
               <div onClick={() => (onClick ? onClick(item) : null)}>
                 <ItemBox
-                  item={item}
+                  item={trueItem ? { item: item } : item}
                   oldItem={
                     !item.isEquipped
                       ? _.find(items, { type: item.type, isEquipped: true })
@@ -74,7 +85,12 @@ class ItemList extends Component {
   }
 }
 
+ItemList.defaultProps = {
+  trueItem: false
+}
+
 ItemList.propTypes = {
+  id: PropTypes.string,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -97,7 +113,8 @@ ItemList.propTypes = {
   hasGuild: PropTypes.bool,
   addEmptyZones: PropTypes.number,
   onClick: PropTypes.func,
-  userLevel: PropTypes.number
+  userLevel: PropTypes.number,
+  trueItem: PropTypes.bool
 }
 
 export default ItemList

@@ -30,6 +30,14 @@ const SubContainer = styled.div`
   overflow-y: scroll;
 `
 
+const SubSubContainer = styled.div`
+  margin-left: 150px;
+
+  @media (max-width: 768px) {
+    margin-left: inherit;
+  }
+`
+
 const AvatarBox = styled.div`
   bottom: 20%;
   left: 15%;
@@ -229,7 +237,7 @@ class Reward extends Component {
               <b>Erreur :</b> {error.error}
             </span>
           )}
-          <div className="row h-100 mt-5">
+          <SubSubContainer className="row h-100 mt-5 mb-5">
             <Box className="offset-2 col-sm-8 my-auto">
               <Card className="card">
                 {user && monster && (
@@ -335,7 +343,7 @@ class Reward extends Component {
                 )}
               </Card>
             </Box>
-          </div>
+          </SubSubContainer>
         </SubContainer>
       </>
     )

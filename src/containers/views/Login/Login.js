@@ -183,7 +183,7 @@ class Login extends Component {
                 Pas de compte?&nbsp;
                 <LinkInput to={'/register'}>S’enregistrer</LinkInput>
               </div>
-              <LinkInput className="d-flex justify-content-center">
+              <LinkInput to={'#'} className="d-flex justify-content-center">
                 Mot de passe oublié?
               </LinkInput>
             </div>

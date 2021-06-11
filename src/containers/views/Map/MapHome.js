@@ -22,6 +22,7 @@ const TextBottomLeft = styled.div`
   position: fixed;
   bottom: 0;
   z-index: 20;
+  text-align: center;
 `
 
 class MapHome extends Component {
@@ -33,7 +34,7 @@ class MapHome extends Component {
       error: undefined,
       user: undefined,
       stepsEnabled: false,
-      stepName: 'homeVillage',
+      stepName: 'homeGuild',
       imageWidth: undefined,
       imageHeight: undefined,
       imageUrl: jwtDecode(Cookies.get('auth-token')).academy
@@ -46,9 +47,9 @@ class MapHome extends Component {
         name: 'map-interactive',
         areas: [
           {
-            name: 'homeVillage',
+            name: 'homeGuild',
             shape: 'poly',
-            href: '/village',
+            href: '/guild',
             // eslint-disable-next-line
             coords: [1023,866,897,898,661,889,543,808,543,665,643,623,741,601,848,565,890,603,945,584,1062,611,1087,628,1070,767],
             preFillColor: 'rgba(0, 0, 0, 0.2)',
@@ -124,8 +125,8 @@ class MapHome extends Component {
 
     let url = '/character'
     switch (stepName) {
-      case 'homeVillage':
-        url = '/village'
+      case 'homeGuild':
+        url = '/guild'
         break
       case 'homeBoss':
         url = '/boss'

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import { Link } from 'react-router-dom'
 import Title from '../../../Components/Title/Title'
 import ItemList from '../../../Components/Item/ItemList'
 import ItemCrafting from '../../../Components/Item/ItemCrafting'
@@ -10,8 +9,6 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
-import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
-import { selectTabFromUrl } from '../../../utils/routingHelper'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg');
@@ -26,18 +23,12 @@ const Container = styled.div`
   overflow-y: scroll;
 `
 
-const ListLink = styled.a`
-  color: #fff;
+const SubContainer = styled.div`
+  margin-left: 150px;
 
-  &:hover {
-    color: #ffc312;
-    text-decoration: none;
+  @media (max-width: 768px) {
+    margin-left: inherit;
   }
-`
-
-const LevelBox = styled.span`
-  font-size: 16px;
-  color: #fff;
 `
 
 const RightBox = styled.div`
@@ -48,14 +39,6 @@ const Card = styled.div`
   background-color: rgba(0, 0, 0, 0.7) !important;
 `
 
-const Image = styled.img`
-  width: 200px;
-  margin-top: 10px;
-  -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
-`
-
 class Crafting extends Component {
   constructor(props) {
     super(props)
@@ -63,14 +46,8 @@ class Crafting extends Component {
     this.state = {
       error: undefined,
       loading: true,
-      boss: undefined,
       character: undefined,
-      activatedTab: selectTabFromUrl([
-        'bossChoiceTab',
-        'itemsCraftingTab',
-        'skillsCraftingTab'
-      ]),
-      selectedBoss: undefined,
+      items: undefined,
       selectedItem: undefined
     }
   }
@@ -82,25 +59,25 @@ class Crafting extends Component {
         Authorization: `Bearer ${Cookies.get('auth-token')}`
       }
     })
-    const getMonsters = axios.get(process.env.REACT_APP_API_URL + '/monsters', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('auth-token')}`
+    const getItems = axios.get(
+      process.env.REACT_APP_API_URL + '/items?order_by=level',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
       }
-    })
+    )
 
     axios
-      .all([getMe, getMonsters])
+      .all([getMe, getItems])
       .then((responses) => {
         this.setState({
           loading: false,
           character: responses[0].data,
-          boss: responses[1].data.items,
-          selectedBoss: parseInt(this.props.match.params.idBoss)
-            ? _.find(responses[1].data.items, {
-                id: parseInt(this.props.match.params.idBoss)
-              })
-            : _.first(responses[1].data.items)
+          items: _.filter(responses[1].data.items, (item) => {
+            return !_.isEmpty(item.itemsToCraft)
+          })
         })
       })
       .catch((errors) => {
@@ -109,12 +86,6 @@ class Crafting extends Component {
           error: errors
         })
       })
-  }
-
-  onClickOnTab = (idTab) => {
-    this.setState({
-      activatedTab: idTab
-    })
   }
 
   handleForgeItem = (item) => {
@@ -197,254 +168,60 @@ class Crafting extends Component {
   }
 
   render() {
-    const {
-      error,
-      loading,
-      boss,
-      character,
-      activatedTab,
-      selectedBoss,
-      selectedItem
-    } = this.state
+    const { error, loading, items, character, selectedItem } = this.state
 
     return (
       <Container className="container-fluid">
         {loading && <Loader />}
         <div className="container">
-          <div className="row h-100 mt-5">
-            <div className="col-sm-3 my-auto">
-              <Card className="card">
-                <div className="card-header">
-                  <Title>Menu</Title>
-                  <div>
-                    <div onClick={() => this.onClickOnTab('bossChoiceTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'bossChoiceTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#bossChoiceTab"
-                      >
-                        Choix du monstre
-                      </ListLink>
-                      {activatedTab === 'bossChoiceTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    <div onClick={() => this.onClickOnTab('itemsCraftingTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'itemsCraftingTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#itemsCraftingTab"
-                      >
-                        Création d’objets
-                      </ListLink>
-                      {activatedTab === 'itemsCraftingTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    <div onClick={() => this.onClickOnTab('skillsCraftingTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'skillsCraftingTab' ? ' active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#skillsCraftingTab"
-                      >
-                        Création de compétences
-                      </ListLink>
-                      {activatedTab === 'skillsCraftingTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Card>
-              <Image
-                src={process.env.PUBLIC_URL + '/img/forgeron.png'}
-                alt="forgeron"
-              />
-            </div>
-
-            <RightBox className="col-sm-9 my-auto">
-              {error && (
-                <span className="text-danger">
-                  <b>Erreur :</b> {error.message}
-                </span>
-              )}
-              {selectedBoss && (
+          {error && (
+            <span className="text-danger">
+              <b>Erreur :</b> {error.message}
+            </span>
+          )}
+          {character && (
+            <SubContainer className="row h-100 mt-5 mb-5">
+              <RightBox className="col-sm-12 my-auto">
                 <div className="tab-content">
-                  {/* BossChoice */}
-                  <div
-                    className={`tab-pane${
-                      activatedTab === 'bossChoiceTab' ? ' active' : ''
-                    }`}
-                    id="bossChoiceTab"
-                    role="tabpanel"
-                  >
-                    <Card className="card">
-                      <div className="card-body">
-                        <div className="col-sm-12">
-                          <Title>Choix du monstre</Title>
-                          <div>
-                            Séléctionner le monstre pour visualiser les objets
-                            et compétences que vous pouvez confectionner grâce à
-                            ses composants.
-                          </div>
-                        </div>
-
-                        <div className="mt-3">
-                          <div>
-                            {_.map(boss, (aBoss) => (
-                              <div
-                                key={aBoss.id}
-                                className={`carousel-item${
-                                  selectedBoss.id === aBoss.id ? 'active' : ''
-                                }`}
-                              >
-                                <Image
-                                  src={
-                                    process.env.PUBLIC_URL +
-                                    '/img/boss/' +
-                                    aBoss.image
-                                  }
-                                  alt="Third slide"
-                                />
-                                <div>
-                                  {(selectedBoss.isBoss ||
-                                    selectedBoss.isGuildBoss) && (
-                                    <>
-                                      <MonsterTypeBadge
-                                        isGuildBoss={selectedBoss.isGuildBoss}
-                                        isBoss={selectedBoss.isBoss}
-                                      />
-                                      <br />
-                                    </>
-                                  )}
-                                  {selectedBoss.name}{' '}
-                                  <span
-                                    style={{
-                                      color: selectedBoss.academy.color
-                                    }}
-                                  >
-                                    ({selectedBoss.academy.name})
-                                  </span>
-                                  <LevelBox>
-                                    {' '}
-                                    - Niv {selectedBoss.level}
-                                  </LevelBox>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          {selectedBoss.id !== _.first(boss).id && (
-                            <Link
-                              to={
-                                '/crafting/' +
-                                boss[
-                                  _.findIndex(boss, { id: selectedBoss.id }) - 1
-                                ].id
-                              }
-                            >
-                              <div className="carousel-control-prev">
-                                <i className="fas fa-chevron-left fa-2x" />
-                              </div>
-                            </Link>
-                          )}
-                          {selectedBoss.id !== _.last(boss).id && (
-                            <Link
-                              to={
-                                '/crafting/' +
-                                boss[
-                                  _.findIndex(boss, { id: selectedBoss.id }) + 1
-                                ].id
-                              }
-                            >
-                              <div className="carousel-control-next">
-                                <i className="fas fa-chevron-right fa-2x" />
-                              </div>
-                            </Link>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  </div>
-
-                  {/* ItemsCrafting */}
-                  <div
-                    className={`tab-pane${
-                      activatedTab === 'itemsCraftingTab' ? ' active' : ''
-                    }`}
-                    id="itemsCraftingTab"
-                    role="tabpanel"
-                  >
+                  <div id="itemsCraftingTab" role="tabpanel">
                     <Card className="card">
                       <div className="card-body">
                         <div className="col-sm-12">
                           <Title>Liste d’objets pouvant être créés</Title>
                           <div>Séléctionner l’objet à confectionner.</div>
                         </div>
-                        <ItemList
-                          items={_.filter(selectedBoss.items, (item) => {
-                            return item.item.itemsToCraft.length > 0
-                          })}
-                          displayActions={false}
-                          onClick={(item) =>
-                            this.setState({ selectedItem: item })
-                          }
-                          userLevel={character.level}
-                        />
-                        {selectedItem && (
-                          <div>
-                            <div className="col-sm-12">
-                              <Title>Forger l’objet</Title>
-                              <ItemCrafting
-                                item={selectedItem}
-                                characterItems={character.items}
-                                onClick={this.handleForgeItem}
-                              />
-                            </div>
-                          </div>
+                        {items && (
+                          <>
+                            <ItemList
+                              items={items}
+                              displayActions={false}
+                              trueItem={true}
+                              onClick={(item) =>
+                                this.setState({ selectedItem: item })
+                              }
+                              userLevel={character.level}
+                            />
+                            {selectedItem && (
+                              <div>
+                                <div className="col-sm-12">
+                                  <Title>Forger l’objet</Title>
+                                  <ItemCrafting
+                                    item={{ item: selectedItem }}
+                                    characterItems={character.items}
+                                    onClick={this.handleForgeItem}
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </>
                         )}
                       </div>
                     </Card>
                   </div>
-
-                  {/* SkillsCrafting */}
-                  <div
-                    className={`tab-pane${
-                      activatedTab === 'skillsCraftingTab' ? ' active' : ''
-                    }`}
-                    id="skillsCraftingTab"
-                    role="tabpanel"
-                  >
-                    <Card className="card">
-                      <div className="card-body">
-                        <div className="col-sm-12">
-                          <Title>Création de compétences</Title>
-                        </div>
-                        Arrive bientôt...
-                      </div>
-                    </Card>
-                  </div>
                 </div>
-              )}
-            </RightBox>
-          </div>
+              </RightBox>
+            </SubContainer>
+          )}
         </div>
       </Container>
     )

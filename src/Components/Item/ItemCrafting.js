@@ -116,15 +116,15 @@ class ItemCrafting extends Component {
               displayActions={false}
               withOpacity={this.getOwnedItems(craft) < craft.amount}
             />
-            <div>(x{craft.amount})</div>
+            <div>Nécessite {craft.amount}</div>
             {this.getOwnedItems(craft) >= craft.amount && (
               <div className="text-success">
-                (Possède x{this.getOwnedItems(craft)})
+                (Possède {this.getOwnedItems(craft)})
               </div>
             )}
             {this.getOwnedItems(craft) < craft.amount && (
               <div className="text-danger">
-                (Manque x{craft.amount - this.getOwnedItems(craft)})
+                (Manque {craft.amount - this.getOwnedItems(craft)})
               </div>
             )}
           </div>

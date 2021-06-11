@@ -31,12 +31,11 @@ const Container = styled.div`
   overflow-y: scroll;
 `
 
-const ListLink = styled.a`
-  color: #fff;
+const SubContainer = styled.div`
+  margin-left: 150px;
 
-  &:hover {
-    color: #ffc312;
-    text-decoration: none;
+  @media (max-width: 768px) {
+    margin-left: inherit;
   }
 `
 
@@ -161,7 +160,6 @@ class Guild extends Component {
       redirect: undefined,
       loading: true,
       estimationLoader: false,
-      displayLeaveButtons: false,
       textMessage: '',
       textAnnouncement: '',
       guild: undefined,
@@ -169,6 +167,7 @@ class Guild extends Component {
       memberToAddOrRemove: '',
       newNameGuild: '',
       stepsEnabled: 'waiting',
+      stepName: 'guild#generalTab',
       activatedTab: selectTabFromUrl([
         'generalTab',
         'chatTab',
@@ -256,14 +255,11 @@ class Guild extends Component {
             guild: response.data
           })
 
-          if (
-            this.state.activatedTab === 'generalTab' &&
-            this.state.user.isNoob &&
-            this.state.stepsEnabled === 'waiting'
-          ) {
+          if (this.state.user.isNoob && this.state.stepsEnabled === 'waiting') {
             setTimeout(() => {
               this.setState({
-                stepsEnabled: true
+                stepsEnabled: true,
+                stepName: 'guild#' + this.state.activatedTab
               })
             }, 500)
           }
@@ -275,6 +271,31 @@ class Guild extends Component {
           error: error.response.data
         })
       })
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const anchor = selectTabFromUrl([
+      'generalTab',
+      'chatTab',
+      'constructionsTab',
+      'membersTab',
+      'choiceBossTab',
+      'fightBossTab',
+      'itemsGuildTab'
+    ])
+
+    if (prevState.activatedTab !== anchor) {
+      this.setState({
+        activatedTab: anchor
+      })
+
+      if (this.state.user && this.state.user.isNoob) {
+        this.setState({
+          stepsEnabled: true,
+          stepName: 'guild#' + anchor
+        })
+      }
+    }
   }
 
   handleSubmit(event) {
@@ -324,7 +345,7 @@ class Guild extends Component {
             this.state.id +
             '/members',
           {
-            type: type === 'leave' ? 'delete' : type,
+            type: type,
             email: this.state.memberToAddOrRemove
           },
           {
@@ -339,8 +360,6 @@ class Guild extends Component {
             <span style={{ fontSize: '14px' }}>
               {type === 'add'
                 ? 'Ajout du membre ' + this.state.memberToAddOrRemove + '!'
-                : type === 'leave'
-                ? 'Vous êtes bien parti de la guilde.'
                 : 'Suppression du membre ' +
                   this.state.memberToAddOrRemove +
                   '!'}
@@ -358,7 +377,6 @@ class Guild extends Component {
           setInterval(() => {
             this.setState({
               guild: response.data,
-              redirect: type === 'leave' ? '/guild' : undefined,
               memberToAddOrRemove: ''
             })
           }, 5000)
@@ -831,6 +849,7 @@ class Guild extends Component {
       user,
       monsters,
       activatedTab,
+      stepName,
       estimationLoader
     } = this.state
 
@@ -842,221 +861,16 @@ class Guild extends Component {
       <Container className="container-fluid">
         {loading && <Loader />}
         <div className="container">
-          <div className="row h-100 mt-5">
+          <SubContainer className="row h-100 mt-5 mb-5">
             {this.state.stepsEnabled === true && (
               <Tutorial
                 stepsEnabled={this.state.stepsEnabled}
-                stepName="guild"
+                stepName={stepName}
                 onExit={() => this.setState({ stepsEnabled: false })}
               />
             )}
 
-            <div className="col-sm-3 my-auto">
-              <Card className="card" id="tutorialMenu">
-                <div className="card-header">
-                  <Title>Menu</Title>
-                  <div>
-                    <div onClick={() => this.onClickOnTab('generalTab')}>
-                      <ListLink
-                        className={
-                          activatedTab === 'generalTab' ? 'active' : ''
-                        }
-                        data-toggle="tab"
-                        role="tab"
-                        href="#generalTab"
-                      >
-                        Général
-                      </ListLink>
-                      {activatedTab === 'generalTab' && (
-                        <span className="text-warning">
-                          &nbsp;
-                          <i className="far fa-arrow-alt-circle-right" />
-                        </span>
-                      )}
-                    </div>
-                    {guild && (
-                      <>
-                        <div onClick={() => this.onClickOnTab('chatTab')}>
-                          <ListLink
-                            className={
-                              activatedTab === 'chatTab' ? 'active' : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#chatTab"
-                          >
-                            Discussion
-                          </ListLink>
-                          {activatedTab === 'chatTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
-                        <div
-                          onClick={() => this.onClickOnTab('constructionsTab')}
-                        >
-                          <ListLink
-                            className={
-                              activatedTab === 'constructionsTab'
-                                ? ' active'
-                                : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#constructionsTab"
-                          >
-                            Constructions
-                          </ListLink>
-                          {activatedTab === 'constructionsTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
-                        <div onClick={() => this.onClickOnTab('membersTab')}>
-                          <ListLink
-                            className={
-                              activatedTab === 'membersTab' ? ' active' : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#membersTab"
-                          >
-                            Membres
-                          </ListLink>
-                          {activatedTab === 'membersTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
-                        {(user.role === 'ROLE_ADMIN' ||
-                          user.guildRole === 'master' ||
-                          user.guildRole === 'officer') && (
-                          <div
-                            onClick={() => this.onClickOnTab('choiceBossTab')}
-                          >
-                            <ListLink
-                              className={
-                                activatedTab === 'choiceBossTab'
-                                  ? ' active'
-                                  : ''
-                              }
-                              data-toggle="tab"
-                              role="tab"
-                              href="#choiceBossTab"
-                            >
-                              Choix du champion
-                            </ListLink>
-                            {activatedTab === 'choiceBossTab' && (
-                              <span className="text-warning">
-                                &nbsp;
-                                <i className="far fa-arrow-alt-circle-right" />
-                              </span>
-                            )}
-                          </div>
-                        )}
-                        {guild.monster && (
-                          <div
-                            onClick={() => this.onClickOnTab('fightBossTab')}
-                          >
-                            <ListLink
-                              className={
-                                activatedTab === 'fightBossTab' ? ' active' : ''
-                              }
-                              data-toggle="tab"
-                              role="tab"
-                              href="#fightBossTab"
-                            >
-                              Combat vs Champion
-                            </ListLink>
-                            {activatedTab === 'fightBossTab' && (
-                              <span className="text-warning">
-                                &nbsp;
-                                <i className="far fa-arrow-alt-circle-right" />
-                              </span>
-                            )}
-                          </div>
-                        )}
-                        <div onClick={() => this.onClickOnTab('itemsGuildTab')}>
-                          <ListLink
-                            className={
-                              activatedTab === 'itemsGuildTab' ? ' active' : ''
-                            }
-                            data-toggle="tab"
-                            role="tab"
-                            href="#itemsGuildTab"
-                          >
-                            Coffre de guilde
-                          </ListLink>
-                          {activatedTab === 'itemsGuildTab' && (
-                            <span className="text-warning">
-                              &nbsp;
-                              <i className="far fa-arrow-alt-circle-right" />
-                            </span>
-                          )}
-                        </div>
-                        <br />
-                        <br />
-                        <div
-                          onClick={() =>
-                            this.setState({
-                              displayLeaveButtons: true
-                            })
-                          }
-                        >
-                          <ListLink className="text-danger" href="#leave">
-                            Quitter la guilde
-                          </ListLink>
-                        </div>
-                        <div
-                          className={
-                            this.state.displayLeaveButtons ? '' : 'd-none'
-                          }
-                          style={{ fontSize: '12px' }}
-                        >
-                          <ListLink
-                            className="text-success"
-                            href="#leave-validate"
-                            onClick={() =>
-                              this.setState(
-                                {
-                                  memberToAddOrRemove: user.email
-                                },
-                                () => this.handleAddDeleteUser('delete')
-                              )
-                            }
-                          >
-                            Valider
-                          </ListLink>{' '}
-                          -{' '}
-                          <ListLink
-                            href="#leave-cancel"
-                            onClick={() =>
-                              this.setState({
-                                displayLeaveButtons: false
-                              })
-                            }
-                          >
-                            Annuler
-                          </ListLink>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </Card>
-              <Image
-                src={process.env.PUBLIC_URL + '/img/guild-master.png'}
-                alt="guild master"
-              />
-            </div>
-
-            <RightBox className="col-sm-9 my-auto">
+            <RightBox className="col-sm-12 my-auto">
               <div className="tab-content">
                 {/* General */}
                 <div
@@ -1361,7 +1175,9 @@ class Guild extends Component {
                                   {message.user.name} :{' '}
                                 </span>
                               </strong>
-                              {message.message}
+                              <span style={{ fontFamily: 'Ubuntu' }}>
+                                {message.message}
+                              </span>
                             </div>
                           ))}
                         </ListingMessages>
@@ -1507,14 +1323,21 @@ class Guild extends Component {
                       className={`tab-pane${
                         activatedTab === 'choiceBossTab' ? ' active' : ''
                       }`}
-                      id="choiceBossTab"
+                      id="tutorialGuildChoiceBoss"
                       role="tabpanel"
                     >
                       <Card className="card">
                         <div className="card-body">
                           <div className="col-sm-12">
                             <Title>
-                              Choisir le champion de guilde à combattre
+                              Choisir le champion de guilde à combattre{' '}
+                              <Link
+                                to={'/guild#fightBossTab'}
+                                className="btn btn-outline-warning"
+                                style={{ color: 'white' }}
+                              >
+                                Retour
+                              </Link>
                             </Title>
                           </div>
                           <MonsterList
@@ -1539,12 +1362,22 @@ class Guild extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div
-                        className="card-body"
-                        style={{ maxHeight: '90vh', overflowY: 'auto' }}
-                      >
+                      <div className="card-body" id="tutorialGuildBossChoice">
                         <div className="col-sm-12">
-                          <Title>Champion de guilde actuel</Title>
+                          <Title>
+                            Champion de guilde actuel{' '}
+                            {(user.role === 'ROLE_ADMIN' ||
+                              user.guildRole === 'master' ||
+                              user.guildRole === 'officer') && (
+                              <Link
+                                to={'/guild#choiceBossTab'}
+                                className="btn btn-outline-warning"
+                                style={{ color: 'white' }}
+                              >
+                                Choisir
+                              </Link>
+                            )}
+                          </Title>
                         </div>
                         <Image
                           src={
@@ -1575,6 +1408,12 @@ class Guild extends Component {
                           </span>
                           <LevelBox> - Niv {guild.monster.level}</LevelBox>
                         </div>
+                      </div>
+                      <div
+                        className="card-footer"
+                        style={{ maxHeight: '50vh', overflowY: 'auto' }}
+                        id="tutorialGuildBossAttacks"
+                      >
                         <div className="col-sm-12 mt-3">
                           <Title>
                             Combats de la journée{' '}
@@ -1678,7 +1517,7 @@ class Guild extends Component {
                 )}
               </div>
             </RightBox>
-          </div>
+          </SubContainer>
         </div>
       </Container>
     )

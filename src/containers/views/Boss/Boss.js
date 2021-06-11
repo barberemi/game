@@ -11,7 +11,6 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
-import { selectTabFromUrl } from '../../../utils/routingHelper'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 
 const Container = styled.div`
@@ -27,12 +26,11 @@ const Container = styled.div`
   overflow-y: scroll;
 `
 
-const ListLink = styled.a`
-  color: #fff;
+const SubContainer = styled.div`
+  margin-left: 150px;
 
-  &:hover {
-    color: #ffc312;
-    text-decoration: none;
+  @media (max-width: 768px) {
+    margin-left: inherit;
   }
 `
 
@@ -43,13 +41,13 @@ const LevelBox = styled.span`
 
 const LeftArrayBox = styled.div`
   left: 10px;
-  top: 65%;
+  top: 100px;
   z-index: 10;
 `
 
 const RightArrayBox = styled.div`
   right: 10px;
-  top: 65%;
+  top: 100px;
   z-index: 10;
 `
 
@@ -87,11 +85,6 @@ class Boss extends Component {
       boss: undefined,
       user: undefined,
       stepsEnabled: false,
-      activatedTab: selectTabFromUrl([
-        'generalTab',
-        'skillsTab',
-        'itemsLootTab'
-      ]),
       selectedBoss: undefined
     }
   }
@@ -123,10 +116,7 @@ class Boss extends Component {
               : _.first(responses[0].data.items)
           })
 
-          if (
-            this.state.activatedTab === 'generalTab' &&
-            responses[1].data.isNoob
-          ) {
+          if (responses[1].data.isNoob) {
             setTimeout(() => {
               this.setState({
                 stepsEnabled: true
@@ -143,21 +133,8 @@ class Boss extends Component {
       })
   }
 
-  onClickOnTab = (idTab) => {
-    this.setState({
-      activatedTab: idTab
-    })
-  }
-
   render() {
-    const {
-      error,
-      loading,
-      boss,
-      user,
-      activatedTab,
-      selectedBoss
-    } = this.state
+    const { error, loading, boss, user, selectedBoss } = this.state
 
     return (
       <Container className="container-fluid">
@@ -169,128 +146,64 @@ class Boss extends Component {
             </span>
           )}
           {boss && (
-            <div className="row h-100 mt-5">
+            <SubContainer className="row h-100 mt-3 mb-3">
               <Tutorial
                 stepsEnabled={this.state.stepsEnabled}
                 stepName="monsters"
                 onExit={() => this.setState({ stepsEnabled: false })}
               />
 
-              <div className="col-sm-3 my-auto">
-                <Card className="card" id="tutorialMenu">
-                  <div className="card-header">
-                    <Title>Menu</Title>
-                    <div>
-                      <div onClick={() => this.onClickOnTab('generalTab')}>
-                        <ListLink
-                          className={
-                            activatedTab === 'generalTab' ? 'active' : ''
-                          }
-                          data-toggle="tab"
-                          role="tab"
-                          href="#generalTab"
-                        >
-                          Général
-                        </ListLink>
-                        {activatedTab === 'generalTab' && (
-                          <span className="text-warning">
-                            &nbsp;
-                            <i className="far fa-arrow-alt-circle-right" />
-                          </span>
-                        )}
-                      </div>
-                      <div onClick={() => this.onClickOnTab('skillsTab')}>
-                        <ListLink
-                          className={
-                            activatedTab === 'skillsTab' ? ' active' : ''
-                          }
-                          data-toggle="tab"
-                          role="tab"
-                          href="#skillsTab"
-                        >
-                          Compétences
-                        </ListLink>
-                        {activatedTab === 'skillsTab' && (
-                          <span className="text-warning">
-                            &nbsp;
-                            <i className="far fa-arrow-alt-circle-right" />
-                          </span>
-                        )}
-                      </div>
-                      <div onClick={() => this.onClickOnTab('itemsLootTab')}>
-                        <ListLink
-                          className={
-                            activatedTab === 'itemsLootTab' ? ' active' : ''
-                          }
-                          data-toggle="tab"
-                          role="tab"
-                          href="#itemsLootTab"
-                        >
-                          Objets lachés
-                        </ListLink>
-                        {activatedTab === 'itemsLootTab' && (
-                          <span className="text-warning">
-                            &nbsp;
-                            <i className="far fa-arrow-alt-circle-right" />
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-                {selectedBoss.id !== _.first(boss).id && (
-                  <LeftArrayBox className="position-absolute">
-                    <LinkArrow
-                      arrow="left"
-                      to={
-                        '/boss/' +
-                        boss[_.findIndex(boss, { id: selectedBoss.id }) - 1].id
-                      }
-                    >
-                      <i className="fas fa-chevron-left fa-3x" />
-                    </LinkArrow>
-                  </LeftArrayBox>
-                )}
-                <Image
-                  src={
-                    process.env.PUBLIC_URL + '/img/boss/' + selectedBoss.image
-                  }
-                  alt={selectedBoss.academy.name}
-                  id="tutorialMonsterImage"
-                />
-                {selectedBoss.id !== _.last(boss).id && (
-                  <RightArrayBox
-                    className="position-absolute"
-                    id="tutorialNextMonster"
-                  >
-                    <LinkArrow
-                      arrow="right"
-                      to={
-                        '/boss/' +
-                        boss[_.findIndex(boss, { id: selectedBoss.id }) + 1].id
-                      }
-                    >
-                      <i className="fas fa-chevron-right fa-3x" />
-                    </LinkArrow>
-                  </RightArrayBox>
-                )}
-              </div>
-
-              <RightBox className="col-sm-9 my-auto">
+              <RightBox className="col-sm-12 my-auto">
                 <div className="tab-content">
                   {/* General */}
-                  <div
-                    className={`tab-pane${
-                      activatedTab === 'generalTab' ? ' active' : ''
-                    }`}
-                    id="generalTab"
-                    role="tabpanel"
-                  >
+                  <div id="generalTab" role="tabpanel">
                     <Card className="card">
                       <div
                         className="card-header"
                         id="tutorialDescriptionMonster"
                       >
+                        {selectedBoss.id !== _.first(boss).id && (
+                          <LeftArrayBox className="position-absolute">
+                            <LinkArrow
+                              arrow="left"
+                              to={
+                                '/boss/' +
+                                boss[
+                                  _.findIndex(boss, { id: selectedBoss.id }) - 1
+                                ].id
+                              }
+                            >
+                              <i className="fas fa-chevron-left fa-3x" />
+                            </LinkArrow>
+                          </LeftArrayBox>
+                        )}
+                        <Image
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/img/boss/' +
+                            selectedBoss.image
+                          }
+                          alt={selectedBoss.academy.name}
+                        />
+                        {selectedBoss.id !== _.last(boss).id && (
+                          <RightArrayBox
+                            className="position-absolute"
+                            id="tutorialNextMonster"
+                          >
+                            <LinkArrow
+                              arrow="right"
+                              to={
+                                '/boss/' +
+                                boss[
+                                  _.findIndex(boss, { id: selectedBoss.id }) + 1
+                                ].id
+                              }
+                            >
+                              <i className="fas fa-chevron-right fa-3x" />
+                            </LinkArrow>
+                          </RightArrayBox>
+                        )}
+                        <br />
                         {(selectedBoss.isBoss || selectedBoss.isGuildBoss) && (
                           <>
                             <MonsterTypeBadge
@@ -329,18 +242,8 @@ class Boss extends Component {
                           />
                         </div>
                       </div>
-                    </Card>
-                  </div>
 
-                  {/* Skills */}
-                  <div
-                    className={`tab-pane${
-                      activatedTab === 'skillsTab' ? ' active' : ''
-                    }`}
-                    id="skillsTab"
-                    role="tabpanel"
-                  >
-                    <Card className="card">
+                      {/* Skills */}
                       <div className="card-body" id="tutorialSkills">
                         <div className="col-sm-12">
                           <Title>Compétences du boss</Title>
@@ -352,18 +255,8 @@ class Boss extends Component {
                           buttonOnRight={true}
                         />
                       </div>
-                    </Card>
-                  </div>
 
-                  {/* Items */}
-                  <div
-                    className={`tab-pane${
-                      activatedTab === 'itemsLootTab' ? ' active' : ''
-                    }`}
-                    id="itemsLootTab"
-                    role="tabpanel"
-                  >
-                    <Card className="card">
+                      {/* Items */}
                       <div className="card-body" id="tutorialItems">
                         <div className="col-sm-12">
                           <Title>Liste des objets lachés</Title>
@@ -378,7 +271,7 @@ class Boss extends Component {
                   </div>
                 </div>
               </RightBox>
-            </div>
+            </SubContainer>
           )}
         </div>
       </Container>

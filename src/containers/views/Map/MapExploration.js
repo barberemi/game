@@ -25,6 +25,11 @@ const RowOverflow = styled.div`
   overflow-x: auto;
   white-space: nowrap;
   flex-wrap: nowrap;
+  margin-left: 150px;
+
+  @media (max-width: 768px) {
+    margin-left: inherit;
+  }
 `
 
 const TextDescription = styled.div`
@@ -98,7 +103,7 @@ class MapExploration extends Component {
             )}
             {maps && user && (
               <>
-                <RowOverflow className="row">
+                <RowOverflow className="row h-100">
                   {_.map(this.state.maps, (map) => (
                     <CardMap
                       key={map.name}
@@ -110,12 +115,12 @@ class MapExploration extends Component {
                     />
                   ))}
                 </RowOverflow>
-                <TextDescription className="col-sm-10">
-                  Dans quelle expédition partez-vous ?
-                </TextDescription>
               </>
             )}
           </div>
+          <TextDescription className="col-sm-12">
+            Sur quelle expédition partez-vous ?
+          </TextDescription>
         </Container>
       </>
     )

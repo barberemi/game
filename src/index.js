@@ -11,7 +11,6 @@ import ReactTooltip from 'react-tooltip'
 import Fight from './containers/views/Fight/Fight'
 import MapExploration from './containers/views/Map/MapExploration'
 import MapHome from './containers/views/Map/MapHome'
-import MapVillage from './containers/views/Map/MapVillage'
 import Exploration from './containers/views/Exploration/Exploration'
 import GuildExploration from './containers/views/Exploration/GuildExploration'
 import Choice from './containers/views/Exploration/Choice'
@@ -33,11 +32,11 @@ import { ToastContainer } from 'react-toastify'
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <BrowserRouter forceRefresh={true}>
+  <BrowserRouter>
+    {/*<BrowserRouter forceRefresh={true}>*/}
     <Switch>
       <AppRoute exact path="/maps" component={MapExploration} layout={Layout} />
       <AppRoute exact path="/home" component={MapHome} layout={Layout} />
-      <AppRoute exact path="/village" component={MapVillage} layout={Layout} />
       <AppRoute
         exact
         path="/exploration"

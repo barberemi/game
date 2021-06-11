@@ -13,12 +13,18 @@ class Tutorial extends Component {
 
     this.state = {
       steps: {
-        character: [
+        'character#generalTab': [
           {
             element: '#tutorialExperience',
             title: 'Personnage',
             intro:
-              'Nom, niveau et guilde du personnage, ainsi que la barre de progression sur le niveau en cours.'
+              'Nom, niveau et expérience sur le niveau en cours, guilde du personnage, ainsi que la possibilité d’activer ou non le tutoriel.'
+          },
+          {
+            element: '#tutorialCharacteristicsGenerales',
+            title: 'Caractéristiques',
+            intro:
+              'La défense sert le soir contre les attaques de monstres contre la guilde, tandis que les points d’actions restantes vous montrent su vous pouvez encore effectuer des actions journalières.'
           },
           {
             element: '#tutorialCharacteristics',
@@ -31,12 +37,9 @@ class Tutorial extends Component {
             title: 'Equipements',
             intro:
               'Armurerie de votre personnage.<br/>Tous les objets équipés augmentent vos caractéristiques.'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Compétences" afin de voir la suite.'
-          },
+          }
+        ],
+        'character#skillsTab': [
           {
             element: '#tutorialSkillsPointsRemaining',
             title: 'Points de compétences',
@@ -47,45 +50,38 @@ class Tutorial extends Component {
             title: 'Arbre de compétences',
             intro:
               'Compétences de votre personnage.<br/>Vous pouvez cliquer sur chaque compétence pour voir les informations de celle-ci, ainsi que les activer et les désactiver pour vos combats.'
-          },
+          }
+        ],
+        'character#itemsTab': [
           {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Inventaire" afin de voir la suite.'
+            element: '#tutorialNbRemainingItems',
+            title: 'Places disponibles',
+            intro: 'Nombre de place de stockage qu’il vous reste.'
           },
           {
             element: '#tutorialItems',
             title: 'Inventaire',
             intro:
               'Tous les objets que vous possèdez.<br/>Vous pouvez survoler chaque objet pour voir les caractéristiques de l’objet, ou cliquer dessus afin de l’équiper/déséquiper, ou encore pour l’envoyer dans l’inventaire de guilde.'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Métier" afin de voir la suite.'
-          },
+          }
+        ],
+        'character#jobsTab': [
           {
             element: '#tutorialJobs',
             title: 'Métier',
             intro:
-              'Vous pouvez choisir ici un métier pour votre personnage.<br/>Attention, le choix d’un métier est payant (autre que celui par défaut).'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Constructions" afin de voir la suite.'
-          },
+              'Vous pouvez choisir ici un métier pour votre personnage.<br/>Attention, choisir un métier vous le fera garder pour une durée de 1 mois.'
+          }
+        ],
+        'character#constructionsTab': [
           {
             element: '#tutorialConstructions',
             title: 'Constructions',
             intro:
               'Toutes les constructions que vous pouvez effectuer pour votre personnage.<br/>Elles permettent d’améliorer la défense de votre personnage et d’aider votre guilde.'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Amis" afin de voir la suite.'
-          },
+          }
+        ],
+        'character#friendsTab': [
           {
             element: '#tutorialAddFriends',
             title: 'Ajouter un ami',
@@ -99,10 +95,10 @@ class Tutorial extends Component {
               'Permet de voir tous vos amis, avec leur niveau, leur rang de guilde, ainsi que la possibilité de voir leur fiche personnage et de discuter avec eux.'
           }
         ],
-        homeVillage: [
+        homeGuild: [
           {
-            title: 'Village',
-            intro: 'Zone permettant d‘accéder à la guilde, ou à la forge.'
+            title: 'Guilde',
+            intro: 'Zone permettant d‘accéder à la guilde.'
           }
         ],
         homeBoss: [
@@ -127,18 +123,7 @@ class Tutorial extends Component {
           {
             element: '#tutorialDescriptionMonster',
             title: 'Monstre',
-            intro: 'Type, nom et niveau du monstre.'
-          },
-          {
-            element: '#tutorialCharacteristicsMonster',
-            title: 'Caractéristiques',
-            intro:
-              'Toutes les caractéristiques du monstre, ainsi que l‘expérience donnée lors d‘une victoire contre lui.'
-          },
-          {
-            element: '#tutorialMonsterImage',
-            title: 'Image du monstre',
-            intro: 'Permet de visualiser l‘aspect du monstre.'
+            intro: 'Nom, type, aspect et niveau du monstre.'
           },
           {
             element: '#tutorialNextMonster',
@@ -147,9 +132,10 @@ class Tutorial extends Component {
               'Permet en cliquant dessus de visualiser les informations du monstre suivant.'
           },
           {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Compétences" afin de voir la suite.'
+            element: '#tutorialCharacteristicsMonster',
+            title: 'Caractéristiques',
+            intro:
+              'Toutes les caractéristiques du monstre, ainsi que l‘expérience donnée lors d‘une victoire contre lui.'
           },
           {
             element: '#tutorialSkills',
@@ -158,18 +144,13 @@ class Tutorial extends Component {
               'Compétences du monstre.<br/>Vous pouvez cliquer sur chaque compétence pour voir les informations de celle-ci.'
           },
           {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Objets lachés" afin de voir la suite.'
-          },
-          {
             element: '#tutorialItems',
             title: 'Inventaire',
             intro:
               'Tous les objets que vous pouvez obtenir en battant le monstre.<br/>Vous pouvez survoler chaque objet pour voir les caractéristiques de l’objet.'
           }
         ],
-        guild: [
+        'guild#generalTab': [
           {
             element: '#tutorialGuildName',
             title: 'Guilde',
@@ -180,56 +161,66 @@ class Tutorial extends Component {
             element: '#tutorialGuildAnnouncement',
             title: 'Annonce',
             intro:
-              'Permet de visualiser l‘annonce de la guilde, faite par le chef de la guilde.'
+              'Permet de visualiser l‘annonce de la guilde, faite par le chef.'
           },
           {
             element: '#tutorialGuildEstimation',
             title: 'Estimation',
             intro:
-              'Permet de visualiser rapidement la défense de votre guilde, et l’attaque des monstres de la soirée.'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Discussion" afin de voir la suite.'
-          },
+              'Permet de visualiser rapidement la défense de votre guilde, et l’attaque des monstres qui attaqueront dans la soirée.'
+          }
+        ],
+        'guild#chatTab': [
           {
             element: '#tutorialGuildChat',
             title: 'Discussion de guilde',
             intro: 'Permet de chatter avec tous les membres de la guilde.'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Constructions" afin de voir la suite.'
-          },
+          }
+        ],
+        'guild#constructionsTab': [
           {
             element: '#tutorialConstructions',
             title: 'Constructions',
             intro:
               'Toutes les constructions que vous pouvez effectuer pour la guilde pour l’améliorer.'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Membres" afin de voir la suite.'
-          },
+          }
+        ],
+        'guild#membersTab': [
           {
             element: '#tutorialGuildMembers',
             title: 'Membres de la guilde',
             intro:
               'Permet de visualiser tous les membres de la guilde, avec leur niveau, leur rang, mais aussi de pouvoir naviguer sur leur profil de personnage.'
-          },
-          {
-            element: '#tutorialMenu',
-            title: 'Navigation',
-            intro: 'Cliquer sur "Coffre de guilde" afin de voir la suite.'
-          },
+          }
+        ],
+        'guild#itemsGuildTab': [
           {
             element: '#tutorialGuildItems',
             title: 'Coffre de guilde',
             intro:
               'Permet de visualiser tous les objets que votre guilde possède.<br/>Vous pouvez survoler les survoler afin de voir leurs caractéristiques, et cliquer dessus afin de les envoyer dans votre coffre personnel.'
+          }
+        ],
+        'guild#fightBossTab': [
+          {
+            element: '#tutorialGuildBossChoice',
+            title: 'Champion de guilde',
+            intro:
+              'Permet de visualiser le champion contre lequel se bat votre guilde.'
+          },
+          {
+            element: '#tutorialGuildBossAttacks',
+            title: 'Combats journaliers',
+            intro:
+              'Permet de visualiser les attaques de la journée des membres de la guilde contre le champion.'
+          }
+        ],
+        'guild#choiceBossTab': [
+          {
+            element: '#tutorialGuildChoiceBoss',
+            title: 'Choix du champion',
+            intro:
+              'Permet de choisir le champion contre lequel votre guilde va pouvoir se battre tous les jours, parmis ceux déjà battus.'
           }
         ]
       }
