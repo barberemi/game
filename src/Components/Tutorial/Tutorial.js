@@ -222,6 +222,14 @@ class Tutorial extends Component {
             intro:
               'Permet de choisir le champion contre lequel votre guilde va pouvoir se battre tous les jours, parmis ceux déjà battus.'
           }
+        ],
+        crafting: [
+          {
+            element: '#tutorialCraftingListing',
+            title: 'Forge',
+            intro:
+              'Choisissez un objet à forger, pou voir les composants nécessaires, et le forger si possible.'
+          }
         ]
       }
     }

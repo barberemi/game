@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
+import Tutorial from '../../../Components/Tutorial/Tutorial'
 
 const Container = styled.div`
   background-image: url('https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg');
@@ -48,7 +49,9 @@ class Crafting extends Component {
       loading: true,
       character: undefined,
       items: undefined,
-      selectedItem: undefined
+      selectedItem: undefined,
+      stepsEnabled: false,
+      stepName: 'crafting'
     }
   }
 
@@ -79,6 +82,13 @@ class Crafting extends Component {
             return !_.isEmpty(item.itemsToCraft)
           })
         })
+        if (responses[0].data.isNoob) {
+          setTimeout(() => {
+            this.setState({
+              stepsEnabled: true
+            })
+          }, 500)
+        }
       })
       .catch((errors) => {
         this.setState({
@@ -181,6 +191,12 @@ class Crafting extends Component {
           )}
           {character && (
             <SubContainer className="row h-100 mt-5 mb-5">
+              <Tutorial
+                stepsEnabled={this.state.stepsEnabled}
+                stepName={this.state.stepName}
+                onExit={() => this.setState({ stepsEnabled: false })}
+              />
+
               <RightBox className="col-sm-12 my-auto">
                 <div className="tab-content">
                   <div id="itemsCraftingTab" role="tabpanel">
@@ -191,7 +207,7 @@ class Crafting extends Component {
                           <div>Séléctionner l’objet à confectionner.</div>
                         </div>
                         {items && (
-                          <>
+                          <div id="tutorialCraftingListing">
                             <ItemList
                               items={items}
                               displayActions={false}
@@ -213,7 +229,7 @@ class Crafting extends Component {
                                 </div>
                               </div>
                             )}
-                          </>
+                          </div>
                         )}
                       </div>
                     </Card>

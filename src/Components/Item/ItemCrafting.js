@@ -84,7 +84,7 @@ class ItemCrafting extends Component {
 
     return (
       <>
-        <div className="col-sm-12 d-flex offset-sm-4 pb-3 pt-3">
+        <div className="col-sm-12 d-flex offset-sm-5 pb-3 pt-3">
           <div className="float-left d-flex flex-column align-items-center">
             <ItemBox item={item} displayText={true} displayActions={false} />
           </div>
