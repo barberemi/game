@@ -27,7 +27,7 @@ const Social = styled.div`
   top: -45px;
 `
 
-const SocialIcon = styled.span`
+const SocialIcon = styled.a`
   font-size: 60px;
   margin-left: 10px;
   color: #ffc312;
@@ -117,10 +117,16 @@ class Login extends Component {
             <div className="card-header">
               <Title>Se connecter</Title>
               <Social className="d-flex justify-content-end">
-                <SocialIcon>
+                <SocialIcon
+                  href="https://www.facebook.com/remi.barbe1/"
+                  target="_blank"
+                >
                   <i className="fab fa-facebook-square" />
                 </SocialIcon>
-                <SocialIcon>
+                <SocialIcon
+                  href="https://twitter.com/Rem_Barbe"
+                  target="_blank"
+                >
                   <i className="fab fa-twitter-square" />
                 </SocialIcon>
               </Social>
