@@ -78,6 +78,7 @@ const Nav = styled.nav`
   max-width: 200px;
 
   @media (max-width: 768px) {
+    background-color: rgba(0, 0, 0);
     min-width: 150px;
     max-width: 150px;
   }
