@@ -32,8 +32,8 @@ import { ToastContainer } from 'react-toastify'
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <BrowserRouter>
-    {/*<BrowserRouter forceRefresh={true}>*/}
+  <BrowserRouter forceRefresh={true}>
+    {/* Needed to refresh when click on Monster arrow next/previous */}
     <Switch>
       <AppRoute exact path="/maps" component={MapExploration} layout={Layout} />
       <AppRoute exact path="/home" component={MapHome} layout={Layout} />

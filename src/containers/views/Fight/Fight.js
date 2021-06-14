@@ -22,6 +22,27 @@ import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import { Redirect } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
+import styled from '@emotion/styled'
+import { css } from '@emotion/core'
+
+const Container = styled.div`
+  ${(props) =>
+    props.isGuildBoss &&
+    css`
+      background-image: url(${process.env.PUBLIC_URL +
+      '/img/backgrounds/guild-exploration-min.jpg'});
+    `};
+
+  ${(props) =>
+    !props.isGuildBoss &&
+    css`
+      background-image: url(${process.env.PUBLIC_URL +
+      '/img/backgrounds/swamp-min.jpg'});
+    `};
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  height: 100vh !important;
+`
 
 class Fight extends Component {
   constructor(props) {
@@ -620,81 +641,85 @@ class Fight extends Component {
     }
 
     return (
-      <div className="container h-100">
-        <div className="row h-100 align-middle">
-          {loading && <Loader />}
-          {/* BATTLE SCREEN CONTAINER */}
-          {error && (
-            <span className="text-danger">
-              <b>Erreur :</b> {error.error}
-            </span>
-          )}
-          {players && enemy && (
-            <div className="col-sm-12">
-              <div id="turn-text-number">
-                <i className="fas fa-dice" /> Tour {this.state.round}
-              </div>
-              <div className="all-players-box col-sm-12">
-                {_.map(this.state.players, (player) => (
-                  <PlayerBox
-                    key={player.name}
-                    player={player}
-                    onClick={
-                      player.isSelectable
-                        ? this.handleClickOnPlayerToAction
-                        : () => {
-                            return null
-                          }
-                    }
-                  />
-                ))}
-
-                <EnemyBox
-                  enemy={this.state.enemy}
-                  expectedAction={this.state.enemy.expectedAction}
-                />
-              </div>
-
-              {/* TEXT BOX SECTION */}
-              <div id="text-box">
-                <div id="text-box-content">
-                  {this.state.textMessageOne !== '' &&
-                    this.state.gameOver === false && (
-                      <TextBox
-                        messageOne={this.state.textMessageOne}
-                        messageTwo={this.state.textMessageTwo}
+      <>
+        {error && (
+          <span className="text-danger">
+            <b>Erreur :</b> {error.error}
+          </span>
+        )}
+        {players && enemy && (
+          <Container isGuildBoss={enemy.isGuildBoss}>
+            <div className="container h-100">
+              <div className="row h-100 align-middle">
+                {loading && <Loader />}
+                {/* BATTLE SCREEN CONTAINER */}
+                <div className="col-sm-12">
+                  <div id="turn-text-number">
+                    <i className="fas fa-dice" /> Tour {this.state.round}
+                  </div>
+                  <div className="all-players-box col-sm-12">
+                    {_.map(this.state.players, (player) => (
+                      <PlayerBox
+                        key={player.name}
+                        player={player}
+                        onClick={
+                          player.isSelectable
+                            ? this.handleClickOnPlayerToAction
+                            : () => {
+                                return null
+                              }
+                        }
                       />
-                    )}
+                    ))}
 
-                  {this.state.textMessageOne === '' &&
-                    this.state.gameOver === false &&
-                    Object.keys(_.find(this.state.players, 'me').skills).map(
-                      (key) => {
-                        return (
-                          <>
-                            <Actions
-                              key={key}
-                              frontPlayer={
-                                _.find(this.state.players, 'me') ===
-                                _.last(this.state.players)
-                              }
-                              action={
-                                _.find(this.state.players, 'me').skills[key]
-                              }
-                              onClick={this.handleClickOnActionBar}
-                            />
-                          </>
-                        )
-                      }
-                    )}
+                    <EnemyBox
+                      enemy={this.state.enemy}
+                      expectedAction={this.state.enemy.expectedAction}
+                    />
+                  </div>
+
+                  {/* TEXT BOX SECTION */}
+                  <div id="text-box">
+                    <div id="text-box-content">
+                      {this.state.textMessageOne !== '' &&
+                        this.state.gameOver === false && (
+                          <TextBox
+                            messageOne={this.state.textMessageOne}
+                            messageTwo={this.state.textMessageTwo}
+                          />
+                        )}
+
+                      {this.state.textMessageOne === '' &&
+                        this.state.gameOver === false &&
+                        Object.keys(
+                          _.find(this.state.players, 'me').skills
+                        ).map((key) => {
+                          return (
+                            <>
+                              <Actions
+                                key={key}
+                                frontPlayer={
+                                  _.find(this.state.players, 'me') ===
+                                  _.last(this.state.players)
+                                }
+                                action={
+                                  _.find(this.state.players, 'me').skills[key]
+                                }
+                                onClick={this.handleClickOnActionBar}
+                              />
+                            </>
+                          )
+                        })}
+                    </div>
+                  </div>
+                  {/* TEXT BOX SECTION */}
                 </div>
+                {/* END BATTLE SCREEN CONTAINER */}
               </div>
-              {/* TEXT BOX SECTION */}
             </div>
-          )}
-          {/* END BATTLE SCREEN CONTAINER */}
-        </div>
-      </div>
+          </Container>
+        )}
+      </>
     )
   }
 }

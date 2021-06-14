@@ -14,7 +14,8 @@ import MonsterTypeBadge from '../../../Components/Badge/MonsterTypeBadge'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 
 const Container = styled.div`
-  background-image: url('https://cdnb.artstation.com/p/assets/images/images/017/639/075/large/yarki-studio-dragon-sisters-2.jpg');
+  background-image: url(${process.env.PUBLIC_URL +
+  '/img/backgrounds/boss-min.jpg'});
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -64,7 +65,7 @@ const LinkArrow = styled(Link)`
 `
 
 const Card = styled.div`
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
 const Image = styled.img`

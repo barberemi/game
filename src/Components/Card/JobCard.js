@@ -55,7 +55,7 @@ const ImageAcademy = styled.img`
 `
 
 const Meta = styled.div`
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   text-align: center;
   position: absolute;
   left: 0;

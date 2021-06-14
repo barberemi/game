@@ -12,7 +12,8 @@ import Loader from '../../../Components/Loader/Loader'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 
 const Container = styled.div`
-  background-image: url('https://cdnb.artstation.com/p/assets/images/images/006/070/561/large/nikita-bulatov-base-p-02.jpg');
+  background-image: url(${process.env.PUBLIC_URL +
+  '/img/backgrounds/crafting-min.jpg'});
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -37,7 +38,7 @@ const RightBox = styled.div`
 `
 
 const Card = styled.div`
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
 class Crafting extends Component {

@@ -10,7 +10,8 @@ import Loader from '../../../Components/Loader/Loader'
 import StyledCards from '../../../Components/Card/StyledCards'
 
 const Container = styled.div`
-  background-image: url('https://images.alphacoders.com/883/883163.jpg');
+  background-image: url(${process.env.PUBLIC_URL +
+  '/img/backgrounds/home-bg.jpg'});
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -36,7 +37,7 @@ const LeftBox = styled.div`
 const RightBox = styled.div``
 
 const Card = styled.div`
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
 const Skill = styled.img`
@@ -155,7 +156,7 @@ class Creation extends Component {
     } = this.state
 
     if ((user && user.academy) || created) {
-      return <Redirect to="/character" />
+      return <Redirect to="/home" />
     }
 
     return (

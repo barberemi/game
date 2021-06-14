@@ -22,7 +22,8 @@ import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
 import moment from 'moment'
 
 const Container = styled.div`
-  background-image: url('https://images2.alphacoders.com/717/717870.jpg');
+  background-image: url('${process.env.PUBLIC_URL +
+  '/img/backgrounds/character-min.jpg'}');
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -52,7 +53,7 @@ const RightBox = styled.div`
 `
 
 const Card = styled.div`
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
 const Image = styled.img`

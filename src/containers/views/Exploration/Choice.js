@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import _ from 'lodash'
 import CardChoice from '../../../Components/Exploration/CardChoice'
 import PropTypes from 'prop-types'
@@ -10,7 +11,19 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 const Container = styled.div`
-  background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
+  ${() =>
+    _.includes(window.location.href, 'guild_exploration') &&
+    css`
+      background-image: url(${process.env.PUBLIC_URL +
+      '/img/backgrounds/guild-exploration-min.jpg'});
+    `};
+
+  ${() =>
+    !_.includes(window.location.href, 'guild_exploration') &&
+    css`
+      background-image: url(${process.env.PUBLIC_URL +
+      '/img/backgrounds/swamp-min.jpg'});
+    `};
   background-size: 100% 100%;
   height: 100%;
   top: 0;

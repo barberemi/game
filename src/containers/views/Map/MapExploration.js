@@ -9,16 +9,17 @@ import { Redirect } from 'react-router-dom'
 import ExperienceNavBar from '../../../Components/NavBar/ExperienceNavBar'
 
 const Container = styled.div`
-  background-image: url('https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1568080216644-6QDT21SZICO3TCYGO2GE/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Gallery54.jpg?format=2500w');
-  background-size: cover;
-  background-attachment: fixed;
+  background-image: url(${process.env.PUBLIC_URL +
+  '/img/backgrounds/maps-min.jpg'});
+  background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+  height: 100%;
   text-align: center;
   color: white;
-  min-height: 100%;
-  height: 100%;
+  min-height: 250px;
+  overflow-y: scroll;
 `
 
 const RowOverflow = styled.div`

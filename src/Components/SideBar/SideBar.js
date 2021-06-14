@@ -218,6 +218,13 @@ class SideBar extends Component {
                 </LinkMenu>
               </div>
 
+              {/* Maps */}
+              <div>
+                <LinkMenu to={'/maps'} link="maps">
+                  <i className="fas fa-map-signs" /> Explorations
+                </LinkMenu>
+              </div>
+
               {/* Character */}
               <div>
                 <CollapsedMenu

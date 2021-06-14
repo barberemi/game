@@ -11,14 +11,10 @@ import PropTypes from 'prop-types'
 import HpNavBar from '../../../Components/NavBar/HpNavBar'
 
 const Container = styled.div`
-  background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
+  background-image: url(${process.env.PUBLIC_URL +
+  '/img/backgrounds/reward-min.jpg'});
   background-size: 100% 100%;
   height: 100%;
-  -webkit-filter: blur(3px);
-  -moz-filter: blur(3px);
-  -o-filter: blur(3px);
-  -ms-filter: blur(3px);
-  filter: blur(3px);
   top: 0;
   left: 0;
 `
@@ -58,7 +54,7 @@ const SubTitle = styled.span`
 `
 
 const Card = styled.div`
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
 const Character = styled.div`
@@ -90,7 +86,7 @@ const LevelWin = styled.div`
   @keyframes pulse {
     0% {
       transform: scale(0.95);
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.8);
     }
 
     70% {

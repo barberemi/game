@@ -12,8 +12,8 @@ import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
 import ItemBox from '../../../Components/Item/ItemBox'
 
 const Container = styled.div`
-  background-image: url('https://cdna.artstation.com/p/assets/images/images/004/345/358/large/nikita-bulatov-58.jpg?1482749515');
-  background-attachment: fixed;
+  background-image: url(${process.env.PUBLIC_URL +
+  '/img/backgrounds/swamp-min.jpg'});
   background-size: 100% 100%;
   height: 100%;
   top: 0;
