@@ -146,14 +146,12 @@ class Choice extends Component {
                   : 'Vous êtes sur le point de vous battre contre le <span class="text-warning"><i>champion</i></span> de la carte, êtes-vous prêt ?'
               cards = [
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
+                  btn_color: 'btn-danger',
                   text_btn: 'Euh ben go...',
                   action: 'fight-boss'
                 },
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
+                  btn_color: 'btn-success',
                   text_btn: 'Foncer!',
                   action: 'fight-boss'
                 }
@@ -164,14 +162,12 @@ class Choice extends Component {
                 'Vous êtes sur le point de vous battre pour récupérer le <span class="text-warning"><i>trésor</i></span> de la carte, êtes-vous prêt ?'
               cards = [
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
+                  btn_color: 'btn-danger',
                   text_btn: 'Euh ben go...',
                   action: 'fight-boss'
                 },
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
+                  btn_color: 'btn-success',
                   text_btn: 'Foncer!',
                   action: 'fight-boss'
                 }
@@ -182,14 +178,12 @@ class Choice extends Component {
                 "Oh mais dites-donc, vous êtes tombé nez à nez avec le forgeron!<br/> Il souhaite vous aider à <span class='text-warning'><i>forger un objet</i></span>, moyennant finance, bien évidemment."
               cards = [
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
+                  btn_color: 'btn-success',
                   text_btn: 'Acheter',
                   action: 'deal'
                 },
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
+                  btn_color: 'btn-secondary',
                   text_btn: 'Partir',
                   action: 'leave'
                 }
@@ -200,14 +194,12 @@ class Choice extends Component {
                 'Vous tombez face à une personne se disant <span class="text-warning"><i>soigneur</i></span>.</br>Elle vous propose de vous aider (<span class="text-warning"><i>soin de 30%</i></span>). Que voulez-vous faire ?'
               cards = [
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
+                  btn_color: 'btn-success',
                   text_btn: 'Merci',
                   action: 'heal'
                 },
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
+                  btn_color: 'btn-secondary',
                   text_btn: 'Non merci',
                   action: 'leave'
                 }
@@ -218,14 +210,12 @@ class Choice extends Component {
                 'Le bâtiment semble infesté de <span class="text-warning"><i>monstres</i></span>. Que voulez-vous faire ?'
               cards = [
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1561633356762-4SM41FGVPRSU22E0YDD3/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/1920x1080_6.jpg',
+                  btn_color: 'btn-danger',
                   text_btn: 'Euh ben go...',
                   action: 'fight'
                 },
                 {
-                  img_url:
-                    'https://images.squarespace-cdn.com/content/v1/5aaf208470e802c436dc1280/1563177869793-AAMHWHMYW2UPHBIH9ACV/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/PiratesOutlaws-Arena6.jpg',
+                  btn_color: 'btn-success',
                   text_btn: 'Foncer!',
                   action: 'fight'
                 }
@@ -261,11 +251,11 @@ class Choice extends Component {
       case 'treasure':
         return process.env.PUBLIC_URL + '/img/chest-close.svg'
       case 'dealer':
-        return process.env.PUBLIC_URL + '/img/forgeron.png'
+        return process.env.PUBLIC_URL + '/img/hammer.svg'
       case 'healer':
-        return process.env.PUBLIC_URL + '/img/forgeron.png'
+        return process.env.PUBLIC_URL + '/img/heal.svg'
       default:
-        return process.env.PUBLIC_URL + '/img/rubillax.png'
+        return process.env.PUBLIC_URL + '/img/versus.svg'
     }
   }
 
@@ -440,7 +430,14 @@ class Choice extends Component {
               <EventCharacterBox className="position-absolute">
                 <img
                   src={this.getHandleImage()}
-                  width={this.state.type === 'treasure' ? '150px' : '200px'}
+                  width={
+                    this.state.type === 'treasure' ||
+                    this.state.type === 'arene' ||
+                    this.state.type === 'dealer' ||
+                    this.state.type === 'healer'
+                      ? '150px'
+                      : '200px'
+                  }
                   alt="personnage de exploration"
                   className="animated fadeInRight slow"
                 />

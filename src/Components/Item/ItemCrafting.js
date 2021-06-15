@@ -4,7 +4,6 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import ItemBox from './ItemBox'
-import hammerSvg from './svg/hammer.svg'
 
 const SubTitle = styled.div`
   font-size: 20px;
@@ -90,7 +89,7 @@ class ItemCrafting extends Component {
           </div>
           <div className="float-left d-flex pt-2">
             <ForgeImage
-              src={hammerSvg}
+              src={process.env.PUBLIC_URL + '/img/hammer.svg'}
               alt="forger boutton"
               canBeCrafted={canBeCrafted}
               onClick={() => (canBeCrafted ? this.props.onClick(item) : null)}

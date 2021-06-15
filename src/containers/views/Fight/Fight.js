@@ -344,7 +344,10 @@ class Fight extends Component {
             enemy: {
               ...this.state.enemy,
               isHit: { amount: amount, type: 'heal' },
-              hp: this.state.enemy.hp + amount
+              hp:
+                this.state.enemy.hp + amount > this.state.enemy.maxHp
+                  ? this.state.enemy.maxHp
+                  : this.state.enemy.hp + amount
             }
           },
           () => {
