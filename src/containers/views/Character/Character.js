@@ -639,11 +639,7 @@ class Character extends Component {
                         <Title>
                           {user.name}{' '}
                           <span style={{ color: user.academy.color }}>
-                            (
-                            {user.isDark
-                              ? user.academy.labelDark
-                              : user.academy.labelLight}
-                            )
+                            ({user.academy.label})
                           </span>
                           <br />
                           <ProgressBar

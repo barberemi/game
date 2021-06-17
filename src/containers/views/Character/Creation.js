@@ -206,9 +206,7 @@ class Creation extends Component {
                   <div className="card-header">
                     <Title>
                       <span style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
-                        {isDark
-                          ? academySelected.labelDark
-                          : academySelected.labelLight}
+                        {academySelected.label}
                       </span>
                     </Title>
                     {_.map(_.split(academySelected.role, ','), (role) => (

@@ -134,9 +134,7 @@ class AcademyCard extends React.Component {
               className="name"
               style={{ color: this.props.isDark ? '#7730ec' : '#fcce18' }}
             >
-              {this.props.isDark
-                ? this.props.academy.labelDark
-                : this.props.academy.labelLight}
+              {this.props.academy.label}
             </div>
             <SvgDoubleRight
               aria-hidden="true"
@@ -164,8 +162,7 @@ class AcademyCard extends React.Component {
 AcademyCard.propTypes = {
   isDark: PropTypes.bool,
   academy: PropTypes.shape({
-    labelLight: PropTypes.string,
-    labelDark: PropTypes.string,
+    label: PropTypes.string,
     name: PropTypes.string
   }),
   onClick: PropTypes.func

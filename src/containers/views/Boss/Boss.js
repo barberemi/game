@@ -216,7 +216,7 @@ class Boss extends Component {
                         )}
                         {selectedBoss.name}{' '}
                         <span style={{ color: selectedBoss.academy.color }}>
-                          ({selectedBoss.academy.labelLight})
+                          ({selectedBoss.academy.label})
                         </span>
                         <LevelBox> - Niv {selectedBoss.level}</LevelBox>
                       </div>

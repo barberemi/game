@@ -260,7 +260,7 @@ class Reward extends Component {
                         <br />
                         {monster.name}{' '}
                         <span style={{ color: monster.academy.color }}>
-                          ({monster.academy.labelLight})
+                          ({monster.academy.label})
                         </span>
                         <LevelBox> - Niv {user.level}</LevelBox>
                         <br />
