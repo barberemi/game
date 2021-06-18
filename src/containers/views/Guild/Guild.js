@@ -1084,7 +1084,7 @@ class Guild extends Component {
                         </div>
                       </>
                     )}
-                    {!guild && user && (
+                    {!guild && user && !loading && (
                       <>
                         <div className="card-header">
                           <Title>Créer sa propre guilde</Title>

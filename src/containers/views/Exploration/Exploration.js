@@ -10,6 +10,7 @@ import Loader from '../../../Components/Loader/Loader'
 import HpNavBar from '../../../Components/NavBar/HpNavBar'
 import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
 import ItemBox from '../../../Components/Item/ItemBox'
+import AcademySprite from '../../../Components/Sprites/AcademySprite'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
@@ -53,14 +54,24 @@ const ExplorationBox = styled.div`
 `
 
 const AvatarBox = styled.div`
-  bottom: 20%;
+  display: flex;
   left: 15%;
+  position: absolute;
+  bottom: 0;
 `
 
 const EventCharacterBox = styled.div`
-  bottom: 20%;
-  right: 15%;
   cursor: pointer;
+`
+
+const ImageChoice = styled.img`
+  @media (min-width: 410px) {
+    width: 70px;
+  }
+
+  @media (min-width: 768px) {
+    width: 100px;
+  }
 `
 
 const CenterItemBox = styled.div`
@@ -71,9 +82,14 @@ const CenterItemBox = styled.div`
 `
 
 const Text = styled.div`
+  text-shadow: 1px 1px 2px black;
   color: white;
-  font-size: 22px;
-  padding-left: 50px;
+  text-align: center;
+  font-size: 14px;
+
+  @media (min-width: 768px) {
+    font-size: 22px;
+  }
 `
 
 const Button = styled.button`
@@ -290,34 +306,25 @@ class Exploration extends Component {
           {loading && <Loader />}
           {character && (
             <>
-              <AvatarBox className="position-absolute">
-                {boss.type === 'treasure' &&
-                  character.position === 1 &&
-                  treasureItem === undefined && (
-                    <Text>Nous voici enfin face à notre récompense !</Text>
-                  )}
-                {character.position !== 1 && <Text>Que faire ?</Text>}
-                <img
-                  src={
-                    process.env.PUBLIC_URL +
-                    '/img/academies/' +
-                    character.academy.name +
-                    '.png'
-                  }
-                  width="200px"
-                  alt="Avatar mon personnage"
-                  className="animated fadeInLeft slow"
-                />
+              <AvatarBox>
+                <div>
+                  {boss.type === 'treasure' &&
+                    character.position === 1 &&
+                    treasureItem === undefined && (
+                      <Text>Nous voici enfin face à notre récompense !</Text>
+                    )}
+                  {character.position !== 1 && <Text>Que faire ?</Text>}
+                  <AcademySprite name={character.academy.name} />
+                </div>
                 {boss.type === 'treasure' && treasureItem !== undefined && (
                   <Link to={'/maps'}>
                     <Button className="btn">Nouvelle exploration</Button>
                   </Link>
                 )}
                 {character.position !== 1 && (
-                  <>
-                    <img
+                  <div className="m-auto">
+                    <ImageChoice
                       src={process.env.PUBLIC_URL + '/img/map.svg'}
-                      width="70px"
                       alt="Compass"
                       style={{ cursor: 'pointer' }}
                       onClick={() => {
@@ -332,44 +339,43 @@ class Exploration extends Component {
                       }}
                       data-tip="Carte de navigation"
                     />
-                  </>
+                  </div>
+                )}
+                {boss.type === 'treasure' && character.position === 1 && (
+                  <EventCharacterBox className="m-auto">
+                    {this.state.treasureItem && (
+                      <CenterItemBox>
+                        <ItemBox
+                          displayActions={false}
+                          displayText={false}
+                          item={this.state.treasureItem}
+                          oldItem={
+                            _.filter(this.state.equippedItems, (item) => {
+                              return item.item.type === treasureItem.item.type
+                            })[0]
+                          }
+                        />
+                        <ReactTooltip />
+                      </CenterItemBox>
+                    )}
+                    <ImageChoice
+                      src={
+                        process.env.PUBLIC_URL +
+                        '/img/' +
+                        this.state.chestIcon +
+                        '.svg'
+                      }
+                      alt="personnage de exploration"
+                      className="animated fadeInRight slow"
+                      data-tip="Ouvrir le coffre"
+                      onClick={() => {
+                        this.setState({ chestIcon: 'chest-open' })
+                        this.handleOpenTreasure()
+                      }}
+                    />
+                  </EventCharacterBox>
                 )}
               </AvatarBox>
-              {boss.type === 'treasure' && character.position === 1 && (
-                <EventCharacterBox className="position-absolute">
-                  {this.state.treasureItem && (
-                    <CenterItemBox>
-                      <ItemBox
-                        displayActions={false}
-                        displayText={false}
-                        item={this.state.treasureItem}
-                        oldItem={
-                          _.filter(this.state.equippedItems, (item) => {
-                            return item.item.type === treasureItem.item.type
-                          })[0]
-                        }
-                      />
-                      <ReactTooltip />
-                    </CenterItemBox>
-                  )}
-                  <img
-                    src={
-                      process.env.PUBLIC_URL +
-                      '/img/' +
-                      this.state.chestIcon +
-                      '.svg'
-                    }
-                    width="120px"
-                    alt="personnage de exploration"
-                    className="animated fadeInRight slow"
-                    data-tip="Ouvrir le coffre"
-                    onClick={() => {
-                      this.setState({ chestIcon: 'chest-open' })
-                      this.handleOpenTreasure()
-                    }}
-                  />
-                </EventCharacterBox>
-              )}
               <ReactTooltip />
             </>
           )}
@@ -466,10 +472,10 @@ class Exploration extends Component {
                                   process.env.PUBLIC_URL +
                                   '/img/academies/' +
                                   character.academy.name +
-                                  '.png'
+                                  '/Alert1H/0.png'
                                 }
                                 alt="me"
-                                width="100px"
+                                width="150px"
                                 ref={this.refMe}
                                 data-tip="Moi"
                                 id={`building-${col.id}`}

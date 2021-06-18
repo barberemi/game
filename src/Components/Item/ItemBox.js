@@ -114,11 +114,7 @@ class ItemBox extends Component {
             </Equipped>
           )}
           <Image
-            src={
-              trueItem.image
-                ? process.env.PUBLIC_URL + '/img/items/' + trueItem.image
-                : process.env.PUBLIC_URL + '/img/items/armor/bandit.png'
-            }
+            src={process.env.PUBLIC_URL + '/img/items/' + trueItem.image}
             alt={trueItem.name}
           />
           {trueItem.level && <Level>{trueItem.level}</Level>}

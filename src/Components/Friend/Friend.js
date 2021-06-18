@@ -5,6 +5,7 @@ import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import Cookies from 'js-cookie'
+import AcademyAvatar from '../Character/AcademyAvatar'
 
 const Container = styled.div`
   display: flex;
@@ -20,14 +21,6 @@ const Name = styled.div`
 const Actions = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-`
-
-const Avatar = styled.img`
-  width: 50px;
-  height: 50px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background-color: #fff;
 `
 
 const IconAction = styled.span`
@@ -70,15 +63,7 @@ class Friend extends Component {
         <Name className="col-sm-9">
           {friend.academy && (
             <>
-              <Avatar
-                src={
-                  process.env.PUBLIC_URL +
-                  '/img/academies/' +
-                  friend.academy.name +
-                  '.png'
-                }
-                alt={friend.name}
-              />
+              <AcademyAvatar name={friend.academy.name} />
               &nbsp;
             </>
           )}
@@ -99,9 +84,6 @@ class Friend extends Component {
                   <i className="far fa-address-card text-success" />
                 </IconAction>
               </Link>
-              <IconAction data-tip="Discuter">
-                <i className="far fa-comment" />
-              </IconAction>
               {friend.guildRole !== 'master' && canPromote && (
                 <IconAction
                   data-tip={

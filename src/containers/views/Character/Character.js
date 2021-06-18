@@ -20,6 +20,7 @@ import { selectTabFromUrl } from '../../../utils/routingHelper'
 import StyledCards from '../../../Components/Card/StyledCards'
 import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
 import moment from 'moment'
+import AcademySprite from '../../../Components/Sprites/AcademySprite'
 
 const Container = styled.div`
   background-image: url('${process.env.PUBLIC_URL +
@@ -650,15 +651,7 @@ class Character extends Component {
                           />
                           <LevelBox>Niveau {user.level}</LevelBox>
                           <br />
-                          <Image
-                            src={
-                              process.env.PUBLIC_URL +
-                              '/img/academies/' +
-                              user.academy.name +
-                              '.png'
-                            }
-                            alt={user.academy.name}
-                          />
+                          <AcademySprite name={user.academy.name} />
                         </Title>
                         {user.guild && (
                           <span data-tip="Guilde de l'utilisateur">

@@ -9,6 +9,7 @@ import HpNavBar from '../../../Components/NavBar/HpNavBar'
 import Loader from '../../../Components/Loader/Loader'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import AcademySprite from '../../../Components/Sprites/AcademySprite'
 
 const Container = styled.div`
   ${() =>
@@ -38,24 +39,36 @@ const SubContainer = styled.div`
 `
 
 const AvatarBox = styled.div`
-  bottom: 20%;
+  display: flex;
   left: 15%;
+  position: absolute;
+
+  @media (min-width: 768px) {
+    bottom: 0;
+  }
 `
 
-const EventCharacterBox = styled.div`
-  bottom: 20%;
-  right: 15%;
+const ImageChoice = styled.img`
+  @media (min-width: 410px) {
+    width: 70px;
+  }
+
+  @media (min-width: 768px) {
+    width: 150px;
+  }
 `
 
 const SubSubContainer = styled.div`
-  background-color: rgba(0, 0, 0, 0.6) !important;
-  border-radius: 0.3em;
   margin-top: 100px;
 `
 
 const TextDescription = styled.div`
-  font-size: 24px;
   text-shadow: 1px 1px 2px black;
+  font-size: 14px;
+
+  @media (min-width: 768px) {
+    font-size: 22px;
+  }
 `
 
 class Choice extends Component {
@@ -410,41 +423,7 @@ class Choice extends Component {
     }
 
     return (
-      <>
-        <Container className="position-fixed container-fluid">
-          {user && (
-            <>
-              <AvatarBox className="position-absolute">
-                <img
-                  src={
-                    process.env.PUBLIC_URL +
-                    '/img/academies/' +
-                    user.academy.name +
-                    '.png'
-                  }
-                  width="200px"
-                  alt="Avatar mon personnage"
-                  className="animated fadeInLeft slow"
-                />
-              </AvatarBox>
-              <EventCharacterBox className="position-absolute">
-                <img
-                  src={this.getHandleImage()}
-                  width={
-                    this.state.type === 'treasure' ||
-                    this.state.type === 'arene' ||
-                    this.state.type === 'dealer' ||
-                    this.state.type === 'healer'
-                      ? '150px'
-                      : '200px'
-                  }
-                  alt="personnage de exploration"
-                  className="animated fadeInRight slow"
-                />
-              </EventCharacterBox>
-            </>
-          )}
-        </Container>
+      <Container className="position-fixed container-fluid">
         {loading && <Loader />}
         {user && <HpNavBar user={user} />}
         <SubContainer className="container-fluid">
@@ -473,10 +452,20 @@ class Choice extends Component {
                   />
                 ))}
               </div>
+              <AvatarBox>
+                <AcademySprite name={user.academy.name} />
+                <div className="m-auto">
+                  <ImageChoice
+                    src={this.getHandleImage()}
+                    alt="personnage de exploration"
+                    className="animated fadeInRight slow"
+                  />
+                </div>
+              </AvatarBox>
             </SubSubContainer>
           )}
         </SubContainer>
-      </>
+      </Container>
     )
   }
 }

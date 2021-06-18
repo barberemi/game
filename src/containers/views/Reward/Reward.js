@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import Loader from '../../../Components/Loader/Loader'
 import PropTypes from 'prop-types'
 import HpNavBar from '../../../Components/NavBar/HpNavBar'
+import AcademySprite from '../../../Components/Sprites/AcademySprite'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
@@ -35,8 +36,8 @@ const SubSubContainer = styled.div`
 `
 
 const AvatarBox = styled.div`
-  bottom: 20%;
-  left: 15%;
+  bottom: 10%;
+  left: 10%;
 `
 
 const LevelBox = styled.span`
@@ -197,17 +198,7 @@ class Reward extends Component {
         <Container className="position-fixed container-fluid">
           {user && (
             <AvatarBox className="position-absolute">
-              <img
-                src={
-                  process.env.PUBLIC_URL +
-                  '/img/academies/' +
-                  user.academy.name +
-                  '.png'
-                }
-                width="200px"
-                alt="Avatar mon personnage"
-                className="animated fadeInLeft slow"
-              />
+              <AcademySprite name={user.academy.name} />
             </AvatarBox>
           )}
         </Container>

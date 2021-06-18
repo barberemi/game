@@ -9,6 +9,7 @@ const Container = styled.div`
   min-height: 100%;
   height: 100%;
   z-index: 30;
+  text-align: center; ;
 `
 
 const Main = styled.div`
@@ -186,6 +187,7 @@ const Inner = styled.div`
 `
 
 const Text = styled.div`
+  color: white;
   padding-top: 5px;
 `
 

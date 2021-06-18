@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import ProgressBar from '../Character/ProgressBar'
 import PropTypes from 'prop-types'
+import AcademyAvatar from '../Character/AcademyAvatar'
 
 const NavBarGlobale = styled.nav`
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -19,14 +20,6 @@ const NavBarGlobale = styled.nav`
 const DisplayFlex = styled.div`
   display: flex;
   flex-direction: row;
-`
-
-const Avatar = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid #000;
-  background-color: #fff;
 `
 
 const MoneyBox = styled.div`
@@ -77,16 +70,7 @@ class HpNavBar extends Component {
                   transparentColor="#e09a9a"
                 />
               </Bar>
-              <Avatar
-                src={
-                  process.env.PUBLIC_URL +
-                  '/img/academies/' +
-                  user.academy.name +
-                  '.png'
-                }
-                alt="Avatar"
-                className="avatar"
-              />
+              <AcademyAvatar name={user.academy.name} flip={true} />
             </>
           )}
         </DisplayFlex>
