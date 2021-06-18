@@ -35,7 +35,7 @@ const ListLink = styled.a`
   color: #fff;
 
   &:hover {
-    color: #ffc312;
+    color: #dc3545;
     text-decoration: none;
   }
 `
@@ -68,7 +68,7 @@ class Friend extends Component {
             </>
           )}
           Niv {friend.level} - {friend.name}{' '}
-          <span className="text-warning">
+          <span style={{ color: '#f26725' }}>
             {friend.guildRole && friend.guildRole === 'master'
               ? '(Chef de guilde)'
               : friend.guildRole === 'officer'

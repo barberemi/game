@@ -60,7 +60,7 @@ const LinkArrow = styled(Link)`
   color: #fff;
 
   &:hover {
-    color: #ffc312;
+    color: #f26725;
   }
 `
 

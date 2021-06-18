@@ -12,11 +12,11 @@ const Label = styled.span`
   ${(props) =>
     props.displayLabel &&
     css`
-      color: #ffc312;
+      color: #f26725;
     `};
 
   &:hover {
-    color: #ffc312;
+    color: #f26725;
   }
 `
 

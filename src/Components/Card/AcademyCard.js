@@ -2,12 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
+import AcademySprite from '../Sprites/AcademySprite'
 
 const Champ = styled.div`
   margin: 10px 2px;
-  width: 150px;
-  height: 250px;
-  position: relative;
+  // position: relative;
   cursor: pointer;
 
   webkit-clip-path: url(#champ-clip-path-1);
@@ -73,12 +72,7 @@ const Meta = styled.div`
   -webkit-transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
   -webkit-transition-delay: 1s;
   transition-delay: 1s;
-  
-  ${(props) =>
-    props.isDark &&
-    css`
-      color: ${props.isDark ? '#7730ec' : '#fcce18'};
-    `};
+  color: #f26725;
   
   &:hover {
     -webkit-transform: translateY(22px)!important;
@@ -109,31 +103,12 @@ class AcademyCard extends React.Component {
       <Champ className="champ" onClick={this.props.onClick}>
         <div
           style={{
-            backgroundColor: this.props.isDark ? '#7730ec' : '#fcce18',
-            height: '100%'
+            backgroundColor: this.props.academy.color
           }}
         >
-          <ImageAcademy
-            src={
-              process.env.PUBLIC_URL +
-              '/img/academies/' +
-              this.props.academy.name +
-              '.png'
-            }
-            alt="The Bounty Hunter"
-            className="img-fluid"
-            style={{
-              backgroundColor: this.props.isDark ? '#7730ec' : '#fcce18'
-            }}
-          />
-          <Meta
-            className="meta"
-            color={this.props.isDark ? '#7730ec' : '#fcce18'}
-          >
-            <div
-              className="name"
-              style={{ color: this.props.isDark ? '#7730ec' : '#fcce18' }}
-            >
+          <AcademySprite name={this.props.academy.name} />
+          <Meta className="meta" color="#f26725">
+            <div className="name" style={{ color: this.props.academy.color }}>
               {this.props.academy.label}
             </div>
             <SvgDoubleRight
@@ -160,10 +135,10 @@ class AcademyCard extends React.Component {
 }
 
 AcademyCard.propTypes = {
-  isDark: PropTypes.bool,
   academy: PropTypes.shape({
     label: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string,
+    color: PropTypes.string
   }),
   onClick: PropTypes.func
 }

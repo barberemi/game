@@ -133,15 +133,7 @@ const FightButton = styled.button`
 `
 
 const InputSubmit = styled.input`
-  margin-top: 15px;
-  color: black;
-  background-color: #ffc312;
-  width: 100px;
-
-  &:hover {
-    color: black;
-    background-color: white;
-  }
+  margin-top: 10px;
 `
 
 const LinkToGuildExploration = styled(Link)`
@@ -995,7 +987,7 @@ class Guild extends Component {
                               <InputSubmit
                                 type="submit"
                                 value="Valider"
-                                className="btn"
+                                className="btn btn-success"
                               />
                             </form>
                           )}
@@ -1334,8 +1326,7 @@ class Guild extends Component {
                               Choisir le champion de guilde à combattre{' '}
                               <Link
                                 to={'/guild#fightBossTab'}
-                                className="btn btn-outline-warning"
-                                style={{ color: 'white' }}
+                                className="btn btn-secondary"
                               >
                                 Retour
                               </Link>
@@ -1372,8 +1363,7 @@ class Guild extends Component {
                               user.guildRole === 'officer') && (
                               <Link
                                 to={'/guild#choiceBossTab'}
-                                className="btn btn-outline-warning"
-                                style={{ color: 'white' }}
+                                className="btn btn-success"
                               >
                                 Choisir
                               </Link>
@@ -1416,28 +1406,7 @@ class Guild extends Component {
                         id="tutorialGuildBossAttacks"
                       >
                         <div className="col-sm-12 mt-3">
-                          <Title>
-                            Combats de la journée{' '}
-                            {user && user.canGuildBossFight && (
-                              <FightButton
-                                onClick={() =>
-                                  this.handleCreateGuildBossFight()
-                                }
-                                className="btn btn-outline-warning"
-                              >
-                                (Me battre{' '}
-                                <img
-                                  src={
-                                    process.env.PUBLIC_URL + '/img/versus.svg'
-                                  }
-                                  width="30px"
-                                  height="30px"
-                                  alt="versus"
-                                />
-                                )
-                              </FightButton>
-                            )}
-                          </Title>
+                          <Title>Combats de la journée</Title>
                         </div>
                         {_.map(guild.users, (member, index) => (
                           <Member key={index}>

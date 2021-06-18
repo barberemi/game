@@ -30,7 +30,7 @@ const Social = styled.div`
 const SocialIcon = styled.a`
   font-size: 60px;
   margin-left: 10px;
-  color: #ffc312;
+  color: #f26725;
 
   &:hover {
     color: white;
@@ -40,27 +40,16 @@ const SocialIcon = styled.a`
 
 const InputGroup = styled.span`
   width: 50px;
-  background-color: #ffc312;
+  background-color: #f26725;
   color: black;
   border: 0 !important;
 `
 
-const InputSubmit = styled.input`
-  color: black;
-  background-color: #ffc312;
-  width: 100px;
-
-  &:hover {
-    color: black;
-    background-color: white;
-  }
-`
-
 const LinkInput = styled(Link)`
-  color: #ffc312;
+  color: #f26725;
 
   &:hover {
-    color: #ffc312;
+    color: #f26725;
   }
 `
 
@@ -176,10 +165,10 @@ class Login extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <InputSubmit
+                  <input
                     type="submit"
-                    value="Login"
-                    className="btn float-right"
+                    value="Connexion"
+                    className="btn btn-success float-right"
                   />
                 </div>
               </form>

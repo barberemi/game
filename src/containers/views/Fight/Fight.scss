@@ -1,14 +1,31 @@
-.enemy-name {
-  margin: 0;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: white;
+.character-name {
+  margin-bottom: 0 !important;
+  color: #f26725 !important;
+  -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(1px 5px 1px rgba(0, 0, 0, 0.3));
+  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
+
+  @media (min-width: 410px) {
+    font-size: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 2rem;
+  }
 }
 
 .avatar {
   -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
   filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
   -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
-  height: 200px;
+
+  @media (min-width: 410px) {
+    height: 120px;
+  }
+
+  @media (min-width: 768px) {
+    height: 200px;
+  }
 }
 
 .avatar-effect {
@@ -22,12 +39,6 @@
 #enemy-container {
   justify-content: space-between;
   text-align: center;
-}
-
-#enemy-info-box, #hero-info-box {
-  padding: 5px;
-  width: 100%;
-  letter-spacing: -2px;
 }
 
 .avatar-box {
@@ -45,8 +56,6 @@
 }
 
 #hero-container {
-  padding-top: 38px;
-  justify-content: space-between;
   text-align: center;
 }
 
@@ -64,27 +73,31 @@
 .all-players-box {
   flex-direction: row;
   display: flex;
-  height: 80%;
-  position: absolute;
-  bottom: 0;
+  //height: 80%;
+  //position: absolute;
+  //bottom: 0;
 }
 
 #text-box {
-  background-color: rgba(0, 0, 0, 0.9);
+  min-width: 500px;
+  background-color: rgba(0, 0, 0, 0.8) !important;
   position: absolute;
-  border: thick double #fff;
-  bottom: 0;
-  min-width: 600px;
+  height: 140px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
   left: 50%;
   transform: translate(-50%);
 }
 
 #text-box-content {
   text-align: center;
-  height: 130px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.action-intention {
+  height: 30px;
 }
 
 .attack-container {
@@ -103,15 +116,29 @@
   }
 }
 
+.characters-and-text-box {
+  width: 100%;
+  position: absolute;
+
+  @media (min-width: 768px) {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+}
+
 .battle-text-content {
   padding: 13px 13px 0px 13px;
-  font-size: 18px;
+  font-size: 24px;
   color: white;
   height: 80px;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
 }
 
 #turn-text-number {
-  color: #fff;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
   padding-top: 10px;
   text-align: center;
 }

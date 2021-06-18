@@ -96,7 +96,7 @@ class ItemCrafting extends Component {
             />
           </div>
         </div>
-        <SubTitle className="col-sm-12 float-left d-flex flex-column align-items-center pb-2">
+        <SubTitle className="col-sm-12 float-left d-flex flex-column align-items-center pb-2 text-success">
           Composants nécéssaires
         </SubTitle>
         <br />

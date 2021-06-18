@@ -79,7 +79,7 @@ const LevelWin = styled.div`
   transform: translate(-50%, -50%);
   z-index: 10;
   position: fixed;
-  border: 1px solid #ffc312;
+  border: 1px solid #f26725;
   border-radius: 5px;
   transform: scale(1);
   animation: pulse 2s infinite;
@@ -103,14 +103,7 @@ const LevelWin = styled.div`
 `
 
 const Button = styled.button`
-  color: #000;
-  background-color: #ffc312;
   margin-top: 10px;
-
-  &:hover {
-    color: black;
-    background-color: white;
-  }
 `
 
 class Reward extends Component {
@@ -279,7 +272,7 @@ class Reward extends Component {
                               <ProgressBar
                                 actual={user.experience - user.xpToActualLevel}
                                 max={user.xpToNextLevel - user.xpToActualLevel}
-                                color="#FFC312"
+                                color="#F26725"
                                 transparentColor="#7F8286"
                               />
                             </div>
@@ -314,7 +307,7 @@ class Reward extends Component {
                             : '/maps'
                         }
                       >
-                        <Button className="btn">
+                        <Button className="btn btn-success">
                           {monster.isGuildBoss || user.exploration
                             ? 'Continuer l’exploration'
                             : 'Nouvelle exploration'}
@@ -322,7 +315,9 @@ class Reward extends Component {
                       </Link>
                       {monster.isGuildBoss && (
                         <Link to="/guild" style={{ marginLeft: '10px' }}>
-                          <Button className="btn">Retour à la guilde</Button>
+                          <Button className="btn btn-success">
+                            Retour à la guilde
+                          </Button>
                         </Link>
                       )}
                     </div>

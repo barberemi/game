@@ -57,7 +57,7 @@ const AvatarBox = styled.div`
   display: flex;
   left: 15%;
   position: absolute;
-  bottom: 0;
+  bottom: 10%;
 `
 
 const EventCharacterBox = styled.div`
@@ -89,17 +89,6 @@ const Text = styled.div`
 
   @media (min-width: 768px) {
     font-size: 22px;
-  }
-`
-
-const Button = styled.button`
-  color: #000;
-  background-color: #ffc312;
-  margin-top: 10px;
-
-  &:hover {
-    color: black;
-    background-color: white;
   }
 `
 
@@ -318,7 +307,9 @@ class Exploration extends Component {
                 </div>
                 {boss.type === 'treasure' && treasureItem !== undefined && (
                   <Link to={'/maps'}>
-                    <Button className="btn">Nouvelle exploration</Button>
+                    <button className="btn btn-success">
+                      Nouvelle exploration
+                    </button>
                   </Link>
                 )}
                 {character.position !== 1 && (

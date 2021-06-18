@@ -74,12 +74,6 @@ const Meta = styled.div`
   -webkit-transition-delay: 1s;
   transition-delay: 1s;
   
-  ${(props) =>
-    props.isDark &&
-    css`
-      color: ${props.isDark ? '#7730ec' : '#fcce18'};
-    `};
-  
   &:hover {
     -webkit-transform: translateY(22px)!important;
     transform: translateY(22px)!important;
@@ -110,7 +104,7 @@ class JobCard extends React.Component {
         <div
           style={{
             backgroundColor:
-              this.props.selectedId === this.props.job.id ? '#fcce18' : 'grey',
+              this.props.selectedId === this.props.job.id ? '#f26725' : 'grey',
             height: '100%'
           }}
         >
@@ -125,13 +119,10 @@ class JobCard extends React.Component {
             className="img-fluid"
             style={{
               backgroundColor:
-                this.props.selectedId === this.props.job.id ? '#fcce18' : 'grey'
+                this.props.selectedId === this.props.job.id ? '#f26725' : 'grey'
             }}
           />
-          <Meta
-            className="meta"
-            color={this.props.isDark ? '#7730ec' : '#fcce18'}
-          >
+          <Meta className="meta">
             <div className="name">
               {this.props.job.label}
               {this.props.selectedId === this.props.job.id && (
@@ -165,7 +156,6 @@ class JobCard extends React.Component {
 }
 
 JobCard.propTypes = {
-  isDark: PropTypes.bool,
   job: PropTypes.shape({
     label: PropTypes.string,
     name: PropTypes.string,

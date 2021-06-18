@@ -86,17 +86,6 @@ const AddUserButton = styled.button`
   }
 `
 
-const InputSubmit = styled.input`
-  color: black;
-  background-color: #ffc312;
-  width: 100px;
-
-  &:hover {
-    color: black;
-    background-color: white;
-  }
-`
-
 class Character extends Component {
   constructor(props) {
     super(props)
@@ -646,7 +635,7 @@ class Character extends Component {
                           <ProgressBar
                             actual={user.experience - user.xpToActualLevel}
                             max={user.xpToNextLevel - user.xpToActualLevel}
-                            color="#FFC312"
+                            color="#F27625"
                             transparentColor="#7F8286"
                           />
                           <LevelBox>Niveau {user.level}</LevelBox>
@@ -750,7 +739,13 @@ class Character extends Component {
                           <Title>
                             Compétences d’académie
                             <br />
-                            <SubTitle>
+                            <SubTitle
+                              className={
+                                user.skillPoints - user.skills.length > 0
+                                  ? 'text-success'
+                                  : 'text-danger'
+                              }
+                            >
                               (
                               {user.skillPoints - user.skills.length === 0
                                 ? 'Aucun point restant'
@@ -794,7 +789,14 @@ class Character extends Component {
                           <Title>
                             Inventaire
                             <br />
-                            <SubTitle id="tutorialNbRemainingItems">
+                            <SubTitle
+                              id="tutorialNbRemainingItems"
+                              className={
+                                user.remainingBagSpace > 0
+                                  ? 'text-success'
+                                  : 'text-danger'
+                              }
+                            >
                               (
                               {user.remainingBagSpace === 0
                                 ? 'Aucune place restante'
@@ -839,7 +841,7 @@ class Character extends Component {
                         <br />
                         {getDaysDateDiffBetweenNowAnd(user.jobUpdatedAt) >=
                           30 && (
-                          <span style={{ color: '#fcce18' }}>
+                          <span style={{ color: '#f26725' }}>
                             Changement de métier possible
                           </span>
                         )}
@@ -866,7 +868,6 @@ class Character extends Component {
                         <StyledCards
                           isDark={user.isDark}
                           type={'jobs'}
-                          displayLightDarkButton={false}
                           onClick={(job) => this.selectJob(job)}
                           selectedId={jobSelected ? jobSelected.id : undefined}
                         />
@@ -880,10 +881,10 @@ class Character extends Component {
                             {getDaysDateDiffBetweenNowAnd(user.jobUpdatedAt) >=
                               30 && (
                               <form onSubmit={this.handleChoiceJob}>
-                                <InputSubmit
+                                <input
                                   type="submit"
                                   value="Choisir"
-                                  className="btn"
+                                  className="btn btn-success"
                                 />
                               </form>
                             )}

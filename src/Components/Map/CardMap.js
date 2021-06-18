@@ -25,9 +25,9 @@ const RequirementBlock = styled(LevelNeededBackground)`
 `
 
 const RequirementNotBlock = styled(LevelNeededBackground)`
-  background-color: #ffc312;
-  color: #000;
-  text-shadow: 1px 1px 2px white;
+  background-color: #f26725;
+  color: #fff;
+  text-shadow: 1px 1px 2px black;
 `
 
 const Pin = styled.img`

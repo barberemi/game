@@ -10,12 +10,12 @@ const Image = styled.img`
 
 const SkillEffect = styled.div`
   position: absolute;
-  color: #000;
-  background-color: #ffc312;
+  color: white;
+  background-color: #f26725;
   width: 30px;
   font-size: 16px;
   right: 17px;
-  border: solid 1px #000;
+  border: solid 1px #fff;
   border-top: solid 1px #fff;
   border-radius: 0 0 5px 5px;
 `

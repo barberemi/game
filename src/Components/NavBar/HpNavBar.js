@@ -13,7 +13,7 @@ const NavBarGlobale = styled.nav`
   padding-bottom: 5px;
   position: fixed;
   right: 0;
-  width: 500px;
+  width: 300px;
   z-index: 20;
 `
 

@@ -36,9 +36,9 @@ export class EnemyBox extends Component {
     return (
       <div id="enemy-container" className="col-sm-4 offset-sm-4">
         {/* ENEMY POKEMON INFO BOX */}
-        <div id="enemy-info-box">
+        <div>
           <div className="justify-content-between align-items-center">
-            <h2 className="enemy-name">{this.props.enemy.name}</h2>
+            <h2 className="character-name">{this.props.enemy.name}</h2>
           </div>
           <HpBar hp={this.props.enemy.hp} maxHp={this.props.enemy.maxHp} />
         </div>
@@ -53,7 +53,7 @@ export class EnemyBox extends Component {
             isHit={this.props.enemy.isHit}
             isPlayer={false}
             logoName={'boss/' + this.props.enemy.image}
-            className="avatar mt-5"
+            className="avatar mt-1"
           />
           {!this.props.enemy.faint &&
             _.map(this.props.enemy.hot, ({ amount }, index) => (

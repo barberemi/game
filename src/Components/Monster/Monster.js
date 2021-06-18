@@ -40,7 +40,7 @@ const ListLink = styled.a`
   color: #fff;
 
   &:hover {
-    color: #ffc312;
+    color: #f26725;
     text-decoration: none;
   }
 `

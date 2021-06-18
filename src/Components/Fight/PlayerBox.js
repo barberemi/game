@@ -23,7 +23,10 @@ export class PlayerBox extends Component {
         }`}
         onClick={() => this.props.onClick(this.props.player)}
       >
-        <div id="hero-info-box">
+        <div>
+          <div className="justify-content-between align-items-center">
+            <h2 className="character-name">{this.props.player.name}</h2>
+          </div>
           <HpBar hp={this.props.player.hp} maxHp={this.props.player.maxHp} />
         </div>
 
@@ -37,7 +40,7 @@ export class PlayerBox extends Component {
             isHit={this.props.player.isHit}
             isPlayer={true}
             logoName={'academies/' + this.props.player.image + '.png'}
-            className={`avatar mt-5 ${
+            className={`avatar mt-1 ${
               this.props.player.isSelectable ? 'hero-hover-selected' : ''
             }`}
           />

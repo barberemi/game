@@ -23,27 +23,16 @@ const Title = styled.h3`
 
 const InputGroup = styled.span`
   width: 50px;
-  background-color: #ffc312;
+  background-color: #f26725;
   color: black;
   border: 0 !important;
 `
 
-const InputSubmit = styled.input`
-  color: black;
-  background-color: #ffc312;
-  width: 100px;
-
-  &:hover {
-    color: black;
-    background-color: white;
-  }
-`
-
 const LinkInput = styled(Link)`
-  color: #ffc312;
+  color: #f26725;
 
   &:hover {
-    color: #ffc312;
+    color: #f26725;
   }
 `
 
@@ -179,10 +168,10 @@ class Register extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <InputSubmit
+                  <input
                     type="submit"
-                    value="Valider"
-                    className="btn float-right"
+                    value="Enregistrer"
+                    className="btn btn-success float-right"
                   />
                 </div>
               </form>

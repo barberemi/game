@@ -8,6 +8,8 @@ import Cookies from 'js-cookie'
 import { Redirect } from 'react-router-dom'
 import Loader from '../../../Components/Loader/Loader'
 import StyledCards from '../../../Components/Card/StyledCards'
+import AcademySprite from '../../../Components/Sprites/AcademySprite'
+import EquippedSkills from '../../../Components/Skill/EquippedSkills'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
@@ -24,8 +26,9 @@ const Container = styled.div`
 `
 
 const TitleBox = styled.div`
-  padding-top: 20px;
-  font-size: 26px;
+  padding-top: 10px;
+  font-size: 3vw;
+  text-shadow: 1px 1px 2px black;
 `
 
 const LeftBox = styled.div`
@@ -54,18 +57,12 @@ const Skill = styled.img`
 
 const NameInput = styled.input`
   margin-top: 20px;
+  width: 200px;
 `
 
 const InputSubmit = styled.input`
-  color: black;
-  background-color: #ffc312;
-  width: 100px;
   margin-top: 10px;
-
-  &:hover {
-    color: black;
-    background-color: white;
-  }
+  margin-bottom: 10px;
 `
 
 class Creation extends Component {
@@ -78,7 +75,7 @@ class Creation extends Component {
       error: undefined,
       academySelected: undefined,
       displayForm: false,
-      isDark: true
+      isDark: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -155,14 +152,14 @@ class Creation extends Component {
       isDark
     } = this.state
 
-    if ((user && user.academy) || created) {
-      return <Redirect to="/home" />
-    }
+    // if ((user && user.academy) || created) {
+    //   return <Redirect to="/home" />
+    // }
 
     return (
       <Container className="container-fluid">
         {loading && <Loader />}
-        <div className="container">
+        <div>
           {error && (
             <span className="text-danger">
               <b>Erreur :</b> {error.message}
@@ -173,39 +170,24 @@ class Creation extends Component {
               Veuillez sélectionner une académie.
             </TitleBox>
 
-            <LeftBox className="col-sm-9 h-100 mt-5">
+            <LeftBox className="col-sm-7 h-100 mt-5">
               <StyledCards
                 isDark={isDark}
                 type={'academies'}
-                displayLightDarkButton={true}
                 onClick={(academy) => this.selectAcademy(academy)}
-                onClickLightDarkButton={(type) =>
-                  this.setState({
-                    isDark: type === 'dark'
-                  })
-                }
               />
-              {this.state.displayForm && (
-                <form onSubmit={this.handleSubmit}>
-                  <NameInput
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Rem le chocorem"
-                    required
-                  />
-                  <br />
-                  <InputSubmit type="submit" value="Valider" className="btn" />
-                </form>
-              )}
             </LeftBox>
 
-            <RightBox className="col-sm-3 h-100 my-auto">
+            <RightBox className="col-sm-5 h-100 my-auto">
               {academySelected && (
                 <Card className="card">
                   <div className="card-header">
                     <Title>
-                      <span style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
+                      <span
+                        style={{
+                          color: academySelected.color
+                        }}
+                      >
                         {academySelected.label}
                       </span>
                     </Title>
@@ -220,38 +202,31 @@ class Creation extends Component {
                   </div>
                   <div className="card-footer">
                     <Title>
-                      <span style={{ color: isDark ? '#7730ec' : '#fcce18' }}>
-                        Compétences
-                      </span>
+                      <span style={{ color: '#f26725' }}>Compétences</span>
                     </Title>
-                    {_.map(
-                      isDark
-                        ? _.filter(academySelected.skills, {
-                            treeType: 'dark'
-                          })
-                        : _.filter(academySelected.skills, {
-                            treeType: 'light'
-                          }),
-                      (skill) => (
-                        <>
-                          <Skill
-                            key={skill}
-                            src={
-                              process.env.PUBLIC_URL +
-                              '/img/skills/' +
-                              skill.image
-                            }
-                            alt={skill.name}
-                            data-tip={skill.description}
-                            style={{
-                              borderColor: isDark ? '#7730ec' : '#fcce18'
-                            }}
-                          />
-                          <ReactTooltip />
-                        </>
-                      )
-                    )}
+                    <EquippedSkills
+                      academyId={academySelected.id}
+                      treeType={'light'}
+                      displayCheckbox={true}
+                    />
                   </div>
+                  {this.state.displayForm && (
+                    <form onSubmit={this.handleSubmit}>
+                      <NameInput
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Nom de mon personnage"
+                        required
+                      />
+                      <br />
+                      <InputSubmit
+                        type="submit"
+                        value="Création"
+                        className="btn btn-success"
+                      />
+                    </form>
+                  )}
                 </Card>
               )}
             </RightBox>

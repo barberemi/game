@@ -660,62 +660,64 @@ class Fight extends Component {
                   <div id="turn-text-number">
                     <i className="fas fa-dice" /> Tour {this.state.round}
                   </div>
-                  <div className="all-players-box col-sm-12">
-                    {_.map(this.state.players, (player) => (
-                      <PlayerBox
-                        key={player.name}
-                        player={player}
-                        onClick={
-                          player.isSelectable
-                            ? this.handleClickOnPlayerToAction
-                            : () => {
-                                return null
-                              }
-                        }
+                  <div className="characters-and-text-box">
+                    <div className="all-players-box">
+                      {_.map(this.state.players, (player) => (
+                        <PlayerBox
+                          key={player.name}
+                          player={player}
+                          onClick={
+                            player.isSelectable
+                              ? this.handleClickOnPlayerToAction
+                              : () => {
+                                  return null
+                                }
+                          }
+                        />
+                      ))}
+
+                      <EnemyBox
+                        enemy={this.state.enemy}
+                        expectedAction={this.state.enemy.expectedAction}
                       />
-                    ))}
-
-                    <EnemyBox
-                      enemy={this.state.enemy}
-                      expectedAction={this.state.enemy.expectedAction}
-                    />
-                  </div>
-
-                  {/* TEXT BOX SECTION */}
-                  <div id="text-box">
-                    <div id="text-box-content">
-                      {this.state.textMessageOne !== '' &&
-                        this.state.gameOver === false && (
-                          <TextBox
-                            messageOne={this.state.textMessageOne}
-                            messageTwo={this.state.textMessageTwo}
-                          />
-                        )}
-
-                      {this.state.textMessageOne === '' &&
-                        this.state.gameOver === false &&
-                        Object.keys(
-                          _.find(this.state.players, 'me').skills
-                        ).map((key) => {
-                          return (
-                            <>
-                              <Actions
-                                key={key}
-                                frontPlayer={
-                                  _.find(this.state.players, 'me') ===
-                                  _.last(this.state.players)
-                                }
-                                action={
-                                  _.find(this.state.players, 'me').skills[key]
-                                }
-                                onClick={this.handleClickOnActionBar}
-                              />
-                            </>
-                          )
-                        })}
                     </div>
+
+                    {/* TEXT BOX SECTION */}
+                    <div id="text-box">
+                      <div id="text-box-content">
+                        {this.state.textMessageOne !== '' &&
+                          this.state.gameOver === false && (
+                            <TextBox
+                              messageOne={this.state.textMessageOne}
+                              messageTwo={this.state.textMessageTwo}
+                            />
+                          )}
+
+                        {this.state.textMessageOne === '' &&
+                          this.state.gameOver === false &&
+                          Object.keys(
+                            _.find(this.state.players, 'me').skills
+                          ).map((key) => {
+                            return (
+                              <>
+                                <Actions
+                                  key={key}
+                                  frontPlayer={
+                                    _.find(this.state.players, 'me') ===
+                                    _.last(this.state.players)
+                                  }
+                                  action={
+                                    _.find(this.state.players, 'me').skills[key]
+                                  }
+                                  onClick={this.handleClickOnActionBar}
+                                />
+                              </>
+                            )
+                          })}
+                      </div>
+                    </div>
+                    {/* TEXT BOX SECTION */}
                   </div>
-                  {/* TEXT BOX SECTION */}
                 </div>
                 {/* END BATTLE SCREEN CONTAINER */}
               </div>
