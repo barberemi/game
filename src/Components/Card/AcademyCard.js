@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
 import AcademySprite from '../Sprites/AcademySprite'
 
 const Champ = styled.div`
@@ -33,23 +32,6 @@ const Champ = styled.div`
       -webkit-transform: translateX(0);
       transform: translateX(0);
     }
-  }
-`
-
-const ImageAcademy = styled.img`
-  width: 100%;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  -webkit-transition: -webkit-transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
-  transition: -webkit-transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
-  transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
-  transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1),
-    -webkit-transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
-
-  &:hover {
-    webkit-transform: scale3d(1.1, 1.1, 1.1);
-    transform: scale3d(1.1, 1.1, 1.1);
   }
 `
 

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
 
 const Champ = styled.div`
   margin: 10px 2px;

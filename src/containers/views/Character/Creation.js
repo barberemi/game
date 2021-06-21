@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import ReactTooltip from 'react-tooltip'
 import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Redirect } from 'react-router-dom'
 import Loader from '../../../Components/Loader/Loader'
 import StyledCards from '../../../Components/Card/StyledCards'
-import AcademySprite from '../../../Components/Sprites/AcademySprite'
 import EquippedSkills from '../../../Components/Skill/EquippedSkills'
 
 const Container = styled.div`
@@ -41,18 +39,6 @@ const RightBox = styled.div``
 
 const Card = styled.div`
   background-color: rgba(0, 0, 0, 0.8) !important;
-`
-
-const Skill = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid;
-  margin-right: 10px;
-
-  &:hover {
-    cursor: pointer;
-  }
 `
 
 const NameInput = styled.input`
@@ -152,9 +138,9 @@ class Creation extends Component {
       isDark
     } = this.state
 
-    // if ((user && user.academy) || created) {
-    //   return <Redirect to="/home" />
-    // }
+    if ((user && user.academy) || created) {
+      return <Redirect to="/home" />
+    }
 
     return (
       <Container className="container-fluid">

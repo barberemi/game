@@ -57,14 +57,6 @@ const Card = styled.div`
   background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
-const Image = styled.img`
-  width: 200px;
-  margin-top: 10px;
-  -webkit-filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  filter: drop-shadow(1px 9px 1px rgba(0, 0, 0, 0.3));
-  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#444')";
-`
-
 const SubTitle = styled.span`
   font-size: 18px;
 `
