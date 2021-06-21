@@ -170,7 +170,7 @@ class Creation extends Component {
               Veuillez sélectionner une académie.
             </TitleBox>
 
-            <LeftBox className="col-sm-7 h-100 mt-5">
+            <LeftBox className="col-sm-5 h-100 mt-5">
               <StyledCards
                 isDark={isDark}
                 type={'academies'}
@@ -178,7 +178,7 @@ class Creation extends Component {
               />
             </LeftBox>
 
-            <RightBox className="col-sm-5 h-100 my-auto">
+            <RightBox className="col-sm-7 h-100 my-auto">
               {academySelected && (
                 <Card className="card">
                   <div className="card-header">

@@ -42,6 +42,7 @@ const SubContainer = styled.div`
 
 const BorderBox = styled.div`
   position: relative;
+  min-width: 150px;
 
   ${(props) =>
     props.descriptionDisplayed === true &&
@@ -143,7 +144,7 @@ class SkillBox extends Component {
     const { isChecked, descriptionDisplayed } = this.state
 
     return (
-      <Container className="col-sm-4">
+      <Container className="col-sm-12 col-lg-4">
         <BorderBox
           hoverColorBorder={getBorderColorSkill(isDark)}
           isSelected={isChecked}
