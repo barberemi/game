@@ -116,6 +116,10 @@ class Character extends Component {
   }
 
   componentDidMount() {
+    this.loadData()
+  }
+
+  loadData() {
     const url = this.state.id
       ? process.env.REACT_APP_API_URL + '/users/' + this.state.id
       : process.env.REACT_APP_API_URL + '/users/me'
@@ -171,11 +175,21 @@ class Character extends Component {
         activatedTab: anchor
       })
 
-      if (this.state.user && this.state.user.isNoob) {
+      if (
+        jwtDecode(Cookies.get('auth-token')).email !== this.state.user.email
+      ) {
         this.setState({
-          stepsEnabled: true,
-          stepName: 'character#' + anchor
+          id: null,
+          loading: true
         })
+        this.loadData()
+      } else {
+        if (this.state.user.isNoob) {
+          this.setState({
+            stepsEnabled: true,
+            stepName: 'character#' + anchor
+          })
+        }
       }
     }
   }
@@ -228,12 +242,6 @@ class Character extends Component {
           })
         })
     }
-  }
-
-  onClickOnTab = (idTab) => {
-    this.setState({
-      activatedTab: idTab
-    })
   }
 
   onCheckSkill = (skill) => {
@@ -606,13 +614,15 @@ class Character extends Component {
               <b>Erreur :</b> {error.message}
             </span>
           )}
-          {user && (
+          {!loading && user && (
             <SubContainer className="row h-100 mt-3 mb-3">
-              <Tutorial
-                stepsEnabled={this.state.stepsEnabled}
-                stepName={this.state.stepName}
-                onExit={() => this.setState({ stepsEnabled: false })}
-              />
+              {this.state.isMe && (
+                <Tutorial
+                  stepsEnabled={this.state.stepsEnabled}
+                  stepName={this.state.stepName}
+                  onExit={() => this.setState({ stepsEnabled: false })}
+                />
+              )}
 
               <RightBox className="col-sm-12 my-auto">
                 <div className="tab-content">

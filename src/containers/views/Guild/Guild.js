@@ -486,12 +486,6 @@ class Guild extends Component {
     }
   }
 
-  onClickOnTab = (idTab) => {
-    this.setState({
-      activatedTab: idTab
-    })
-  }
-
   handleChoiceGuildBoss = (guildMonster) => {
     const { guild } = this.state
 
