@@ -162,8 +162,8 @@ class CardMap extends Component {
                     src={process.env.PUBLIC_URL + '/img/chest-close.svg'}
                     width="50px"
                     style={{ paddingTop: '7px' }}
-                    alt="chasse au trésor"
-                    data-tip="Chasse au trésor"
+                    alt="chasse aux trésors"
+                    data-tip="Chasse aux trésors"
                   />
                 </IconTreasure>
               )}

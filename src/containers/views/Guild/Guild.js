@@ -17,6 +17,7 @@ import { selectTabFromUrl } from '../../../utils/routingHelper'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 import ConstructionList from '../../../Components/Construction/ConstructionList'
 import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
+import GuildList from '../../../Components/Guild/GuildList'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
@@ -157,6 +158,7 @@ class Guild extends Component {
       textAnnouncement: '',
       guild: undefined,
       monsters: undefined,
+      selectedGuild: undefined,
       memberToAddOrRemove: '',
       newNameGuild: '',
       stepsEnabled: 'waiting',
@@ -168,7 +170,8 @@ class Guild extends Component {
         'membersTab',
         'choiceBossTab',
         'fightBossTab',
-        'itemsGuildTab'
+        'itemsGuildTab',
+        'pantheonGuildTab'
       ])
     }
 
@@ -274,7 +277,8 @@ class Guild extends Component {
       'membersTab',
       'choiceBossTab',
       'fightBossTab',
-      'itemsGuildTab'
+      'itemsGuildTab',
+      'pantheonGuildTab'
     ])
 
     if (prevState.activatedTab !== anchor) {
@@ -282,7 +286,7 @@ class Guild extends Component {
         activatedTab: anchor
       })
 
-      if (this.state.user && this.state.user.isNoob) {
+      if (this.state.user && this.state.user.isNoob && this.state.user.guild) {
         this.setState({
           stepsEnabled: true,
           stepName: 'guild#' + anchor
@@ -835,6 +839,7 @@ class Guild extends Component {
       guild,
       user,
       monsters,
+      selectedGuild,
       activatedTab,
       stepName,
       estimationLoader
@@ -859,6 +864,72 @@ class Guild extends Component {
 
             <RightBox className="col-sm-12 my-auto">
               <div className="tab-content">
+                {error && (
+                  <span className="text-danger">
+                    <b>Erreur :</b> {error.error}
+                  </span>
+                )}
+
+                {/* No Guild */}
+                {!guild && user && !loading && (
+                  <Card className="card">
+                    <div className="card-header">
+                      <Title>Créer sa propre guilde</Title>
+                    </div>
+                    <div className="card-body">
+                      <div className="col-sm-12">
+                        {user.money >= 20000 && (
+                          <div className="offset-sm-3 col-sm-6">
+                            <FormAddUser>
+                              <Input
+                                id="name"
+                                name="name"
+                                type="text"
+                                placeholder="Nom de la guilde"
+                                value={this.state.newNameGuild}
+                                onChange={(event) =>
+                                  this.setState({
+                                    newNameGuild: event.target.value
+                                  })
+                                }
+                              />
+                              <Button
+                                className="btn btn-success"
+                                type="button"
+                                onClick={() => this.handleCreateGuild()}
+                              >
+                                Créer
+                              </Button>
+                            </FormAddUser>
+                          </div>
+                        )}
+                        <CreateGuildText>
+                          Attention: la création d’une guilde coûte 20 000{' '}
+                          <img
+                            src={process.env.PUBLIC_URL + '/img/money.svg'}
+                            width="30"
+                            height="30"
+                            className="d-inline-block align-top"
+                            alt="Thune"
+                          />
+                          {user.money < 20000 && (
+                            <div className="text-danger">
+                              Vous ne possèdez actuellement que {user.money}{' '}
+                              <img
+                                src={process.env.PUBLIC_URL + '/img/money.svg'}
+                                width="30"
+                                height="30"
+                                className="d-inline-block align-top"
+                                alt="Thune"
+                              />
+                            </div>
+                          )}
+                        </CreateGuildText>
+                      </div>
+                    </div>
+                  </Card>
+                )}
+
                 {/* General */}
                 <div
                   className={`tab-pane${
@@ -867,270 +938,188 @@ class Guild extends Component {
                   id="generalTab"
                   role="tabpanel"
                 >
-                  <Card className="card">
-                    {error && (
-                      <span className="text-danger">
-                        <b>Erreur :</b> {error.error}
-                      </span>
-                    )}
-                    {guild && user && (
-                      <>
-                        <div className="card-header" id="tutorialGuildName">
-                          <Title>
-                            {guild.name}{' '}
-                            <span style={{ fontSize: '18px', color: 'white' }}>
-                              ({getDaysDateDiffBetweenNowAnd(guild.createdAt)}{' '}
-                              jours)
-                            </span>
-                          </Title>
-                          {user.canGuildBossFight && (
-                            <>
+                  {guild && user && (
+                    <Card className="card">
+                      <div className="card-header" id="tutorialGuildName">
+                        <Title>
+                          {guild.name}{' '}
+                          <span style={{ fontSize: '18px', color: 'white' }}>
+                            ({getDaysDateDiffBetweenNowAnd(guild.createdAt)}{' '}
+                            jours)
+                          </span>
+                        </Title>
+                        {user.canGuildBossFight && (
+                          <>
+                            <FightButton
+                              onClick={() => this.handleCreateGuildBossFight()}
+                              className="btn btn-outline-warning"
+                            >
+                              Combat de la journée{' '}
+                              <img
+                                src={process.env.PUBLIC_URL + '/img/versus.svg'}
+                                width="30px"
+                                height="30px"
+                                alt="versus"
+                              />
+                            </FightButton>{' '}
+                          </>
+                        )}
+                        <LinkToGuildExploration to={'/guild_exploration'}>
+                          <FightButton className="btn btn-outline-warning">
+                            Exploration de guilde{' '}
+                            <img
+                              src={process.env.PUBLIC_URL + '/img/map.svg'}
+                              width="30px"
+                              height="30px"
+                              alt="map"
+                            />
+                          </FightButton>
+                        </LinkToGuildExploration>{' '}
+                        {user.job && user.canAction && (
+                          <>
+                            {user.job.name === 'scout' && (
                               <FightButton
-                                onClick={() =>
-                                  this.handleCreateGuildBossFight()
-                                }
+                                onClick={() => this.handleDoJob(user.job.name)}
                                 className="btn btn-outline-warning"
                               >
-                                Combat de la journée{' '}
+                                Compter les ennemis{' '}
                                 <img
                                   src={
-                                    process.env.PUBLIC_URL + '/img/versus.svg'
+                                    process.env.PUBLIC_URL +
+                                    '/img/jobs/scout.svg'
                                   }
                                   width="30px"
                                   height="30px"
-                                  alt="versus"
+                                  alt="scout"
                                 />
-                              </FightButton>{' '}
-                            </>
-                          )}
-                          <LinkToGuildExploration to={'/guild_exploration'}>
-                            <FightButton className="btn btn-outline-warning">
-                              Exploration de guilde{' '}
-                              <img
-                                src={process.env.PUBLIC_URL + '/img/map.svg'}
-                                width="30px"
-                                height="30px"
-                                alt="map"
-                              />
-                            </FightButton>
-                          </LinkToGuildExploration>{' '}
-                          {user.job && user.canAction && (
-                            <>
-                              {user.job.name === 'scout' && (
-                                <FightButton
-                                  onClick={() =>
-                                    this.handleDoJob(user.job.name)
-                                  }
-                                  className="btn btn-outline-warning"
-                                >
-                                  Compter les ennemis{' '}
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      '/img/jobs/scout.svg'
-                                    }
-                                    width="30px"
-                                    height="30px"
-                                    alt="scout"
-                                  />
-                                </FightButton>
-                              )}
-                              {user.job.name === 'minor' && (
-                                <FightButton
-                                  onClick={() =>
-                                    this.handleDoJob(user.job.name)
-                                  }
-                                  className="btn btn-outline-warning"
-                                >
-                                  Chercher des matériaux{' '}
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      '/img/jobs/minor.svg'
-                                    }
-                                    width="30px"
-                                    height="30px"
-                                    alt="minor"
-                                  />
-                                </FightButton>
-                              )}
-                            </>
-                          )}
-                        </div>
-                        <div
-                          className="card-body"
-                          id="tutorialGuildAnnouncement"
-                        >
-                          <Title>Annonce de la guilde</Title>
-                          {(user.role === 'ROLE_ADMIN' ||
-                            user.guildRole === 'master' ||
-                            user.guildRole === 'officer') && (
-                            <form onSubmit={this.handleChangeGuildAnnouncement}>
-                              <textarea
-                                name="announcement"
-                                id="announcement"
-                                className="form-control"
-                                rows="5"
-                                value={this.state.textAnnouncement}
-                                onChange={(e) =>
-                                  this.setState({
-                                    textAnnouncement: e.target.value
-                                  })
-                                }
-                              />
-                              <InputSubmit
-                                type="submit"
-                                value="Valider"
-                                className="btn btn-success"
-                              />
-                            </form>
-                          )}
-                          {user.role !== 'ROLE_ADMIN' &&
-                            user.guildRole === 'member' && (
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: guild.announcement.replace(
-                                    // eslint-disable-next-line
-                                  new RegExp('\r?\n', 'g'),
-                                    '<br />'
-                                  )
-                                }}
-                              />
+                              </FightButton>
                             )}
-                        </div>
-                        <div
-                          className="card-footer"
-                          id="tutorialGuildEstimation"
-                        >
-                          <Title>
-                            Estimation de l’attaque{' '}
-                            <span style={{ fontSize: '10px' }}>
-                              (de 00h00 à 00h15)
-                            </span>
-                          </Title>
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th style={{ borderTop: 0 }}>
-                                  Attaque des monstres
-                                </th>
-                                <th style={{ borderTop: 0 }}>
-                                  Défense de la guilde
-                                </th>
-                              </tr>
-                              <tr>
-                                <td style={{ borderTop: 0 }}>
-                                  {estimationLoader && (
-                                    <img
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        '/img/tail-spinner.svg'
-                                      }
-                                      width="20"
-                                      height="20"
-                                      alt="spinner"
-                                    />
+                            {user.job.name === 'minor' && (
+                              <FightButton
+                                onClick={() => this.handleDoJob(user.job.name)}
+                                className="btn btn-outline-warning"
+                              >
+                                Chercher des matériaux{' '}
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    '/img/jobs/minor.svg'
+                                  }
+                                  width="30px"
+                                  height="30px"
+                                  alt="minor"
+                                />
+                              </FightButton>
+                            )}
+                          </>
+                        )}
+                      </div>
+                      <div className="card-body" id="tutorialGuildAnnouncement">
+                        <Title>Annonce de la guilde</Title>
+                        {(user.role === 'ROLE_ADMIN' ||
+                          user.guildRole === 'master' ||
+                          user.guildRole === 'officer') && (
+                          <form onSubmit={this.handleChangeGuildAnnouncement}>
+                            <textarea
+                              name="announcement"
+                              id="announcement"
+                              className="form-control"
+                              rows="5"
+                              value={this.state.textAnnouncement}
+                              onChange={(e) =>
+                                this.setState({
+                                  textAnnouncement: e.target.value
+                                })
+                              }
+                            />
+                            <InputSubmit
+                              type="submit"
+                              value="Valider"
+                              className="btn btn-success"
+                            />
+                          </form>
+                        )}
+                        {user.role !== 'ROLE_ADMIN' &&
+                          user.guildRole === 'member' && (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: guild.announcement.replace(
+                                  // eslint-disable-next-line
+                                new RegExp('\r?\n', 'g'),
+                                  '<br />'
+                                )
+                              }}
+                            />
+                          )}
+                      </div>
+                      <div className="card-footer" id="tutorialGuildEstimation">
+                        <Title>
+                          Estimation de l’attaque{' '}
+                          <span style={{ fontSize: '10px' }}>
+                            (de 00h00 à 00h15)
+                          </span>
+                        </Title>
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th style={{ borderTop: 0 }}>
+                                Attaque des monstres
+                              </th>
+                              <th style={{ borderTop: 0 }}>
+                                Défense de la guilde
+                              </th>
+                            </tr>
+                            <tr>
+                              <td style={{ borderTop: 0 }}>
+                                {estimationLoader && (
+                                  <img
+                                    src={
+                                      process.env.PUBLIC_URL +
+                                      '/img/tail-spinner.svg'
+                                    }
+                                    width="20"
+                                    height="20"
+                                    alt="spinner"
+                                  />
+                                )}
+                                {!estimationLoader &&
+                                  !guild.minAttack &&
+                                  !guild.maxAttack && (
+                                    <i className="fas fa-question" />
                                   )}
-                                  {!estimationLoader &&
-                                    !guild.minAttack &&
-                                    !guild.maxAttack && (
-                                      <i className="fas fa-question" />
-                                    )}
-                                  {!estimationLoader &&
-                                    (guild.minAttack || guild.maxAttack) && (
-                                      <>
-                                        Entre{' '}
-                                        {guild.minAttack ? (
-                                          guild.minAttack
-                                        ) : (
-                                          <i className="fas fa-question" />
-                                        )}{' '}
-                                        et{' '}
-                                        {guild.maxAttack ? (
-                                          guild.maxAttack
-                                        ) : (
-                                          <i className="fas fa-question" />
-                                        )}
-                                      </>
-                                    )}
-                                </td>
-                                <td style={{ borderTop: 0 }}>
-                                  {guild.defense}{' '}
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      '/img/defense.gif'
-                                    }
-                                    alt="defense"
-                                  />
-                                </td>
-                              </tr>
-                            </thead>
-                          </table>
-                        </div>
-                      </>
-                    )}
-                    {!guild && user && !loading && (
-                      <>
-                        <div className="card-header">
-                          <Title>Créer sa propre guilde</Title>
-                        </div>
-                        <div className="card-body">
-                          <div className="col-sm-12">
-                            {user.money >= 20000 && (
-                              <div className="offset-sm-3 col-sm-6">
-                                <FormAddUser>
-                                  <Input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    placeholder="Nom de la guilde"
-                                    value={this.state.newNameGuild}
-                                    onChange={(event) =>
-                                      this.setState({
-                                        newNameGuild: event.target.value
-                                      })
-                                    }
-                                  />
-                                  <Button
-                                    className="btn btn-success"
-                                    type="button"
-                                    onClick={() => this.handleCreateGuild()}
-                                  >
-                                    Créer
-                                  </Button>
-                                </FormAddUser>
-                              </div>
-                            )}
-                            <CreateGuildText>
-                              Attention: la création d’une guilde coûte 20 000{' '}
-                              <img
-                                src={process.env.PUBLIC_URL + '/img/money.svg'}
-                                width="30"
-                                height="30"
-                                className="d-inline-block align-top"
-                                alt="Thune"
-                              />
-                              {user.money < 20000 && (
-                                <div className="text-danger">
-                                  Vous ne possèdez actuellement que {user.money}{' '}
-                                  <img
-                                    src={
-                                      process.env.PUBLIC_URL + '/img/money.svg'
-                                    }
-                                    width="30"
-                                    height="30"
-                                    className="d-inline-block align-top"
-                                    alt="Thune"
-                                  />
-                                </div>
-                              )}
-                            </CreateGuildText>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </Card>
+                                {!estimationLoader &&
+                                  (guild.minAttack || guild.maxAttack) && (
+                                    <>
+                                      Entre{' '}
+                                      {guild.minAttack ? (
+                                        guild.minAttack
+                                      ) : (
+                                        <i className="fas fa-question" />
+                                      )}{' '}
+                                      et{' '}
+                                      {guild.maxAttack ? (
+                                        guild.maxAttack
+                                      ) : (
+                                        <i className="fas fa-question" />
+                                      )}
+                                    </>
+                                  )}
+                              </td>
+                              <td style={{ borderTop: 0 }}>
+                                {guild.defense}{' '}
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL + '/img/defense.gif'
+                                  }
+                                  alt="defense"
+                                />
+                              </td>
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+                    </Card>
+                  )}
                 </div>
 
                 {/* Chat */}
@@ -1479,6 +1468,51 @@ class Guild extends Component {
                     </Card>
                   </div>
                 )}
+
+                {/* Pantheon */}
+                <div
+                  className={`tab-pane${
+                    activatedTab === 'pantheonGuildTab' ? ' active' : ''
+                  }`}
+                  id="pantheonGuildTab"
+                  role="tabpanel"
+                >
+                  <Card className="card">
+                    <div className="card-body">
+                      <div className="col-sm-12">
+                        {!selectedGuild && (
+                          <>
+                            <Title>Panthéon des guildes</Title>
+                            <GuildList
+                              onSelectedGuild={(guild) => {
+                                this.setState({
+                                  selectedGuild: guild
+                                })
+                              }}
+                            />
+                          </>
+                        )}
+                        {selectedGuild && (
+                          <>
+                            <Title>
+                              {selectedGuild.name}{' '}
+                              <Link
+                                to={'/guild#pantheonGuildTab'}
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                  this.setState({ selectedGuild: undefined })
+                                }}
+                              >
+                                Retour
+                              </Link>
+                            </Title>
+                            <FriendList friends={selectedGuild.users} />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                </div>
               </div>
             </RightBox>
           </SubContainer>
