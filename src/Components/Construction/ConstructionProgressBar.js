@@ -2,14 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-const ProgressDiv = styled.div`
-  border-radius: 10px;
-`
-
-const ProgressSubDiv = styled.div`
-  border-radius: 10px;
-`
-
 export class ConstructionProgressBar extends Component {
   getColor = (percent) => {
     switch (true) {
@@ -38,12 +30,12 @@ export class ConstructionProgressBar extends Component {
       ((this.props.max - this.props.remaining) / this.props.max) * 100
 
     return (
-      <ProgressDiv className="d-flex justify-content-between align-items-center">
+      <div className="d-flex justify-content-between align-items-center">
         <div
           className="progress both-progress"
           style={{ backgroundColor: this.getTransparentColor(percentage) }}
         >
-          <ProgressSubDiv
+          <div
             className="progress-bar"
             role="progressbar"
             style={{
@@ -55,7 +47,7 @@ export class ConstructionProgressBar extends Component {
           />
           <div className="hp-progress-bar">{percentage} %</div>
         </div>
-      </ProgressDiv>
+      </div>
     )
   }
 }
