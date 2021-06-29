@@ -39,6 +39,23 @@ const Sprite = styled.div`
     ${background};
     animation: sprite 1s steps(10) infinite;
   }
+
+  @keyframes sprite {
+    from {
+      background-position: 0;
+    }
+    to {
+      background-position: 5120px;
+    }
+  }
+  @keyframes sprite-mobile {
+    from {
+      background-position: 0px;
+    }
+    to {
+      background-position: 2560px;
+    }
+  }
 `
 
 class AcademySprite extends Component {

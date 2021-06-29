@@ -39,7 +39,7 @@ export class PlayerBox extends Component {
             faint={this.props.player.faint}
             isHit={this.props.player.isHit}
             isPlayer={true}
-            logoName={'academies/' + this.props.player.image + '.png'}
+            logoName={'academies/' + this.props.player.image + '/Alert1H/0.png'}
             className={`avatar mt-1 ${
               this.props.player.isSelectable ? 'hero-hover-selected' : ''
             }`}
