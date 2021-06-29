@@ -55,9 +55,13 @@ const ExplorationBox = styled.div`
 
 const AvatarBox = styled.div`
   display: flex;
-  left: 15%;
+  left: 0;
   position: absolute;
   bottom: 10%;
+
+  @media (min-width: 768px) {
+    left: 5%;
+  }
 `
 
 const EventCharacterBox = styled.div`

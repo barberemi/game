@@ -9,10 +9,7 @@ import ReactTooltip from 'react-tooltip'
 import Loader from '../../../Components/Loader/Loader'
 import HpNavBar from '../../../Components/NavBar/HpNavBar'
 import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
-import {
-  getBoxBottomSpacing,
-  getBoxRightSpacing
-} from '../../../utils/explorationHelper'
+import AcademySprite from '../../../Components/Sprites/AcademySprite'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
@@ -56,26 +53,29 @@ const ExplorationBox = styled.div`
 `
 
 const AvatarBox = styled.div`
-  bottom: 20%;
-  left: 15%;
+  display: flex;
+  left: 0;
+  position: absolute;
+  bottom: 10%;
+
+  @media (min-width: 768px) {
+    left: 5%;
+  }
 `
 
 const OtherCharacterBox = styled.div`
   transform: rotateY(180deg);
-  cursor: pointer;
-
-  ${(props) =>
-    props.index >= 0 &&
-    css`
-      bottom: ${getBoxBottomSpacing(props.index)};
-      right: ${getBoxRightSpacing(props.index)};
-    `};
 `
 
 const Text = styled.div`
+  text-shadow: 1px 1px 2px black;
   color: white;
-  font-size: 22px;
-  padding-left: 50px;
+  text-align: center;
+  font-size: 14px;
+
+  @media (min-width: 768px) {
+    font-size: 22px;
+  }
 `
 
 const Building = styled.img`
@@ -226,69 +226,47 @@ class GuildExploration extends Component {
           {loading && <Loader />}
           {character && (
             <>
-              <AvatarBox className="position-absolute">
-                <Text>Que faire ?</Text>
-                <img
-                  src={
-                    process.env.PUBLIC_URL +
-                    '/img/academies/' +
-                    character.academy.name +
-                    '.png'
-                  }
-                  width="200px"
-                  alt="Avatar mon personnage"
-                  className="animated fadeInLeft slow"
-                  data-tip="Moi"
-                />
-                <img
-                  src={process.env.PUBLIC_URL + '/img/map.svg'}
-                  width="70px"
-                  alt="Compass"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    this.setState({ displayMap: !this.state.displayMap })
-                    // Scroll if didnt see character
-                    setTimeout(() => {
-                      this.refScroll.current.scrollTop =
-                        this.refMe.current.getBoundingClientRect().top -
-                        (this.refMe.current.getBoundingClientRect().height +
-                          100)
-                    }, 1000)
-                  }}
-                  data-tip="Carte de navigation"
-                />
+              <AvatarBox>
+                <div>
+                  <Text>Que faire avec la guilde ?</Text>
+                  <AcademySprite name={character.academy.name} />
+                </div>
+                <div className="m-auto">
+                  <img
+                    src={process.env.PUBLIC_URL + '/img/map.svg'}
+                    width="70px"
+                    alt="Compass"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      this.setState({ displayMap: !this.state.displayMap })
+                      // Scroll if didnt see character
+                      setTimeout(() => {
+                        this.refScroll.current.scrollTop =
+                          this.refMe.current.getBoundingClientRect().top -
+                          (this.refMe.current.getBoundingClientRect().height +
+                            100)
+                      }, 1000)
+                    }}
+                    data-tip="Carte de navigation"
+                  />
+                </div>
+                {_.map(
+                  _.filter(guild.users, (user) => user.guildRole === 'master'),
+                  (user, index) => (
+                    <div className="m-auto" key={index}>
+                      <OtherCharacterBox>
+                        <br />
+                        <AcademySprite name={user.academy.name} />
+                      </OtherCharacterBox>
+                      <Text>
+                        Chef de guilde
+                        <br />
+                        <span className="text-danger">{user.name}</span>
+                      </Text>
+                    </div>
+                  )
+                )}
               </AvatarBox>
-              {_.map(
-                _.filter(
-                  guild.users,
-                  (user) =>
-                    user.guildRole === 'master' || user.guildRole === 'officer'
-                ),
-                (user, index) => (
-                  <OtherCharacterBox
-                    key={index}
-                    index={index}
-                    className="position-absolute"
-                  >
-                    <img
-                      src={
-                        process.env.PUBLIC_URL +
-                        '/img/academies/' +
-                        user.academy.name +
-                        '.png'
-                      }
-                      width="200px"
-                      alt={user.name}
-                      className="animated fadeInLeft slow"
-                      data-tip={
-                        user.guildRole === 'master'
-                          ? '(Chef de guilde) ' + user.name
-                          : '(Officier) ' + user.name
-                      }
-                    />
-                  </OtherCharacterBox>
-                )
-              )}
               <ReactTooltip />
             </>
           )}
