@@ -21,11 +21,7 @@ const Actions = styled.div`
 `
 
 const Avatar = styled.img`
-  width: 50px;
-  height: 50px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background-color: #fff;
+  width: 150px;
 `
 
 const IconAction = styled.span`

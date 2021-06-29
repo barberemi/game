@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import _ from 'lodash'
 import { Redirect, Link } from 'react-router-dom'
 import FriendList from '../../../Components/Friend/FriendList'
@@ -18,6 +19,7 @@ import Tutorial from '../../../Components/Tutorial/Tutorial'
 import ConstructionList from '../../../Components/Construction/ConstructionList'
 import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
 import GuildList from '../../../Components/Guild/GuildList'
+import MonsterSprite from '../../../Components/Sprites/MonsterSprite'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
@@ -126,6 +128,12 @@ const Avatar = styled.img`
   border: 2px solid #fff;
   border-radius: 50%;
   background-color: #fff;
+
+  ${(props) =>
+    props.backgroundColor &&
+    css`
+      background-color: ${props.backgroundColor};
+    `};
 `
 
 const FightButton = styled.button`
@@ -1353,15 +1361,8 @@ class Guild extends Component {
                             )}
                           </Title>
                         </div>
-                        <Image
-                          src={
-                            process.env.PUBLIC_URL +
-                            '/img/boss/' +
-                            guild.monster.image
-                          }
-                          alt="Third slide"
-                        />
-                        <div>
+                        <MonsterSprite image={guild.monster.image} />
+                        <div style={{ marginTop: '30px' }}>
                           {(guild.monster.isBoss ||
                             guild.monster.isGuildBoss) && (
                             <>
@@ -1401,7 +1402,14 @@ class Guild extends Component {
                                       process.env.PUBLIC_URL +
                                       '/img/academies/' +
                                       member.academy.name +
-                                      '.png'
+                                      '/Alert1H/0.png'
+                                    }
+                                    backgroundColor={
+                                      member.academy.name === 'warrior'
+                                        ? '#dc3545'
+                                        : member.academy.name === 'hunter'
+                                        ? '#28a745'
+                                        : '#007bff'
                                     }
                                     alt={member.name}
                                   />

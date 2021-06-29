@@ -53,7 +53,7 @@ export class EnemyBox extends Component {
             isHit={this.props.enemy.isHit}
             isPlayer={false}
             logoName={'boss/' + this.props.enemy.image}
-            className="avatar mt-1"
+            className="avatar avatar-enemy mt-1"
           />
           {!this.props.enemy.faint &&
             _.map(this.props.enemy.hot, ({ amount }, index) => (
