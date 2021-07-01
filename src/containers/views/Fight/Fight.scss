@@ -160,6 +160,10 @@
   position: absolute;
   height: 50px;
 
+  -webkit-filter: drop-shadow(0 0 1px rgb(255, 255, 255));
+  filter: drop-shadow(0 0 1px rgb(255, 255, 255));
+  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=0, OffY=0, Color='#fff')";
+
   @media (min-width: 768px) {
     height: 80px;
   }

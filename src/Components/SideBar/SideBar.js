@@ -7,16 +7,13 @@ import _ from 'lodash'
 
 const MobileDiv = styled.div`
   display: none;
-  background-color: #f26725;
-  color: white;
-  border-radius: 3px;
   cursor: pointer;
 
   @media (max-width: 768px) {
     display: block;
     position: fixed;
     z-index: 100;
-    top: 50%;
+    top: 35%;
 
     ${(props) =>
       props.isDisplayed &&
@@ -32,11 +29,15 @@ const MobileDiv = styled.div`
   }
 `
 
+const ImageAccueil = styled.img`
+  -webkit-filter: drop-shadow(0 0 3px rgb(255, 255, 255));
+  filter: drop-shadow(0 0 3px rgb(255, 255, 255));
+  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=1, OffY=1, Color='#fff')";
+`
+
 const ReturnDiv = styled.div`
   display: none;
-  background-color: #f26725;
   color: white;
-  border-radius: 3px;
   cursor: pointer;
   width: 35px;
 
@@ -69,6 +70,7 @@ const Bar = styled.div`
 
 const Nav = styled.nav`
   height: 100%;
+
   z-index: 20;
   background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
@@ -81,6 +83,10 @@ const Nav = styled.nav`
     background-color: rgba(0, 0, 0);
     min-width: 150px;
     max-width: 150px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
   }
 `
 
@@ -193,9 +199,10 @@ class SideBar extends Component {
           onClick={() => this.setState({ displayMenu: !displayMenu })}
           isDisplayed={!displayMenu}
         >
-          <div className="btn btn-sm">
-            <i className="fas fa-align-justify" />
-          </div>
+          <ImageAccueil
+            src={process.env.PUBLIC_URL + '/img/parchemin.png'}
+            height="150px"
+          />
         </MobileDiv>
         <Bar displayMenu={displayMenu}>
           <Nav>
