@@ -310,7 +310,7 @@ class GuildExploration extends Component {
                                   process.env.PUBLIC_URL +
                                   '/img/academies/' +
                                   character.academy.name +
-                                  '.png'
+                                  '/Alert1H/0.png'
                                 }
                                 alt="me"
                                 width="100px"

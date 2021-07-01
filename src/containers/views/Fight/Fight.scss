@@ -144,10 +144,47 @@
 }
 
 #turn-text-number {
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: white;
-  padding-top: 10px;
   text-align: center;
+  text-shadow: 1px 1px 2px black;
+  color: #f26725;
+  font-size: 24px;
+  height: 40px;
+
+  @media (min-width: 768px) {
+    height: auto;
+    font-size: 34px;
+  }
+}
+
+#turn-text-number > img {
+  position: absolute;
+  height: 50px;
+
+  @media (min-width: 768px) {
+    height: 80px;
+  }
+}
+
+.text-round {
+  position: relative;
+  top: 6px;
+  @media (min-width: 768px) {
+    top: 12px;
+  }
+}
+
+.text-round-one-digit {
+  left: 15px;
+  @media (min-width: 768px) {
+    left: 25px;
+  }
+}
+
+.text-round-two-digit {
+  left: 10px;
+  @media (min-width: 768px) {
+    left: 20px;
+  }
 }
 
 .hp-progress-bar {

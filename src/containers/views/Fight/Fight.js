@@ -59,6 +59,7 @@ class Fight extends Component {
       textMessageTwo: '',
       playerActionSelectable: undefined,
       round: 1,
+      rotateRound: false,
       gameOver: false
     }
   }
@@ -221,11 +222,19 @@ class Fight extends Component {
     setTimeout(() => {
       this.setState({
         round: this.state.round + 1,
+        rotateRound: true,
         players: playersTurnFinished(this.state.players),
         enemy: enemyTurnFinished(this.state.enemy),
         textMessageOne: ''
       })
       this.nextEnemyAction()
+
+      // Reset rotateRound
+      setTimeout(() => {
+        this.setState({
+          rotateRound: false
+        })
+      }, 1000)
     }, timer)
   }
 
@@ -658,7 +667,28 @@ class Fight extends Component {
                 {/* BATTLE SCREEN CONTAINER */}
                 <div className="col-sm-12">
                   <div id="turn-text-number">
-                    <i className="fas fa-dice" /> Tour {this.state.round}
+                    <img
+                      src={process.env.PUBLIC_URL + '/img/sablier.png'}
+                      className={
+                        this.state.rotateRound ? 'animated rotateIn' : ''
+                      }
+                    />
+                    <span
+                      className={`text-round ${
+                        this.state.round.toString().length === 1
+                          ? 'text-round-one-digit'
+                          : 'text-round-two-digit'
+                      }`}
+                      // style={{
+                      //   left: `${
+                      //     this.state.round.toString().length === 1
+                      //       ? '25px'
+                      //       : '20px'
+                      //   }`
+                      // }}
+                    >
+                      {this.state.round}
+                    </span>
                   </div>
                   <div className="characters-and-text-box">
                     <div className="all-players-box">
