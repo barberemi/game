@@ -5,9 +5,7 @@ import _ from 'lodash'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { getDaysDateDiffBetweenNowAnd } from '../../utils/dateHelper'
-import { Link } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
-import FriendList from '../Friend/FriendList'
 
 const Container = styled.div`
   max-height: 60vh;

@@ -44,6 +44,16 @@ const Container = styled.div`
   height: 100vh !important;
 `
 
+const InterfaceActions = styled.div`
+  //background-image: url('${process.env.PUBLIC_URL +
+  '/img/skillsbar/interface-4.png'}');
+  // height: 342px;
+  height: 232px;
+  width: 700px;
+  bottom: 0;
+  background-repeat: no-repeat;
+`
+
 class Fight extends Component {
   constructor(props) {
     super(props)
@@ -669,6 +679,7 @@ class Fight extends Component {
                   <div id="turn-text-number">
                     <img
                       src={process.env.PUBLIC_URL + '/img/sablier.png'}
+                      alt="sablier"
                       className={
                         this.state.rotateRound ? 'animated rotateIn' : ''
                       }
@@ -679,13 +690,6 @@ class Fight extends Component {
                           ? 'text-round-one-digit'
                           : 'text-round-two-digit'
                       }`}
-                      // style={{
-                      //   left: `${
-                      //     this.state.round.toString().length === 1
-                      //       ? '25px'
-                      //       : '20px'
-                      //   }`
-                      // }}
                     >
                       {this.state.round}
                     </span>
@@ -711,43 +715,47 @@ class Fight extends Component {
                         expectedAction={this.state.enemy.expectedAction}
                       />
                     </div>
-
-                    {/* TEXT BOX SECTION */}
-                    <div id="text-box">
-                      <div id="text-box-content">
-                        {this.state.textMessageOne !== '' &&
-                          this.state.gameOver === false && (
-                            <TextBox
-                              messageOne={this.state.textMessageOne}
-                              messageTwo={this.state.textMessageTwo}
-                            />
-                          )}
-
-                        {this.state.textMessageOne === '' &&
-                          this.state.gameOver === false &&
-                          Object.keys(
-                            _.find(this.state.players, 'me').skills
-                          ).map((key) => {
-                            return (
-                              <>
-                                <Actions
-                                  key={key}
-                                  frontPlayer={
-                                    _.find(this.state.players, 'me') ===
-                                    _.last(this.state.players)
-                                  }
-                                  action={
-                                    _.find(this.state.players, 'me').skills[key]
-                                  }
-                                  onClick={this.handleClickOnActionBar}
-                                />
-                              </>
-                            )
-                          })}
-                      </div>
-                    </div>
-                    {/* TEXT BOX SECTION */}
                   </div>
+                  {/* TEXT BOX SECTION */}
+                  <InterfaceActions id="text-box">
+                    <img
+                      src={process.env.PUBLIC_URL + '/img/skillsbar/test.png'}
+                      alt="skill bar"
+                    />
+                    <div id="text-box-content">
+                      {this.state.textMessageOne !== '' &&
+                        this.state.gameOver === false && (
+                          <TextBox
+                            messageOne={this.state.textMessageOne}
+                            messageTwo={this.state.textMessageTwo}
+                          />
+                        )}
+
+                      {this.state.textMessageOne === '' &&
+                        this.state.gameOver === false &&
+                        Object.keys(
+                          _.find(this.state.players, 'me').skills
+                        ).map((key) => {
+                          return (
+                            <>
+                              <Actions
+                                key={key}
+                                number={key}
+                                frontPlayer={
+                                  _.find(this.state.players, 'me') ===
+                                  _.last(this.state.players)
+                                }
+                                action={
+                                  _.find(this.state.players, 'me').skills[key]
+                                }
+                                onClick={this.handleClickOnActionBar}
+                              />
+                            </>
+                          )
+                        })}
+                    </div>
+                  </InterfaceActions>
+                  {/* TEXT BOX SECTION */}
                 </div>
                 {/* END BATTLE SCREEN CONTAINER */}
               </div>

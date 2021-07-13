@@ -80,24 +80,30 @@
 .all-players-box {
   flex-direction: row;
   display: flex;
-  //height: 80%;
-  //position: absolute;
-  //bottom: 0;
 }
 
 #text-box {
   min-width: 500px;
-  background-color: rgba(0, 0, 0, 0.8) !important;
   position: absolute;
-  height: 140px;
-  border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
   left: 50%;
   transform: translate(-50%);
+  bottom: 0;
+}
+
+#text-box > img {
+  position: absolute;
+
+  -webkit-filter: drop-shadow(0 0 1px rgb(255, 255, 255));
+  filter: drop-shadow(0 0 1px rgb(255, 255, 255));
+  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=0, OffY=0, Color='#fff')";
 }
 
 #text-box-content {
   text-align: center;
+  margin-top: 80px;
+  display: flex;
+
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -109,8 +115,32 @@
 
 .attack-container {
   text-align: center;
-  padding: 10px;
   display: inline-block;
+  //width: 80px;
+}
+
+.attack-container-nb-0, .attack-container-nb-2, .attack-container-nb-4 {
+  margin-top: 27px;
+}
+
+.attack-container-nb-1, .attack-container-nb-3 {
+  margin-top: -13px;
+}
+
+.attack-container-nb-0 {
+  margin-left: 182px;
+}
+.attack-container-nb-1 {
+  margin-left: 15px;
+}
+.attack-container-nb-2 {
+  margin-left: 13px;
+}
+.attack-container-nb-3 {
+  margin-left: 10px;
+}
+.attack-container-nb-4 {
+  margin-left: 13px;
 }
 
 .move-pointer {
@@ -141,6 +171,8 @@
   height: 80px;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
+  width: 100%;
+  z-index: 10;
 }
 
 #turn-text-number {

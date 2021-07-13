@@ -166,7 +166,15 @@ class SkillBox extends Component {
                 alt={skill.name}
               />
             </Box>
-            <Text>{skill.name}</Text>
+            <Text
+              className={
+                skill.type === 'heal' || skill.type === 'hot'
+                  ? 'text-success'
+                  : 'text-danger'
+              }
+            >
+              {skill.name}
+            </Text>
             {displayCheckbox && (
               <InputCheckBox
                 type="checkbox"
