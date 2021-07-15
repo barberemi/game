@@ -39,10 +39,10 @@ class MapHome extends Component {
       imageHeight: undefined,
       imageUrl: jwtDecode(Cookies.get('auth-token')).academy
         ? process.env.PUBLIC_URL +
-          '/img/maps/home-' +
+          '/img/backgrounds/home-' +
           jwtDecode(Cookies.get('auth-token')).academy.name +
           '.jpg'
-        : process.env.PUBLIC_URL + '/img/maps/home.jpg',
+        : process.env.PUBLIC_URL + '/img/backgrounds/home-map.jpg',
       interactiveMap: {
         name: 'map-interactive',
         areas: [
@@ -51,7 +51,7 @@ class MapHome extends Component {
             shape: 'poly',
             href: '/guild',
             // eslint-disable-next-line
-            coords: [1023,866,897,898,661,889,543,808,543,665,643,623,741,601,848,565,890,603,945,584,1062,611,1087,628,1070,767],
+            coords: [583,633,802,552,1060,776,879,908,583,912],
             preFillColor: 'rgba(0, 0, 0, 0.2)',
             fillColor: 'rgba(0, 0, 0, 0.4)'
           },
@@ -69,7 +69,7 @@ class MapHome extends Component {
             shape: 'poly',
             href: '/character',
             // eslint-disable-next-line
-            coords: [1298,501,1569,484,1582,664,1533,917,1262,917],
+            coords: [1298,520,1575,520,1575,870,1298,870],
             preFillColor: 'rgba(0, 0, 0, 0.2)',
             fillColor: 'rgba(0, 0, 0, 0.4)'
           },
@@ -78,7 +78,7 @@ class MapHome extends Component {
             shape: 'poly',
             href: '/maps',
             // eslint-disable-next-line
-            coords: [1109,586,1055,575,967,584,928,536,921,497,968,460,989,441,1009,438,1040,411,1104,404],
+            coords: [258,663,252,924,555,885,561,629],
             preFillColor: 'rgba(0, 0, 0, 0.2)',
             fillColor: 'rgba(0, 0, 0, 0.4)'
           }
@@ -107,7 +107,7 @@ class MapHome extends Component {
           user: response.data,
           imageUrl: response.data.academy
             ? process.env.PUBLIC_URL +
-              '/img/maps/home-' +
+              '/img/backgrounds/home-' +
               response.data.academy.name +
               '.jpg'
             : this.state.imageUrl
@@ -163,7 +163,7 @@ class MapHome extends Component {
             map={interactiveMap}
             imgWidth={1920}
             width={this.state.imageWidth}
-            strokeColor={'#ede1b0'}
+            strokeColor={'#ffffff'}
             onClick={(area) => {
               this.setState({ stepsEnabled: true, stepName: area.name })
             }}
