@@ -3,19 +3,12 @@ frontend:
   phases:
     preBuild:
       commands:
-        - mkdir dist
         - yarn install
     build:
       commands:
         - yarn run build
-    postBuild:
-      commands:
-        - ls
-        - pwd
-        - cd dist
-        - ls
   artifacts:
-    baseDirectory: dist
+    baseDirectory: build
     files:
       - '**/*'
   cache:
