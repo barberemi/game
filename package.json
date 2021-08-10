@@ -2,7 +2,7 @@
   "name": "game",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://barberemi.github.io/game",
+  "homepage": ".",
   "dependencies": {
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
