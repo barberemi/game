@@ -78,7 +78,7 @@ class Login extends Component {
           let decodeToken = jwtDecode(response.data.token)
 
           Cookies.set('auth-token', response.data.token, {
-            domain: 'localhost',
+            domain: process.env.REACT_APP_DOMAIN,
             expires: decodeToken.exp || 10 * 24 * 60 * 60
           })
 

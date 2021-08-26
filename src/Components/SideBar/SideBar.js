@@ -363,7 +363,7 @@ class SideBar extends Component {
                   onClick={() =>
                     Cookies.remove('auth-token', {
                       path: '',
-                      domain: 'localhost'
+                      domain: process.env.REACT_APP_DOMAIN
                     })
                   }
                 >
