@@ -17,7 +17,6 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
-    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-image-mapper": "^0.0.15",
@@ -26,7 +25,8 @@
     "react-scripts": "^3.4.4",
     "react-toastify": "^6.1.0",
     "react-tooltip": "^4.2.10",
-    "react-xarrows": "^1.5.2"
+    "react-xarrows": "^1.5.2",
+    "sass": "^1.55.0"
   },
   "scripts": {
     "start": "react-scripts start",
