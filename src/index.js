@@ -61,31 +61,31 @@ ReactDOM.render(
         component={Fight}
         layout={FightLayout}
       />
-      <AppRoute exact path="/character" component={Character} layout={Layout} />
       <AppRoute
         exact
         path="/character/:idCharacter"
         component={Character}
         layout={Layout}
       />
+      <AppRoute exact path="/character" component={Character} layout={Layout} />
       <AppRoute
         exact
         path="/creation"
         component={Creation}
         layout={CreationLayout}
       />
-      <AppRoute path="/boss/:idBoss" component={Boss} layout={Layout} />
-      <AppRoute path="/boss" component={Boss} layout={Layout} />
-      <AppRoute exact path="/crafting" component={Crafting} layout={Layout} />
+      <AppRoute exact path="/boss/:idBoss" component={Boss} layout={Layout} />
+      <AppRoute exact path="/boss" component={Boss} layout={Layout} />
       <AppRoute
         exact
         path="/crafting/:idBoss"
         component={Crafting}
         layout={Layout}
       />
-      <AppRoute path="/reward/:idFight" component={Reward} layout={Layout} />
-      <AppRoute path="/guild" component={Guild} layout={Layout} />
-      <AppRoute path="/guild/:idGuild" component={Guild} layout={Layout} />
+      <AppRoute exact path="/crafting" component={Crafting} layout={Layout} />
+      <AppRoute exact path="/reward/:idFight" component={Reward} layout={Layout} />
+      <AppRoute exact path="/guild/:idGuild" component={Guild} layout={Layout} />
+      <AppRoute exact path="/guild" component={Guild} layout={Layout} />
       <AppRoute exact path="/login" component={Login} layout={LoginLayout} />
       <AppRoute
         exact
