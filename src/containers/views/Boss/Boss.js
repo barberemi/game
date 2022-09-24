@@ -75,12 +75,13 @@ class Boss extends Component {
 
     this.state = {
       loading: true,
-      id: parseInt(this.props.match.params.idBoss),
+      id: this.props.match.params.idBoss ? parseInt(this.props.match.params.idBoss) : undefined,
       boss: undefined,
       user: undefined,
       stepsEnabled: false,
       selectedBoss: undefined
     }
+    console.log(this.props.match.params.idBoss ? parseInt(this.props.match.params.idBoss) : undefined)
   }
 
   componentDidMount() {
@@ -97,9 +98,12 @@ class Boss extends Component {
       }
     })
 
+    console.log('Mount')
     axios
       .all([getMonsters, getMe])
       .then((responses) => {
+        console.log(responses[0].data)
+        console.log(responses[1].data)
         if (responses[0].data && responses[1].data) {
           this.setState({
             loading: false,
