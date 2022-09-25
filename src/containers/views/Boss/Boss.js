@@ -161,7 +161,7 @@ class Boss extends Component {
                             <LinkArrow
                               arrow="left"
                               to={
-                                '/monsters/' +
+                                '/boss/' +
                                 boss[
                                   _.findIndex(boss, { id: selectedBoss.id }) - 1
                                 ].id
@@ -180,7 +180,7 @@ class Boss extends Component {
                             <LinkArrow
                               arrow="right"
                               to={
-                                '/monsters/' +
+                                '/boss/' +
                                 boss[
                                   _.findIndex(boss, { id: selectedBoss.id }) + 1
                                 ].id
