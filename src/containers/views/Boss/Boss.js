@@ -71,7 +71,6 @@ const Card = styled.div`
 
 class Boss extends Component {
   constructor(props) {
-    console.log('Constructor')
     super(props)
 
     this.state = {
@@ -85,7 +84,6 @@ class Boss extends Component {
   }
 
   componentDidMount() {
-    console.log('Mount')
     const getMonsters = axios.get(process.env.REACT_APP_API_URL + '/monsters', {
       headers: {
         'Content-Type': 'application/json',
