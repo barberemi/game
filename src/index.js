@@ -76,7 +76,7 @@ ReactDOM.render(
         layout={CreationLayout}
       />
       <AppRoute exact path="/boss/:idBoss" component={Boss} layout={Layout} />
-      <AppRoute exact path="/boss" component={Boss} layout={Layout} />
+      <AppRoute path="/boss" component={Boss} layout={Layout} />
       <AppRoute
         exact
         path="/crafting/:idBoss"
