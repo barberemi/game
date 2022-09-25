@@ -32,7 +32,8 @@ const LinkInput = styled(Link)`
   color: #f26725;
 
   &:hover {
-    color: #f26725;
+    text-decoration: none;
+    color: white;
   }
 `
 

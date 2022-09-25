@@ -16,6 +16,7 @@ import GuildExploration from './containers/views/Exploration/GuildExploration'
 import Choice from './containers/views/Exploration/Choice'
 import Login from './containers/views/Login/Login'
 import Register from './containers/views/Login/Register'
+import Error404 from './containers/views/Login/Error404'
 import Creation from './containers/views/Character/Creation'
 import Character from './containers/views/Character/Character'
 import Boss from './containers/views/Boss/Boss'
@@ -87,13 +88,16 @@ ReactDOM.render(
       <AppRoute exact path="/guild/:idGuild" component={Guild} layout={Layout} />
       <AppRoute exact path="/guild" component={Guild} layout={Layout} />
       <AppRoute exact path="/login" component={Login} layout={LoginLayout} />
+
+      <AppRoute exact path="/404" component={Error404} layout={LoginLayout} />
       <AppRoute
         exact
         path="/register"
         component={Register}
         layout={LoginLayout}
       />
-      <Redirect from="/" to="/login" />
+      <Redirect exact from="/" to="/login" />
+      <Redirect to="/404" />
     </Switch>
     <ToastContainer />
     <ReactTooltip />
