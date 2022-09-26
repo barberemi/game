@@ -194,6 +194,7 @@ class Creation extends Component {
                       academyId={academySelected.id}
                       treeType={'light'}
                       displayCheckbox={true}
+                      userLevel={0}
                     />
                   </div>
                   {this.state.displayForm && (

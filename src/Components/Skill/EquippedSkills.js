@@ -125,7 +125,7 @@ class EquippedSkills extends Component {
                       }
                       isSelected={!!_.find(skills, { id: skill.id })}
                       displayCheckbox={
-                        displayCheckbox ? (skill.level == 1 ? true : userLevel >= skill.level) : false
+                        displayCheckbox ? userLevel >= skill.level : false
                       }
                       {..._.omit(
                         this.props,
