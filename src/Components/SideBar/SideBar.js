@@ -321,7 +321,10 @@ class SideBar extends Component {
                       >
                         Constructions
                       </LinkMenu>
-                      <LinkMenu to={'/guild#membersTab'} link="guild#membersTab">
+                      <LinkMenu
+                        to={'/guild#membersTab'}
+                        link="guild#membersTab"
+                      >
                         Membres
                       </LinkMenu>
                       <LinkMenu
@@ -384,7 +387,7 @@ class SideBar extends Component {
                   <i className="fas fa-arrow-left" />
                 </div>
               </ReturnDiv>
-              <Footer>© 2021 RemCorp</Footer>
+              <Footer>© 2022 RemCorp</Footer>
             </FooterMobile>
           </Nav>
         </Bar>

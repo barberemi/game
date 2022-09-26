@@ -78,6 +78,13 @@ const AddUserButton = styled.button`
   }
 `
 
+const TextBox = styled.div`
+  padding: 0 10px;
+  display: table-cell;
+  margin-top: auto;
+  text-align: left;
+`
+
 class Character extends Component {
   constructor(props) {
     super(props)
@@ -689,6 +696,33 @@ class Character extends Component {
                             displayJob={user.job.name === 'engineer'}
                             description="Points d’actions permettants d’effectuer des activités de guilde (constructions, explorations, minage etc...)"
                           />
+                          <div
+                            className="col-md-4 col-sm-5"
+                            style={{ display: 'flex', float: 'left' }}
+                          >
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                '/img/items/craft/wood.png'
+                              }
+                              width="60px"
+                              height="60px"
+                              alt="wood"
+                              data-tip={
+                                'Ressource de bois permettant de réaliser des constructions.'
+                              }
+                            />
+                            <TextBox>
+                              <div>
+                                {
+                                  _.filter(user.items, {
+                                    item: { name: 'Bois' }
+                                  }).length
+                                }
+                              </div>
+                              <span>Bois</span>
+                            </TextBox>
+                          </div>
                         </div>
                       </div>
                       <div className="card-body" id="tutorialCharacteristics">

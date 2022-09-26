@@ -5,6 +5,8 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import ConstructionProgressBar from './ConstructionProgressBar'
 import ReactTooltip from 'react-tooltip'
+import actionSvg from './../Characteristic/action.svg'
+import defenseSvg from './../Characteristic/defense.svg'
 
 const Label = styled.span`
   cursor: pointer;
@@ -21,7 +23,7 @@ const Label = styled.span`
 `
 
 const Button = styled.button`
-  height: 25px;
+  height: 30px;
 `
 
 const TD = styled.td`
@@ -88,18 +90,27 @@ class ConstructionItem extends Component {
             +{building.amount}{' '}
             {building.type === 'defense' && (
               <img
-                src={process.env.PUBLIC_URL + '/img/defense.gif'}
+                src={defenseSvg}
                 alt="defense"
+                width="30px"
+                data-tip="Point de défense"
               />
             )}
             {building.type === 'action' && (
               <img
-                src={process.env.PUBLIC_URL + '/img/pa.gif'}
+                src={actionSvg}
                 alt="point action"
+                width="30px"
+                data-tip="Point d'action"
               />
             )}
             {building.type === 'user_bag' && (
-              <img src={process.env.PUBLIC_URL + '/img/bag.gif'} alt="sac" />
+              <img
+                src={process.env.PUBLIC_URL + '/img/bag.gif'}
+                alt="sac"
+                width="25px"
+                data-tip="Inventaire"
+              />
             )}
           </TD>
           <TD>
@@ -110,7 +121,12 @@ class ConstructionItem extends Component {
             ) : (
               <>
                 {this.getConstruction().remainingActions}{' '}
-                <img src={process.env.PUBLIC_URL + '/img/pa.gif'} alt="pa" />{' '}
+                <img
+                  src={actionSvg}
+                  alt="point action"
+                  width="30px"
+                  data-tip="Point d'action"
+                />{' '}
                 {(!building.hasParentId ||
                   (building.hasParentId &&
                     _.filter(constructions, {
@@ -121,7 +137,7 @@ class ConstructionItem extends Component {
                     <Button
                       type="button"
                       className="btn btn-sm btn-outline-success"
-                      data-tip="Donner 1 points d’action"
+                      data-tip="Donner 1 point d’action"
                       onClick={() =>
                         this.props.giveAction(this.getConstruction())
                       }
@@ -142,7 +158,7 @@ class ConstructionItem extends Component {
                 {this.getConstruction().remainingMaterials}{' '}
                 <img
                   src={process.env.PUBLIC_URL + '/img/items/craft/wood.png'}
-                  width="15px"
+                  width="30px"
                   alt="wood"
                 />{' '}
                 {(!building.hasParentId ||

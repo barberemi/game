@@ -20,6 +20,8 @@ import ConstructionList from '../../../Components/Construction/ConstructionList'
 import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
 import GuildList from '../../../Components/Guild/GuildList'
 import MonsterSprite from '../../../Components/Sprites/MonsterSprite'
+import defenseSvg from '../../../Components/Characteristic/defense.svg'
+import ReactTooltip from 'react-tooltip'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
@@ -1045,7 +1047,7 @@ class Guild extends Component {
                               dangerouslySetInnerHTML={{
                                 __html: guild.announcement.replace(
                                   // eslint-disable-next-line
-                                new RegExp('\r?\n', 'g'),
+                                  new RegExp('\r?\n', 'g'),
                                   '<br />'
                                 )
                               }}
@@ -1108,16 +1110,17 @@ class Guild extends Component {
                               <td style={{ borderTop: 0 }}>
                                 {guild.defense}{' '}
                                 <img
-                                  src={
-                                    process.env.PUBLIC_URL + '/img/defense.gif'
-                                  }
+                                  src={defenseSvg}
                                   alt="defense"
+                                  width="30px"
+                                  data-tip="Point de défense"
                                 />
                               </td>
                             </tr>
                           </thead>
                         </table>
                       </div>
+                      <ReactTooltip />
                     </Card>
                   )}
                 </div>
