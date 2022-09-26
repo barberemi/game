@@ -97,7 +97,7 @@ const Button = styled.button`
 `
 
 const CreateGuildText = styled.div`
-  padding-top: 50px;
+  padding-top: 10px;
 `
 
 const LevelBox = styled.span`
@@ -906,7 +906,7 @@ class Guild extends Component {
                           </div>
                         )}
                         <CreateGuildText>
-                          Attention: la création d’une guilde coûte 20 000{' '}
+                          Coûte 20 000{' '}
                           <img
                             src={process.env.PUBLIC_URL + '/img/money.svg'}
                             width="30"
@@ -916,7 +916,8 @@ class Guild extends Component {
                           />
                           {user.money < 20000 && (
                             <div className="text-danger">
-                              Vous ne possèdez actuellement que {user.money}{' '}
+                              Vous possédez actuellement{' '}
+                              {user.money.toLocaleString()}{' '}
                               <img
                                 src={process.env.PUBLIC_URL + '/img/money.svg'}
                                 width="30"

@@ -682,7 +682,7 @@ class Character extends Component {
                         className="card-body"
                         id="tutorialCharacteristicsGenerales"
                       >
-                        <Title>Caractéristiques générales</Title>
+                        <Title>Ressources générales</Title>
                         <div className="col-sm-12" style={{ height: '100px' }}>
                           <CharacteristicItem
                             name="defense"
@@ -696,6 +696,26 @@ class Character extends Component {
                             displayJob={user.job.name === 'engineer'}
                             description="Points d’actions permettants d’effectuer des activités de guilde (constructions, explorations, minage etc...)"
                           />
+                        </div>
+                        <div className="col-sm-12" style={{ height: '100px' }}>
+                          <div
+                            className="col-md-4 col-sm-5"
+                            style={{ display: 'flex', float: 'left' }}
+                          >
+                            <img
+                              src={process.env.PUBLIC_URL + '/img/money.svg'}
+                              width="50px"
+                              height="50px"
+                              alt="thune"
+                              data-tip={
+                                'Thune permettant d’acheter des choses.'
+                              }
+                            />
+                            <TextBox>
+                              <div>{user.money.toLocaleString()}</div>
+                              <span>Thune</span>
+                            </TextBox>
+                          </div>
                           <div
                             className="col-md-4 col-sm-5"
                             style={{ display: 'flex', float: 'left' }}
@@ -705,8 +725,8 @@ class Character extends Component {
                                 process.env.PUBLIC_URL +
                                 '/img/items/craft/wood.png'
                               }
-                              width="60px"
-                              height="60px"
+                              width="50px"
+                              height="50px"
                               alt="wood"
                               data-tip={
                                 'Ressource de bois permettant de réaliser des constructions.'

@@ -267,7 +267,8 @@ class Reward extends Component {
                           <Character className="col-sm-12">
                             <div className="col-sm-4">
                               <div>
-                                Niv {user.level} (+ {monster.givenXp}xp)
+                                Niv {user.level} (+{' '}
+                                {monster.givenXp.toLocaleString()}xp)
                               </div>
                               <ProgressBar
                                 actual={user.experience - user.xpToActualLevel}
@@ -283,7 +284,9 @@ class Reward extends Component {
                                 height="30"
                                 alt="Thune"
                               />
-                              <div>{monster.givenMoney} thunes</div>
+                              <div>
+                                {monster.givenMoney.toLocaleString()} thune
+                              </div>
                             </div>
                             <div className="col-sm-5">
                               <ItemList

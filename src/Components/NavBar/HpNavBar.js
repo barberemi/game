@@ -50,7 +50,7 @@ class HpNavBar extends Component {
                     alt="Thune"
                   />
                 </div>
-                <div>{user.money ? user.money : 'Aucun'}</div>
+                <div>{user.money ? user.money.toLocaleString() : 'Aucun'}</div>
               </MoneyBox>
               <Bar className="col-sm-9">
                 <div>PV</div>

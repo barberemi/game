@@ -24,7 +24,7 @@ class Tutorial extends Component {
             element: '#tutorialCharacteristicsGenerales',
             title: 'Caractéristiques',
             intro:
-              'La défense sert le soir contre les attaques de monstres contre la guilde, tandis que les points d’actions restantes vous montrent su vous pouvez encore effectuer des actions journalières.'
+              'La défense sert le soir contre les attaques de monstres contre la guilde.<br/>Les points d’actions restants vous montrent si vous pouvez encore effectuer des actions journalières.<br/>L’argent et le nombre de bois que vous possédez.'
           },
           {
             element: '#tutorialCharacteristics',
