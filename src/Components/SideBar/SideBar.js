@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { Link } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
 import _ from 'lodash'
 
 const MobileDiv = styled.div`
@@ -309,36 +310,40 @@ class SideBar extends Component {
                   <LinkMenu to={'/guild#generalTab'} link="guild#generalTab">
                     Général
                   </LinkMenu>
-                  <LinkMenu to={'/guild#chatTab'} link="guild#chatTab">
-                    Discussion
-                  </LinkMenu>
-                  <LinkMenu
-                    to={'/guild#constructionsTab'}
-                    link="guild#constructionsTab"
-                  >
-                    Constructions
-                  </LinkMenu>
-                  <LinkMenu to={'/guild#membersTab'} link="guild#membersTab">
-                    Membres
-                  </LinkMenu>
-                  <LinkMenu
-                    to={'/guild#itemsGuildTab'}
-                    link="guild#itemsGuildTab"
-                  >
-                    Banque
-                  </LinkMenu>
-                  <LinkMenu
-                    to={'/guild#fightBossTab'}
-                    link="guild#fightBossTab"
-                  >
-                    Combat champion
-                  </LinkMenu>
-                  <LinkMenu
-                    to={'/guild#pantheonGuildTab'}
-                    link="guild#pantheonGuildTab"
-                  >
-                    Panthéon
-                  </LinkMenu>
+                  {jwtDecode(Cookies.get('auth-token')).guild && (
+                    <>
+                      <LinkMenu to={'/guild#chatTab'} link="guild#chatTab">
+                        Discussion
+                      </LinkMenu>
+                      <LinkMenu
+                        to={'/guild#constructionsTab'}
+                        link="guild#constructionsTab"
+                      >
+                        Constructions
+                      </LinkMenu>
+                      <LinkMenu to={'/guild#membersTab'} link="guild#membersTab">
+                        Membres
+                      </LinkMenu>
+                      <LinkMenu
+                        to={'/guild#itemsGuildTab'}
+                        link="guild#itemsGuildTab"
+                      >
+                        Banque
+                      </LinkMenu>
+                      <LinkMenu
+                        to={'/guild#fightBossTab'}
+                        link="guild#fightBossTab"
+                      >
+                        Combat champion
+                      </LinkMenu>
+                      <LinkMenu
+                        to={'/guild#pantheonGuildTab'}
+                        link="guild#pantheonGuildTab"
+                      >
+                        Panthéon
+                      </LinkMenu>
+                    </>
+                  )}
                 </ComponentSubList>
               </div>
 
