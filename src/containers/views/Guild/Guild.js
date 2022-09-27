@@ -8,6 +8,7 @@ import MonsterList from '../../../Components/Monster/MonsterList'
 import Title from '../../../Components/Title/Title'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import Loader from '../../../Components/Loader/Loader'
@@ -207,25 +208,41 @@ class Guild extends Component {
       .all([getMe, getMonsters])
       .then((responses) => {
         if (responses[0].data) {
-          if (!responses[0].data.guild) {
+          // Redirect to Login if Guild Token dont match with DB Guild
+          if (
+            (jwtDecode(Cookies.get('auth-token')).guild &&
+              !responses[0].data.guild) ||
+            (!jwtDecode(Cookies.get('auth-token')).guild &&
+              responses[0].data.guild)
+          ) {
+            Cookies.remove('auth-token', {
+              path: '',
+              domain: process.env.REACT_APP_DOMAIN
+            })
             this.setState({
-              loading: false,
-              user: responses[0].data
+              redirect: '/login'
             })
           } else {
-            this.setState({
-              user: responses[0].data,
-              monsters: responses[1].data.items.slice(
-                0,
-                responses[0].data.guild.position
-              ),
-              textAnnouncement: responses[0].data.guild.announcement,
-              id: responses[0].data.guild.id
-            })
-            this.loadData()
-            setInterval(() => {
+            if (!responses[0].data.guild) {
+              this.setState({
+                loading: false,
+                user: responses[0].data
+              })
+            } else {
+              this.setState({
+                user: responses[0].data,
+                monsters: responses[1].data.items.slice(
+                  0,
+                  responses[0].data.guild.position
+                ),
+                textAnnouncement: responses[0].data.guild.announcement,
+                id: responses[0].data.guild.id
+              })
               this.loadData()
-            }, 5000)
+              setInterval(() => {
+                this.loadData()
+              }, 5000)
+            }
           }
         }
       })
