@@ -230,6 +230,13 @@ class Tutorial extends Component {
             intro:
               'Choisissez un objet à forger, pou voir les composants nécessaires, et le forger si possible.'
           }
+        ],
+        chat: [
+          {
+            element: '#tutorialGlobalChat',
+            title: 'Discussion globale',
+            intro: 'Permet de chatter avec tous les joueurs.'
+          }
         ]
       }
     }

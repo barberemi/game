@@ -1168,9 +1168,17 @@ class Guild extends Component {
                                   )}
                                   ){' '}
                                 </i>
-                                <span className="text-warning">
-                                  {message.user.name} :{' '}
-                                </span>
+                                <Link
+                                  to={
+                                    message.user.id === user.id
+                                      ? '/character'
+                                      : '/character/' + message.user.id
+                                  }
+                                  className="text-warning text-decoration-none"
+                                >
+                                  {message.user.name}
+                                </Link>{' '}
+                                :{' '}
                               </strong>
                               <span style={{ fontFamily: 'Ubuntu' }}>
                                 {message.message}

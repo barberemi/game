@@ -24,6 +24,7 @@ import Boss from './containers/views/Boss/Boss'
 import Crafting from './containers/views/Crafting/Crafting'
 import Reward from './containers/views/Reward/Reward'
 import Guild from './containers/views/Guild/Guild'
+import Chat from './containers/views/Chat/Chat'
 
 import FightLayout from './containers/layouts/FightLayout'
 import LoginLayout from './containers/layouts/LoginLayout'
@@ -45,6 +46,7 @@ ReactDOM.render(
         component={Exploration}
         layout={Layout}
       />
+      <AppRoute exact path="/chat" component={Chat} layout={Layout} />
       <AppRoute
         exact
         path="/guild_exploration"
