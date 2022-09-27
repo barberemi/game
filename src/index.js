@@ -17,6 +17,7 @@ import Choice from './containers/views/Exploration/Choice'
 import Login from './containers/views/Login/Login'
 import Register from './containers/views/Login/Register'
 import Error404 from './containers/views/Login/Error404'
+import Maintenance from './containers/views/Login/Maintenance'
 import Creation from './containers/views/Character/Creation'
 import Character from './containers/views/Character/Character'
 import Boss from './containers/views/Boss/Boss'
@@ -84,12 +85,28 @@ ReactDOM.render(
         layout={Layout}
       />
       <AppRoute exact path="/crafting" component={Crafting} layout={Layout} />
-      <AppRoute exact path="/reward/:idFight" component={Reward} layout={Layout} />
-      <AppRoute exact path="/guild/:idGuild" component={Guild} layout={Layout} />
+      <AppRoute
+        exact
+        path="/reward/:idFight"
+        component={Reward}
+        layout={Layout}
+      />
+      <AppRoute
+        exact
+        path="/guild/:idGuild"
+        component={Guild}
+        layout={Layout}
+      />
       <AppRoute exact path="/guild" component={Guild} layout={Layout} />
       <AppRoute exact path="/login" component={Login} layout={LoginLayout} />
 
       <AppRoute exact path="/404" component={Error404} layout={LoginLayout} />
+      <AppRoute
+        exact
+        path="/maintenance"
+        component={Maintenance}
+        layout={LoginLayout}
+      />
       <AppRoute
         exact
         path="/register"

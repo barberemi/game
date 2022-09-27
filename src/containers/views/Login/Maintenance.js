@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
-import { Link } from 'react-router-dom'
 
 const Container = styled.div`
   height: 100%;
@@ -17,7 +16,7 @@ const Card = styled.div`
 
 const NumError = styled.p`
   color: #f26725;
-  font-size: 12vw;
+  font-size: 9vw;
 `
 
 const TextError = styled.p`
@@ -25,28 +24,18 @@ const TextError = styled.p`
   font-size: 3vw;
 `
 
-const LinkInput = styled(Link)`
-  color: #f26725;
-  font-size: 2vw;
-
-  &:hover {
-    text-decoration: none;
-    color: white;
-  }
-`
-
-class Error404 extends Component {
+class Maintenance extends Component {
   render() {
     return (
       <Container className="container">
         <div className="d-flex text-center h-100">
           <Card>
-            <NumError>404</NumError>
+            <NumError>Attaque en cours</NumError>
             <TextError>
-              La page que vous cherchez n'existe pas, nos meilleurs bidouilleurs
-              sont sur le coup !
+              Les monstres auront terminé à 00h15.
+              <br />
+              En espérant que vous ayez survécu !
             </TextError>
-            <LinkInput to={'/home'}>Retour</LinkInput>
           </Card>
         </div>
       </Container>
@@ -54,4 +43,4 @@ class Error404 extends Component {
   }
 }
 
-export default Error404
+export default Maintenance
