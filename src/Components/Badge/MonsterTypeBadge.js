@@ -5,17 +5,23 @@ class MonsterTypeBadge extends React.Component {
   render() {
     const { isBoss, isGuildBoss } = this.props
 
-    if (!isBoss && !isGuildBoss) {
-      return ''
-    }
-
     return (
       <span
-        className="badge badge-pill"
-        style={{ backgroundColor: isGuildBoss ? '#ff8000' : '#c600ff' }}
+        className="badge"
+        style={{
+          backgroundColor: isGuildBoss
+            ? '#ff8000'
+            : isBoss
+            ? '#dc3545'
+            : '#808080'
+        }}
       >
-        <div className="pt-1">
-          {isGuildBoss ? 'Champion de guilde' : 'Champion'}
+        <div className="p-1">
+          {isGuildBoss
+            ? 'Champion de guilde'
+            : isBoss
+            ? 'Champion d‘exploration'
+            : 'Monstre classique'}
         </div>
       </span>
     )

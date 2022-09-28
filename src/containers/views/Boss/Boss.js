@@ -84,12 +84,15 @@ class Boss extends Component {
   }
 
   componentDidMount() {
-    const getMonsters = axios.get(process.env.REACT_APP_API_URL + '/monsters', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('auth-token')}`
+    const getMonsters = axios.get(
+      process.env.REACT_APP_API_URL + '/monsters?order_by=level',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('auth-token')}`
+        }
       }
-    })
+    )
     const getMe = axios.get(process.env.REACT_APP_API_URL + '/users/me', {
       headers: {
         'Content-Type': 'application/json',
@@ -191,15 +194,11 @@ class Boss extends Component {
                           </RightArrayBox>
                         )}
                         <br />
-                        {(selectedBoss.isBoss || selectedBoss.isGuildBoss) && (
-                          <>
-                            <MonsterTypeBadge
-                              isGuildBoss={selectedBoss.isGuildBoss}
-                              isBoss={selectedBoss.isBoss}
-                            />
-                            <br />
-                          </>
-                        )}
+                        <MonsterTypeBadge
+                          isGuildBoss={selectedBoss.isGuildBoss}
+                          isBoss={selectedBoss.isBoss}
+                        />
+                        <br />
                         {selectedBoss.name}{' '}
                         <span style={{ color: selectedBoss.academy.color }}>
                           ({selectedBoss.academy.label})
