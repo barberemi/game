@@ -30,6 +30,7 @@ import FightLayout from './containers/layouts/FightLayout'
 import LoginLayout from './containers/layouts/LoginLayout'
 import CreationLayout from './containers/layouts/CreationLayout'
 import Layout from './containers/layouts/Layout'
+import MaintenanceLayout from './containers/layouts/MaintenanceLayout'
 
 import { ToastContainer } from 'react-toastify'
 // import * as serviceWorker from './serviceWorker';
@@ -107,7 +108,7 @@ ReactDOM.render(
         exact
         path="/maintenance"
         component={Maintenance}
-        layout={LoginLayout}
+        layout={MaintenanceLayout}
       />
       <AppRoute
         exact
