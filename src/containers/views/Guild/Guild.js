@@ -170,7 +170,7 @@ class Guild extends Component {
         'generalTab',
         'chatTab',
         'constructionsTab',
-        'membersTab',
+        'friendsTab',
         'choiceBossTab',
         'fightBossTab',
         'itemsGuildTab',
@@ -293,7 +293,7 @@ class Guild extends Component {
       'generalTab',
       'chatTab',
       'constructionsTab',
-      'membersTab',
+      'friendsTab',
       'choiceBossTab',
       'fightBossTab',
       'itemsGuildTab',
@@ -362,7 +362,7 @@ class Guild extends Component {
             '/members',
           {
             type: type,
-            email: this.state.memberToAddOrRemove
+            name: this.state.memberToAddOrRemove
           },
           {
             headers: {
@@ -398,9 +398,20 @@ class Guild extends Component {
           }, 5000)
         })
         .catch((error) => {
-          this.setState({
-            error: error.response.status
-          })
+          toast['error'](
+            <span style={{ fontSize: '14px' }}>
+              Impossible de trouver cet utilisateur.
+            </span>,
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            }
+          )
         })
     }
   }
@@ -454,7 +465,7 @@ class Guild extends Component {
                         '/members',
                       {
                         type: 'add',
-                        email: this.state.user.email
+                        name: this.state.user.name
                       },
                       {
                         headers: {
@@ -1246,9 +1257,9 @@ class Guild extends Component {
                 {guild && (
                   <div
                     className={`tab-pane${
-                      activatedTab === 'membersTab' ? ' active' : ''
+                      activatedTab === 'friendsTab' ? ' active' : ''
                     }`}
-                    id="membersTab"
+                    id="friendsTab"
                     role="tabpanel"
                   >
                     <Card className="card">
@@ -1263,10 +1274,10 @@ class Guild extends Component {
                             <div className="offset-sm-3 col-sm-6">
                               <FormAddUser>
                                 <Input
-                                  id="email"
-                                  name="email"
+                                  id="name"
+                                  name="name"
                                   type="text"
-                                  placeholder="Email"
+                                  placeholder="Nom du joueur"
                                   value={this.state.memberToAddOrRemove}
                                   onChange={(event) =>
                                     this.setState({
@@ -1300,14 +1311,15 @@ class Guild extends Component {
                           onDelete={(friend) => {
                             this.setState(
                               {
-                                memberToAddOrRemove: friend.email
+                                memberToAddOrRemove: friend.name
                               },
                               () => this.handleAddDeleteUser('delete')
                             )
                           }}
                           canPromote={
                             user.role === 'ROLE_ADMIN' ||
-                            user.guildRole === 'master'
+                            user.guildRole === 'master' ||
+                            user.guildRole === 'officer'
                           }
                           onPromoteToOfficer={(member) =>
                             this.handlePromoteToOfficer(member)

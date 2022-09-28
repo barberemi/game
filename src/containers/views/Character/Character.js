@@ -203,7 +203,7 @@ class Character extends Component {
             '/friends',
           {
             type: type,
-            email: this.state.friendToAddOrRemove
+            name: this.state.friendToAddOrRemove
           },
           {
             headers: {
@@ -236,9 +236,20 @@ class Character extends Component {
           })
         })
         .catch((error) => {
-          this.setState({
-            error: error.response.status
-          })
+          toast['error'](
+            <span style={{ fontSize: '14px' }}>
+              Impossible de trouver cet utilisateur.
+            </span>,
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            }
+          )
         })
     }
   }
@@ -985,34 +996,39 @@ class Character extends Component {
                     role="tabpanel"
                   >
                     <Card className="card">
-                      <div className="card-header" id="tutorialAddFriends">
-                        <div className="col-sm-12">
-                          <Title>Ajouter des amis</Title>
+                      {(user.email ===
+                        jwtDecode(Cookies.get('auth-token')).email ||
+                        jwtDecode(Cookies.get('auth-token')).roles[0] ===
+                          'ROLE_ADMIN') && (
+                        <div className="card-header" id="tutorialAddFriends">
+                          <div className="col-sm-12">
+                            <Title>Ajouter des amis</Title>
+                          </div>
+                          <div className="offset-sm-3 col-sm-6">
+                            <FormAddUser>
+                              <InputEmail
+                                id="name"
+                                name="name"
+                                type="text"
+                                placeholder="Nom du joueur"
+                                value={this.state.friendToAddOrRemove}
+                                onChange={(event) =>
+                                  this.setState({
+                                    friendToAddOrRemove: event.target.value
+                                  })
+                                }
+                              />
+                              <AddUserButton
+                                className="btn btn-success"
+                                type="button"
+                                onClick={() => this.handleAddDeleteUser('add')}
+                              >
+                                Ajouter
+                              </AddUserButton>
+                            </FormAddUser>
+                          </div>
                         </div>
-                        <div className="offset-sm-3 col-sm-6">
-                          <FormAddUser>
-                            <InputEmail
-                              id="email"
-                              name="email"
-                              type="text"
-                              placeholder="Email"
-                              value={this.state.friendToAddOrRemove}
-                              onChange={(event) =>
-                                this.setState({
-                                  friendToAddOrRemove: event.target.value
-                                })
-                              }
-                            />
-                            <AddUserButton
-                              className="btn btn-success"
-                              type="button"
-                              onClick={() => this.handleAddDeleteUser('add')}
-                            >
-                              Ajouter
-                            </AddUserButton>
-                          </FormAddUser>
-                        </div>
-                      </div>
+                      )}
                       <div className="card-body" id="tutorialFriendsList">
                         <div className="col-sm-12 mt-3">
                           <Title>Liste d’amis</Title>
@@ -1020,14 +1036,15 @@ class Character extends Component {
                         <FriendList
                           friends={user.friends}
                           canDelete={
-                            user.role === 'ROLE_ADMIN' ||
+                            jwtDecode(Cookies.get('auth-token')).roles[0] ===
+                              'ROLE_ADMIN' ||
                             user.email ===
                               jwtDecode(Cookies.get('auth-token')).email
                           }
                           onDelete={(friend) => {
                             this.setState(
                               {
-                                friendToAddOrRemove: friend.email
+                                friendToAddOrRemove: friend.name
                               },
                               () => this.handleAddDeleteUser('delete')
                             )

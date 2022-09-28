@@ -329,8 +329,8 @@ class SideBar extends Component {
                         Constructions
                       </LinkMenu>
                       <LinkMenu
-                        to={'/guild#membersTab'}
-                        link="guild#membersTab"
+                        to={'/guild#friendsTab'}
+                        link="guild#friendsTab"
                       >
                         Membres
                       </LinkMenu>

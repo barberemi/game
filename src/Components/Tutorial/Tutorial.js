@@ -185,7 +185,7 @@ class Tutorial extends Component {
               'Toutes les constructions que vous pouvez effectuer pour la guilde pour l’améliorer.'
           }
         ],
-        'guild#membersTab': [
+        'guild#friendsTab': [
           {
             element: '#tutorialGuildMembers',
             title: 'Membres de la guilde',

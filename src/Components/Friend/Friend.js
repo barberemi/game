@@ -76,73 +76,74 @@ class Friend extends Component {
               : ''}
           </span>
         </Name>
-        {jwtDecode(Cookies.get('auth-token')).email !== friend.email && (
-          <>
-            <Actions className="col-sm-3">
-              <Link to={'/character/' + friend.id}>
-                <IconAction data-tip="Visualiser">
-                  <i className="far fa-address-card text-success" />
-                </IconAction>
-              </Link>
-              {friend.guildRole !== 'master' && canPromote && (
-                <IconAction
-                  data-tip={
-                    friend.guildRole === 'officer'
-                      ? 'Rétrograder'
-                      : 'Promouvoir'
-                  }
-                  onClick={() => onPromoteToOfficer(friend)}
+        <Actions className="col-sm-3">
+          <Link
+            to={
+              jwtDecode(Cookies.get('auth-token')).email === friend.email
+                ? '/character'
+                : '/character/' + friend.id
+            }
+          >
+            <IconAction data-tip="Visualiser">
+              <i className="far fa-address-card text-success" />
+            </IconAction>
+          </Link>
+          {friend.guildRole !== 'master' && canPromote && (
+            <IconAction
+              data-tip={
+                friend.guildRole === 'officer' ? 'Rétrograder' : 'Promouvoir'
+              }
+              onClick={() => onPromoteToOfficer(friend)}
+            >
+              <i
+                className={`fas fa-user-graduate ${
+                  friend.guildRole === 'officer'
+                    ? 'text-danger'
+                    : 'text-warning'
+                }`}
+              />
+            </IconAction>
+          )}
+          {(canDelete ||
+            jwtDecode(Cookies.get('auth-token')).email === friend.email) && (
+            <>
+              <IconAction
+                data-tip="Supprimer"
+                onClick={() =>
+                  this.setState({
+                    displayLeaveButtons: !this.state.displayLeaveButtons
+                  })
+                }
+              >
+                <i className="fas fa-times text-danger" />
+              </IconAction>
+              <div
+                className={this.state.displayLeaveButtons ? '' : 'd-none'}
+                style={{ fontSize: '12px' }}
+              >
+                <ListLink
+                  className="text-success"
+                  href="#friendsTab"
+                  onClick={() => onDelete(friend)}
                 >
-                  <i
-                    className={`fas fa-user-graduate ${
-                      friend.guildRole === 'officer'
-                        ? 'text-danger'
-                        : 'text-warning'
-                    }`}
-                  />
-                </IconAction>
-              )}
-              {canDelete && (
-                <>
-                  <IconAction
-                    data-tip="Supprimer"
-                    onClick={() =>
-                      this.setState({
-                        displayLeaveButtons: !this.state.displayLeaveButtons
-                      })
-                    }
-                  >
-                    <i className="fas fa-times text-danger" />
-                  </IconAction>
-                  <div
-                    className={this.state.displayLeaveButtons ? '' : 'd-none'}
-                    style={{ fontSize: '12px' }}
-                  >
-                    <ListLink
-                      className="text-success"
-                      href="#leave-validate"
-                      onClick={() => onDelete(friend)}
-                    >
-                      Valider
-                    </ListLink>{' '}
-                    -{' '}
-                    <ListLink
-                      href="#leave-cancel"
-                      onClick={() =>
-                        this.setState({
-                          displayLeaveButtons: false
-                        })
-                      }
-                    >
-                      Annuler
-                    </ListLink>
-                  </div>
-                </>
-              )}
-            </Actions>
-            <ReactTooltip />
-          </>
-        )}
+                  Valider
+                </ListLink>{' '}
+                -{' '}
+                <ListLink
+                  href="#leave-cancel"
+                  onClick={() =>
+                    this.setState({
+                      displayLeaveButtons: false
+                    })
+                  }
+                >
+                  Annuler
+                </ListLink>
+              </div>
+            </>
+          )}
+        </Actions>
+        <ReactTooltip />
       </Container>
     )
   }
