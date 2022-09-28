@@ -47,7 +47,7 @@ ReactDOM.render(
         component={Exploration}
         layout={Layout}
       />
-      <AppRoute exact path="/chat" component={Chat} layout={Layout} />
+      <AppRoute exact path="/discussion" component={Chat} layout={Layout} />
       <AppRoute
         exact
         path="/guild_exploration"

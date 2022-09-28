@@ -228,7 +228,7 @@ class SideBar extends Component {
 
               {/* Chat */}
               <div>
-                <LinkMenu to={'/chat'} link="chat">
+                <LinkMenu to={'/discussion'} link="discussion">
                   <i className="fas fa-comments" /> Chat
                 </LinkMenu>
               </div>
