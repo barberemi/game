@@ -240,6 +240,7 @@ class Boss extends Component {
                           academyId={selectedBoss.academy.id}
                           displayCheckbox={false}
                           buttonOnRight={true}
+                          treeType={'light'}
                         />
                       </div>
 

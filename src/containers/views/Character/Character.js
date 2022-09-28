@@ -835,7 +835,7 @@ class Character extends Component {
                           remainingSkillPoints={
                             user.skillPoints - user.skills.length
                           }
-                          treeType={user.isDark ? 'dark' : 'light'}
+                          treeType={'light'}
                           userLevel={user.level === 0 ? 1 : user.level}
                         />
                       </div>
