@@ -615,6 +615,8 @@ class Character extends Component {
       displayForm
     } = this.state
 
+    const orderTab = ['health', 'strength', 'intelligence']
+
     return (
       <Container className="container-fluid">
         {loading && <Loader />}
@@ -759,19 +761,28 @@ class Character extends Component {
                       <div className="card-body" id="tutorialCharacteristics">
                         <Title>Caractéristiques personnage</Title>
                         <div className="col-sm-12">
-                          {_.map(user.characteristics, (characteristic) => (
-                            <CharacteristicItem
-                              key={characteristic.characteristic.name}
-                              name={characteristic.characteristic.name}
-                              amount={characteristic.amount}
-                              description={
-                                characteristic.characteristic.description
-                              }
-                              equippedItems={_.filter(user.items, {
-                                isEquipped: true
-                              })}
-                            />
-                          ))}
+                          {_.map(
+                            _.sortBy(user.characteristics, function (item) {
+                              return orderTab.indexOf(
+                                item.characteristic.name
+                              ) !== -1
+                                ? orderTab.indexOf(item.characteristic.name)
+                                : user.characteristics.length
+                            }),
+                            (characteristic) => (
+                              <CharacteristicItem
+                                key={characteristic.characteristic.name}
+                                name={characteristic.characteristic.name}
+                                amount={characteristic.amount}
+                                description={
+                                  characteristic.characteristic.description
+                                }
+                                equippedItems={_.filter(user.items, {
+                                  isEquipped: true
+                                })}
+                              />
+                            )
+                          )}
                         </div>
                       </div>
                       <div className="card-footer" id="tutorialEquipments">

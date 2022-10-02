@@ -132,6 +132,7 @@ class Boss extends Component {
 
   render() {
     const { error, loading, boss, user, selectedBoss } = this.state
+    const orderTab = ['health', 'strength', 'intelligence']
 
     return (
       <Container className="container-fluid">
@@ -212,7 +213,16 @@ class Boss extends Component {
                         <Title>Caractéristiques</Title>
                         <div className="col-sm-12">
                           {_.map(
-                            selectedBoss.characteristics,
+                            _.sortBy(
+                              selectedBoss.characteristics,
+                              function (item) {
+                                return orderTab.indexOf(
+                                  item.characteristic.name
+                                ) !== -1
+                                  ? orderTab.indexOf(item.characteristic.name)
+                                  : user.characteristics.length
+                              }
+                            ),
                             (characteristic) => (
                               <CharacteristicItem
                                 key={characteristic.characteristic.name}
