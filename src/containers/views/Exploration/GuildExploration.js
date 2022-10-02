@@ -7,7 +7,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactTooltip from 'react-tooltip'
 import Loader from '../../../Components/Loader/Loader'
-import HpNavBar from '../../../Components/NavBar/HpNavBar'
+import ExperienceNavBar from '../../../Components/NavBar/ExperienceNavBar'
 import ArrowTrait from '../../../Components/ArrowTrait/ArrowTrait'
 import AcademySprite from '../../../Components/Sprites/AcademySprite'
 
@@ -56,15 +56,11 @@ const AvatarBox = styled.div`
   display: flex;
   left: 0;
   position: absolute;
-  bottom: 10%;
+  bottom: 0;
 
   @media (min-width: 768px) {
     left: 5%;
   }
-`
-
-const OtherCharacterBox = styled.div`
-  transform: rotateY(180deg);
 `
 
 const Text = styled.div`
@@ -215,7 +211,7 @@ class GuildExploration extends Component {
 
     return (
       <>
-        <HpNavBar user={character} />
+        <ExperienceNavBar user={character} />
         <Container
           className="position-fixed container-fluid"
           onClick={() =>
@@ -250,22 +246,6 @@ class GuildExploration extends Component {
                     data-tip="Carte de navigation"
                   />
                 </div>
-                {_.map(
-                  _.filter(guild.users, (user) => user.guildRole === 'master'),
-                  (user, index) => (
-                    <div className="m-auto" key={index}>
-                      <OtherCharacterBox>
-                        <br />
-                        <AcademySprite name={user.academy.name} />
-                      </OtherCharacterBox>
-                      <Text>
-                        Chef de guilde
-                        <br />
-                        <span className="text-danger">{user.name}</span>
-                      </Text>
-                    </div>
-                  )
-                )}
               </AvatarBox>
               <ReactTooltip />
             </>

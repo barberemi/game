@@ -6,10 +6,12 @@ import CardChoice from '../../../Components/Exploration/CardChoice'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import HpNavBar from '../../../Components/NavBar/HpNavBar'
+import ExperienceNavBar from '../../../Components/NavBar/ExperienceNavBar'
 import Loader from '../../../Components/Loader/Loader'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import AcademySprite from '../../../Components/Sprites/AcademySprite'
+import MonsterSprite from '../../../Components/Sprites/MonsterSprite'
 
 const Container = styled.div`
   ${() =>
@@ -41,7 +43,6 @@ const SubContainer = styled.div`
 const AvatarBox = styled.div`
   display: flex;
   left: 15%;
-  position: absolute;
 
   @media (min-width: 768px) {
     bottom: 10%;
@@ -416,7 +417,15 @@ class Choice extends Component {
   }
 
   render() {
-    const { error, loading, redirect, user, text, room } = this.state
+    const {
+      error,
+      loading,
+      redirect,
+      user,
+      text,
+      room,
+      typeExploration
+    } = this.state
 
     if (redirect) {
       return <Redirect to={redirect} />
@@ -425,7 +434,12 @@ class Choice extends Component {
     return (
       <Container className="position-fixed container-fluid">
         {loading && <Loader />}
-        {user && <HpNavBar user={user} />}
+        {user && !_.includes(window.location.href, 'guild_exploration') && (
+          <HpNavBar user={user} />
+        )}
+        {user && _.includes(window.location.href, 'guild_exploration') && (
+          <ExperienceNavBar user={user} />
+        )}
         <SubContainer className="container-fluid">
           {error && (
             <span className="text-danger">
@@ -453,13 +467,20 @@ class Choice extends Component {
                 ))}
               </div>
               <AvatarBox>
-                <AcademySprite name={user.academy.name} />
+                <div>
+                  <AcademySprite name={user.academy.name} />
+                </div>
                 <div className="m-auto">
-                  <ImageChoice
-                    src={this.getHandleImage()}
-                    alt="personnage de exploration"
-                    className="animated fadeInRight slow"
-                  />
+                  {typeExploration === 'guild_exploration' ? (
+                    <MonsterSprite image={room.image} />
+                  ) : (
+                    <ImageChoice
+                      src={this.getHandleImage()}
+                      alt="personnage de exploration"
+                      className="animated fadeInRight slow"
+                      type={typeExploration}
+                    />
+                  )}
                 </div>
               </AvatarBox>
             </SubSubContainer>

@@ -17,10 +17,10 @@ const cssClassic = (props) =>
     margin: 0 auto;
     width: calc(${props.params.width} / ${props.params.nbByLine});
     height: ${props.params.height};
-    animation: sprite ${props.params.timing}s steps(${props.params.nbByLine})
-      infinite;
+    animation: sprite-monster ${props.params.timing}s
+      steps(${props.params.nbByLine}) infinite;
 
-    @keyframes sprite {
+    @keyframes sprite-monster {
       from {
         background-position: 0;
       }
@@ -42,10 +42,10 @@ const cssMobile = (props) =>
     margin: 0 auto;
     width: calc(${props.params.widthMobile} / ${props.params.nbByLine});
     height: ${props.params.heightMobile};
-    animation: sprite-mobile ${props.params.timing}s
+    animation: sprite-mobile-monster ${props.params.timing}s
       steps(${props.params.nbByLine}) infinite;
 
-    @keyframes sprite-mobile {
+    @keyframes sprite-mobile-monster {
       from {
         background-position: 0px;
       }
@@ -76,7 +76,7 @@ class MonsterSprite extends Component {
       <Sprite
         params={
           _.find(monsters, {
-            name: this.props.image.split('/')[0] ?? 'Orc'
+            name: this.props.image.split('/')[0]
           }) ??
           _.find(monsters, {
             name: 'Orc'

@@ -29,7 +29,7 @@ const Sprite = styled.div`
     width: calc(2560px / 10);
     height: 200px;
     ${backgroundMobile};
-    animation: sprite-mobile 1s steps(10) infinite;
+    animation: sprite-mobile-academy 1s steps(10) infinite;
   }
 
   @media (min-width: 768px) {
@@ -37,10 +37,10 @@ const Sprite = styled.div`
     width: calc(5120px / 10);
     height: 380px;
     ${background};
-    animation: sprite 1s steps(10) infinite;
+    animation: sprite-academy 1s steps(10) infinite;
   }
 
-  @keyframes sprite {
+  @keyframes sprite-academy {
     from {
       background-position: 0;
     }
@@ -48,7 +48,7 @@ const Sprite = styled.div`
       background-position: 5120px;
     }
   }
-  @keyframes sprite-mobile {
+  @keyframes sprite-mobile-academy {
     from {
       background-position: 0px;
     }

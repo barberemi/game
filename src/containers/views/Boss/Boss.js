@@ -194,16 +194,16 @@ class Boss extends Component {
                           </RightArrayBox>
                         )}
                         <br />
-                        <MonsterTypeBadge
-                          isGuildBoss={selectedBoss.isGuildBoss}
-                          isBoss={selectedBoss.isBoss}
-                        />
-                        <br />
                         {selectedBoss.name}{' '}
                         <span style={{ color: selectedBoss.academy.color }}>
                           ({selectedBoss.academy.label})
                         </span>
                         <LevelBox> - Niv {selectedBoss.level}</LevelBox>
+                        <br />
+                        <MonsterTypeBadge
+                          isGuildBoss={selectedBoss.isGuildBoss}
+                          isBoss={selectedBoss.isBoss}
+                        />
                       </div>
                       <div
                         className="card-body"

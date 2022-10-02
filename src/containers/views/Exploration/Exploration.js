@@ -57,7 +57,7 @@ const AvatarBox = styled.div`
   display: flex;
   left: 0;
   position: absolute;
-  bottom: 10%;
+  bottom: 0;
 
   @media (min-width: 768px) {
     left: 5%;

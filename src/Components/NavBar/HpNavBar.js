@@ -52,7 +52,7 @@ class HpNavBar extends Component {
                 </div>
                 <div>{user.money ? user.money.toLocaleString() : 'Aucun'}</div>
               </MoneyBox>
-              <Bar className="col-sm-9">
+              <Bar className="col-sm-8">
                 <div>PV</div>
                 <ProgressBar
                   actual={
