@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import _ from 'lodash'
 import { getCharacteristicTranslationName } from '../../utils/characteristicHelper'
 
-import agilitySvg from './agility.svg'
 import actionSvg from './action.svg'
 import healthSvg from './health.svg'
 import intelligenceSvg from './intelligence.svg'
@@ -42,13 +41,6 @@ class CharacteristicItem extends Component {
 
   componentDidMount() {
     switch (this.props.name) {
-      case 'agility':
-        this.setState({
-          label: getCharacteristicTranslationName(this.props),
-          color: '#9256ff',
-          svg: agilitySvg
-        })
-        break
       case 'intelligence':
         this.setState({
           label: getCharacteristicTranslationName(this.props),

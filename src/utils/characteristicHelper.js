@@ -1,8 +1,6 @@
 // To get the translation of the name of characteristic
 export const getCharacteristicTranslationName = (characteristic) => {
   switch (characteristic.name) {
-    case 'agility':
-      return 'Agilité'
     case 'intelligence':
       return 'Intelligence'
     case 'strength':

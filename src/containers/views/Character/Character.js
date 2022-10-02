@@ -664,11 +664,6 @@ class Character extends Component {
                           <br />
                           <AcademySprite name={user.academy.name} />
                         </Title>
-                        {user.guild && (
-                          <span data-tip="Guilde de l'utilisateur">
-                            {user.guild.name}
-                          </span>
-                        )}
                         {this.state.isMe && (
                           <>
                             <br />
@@ -685,8 +680,17 @@ class Character extends Component {
                                 className="form-check-label mt-1"
                                 htmlFor="isNoob"
                               >
-                                Je suis un noob (débutant)
+                                Je suis un noob
                               </label>
+                            </span>
+                            <br />
+                            <span
+                              className="badge"
+                              style={{
+                                backgroundColor: '#dc3545'
+                              }}
+                            >
+                              <div className="p-1">Débutant</div>
                             </span>
                           </>
                         )}
