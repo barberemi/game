@@ -51,36 +51,85 @@ class MapHome extends Component {
             shape: 'poly',
             href: '/guild',
             // eslint-disable-next-line
-            coords: [583,633,802,552,1060,776,879,908,583,912],
-            preFillColor: 'rgba(0, 0, 0, 0.2)',
-            fillColor: 'rgba(0, 0, 0, 0.4)'
+            coords: [583, 633, 802, 552, 1060, 776, 879, 908, 583, 912],
+            preFillColor: 'rgba(0, 0, 0, 0)',
+            fillColor: 'rgba(0, 0, 0, 0)',
+            strokeColor: 'rgba(0, 0, 0, 0)'
           },
           {
             name: 'homeBoss',
             shape: 'poly',
             href: '/boss',
             // eslint-disable-next-line
-            coords: [399,102,468,66,482,100,497,107,499,122,529,122,538,105,597,122,619,139,628,168,612,219,616,270,624,287,606,334,643,596,348,603,363,355,351,307,370,285,375,178,366,151,388,136],
-            preFillColor: 'rgba(0, 0, 0, 0.2)',
-            fillColor: 'rgba(0, 0, 0, 0.4)'
+            coords: [
+              399,
+              102,
+              468,
+              66,
+              482,
+              100,
+              497,
+              107,
+              499,
+              122,
+              529,
+              122,
+              538,
+              105,
+              597,
+              122,
+              619,
+              139,
+              628,
+              168,
+              612,
+              219,
+              616,
+              270,
+              624,
+              287,
+              606,
+              334,
+              643,
+              596,
+              348,
+              603,
+              363,
+              355,
+              351,
+              307,
+              370,
+              285,
+              375,
+              178,
+              366,
+              151,
+              388,
+              136
+            ],
+            preFillColor: 'rgba(0, 0, 0, 0)',
+            fillColor: 'rgba(0, 0, 0, 0)',
+            strokeColor: 'rgba(0, 0, 0, 0)'
           },
           {
             name: 'homeCharacter',
             shape: 'poly',
             href: '/character',
             // eslint-disable-next-line
-            coords: [1298,520,1575,520,1575,870,1298,870],
-            preFillColor: 'rgba(0, 0, 0, 0.2)',
-            fillColor: 'rgba(0, 0, 0, 0.4)'
+            coords: [1298, 520, 1575, 520, 1575, 870, 1298, 870],
+            preFillColor: 'rgba(0, 0, 0, 0)',
+            fillColor: 'rgba(0, 0, 0, 0)',
+            strokeColor: 'rgba(0, 0, 0, 0)'
           },
           {
             name: 'homeMap',
             shape: 'poly',
             href: '/maps',
             // eslint-disable-next-line
-            coords: [258,663,252,924,555,885,561,629],
-            preFillColor: 'rgba(0, 0, 0, 0.2)',
-            fillColor: 'rgba(0, 0, 0, 0.4)'
+            coords: [258, 663, 252, 924, 555, 885, 561, 629],
+            preFillColor: 'rgba(0, 0, 0, 0)',
+            fillColor: 'rgba(0, 0, 0, 0)',
+            strokeColor: 'rgba(0, 0, 0, 0)'
           }
         ]
       }
