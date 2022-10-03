@@ -10,7 +10,6 @@ const Container = styled.div`
 `
 
 const Card = styled.div`
-  height: 370px;
   margin-top: auto;
   margin-bottom: auto;
   width: 400px;
@@ -19,6 +18,8 @@ const Card = styled.div`
 
 const Title = styled.h3`
   color: white;
+  text-align: center;
+  padding-top: 20px;
 `
 
 const InputGroup = styled.span`
@@ -35,6 +36,14 @@ const LinkInput = styled(Link)`
     text-decoration: none;
     color: white;
   }
+`
+
+const BetaImg = styled.img`
+  position: absolute;
+  width: 200px;
+  -webkit-transform: rotate(-20deg);
+  transform: rotate(-20deg);
+  margin-left: -55px;
 `
 
 class Register extends Component {
@@ -102,6 +111,7 @@ class Register extends Component {
       <Container className="container">
         <div className="d-flex justify-content-center h-100">
           <Card className="card">
+            <BetaImg src={process.env.PUBLIC_URL + '/img/beta.png'} />
             <div className="card-header">
               <Title>S’enregistrer</Title>
             </div>
@@ -176,11 +186,6 @@ class Register extends Component {
                   />
                 </div>
               </form>
-            </div>
-            <div className="card-footer">
-              <LinkInput className="d-flex justify-content-center">
-                Mot de passe oublié?
-              </LinkInput>
             </div>
           </Card>
         </div>

@@ -19,6 +19,8 @@ const Card = styled.div`
 
 const Title = styled.h3`
   color: white;
+  text-align: center;
+  padding-top: 20px;
 `
 
 const Social = styled.div`
@@ -52,6 +54,14 @@ const LinkInput = styled(Link)`
     text-decoration: none;
     color: white;
   }
+`
+
+const BetaImg = styled.img`
+  position: absolute;
+  width: 200px;
+  -webkit-transform: rotate(-20deg);
+  transform: rotate(-20deg);
+  margin-left: -55px;
 `
 
 class Login extends Component {
@@ -104,6 +114,7 @@ class Login extends Component {
       <Container className="container">
         <div className="d-flex justify-content-center h-100">
           <Card className="card">
+            <BetaImg src={process.env.PUBLIC_URL + '/img/beta.png'} />
             <div className="card-header">
               <Title>Se connecter</Title>
               <Social className="d-flex justify-content-end">
@@ -179,9 +190,6 @@ class Login extends Component {
                 Pas de compte?&nbsp;
                 <LinkInput to={'/register'}>S’enregistrer</LinkInput>
               </div>
-              <LinkInput to={'#'} className="d-flex justify-content-center">
-                Mot de passe oublié?
-              </LinkInput>
             </div>
           </Card>
         </div>

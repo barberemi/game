@@ -210,7 +210,7 @@ class SideBar extends Component {
             <Header className="text-center">
               <Link to={'/home'}>
                 <img
-                  src={process.env.PUBLIC_URL + '/img/logo.png'}
+                  src={process.env.PUBLIC_URL + '/img/logo-beta.png'}
                   alt="Logo"
                   width="80px"
                   className="img-fluid"
