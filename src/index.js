@@ -33,6 +33,7 @@ import Layout from './containers/layouts/Layout'
 import MaintenanceLayout from './containers/layouts/MaintenanceLayout'
 
 import { ToastContainer } from 'react-toastify'
+import TawkMessengerReact from '@tawk.to/tawk-messenger-react'
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
@@ -121,6 +122,10 @@ ReactDOM.render(
     </Switch>
     <ToastContainer />
     <ReactTooltip />
+    <TawkMessengerReact
+      propertyId="633af0b054f06e12d8982eee"
+      widgetId="1gef3oca6"
+    />
   </BrowserRouter>,
   document.getElementById('root')
 )
