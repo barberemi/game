@@ -59,10 +59,13 @@ const Card = styled.div`
 `
 
 const Character = styled.div`
-  display: flex;
-  float: left;
   width: 100%;
   padding-top: 10px;
+
+  @media (min-width: 768px) {
+    display: flex;
+    float: left;
+  }
 `
 
 const Versus = styled.img`
@@ -75,7 +78,6 @@ const LevelWin = styled.div`
   top: 40%;
   left: 40%;
   width: 230px;
-  height: 120px;
   transform: translate(-50%, -50%);
   z-index: 10;
   position: fixed;
@@ -265,7 +267,7 @@ class Reward extends Component {
                         <Title>Récompenses de bataille</Title>
                         <div className="col-sm-12">
                           <Character className="col-sm-12">
-                            <div className="col-sm-4">
+                            <div className="col-md-4 col-sm-12">
                               <div>
                                 Niv {user.level} (+{' '}
                                 {monster.givenXp.toLocaleString()}xp)
@@ -277,7 +279,7 @@ class Reward extends Component {
                                 transparentColor="#7F8286"
                               />
                             </div>
-                            <div className="col-sm-3 mt-3">
+                            <div className="col-md-3 mt-3 col-sm-12">
                               <img
                                 src={process.env.PUBLIC_URL + '/img/money.svg'}
                                 width="30"
@@ -288,7 +290,7 @@ class Reward extends Component {
                                 {monster.givenMoney.toLocaleString()} thune
                               </div>
                             </div>
-                            <div className="col-sm-5">
+                            <div className="col-md-5 col-sm-12">
                               <ItemList
                                 items={items}
                                 displayActions={false}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -27,15 +27,6 @@ const InputGroup = styled.span`
   background-color: #f26725;
   color: black;
   border: 0 !important;
-`
-
-const LinkInput = styled(Link)`
-  color: #f26725;
-
-  &:hover {
-    text-decoration: none;
-    color: white;
-  }
 `
 
 const BetaImg = styled.img`

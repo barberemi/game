@@ -7,7 +7,6 @@ import ItemBox from './ItemBox'
 import ReactTooltip from 'react-tooltip'
 
 const Container = styled.div`
-  max-height: 40vh;
   min-height: 100px;
   overflow-y: scroll;
   padding-left: 30px;
@@ -15,7 +14,6 @@ const Container = styled.div`
   ${(props) =>
     props.minusPadding &&
     css`
-      min-height: 20vh;
       padding-left: 0px;
     `};
 `

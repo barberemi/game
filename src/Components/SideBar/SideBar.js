@@ -346,14 +346,14 @@ class SideBar extends Component {
                       >
                         Combat champion
                       </LinkMenu>
-                      <LinkMenu
-                        to={'/guild#pantheonGuildTab'}
-                        link="guild#pantheonGuildTab"
-                      >
-                        Panthéon
-                      </LinkMenu>
                     </>
                   )}
+                  <LinkMenu
+                    to={'/guild#pantheonGuildTab'}
+                    link="guild#pantheonGuildTab"
+                  >
+                    Panthéon
+                  </LinkMenu>
                 </ComponentSubList>
               </div>
 

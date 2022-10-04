@@ -21,6 +21,7 @@ import ConstructionList from '../../../Components/Construction/ConstructionList'
 import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
 import GuildList from '../../../Components/Guild/GuildList'
 import MonsterSprite from '../../../Components/Sprites/MonsterSprite'
+import SeasonRewards from '../../../Components/Guild/SeasonRewards'
 import defenseSvg from '../../../Components/Characteristic/defense.svg'
 import ReactTooltip from 'react-tooltip'
 
@@ -143,6 +144,17 @@ const InputSubmit = styled.input`
 const LinkToGuildExploration = styled(Link)`
   &:hover {
     text-decoration: none;
+  }
+`
+
+const SeasonChest = styled.img`
+  width: 50px;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  &:hover {
+    cursor: pointer;
   }
 `
 
@@ -869,6 +881,7 @@ class Guild extends Component {
       guild,
       user,
       monsters,
+      season,
       selectedGuild,
       activatedTab,
       stepName,
@@ -900,67 +913,6 @@ class Guild extends Component {
                   </span>
                 )}
 
-                {/* No Guild */}
-                {!guild && user && !loading && (
-                  <Card className="card">
-                    <div className="card-header">
-                      <Title>Créer sa propre guilde</Title>
-                    </div>
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        {user.money >= 20000 && (
-                          <div className="offset-sm-3 col-sm-6">
-                            <FormAddUser>
-                              <Input
-                                id="name"
-                                name="name"
-                                type="text"
-                                placeholder="Nom de la guilde"
-                                value={this.state.newNameGuild}
-                                onChange={(event) =>
-                                  this.setState({
-                                    newNameGuild: event.target.value
-                                  })
-                                }
-                              />
-                              <Button
-                                className="btn btn-success"
-                                type="button"
-                                onClick={() => this.handleCreateGuild()}
-                              >
-                                Créer
-                              </Button>
-                            </FormAddUser>
-                          </div>
-                        )}
-                        <CreateGuildText>
-                          Coûte 20 000{' '}
-                          <img
-                            src={process.env.PUBLIC_URL + '/img/money.svg'}
-                            width="30"
-                            height="30"
-                            className="d-inline-block align-top"
-                            alt="Thune"
-                          />
-                          {user.money < 20000 && (
-                            <div className="text-danger">
-                              Vous possédez actuellement{' '}
-                              {user.money.toLocaleString()}{' '}
-                              <img
-                                src={process.env.PUBLIC_URL + '/img/money.svg'}
-                                width="30"
-                                height="30"
-                                className="d-inline-block align-top"
-                                alt="Thune"
-                              />
-                            </div>
-                          )}
-                        </CreateGuildText>
-                      </div>
-                    </div>
-                  </Card>
-                )}
-
                 {/* General */}
                 <div
                   className={`tab-pane${
@@ -969,6 +921,68 @@ class Guild extends Component {
                   id="generalTab"
                   role="tabpanel"
                 >
+                  {/* No Guild */}
+                  {!guild && user && !loading && (
+                    <Card className="card">
+                      <div className="card-header">
+                        <Title>Créer sa propre guilde</Title>
+                      </div>
+                      <div className="card-body">
+                        <div className="col-sm-12">
+                          {user.money >= 20000 && (
+                            <div className="offset-sm-3 col-sm-6">
+                              <FormAddUser>
+                                <Input
+                                  id="name"
+                                  name="name"
+                                  type="text"
+                                  placeholder="Nom de la guilde"
+                                  value={this.state.newNameGuild}
+                                  onChange={(event) =>
+                                    this.setState({
+                                      newNameGuild: event.target.value
+                                    })
+                                  }
+                                />
+                                <Button
+                                  className="btn btn-success"
+                                  type="button"
+                                  onClick={() => this.handleCreateGuild()}
+                                >
+                                  Créer
+                                </Button>
+                              </FormAddUser>
+                            </div>
+                          )}
+                          <CreateGuildText>
+                            Coûte 20 000{' '}
+                            <img
+                              src={process.env.PUBLIC_URL + '/img/money.svg'}
+                              width="30"
+                              height="30"
+                              className="d-inline-block align-top"
+                              alt="Thune"
+                            />
+                            {user.money < 20000 && (
+                              <div className="text-danger">
+                                Vous possédez actuellement{' '}
+                                {user.money.toLocaleString()}{' '}
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL + '/img/money.svg'
+                                  }
+                                  width="30"
+                                  height="30"
+                                  className="d-inline-block align-top"
+                                  alt="Thune"
+                                />
+                              </div>
+                            )}
+                          </CreateGuildText>
+                        </div>
+                      </div>
+                    </Card>
+                  )}
                   {guild && user && (
                     <Card className="card">
                       <div className="card-header" id="tutorialGuildName">
@@ -1523,7 +1537,49 @@ class Guild extends Component {
                       <div className="col-sm-12">
                         {!selectedGuild && (
                           <>
-                            <Title>Panthéon des guildes</Title>
+                            <Title>
+                              Panthéon des guildes
+                              <br />
+                              {season && (
+                                <span
+                                  style={{ color: '#fff', fontSize: '12px' }}
+                                >
+                                  (fin de saison dans{' '}
+                                  <span style={{ color: 'red' }}>
+                                    {moment(season.endingAt).diff(
+                                      moment(),
+                                      'days'
+                                    )}{' '}
+                                    jours
+                                  </span>
+                                  )
+                                </span>
+                              )}
+                              <SeasonChest
+                                src={
+                                  process.env.PUBLIC_URL +
+                                  '/img/chest-close.svg'
+                                }
+                                onMouseOver={(e) => {
+                                  e.currentTarget.src =
+                                    process.env.PUBLIC_URL +
+                                    '/img/chest-open.svg'
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.src =
+                                    process.env.PUBLIC_URL +
+                                    '/img/chest-close.svg'
+                                }}
+                                data-tip="Voir les récompenses de saison"
+                                data-toggle="modal"
+                                data-target="#seasonRewardsModal"
+                              />
+                            </Title>
+                            <SeasonRewards
+                              getSeason={(season) => {
+                                this.setState({ season: season })
+                              }}
+                            />
                             <GuildList
                               onSelectedGuild={(guild) => {
                                 this.setState({

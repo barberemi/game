@@ -520,12 +520,10 @@ class Character extends Component {
 
   handleChoiceJob(event) {
     event.preventDefault()
-    // console.log(moment().format('YYYY-MM-DD HH:mm:ss'))
     var date = moment().format('YYYY-MM-DD HH:mm:ss')
     // Add 2 hours to UTC Paris
     // var date = new Date()
     // date.setHours(date.getHours() + 2)
-    //
     axios
       .put(
         process.env.REACT_APP_API_URL + '/users/' + this.state.user.id,

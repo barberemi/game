@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import _ from 'lodash'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { getDaysDateDiffBetweenNowAnd } from '../../utils/dateHelper'
 import ReactTooltip from 'react-tooltip'
 
 const Container = styled.div`
@@ -46,7 +45,7 @@ class GuildList extends Component {
 
   componentDidMount() {
     axios
-      .get(process.env.REACT_APP_API_URL + '/guilds?order_by=createdAt', {
+      .get(process.env.REACT_APP_API_URL + '/guilds', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${Cookies.get('auth-token')}`
@@ -55,7 +54,13 @@ class GuildList extends Component {
       .then((response) => {
         if (response.data) {
           this.setState({
-            guilds: response.data.items,
+            guilds: _.orderBy(
+              response.data.items,
+              (guild) => {
+                return parseInt(guild.seasonRecord)
+              },
+              'desc'
+            ),
             isLoaded: true
           })
         }
@@ -84,11 +89,23 @@ class GuildList extends Component {
           _.map(guilds, (guild, index) => (
             <SubContainer key={index} className="col-sm-12">
               <div className="col-sm-1">{index + 1}</div>
-              <Name className="col-sm-6">{guild.name}</Name>
-              <div className="col-sm-2">
-                {getDaysDateDiffBetweenNowAnd(guild.createdAt)} jours
-              </div>
-              <div className="col-sm-2">
+              <Name
+                className="col-sm-4"
+                style={{
+                  color:
+                    index === 0
+                      ? '#ff8000'
+                      : index >= 1 && index <= 8
+                      ? '#c600ff'
+                      : index >= 9 && index <= 49
+                      ? '#00bfff'
+                      : '#ffffff'
+                }}
+              >
+                {guild.name}
+              </Name>
+              <div className="col-sm-3">{guild.seasonRecord} jours</div>
+              <div className="col-sm-3">
                 {guild.users.length === 0
                   ? 'Aucun'
                   : guild.users.length === 1
@@ -96,7 +113,7 @@ class GuildList extends Component {
                   : guild.users.length + ' membres'}
               </div>
               {guild.users.length > 0 && (
-                <div className="col-sm-1">
+                <div className="col-sm-1 m-auto">
                   <IconAction
                     onClick={() => this.props.onSelectedGuild(guild)}
                     data-tip="Voir les membres"
