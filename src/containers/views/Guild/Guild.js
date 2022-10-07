@@ -18,7 +18,6 @@ import ItemList from '../../../Components/Item/ItemList'
 import { selectTabFromUrl } from '../../../utils/routingHelper'
 import Tutorial from '../../../Components/Tutorial/Tutorial'
 import ConstructionList from '../../../Components/Construction/ConstructionList'
-import { getDaysDateDiffBetweenNowAnd } from '../../../utils/dateHelper'
 import GuildList from '../../../Components/Guild/GuildList'
 import MonsterSprite from '../../../Components/Sprites/MonsterSprite'
 import SeasonRewards from '../../../Components/Guild/SeasonRewards'
@@ -989,8 +988,7 @@ class Guild extends Component {
                         <Title>
                           {guild.name}{' '}
                           <span style={{ fontSize: '18px', color: 'white' }}>
-                            ({getDaysDateDiffBetweenNowAnd(guild.createdAt)}{' '}
-                            jours)
+                            ({guild.seasonDay} jours)
                           </span>
                         </Title>
                         {user.canGuildBossFight && (
