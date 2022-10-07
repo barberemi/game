@@ -116,7 +116,7 @@ class CharacteristicItem extends Component {
       return (
         <>
           {' '}
-          + {amount / 2}
+          + {amount / 2}{' '}
           <img
             src={process.env.PUBLIC_URL + '/img/jobs/defender.svg'}
             alt="defenseur"
@@ -129,7 +129,7 @@ class CharacteristicItem extends Component {
       return (
         <>
           {' '}
-          + {amount > 0 ? 1 : 0}
+          + {amount > 0 ? 1 : 0}{' '}
           <img
             src={process.env.PUBLIC_URL + '/img/jobs/engineer.svg'}
             alt="ingenieur"

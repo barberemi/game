@@ -138,7 +138,7 @@ class SeasonRewards extends Component {
                   )}
                   {season.itemsRewarded4.length > 0 && (
                     <>
-                      <Text>Top 101-*</Text>
+                      <Text>Top 51-*</Text>
                       <ItemList
                         items={season.itemsRewarded4}
                         displayActions={false}
