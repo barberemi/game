@@ -988,7 +988,8 @@ class Guild extends Component {
                         <Title>
                           {guild.name}{' '}
                           <span style={{ fontSize: '18px', color: 'white' }}>
-                            ({guild.seasonDay} jours)
+                            ({guild.seasonDay}{' '}
+                            {guild.seasonDay > 1 ? 'jours' : 'jour'})
                           </span>
                         </Title>
                         {user.canGuildBossFight && (

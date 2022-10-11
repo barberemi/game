@@ -104,7 +104,9 @@ class GuildList extends Component {
               >
                 {guild.name}
               </Name>
-              <div className="col-sm-3">{guild.seasonRecord} jours</div>
+              <div className="col-sm-3">
+                {guild.seasonRecord} {guild.seasonRecord > 1 ? 'jours' : 'jour'}
+              </div>
               <div className="col-sm-3">
                 {guild.users.length === 0
                   ? 'Aucun'
