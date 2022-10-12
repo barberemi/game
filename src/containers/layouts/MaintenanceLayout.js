@@ -7,7 +7,7 @@ const Background = styled.div`
   background-repeat: no-repeat;
   height: 100vh;
   background-image: url(${process.env.PUBLIC_URL +
-  '/img/backgrounds/boss-min.jpg'});
+  '/img/backgrounds/guild-attack-min.jpg'});
 `
 
 const MaintenanceLayout = ({ children }) => <Background>{children}</Background>

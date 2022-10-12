@@ -6,6 +6,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import moment from 'moment'
 import ItemList from '../../Components/Item/ItemList'
+import { getColorRank, getRewardsByRank } from '../../utils/seasonHelper'
 
 const Text = styled.div`
   text-align: left;
@@ -105,9 +106,9 @@ class SeasonRewards extends Component {
                 <>
                   {season.itemsRewarded1.length > 0 && (
                     <>
-                      <Text style={{ color: '#ff8000' }}>Top 1</Text>
+                      <Text style={{ color: getColorRank(0) }}>Top 1</Text>
                       <ItemList
-                        items={season.itemsRewarded1}
+                        items={getRewardsByRank(0, season)}
                         displayActions={false}
                         minusPadding
                       />
@@ -116,9 +117,9 @@ class SeasonRewards extends Component {
                   )}
                   {season.itemsRewarded2.length > 0 && (
                     <>
-                      <Text style={{ color: '#c600ff' }}>Top 2-9</Text>
+                      <Text style={{ color: getColorRank(2) }}>Top 2-9</Text>
                       <ItemList
-                        items={season.itemsRewarded2}
+                        items={getRewardsByRank(2, season)}
                         displayActions={false}
                         minusPadding
                       />
@@ -127,9 +128,9 @@ class SeasonRewards extends Component {
                   )}
                   {season.itemsRewarded3.length > 0 && (
                     <>
-                      <Text style={{ color: '#00BFFF' }}>Top 10-50</Text>
+                      <Text style={{ color: getColorRank(10) }}>Top 10-50</Text>
                       <ItemList
-                        items={season.itemsRewarded3}
+                        items={getRewardsByRank(10, season)}
                         displayActions={false}
                         minusPadding
                       />
@@ -140,7 +141,7 @@ class SeasonRewards extends Component {
                     <>
                       <Text>Top 51-*</Text>
                       <ItemList
-                        items={season.itemsRewarded4}
+                        items={getRewardsByRank(51, season)}
                         displayActions={false}
                         minusPadding
                       />

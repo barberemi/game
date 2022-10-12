@@ -23,10 +23,11 @@ import MonsterSprite from '../../../Components/Sprites/MonsterSprite'
 import SeasonRewards from '../../../Components/Guild/SeasonRewards'
 import defenseSvg from '../../../Components/Characteristic/defense.svg'
 import ReactTooltip from 'react-tooltip'
+import ResultAttack from '../../../Components/Guild/ResultAttack'
 
 const Container = styled.div`
   background-image: url(${process.env.PUBLIC_URL +
-  '/img/backgrounds/guild-min.jpg'});
+  '/img/backgrounds/guild-exploration-min.jpg'});
   background-size: 100% 100%;
   -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
@@ -242,10 +243,12 @@ class Guild extends Component {
             } else {
               this.setState({
                 user: responses[0].data,
-                monsters: responses[1].data.items.slice(
-                  0,
-                  responses[0].data.guild.position
-                ),
+                monsters: responses[0].data.guild.position
+                  ? responses[1].data.items.slice(
+                      0,
+                      responses[0].data.guild.position
+                    )
+                  : responses[1].data.items,
                 textAnnouncement: responses[0].data.guild.announcement,
                 id: responses[0].data.guild.id
               })
@@ -872,6 +875,33 @@ class Guild extends Component {
     }
   }
 
+  handleValidAttack = () => {
+    const { user } = this.state
+    axios
+      .put(
+        process.env.REACT_APP_API_URL + '/users/' + user.id,
+        { hasSurvivedToAttack: null },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('auth-token')}`
+          }
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          this.setState({
+            redirect: '/guild'
+          })
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data
+        })
+      })
+  }
+
   render() {
     const {
       error,
@@ -896,21 +926,34 @@ class Guild extends Component {
         {loading && <Loader />}
         <div className="container">
           <SubContainer className="row h-100 mt-5 mb-5">
-            {this.state.stepsEnabled === true && (
-              <Tutorial
-                stepsEnabled={this.state.stepsEnabled}
-                stepName={stepName}
-                onExit={() => this.setState({ stepsEnabled: false })}
-              />
-            )}
-
             <RightBox className="col-sm-12 my-auto">
+              {this.state.stepsEnabled === true && (
+                <Tutorial
+                  stepsEnabled={this.state.stepsEnabled}
+                  stepName={stepName}
+                  onExit={() => this.setState({ stepsEnabled: false })}
+                />
+              )}
               <div className="tab-content">
                 {error && (
                   <span className="text-danger">
                     <b>Erreur :</b> {error.error}
                   </span>
                 )}
+
+                {/* Night Attack result */}
+                {guild &&
+                  user &&
+                  user.hasSurvivedToAttack !== undefined &&
+                  !loading && (
+                    <Card className="card">
+                      <ResultAttack
+                        user={user}
+                        guild={guild}
+                        onValidAttack={() => this.handleValidAttack()}
+                      />
+                    </Card>
+                  )}
 
                 {/* General */}
                 <div
@@ -921,68 +964,71 @@ class Guild extends Component {
                   role="tabpanel"
                 >
                   {/* No Guild */}
-                  {!guild && user && !loading && (
-                    <Card className="card">
-                      <div className="card-header">
-                        <Title>Créer sa propre guilde</Title>
-                      </div>
-                      <div className="card-body">
-                        <div className="col-sm-12">
-                          {user.money >= 20000 && (
-                            <div className="offset-sm-3 col-sm-6">
-                              <FormAddUser>
-                                <Input
-                                  id="name"
-                                  name="name"
-                                  type="text"
-                                  placeholder="Nom de la guilde"
-                                  value={this.state.newNameGuild}
-                                  onChange={(event) =>
-                                    this.setState({
-                                      newNameGuild: event.target.value
-                                    })
-                                  }
-                                />
-                                <Button
-                                  className="btn btn-success"
-                                  type="button"
-                                  onClick={() => this.handleCreateGuild()}
-                                >
-                                  Créer
-                                </Button>
-                              </FormAddUser>
-                            </div>
-                          )}
-                          <CreateGuildText>
-                            Coûte 20 000{' '}
-                            <img
-                              src={process.env.PUBLIC_URL + '/img/money.svg'}
-                              width="30"
-                              height="30"
-                              className="d-inline-block align-top"
-                              alt="Thune"
-                            />
-                            {user.money < 20000 && (
-                              <div className="text-danger">
-                                Vous possédez actuellement{' '}
-                                {user.money.toLocaleString()}{' '}
-                                <img
-                                  src={
-                                    process.env.PUBLIC_URL + '/img/money.svg'
-                                  }
-                                  width="30"
-                                  height="30"
-                                  className="d-inline-block align-top"
-                                  alt="Thune"
-                                />
+                  {!guild &&
+                    user &&
+                    user.hasSurvivedToAttack === undefined &&
+                    !loading && (
+                      <Card className="card">
+                        <div className="card-header">
+                          <Title>Créer sa propre guilde</Title>
+                        </div>
+                        <div className="card-body">
+                          <div className="col-sm-12">
+                            {user.money >= 20000 && (
+                              <div className="offset-sm-3 col-sm-6">
+                                <FormAddUser>
+                                  <Input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    placeholder="Nom de la guilde"
+                                    value={this.state.newNameGuild}
+                                    onChange={(event) =>
+                                      this.setState({
+                                        newNameGuild: event.target.value
+                                      })
+                                    }
+                                  />
+                                  <Button
+                                    className="btn btn-success"
+                                    type="button"
+                                    onClick={() => this.handleCreateGuild()}
+                                  >
+                                    Créer
+                                  </Button>
+                                </FormAddUser>
                               </div>
                             )}
-                          </CreateGuildText>
+                            <CreateGuildText>
+                              Coûte 20 000{' '}
+                              <img
+                                src={process.env.PUBLIC_URL + '/img/money.svg'}
+                                width="30"
+                                height="30"
+                                className="d-inline-block align-top"
+                                alt="Thune"
+                              />
+                              {user.money < 20000 && (
+                                <div className="text-danger">
+                                  Vous possédez actuellement{' '}
+                                  {user.money.toLocaleString()}{' '}
+                                  <img
+                                    src={
+                                      process.env.PUBLIC_URL + '/img/money.svg'
+                                    }
+                                    width="30"
+                                    height="30"
+                                    className="d-inline-block align-top"
+                                    alt="Thune"
+                                  />
+                                </div>
+                              )}
+                            </CreateGuildText>
+                          </div>
                         </div>
-                      </div>
-                    </Card>
-                  )}
-                  {guild && user && (
+                      </Card>
+                    )}
+                  {guild && user && user.hasSurvivedToAttack === undefined && (
                     <Card className="card">
                       <div className="card-header" id="tutorialGuildName">
                         <Title>
@@ -1168,7 +1214,7 @@ class Guild extends Component {
                 </div>
 
                 {/* Chat */}
-                {guild && (
+                {guild && user && user.hasSurvivedToAttack === undefined && (
                   <div
                     className={`tab-pane${
                       activatedTab === 'chatTab' ? ' active' : ''
@@ -1238,7 +1284,7 @@ class Guild extends Component {
                 )}
 
                 {/* Constructions */}
-                {guild && (
+                {guild && user && user.hasSurvivedToAttack === undefined && (
                   <div
                     className={`tab-pane${
                       activatedTab === 'constructionsTab' ? ' active' : ''
@@ -1267,7 +1313,7 @@ class Guild extends Component {
                 )}
 
                 {/* Members */}
-                {guild && (
+                {guild && user && user.hasSurvivedToAttack === undefined && (
                   <div
                     className={`tab-pane${
                       activatedTab === 'friendsTab' ? ' active' : ''
@@ -1345,6 +1391,8 @@ class Guild extends Component {
 
                 {/* ChoiceBoss */}
                 {guild &&
+                  user &&
+                  user.hasSurvivedToAttack === undefined &&
                   monsters &&
                   (user.role === 'ROLE_ADMIN' ||
                     user.guildRole === 'master' ||
@@ -1382,7 +1430,7 @@ class Guild extends Component {
                   )}
 
                 {/* BossFight */}
-                {guild && guild.monster && (
+                {guild && user && user.hasSurvivedToAttack === undefined && (
                   <div
                     className={`tab-pane${
                       activatedTab === 'fightBossTab' ? ' active' : ''
@@ -1407,97 +1455,107 @@ class Guild extends Component {
                             )}
                           </Title>
                         </div>
-                        <MonsterSprite image={guild.monster.image} />
-                        <div style={{ marginTop: '30px' }}>
-                          {(guild.monster.isBoss ||
-                            guild.monster.isGuildBoss) && (
-                            <>
-                              <MonsterTypeBadge
-                                isGuildBoss={guild.monster.isGuildBoss}
-                                isBoss={guild.monster.isBoss}
-                              />
-                              <br />
-                            </>
-                          )}
-                          {guild.monster.name}{' '}
-                          <span
-                            style={{
-                              color: guild.monster.academy.color
-                            }}
-                          >
-                            ({guild.monster.academy.name})
-                          </span>
-                          <LevelBox> - Niv {guild.monster.level}</LevelBox>
-                        </div>
+                        {!guild.monster && 'Aucun pour le moment'}
+                        {guild.monster && (
+                          <>
+                            <MonsterSprite image={guild.monster.image} />
+                            <div style={{ marginTop: '30px' }}>
+                              {(guild.monster.isBoss ||
+                                guild.monster.isGuildBoss) && (
+                                <>
+                                  <MonsterTypeBadge
+                                    isGuildBoss={guild.monster.isGuildBoss}
+                                    isBoss={guild.monster.isBoss}
+                                  />
+                                  <br />
+                                </>
+                              )}
+                              {guild.monster.name}{' '}
+                              <span
+                                style={{
+                                  color: guild.monster.academy.color
+                                }}
+                              >
+                                ({guild.monster.academy.name})
+                              </span>
+                              <LevelBox> - Niv {guild.monster.level}</LevelBox>
+                            </div>
+                          </>
+                        )}
                       </div>
                       <div
                         className="card-footer"
                         style={{ maxHeight: '50vh', overflowY: 'auto' }}
                         id="tutorialGuildBossAttacks"
                       >
-                        <div className="col-sm-12 mt-3">
-                          <Title>Combats de la journée</Title>
-                        </div>
-                        {_.map(guild.users, (member, index) => (
-                          <Member key={index}>
-                            <Name className="col-sm-9">
-                              {member.academy && (
-                                <>
-                                  <Avatar
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      '/img/academies/' +
-                                      member.academy.name +
-                                      '/Alert1H/0.png'
-                                    }
-                                    backgroundColor={
-                                      member.academy.name === 'warrior'
-                                        ? '#dc3545'
-                                        : member.academy.name === 'hunter'
-                                        ? '#28a745'
-                                        : '#007bff'
-                                    }
-                                    alt={member.name}
-                                  />
-                                  &nbsp;
-                                </>
-                              )}
-                              {member.name} -{' '}
-                              {member.lastGuildBossFightOfDay && (
-                                <span
-                                  className={`text-${
-                                    member.lastGuildBossFightOfDay.type ===
-                                      'waiting' ||
-                                    member.lastGuildBossFightOfDay.type ===
-                                      'won'
-                                      ? 'success'
-                                      : 'warning'
-                                  }`}
-                                >
-                                  {member.lastGuildBossFightOfDay.type ===
-                                  'waiting'
-                                    ? 'En cours'
-                                    : member.lastGuildBossFightOfDay.type ===
-                                      'won'
-                                    ? 'Victoire'
-                                    : member.lastGuildBossFightOfDay
-                                        .remainingHp + 'pts de vie restant'}
-                                </span>
-                              )}
-                              {!member.lastGuildBossFightOfDay && (
-                                <span className="text-danger">
-                                  Pas encore combattu
-                                </span>
-                              )}
-                            </Name>
-                          </Member>
-                        ))}
+                        {guild.monster && (
+                          <>
+                            <div className="col-sm-12 mt-3">
+                              <Title>Combats de la journée</Title>
+                            </div>
+                            {_.map(guild.users, (member, index) => (
+                              <Member key={index}>
+                                <Name className="col-sm-9">
+                                  {member.academy && (
+                                    <>
+                                      <Avatar
+                                        src={
+                                          process.env.PUBLIC_URL +
+                                          '/img/academies/' +
+                                          member.academy.name +
+                                          '/Alert1H/0.png'
+                                        }
+                                        backgroundColor={
+                                          member.academy.name === 'warrior'
+                                            ? '#dc3545'
+                                            : member.academy.name === 'hunter'
+                                            ? '#28a745'
+                                            : '#007bff'
+                                        }
+                                        alt={member.name}
+                                      />
+                                      &nbsp;
+                                    </>
+                                  )}
+                                  {member.name} -{' '}
+                                  {member.lastGuildBossFightOfDay && (
+                                    <span
+                                      className={`text-${
+                                        member.lastGuildBossFightOfDay.type ===
+                                          'waiting' ||
+                                        member.lastGuildBossFightOfDay.type ===
+                                          'won'
+                                          ? 'success'
+                                          : 'warning'
+                                      }`}
+                                    >
+                                      {member.lastGuildBossFightOfDay.type ===
+                                      'waiting'
+                                        ? 'En cours'
+                                        : member.lastGuildBossFightOfDay
+                                            .type === 'won'
+                                        ? 'Victoire'
+                                        : member.lastGuildBossFightOfDay
+                                            .remainingHp + 'pts de vie restant'}
+                                    </span>
+                                  )}
+                                  {!member.lastGuildBossFightOfDay && (
+                                    <span className="text-danger">
+                                      Pas encore combattu
+                                    </span>
+                                  )}
+                                </Name>
+                              </Member>
+                            ))}
+                          </>
+                        )}
                       </div>
                     </Card>
                   </div>
                 )}
 
-                {guild && (
+                {/* Items guild */}
+                {guild && user && user.hasSurvivedToAttack === undefined && (
                   <div
                     className={`tab-pane${
                       activatedTab === 'itemsGuildTab' ? ' active' : ''
@@ -1524,91 +1582,95 @@ class Guild extends Component {
                 )}
 
                 {/* Pantheon */}
-                <div
-                  className={`tab-pane${
-                    activatedTab === 'pantheonGuildTab' ? ' active' : ''
-                  }`}
-                  id="pantheonGuildTab"
-                  role="tabpanel"
-                >
-                  <Card className="card">
-                    <div className="card-body">
-                      <div className="col-sm-12">
-                        {!selectedGuild && (
-                          <>
-                            <Title>
-                              Panthéon des guildes
-                              <br />
-                              {season && (
-                                <span
-                                  style={{ color: '#fff', fontSize: '12px' }}
-                                >
-                                  (fin de saison dans{' '}
-                                  <span style={{ color: 'red' }}>
-                                    {moment(season.endingAt).diff(
-                                      moment(),
-                                      'days'
-                                    )}{' '}
-                                    jours
+                {user && user.hasSurvivedToAttack === undefined && (
+                  <div
+                    className={`tab-pane${
+                      activatedTab === 'pantheonGuildTab' ? ' active' : ''
+                    }`}
+                    id="pantheonGuildTab"
+                    role="tabpanel"
+                  >
+                    <Card className="card">
+                      <div className="card-body" id="tutorialGuildPantheon">
+                        <div className="col-sm-12">
+                          {!selectedGuild && (
+                            <>
+                              <Title>
+                                Panthéon des guildes
+                                <br />
+                                {season && (
+                                  <span
+                                    style={{ color: '#fff', fontSize: '12px' }}
+                                    id="tutorialGuildSeason"
+                                  >
+                                    (fin de saison dans{' '}
+                                    <span style={{ color: 'red' }}>
+                                      {moment(season.endingAt).diff(
+                                        moment(),
+                                        'days'
+                                      )}{' '}
+                                      jours
+                                    </span>
+                                    )
                                   </span>
-                                  )
-                                </span>
-                              )}
-                              <SeasonChest
-                                src={
-                                  process.env.PUBLIC_URL +
-                                  '/img/chest-close.svg'
-                                }
-                                onMouseOver={(e) => {
-                                  e.currentTarget.src =
-                                    process.env.PUBLIC_URL +
-                                    '/img/chest-open.svg'
-                                }}
-                                onMouseOut={(e) => {
-                                  e.currentTarget.src =
+                                )}
+                                <SeasonChest
+                                  src={
                                     process.env.PUBLIC_URL +
                                     '/img/chest-close.svg'
+                                  }
+                                  onMouseOver={(e) => {
+                                    e.currentTarget.src =
+                                      process.env.PUBLIC_URL +
+                                      '/img/chest-open.svg'
+                                  }}
+                                  onMouseOut={(e) => {
+                                    e.currentTarget.src =
+                                      process.env.PUBLIC_URL +
+                                      '/img/chest-close.svg'
+                                  }}
+                                  data-tip="Voir les récompenses de saison"
+                                  data-toggle="modal"
+                                  data-target="#seasonRewardsModal"
+                                  id="tutorialGuildSeasonRewards"
+                                />
+                              </Title>
+                              <SeasonRewards
+                                getSeason={(season) => {
+                                  this.setState({ season: season })
                                 }}
-                                data-tip="Voir les récompenses de saison"
-                                data-toggle="modal"
-                                data-target="#seasonRewardsModal"
                               />
-                            </Title>
-                            <SeasonRewards
-                              getSeason={(season) => {
-                                this.setState({ season: season })
-                              }}
-                            />
-                            <GuildList
-                              onSelectedGuild={(guild) => {
-                                this.setState({
-                                  selectedGuild: guild
-                                })
-                              }}
-                            />
-                          </>
-                        )}
-                        {selectedGuild && (
-                          <>
-                            <Title>
-                              {selectedGuild.name}{' '}
-                              <Link
-                                to={'/guild#pantheonGuildTab'}
-                                className="btn btn-secondary"
-                                onClick={() => {
-                                  this.setState({ selectedGuild: undefined })
+                              <GuildList
+                                onSelectedGuild={(guild) => {
+                                  this.setState({
+                                    selectedGuild: guild
+                                  })
                                 }}
-                              >
-                                Retour
-                              </Link>
-                            </Title>
-                            <FriendList friends={selectedGuild.users} />
-                          </>
-                        )}
+                              />
+                            </>
+                          )}
+                          {selectedGuild && (
+                            <>
+                              <Title>
+                                {selectedGuild.name}{' '}
+                                <Link
+                                  to={'/guild#pantheonGuildTab'}
+                                  className="btn btn-secondary"
+                                  onClick={() => {
+                                    this.setState({ selectedGuild: undefined })
+                                  }}
+                                >
+                                  Retour
+                                </Link>
+                              </Title>
+                              <FriendList friends={selectedGuild.users} />
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </div>
+                    </Card>
+                  </div>
+                )}
               </div>
             </RightBox>
           </SubContainer>

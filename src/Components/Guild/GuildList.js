@@ -5,6 +5,7 @@ import _ from 'lodash'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactTooltip from 'react-tooltip'
+import { getColorRank } from '../../utils/seasonHelper'
 
 const Container = styled.div`
   max-height: 60vh;
@@ -92,14 +93,7 @@ class GuildList extends Component {
               <Name
                 className="col-sm-4"
                 style={{
-                  color:
-                    index === 0
-                      ? '#ff8000'
-                      : index >= 1 && index <= 8
-                      ? '#c600ff'
-                      : index >= 9 && index <= 49
-                      ? '#00bfff'
-                      : '#ffffff'
+                  color: getColorRank(index)
                 }}
               >
                 {guild.name}

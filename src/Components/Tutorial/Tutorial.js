@@ -223,6 +223,25 @@ class Tutorial extends Component {
               'Permet de choisir le champion contre lequel votre guilde va pouvoir se battre tous les jours, parmis ceux déjà battus.'
           }
         ],
+        'guild#pantheonGuildTab': [
+          {
+            element: '#tutorialGuildPantheon',
+            title: 'Panthéon de guilde',
+            intro:
+              'Permet de voir le rang des guildes. Plus ton rang de guilde est élevé, plus de récompenses et de meilleures qualités tu recevras en fin de saison.'
+          },
+          {
+            element: '#tutorialGuildSeason',
+            title: 'Saison en cours',
+            intro:
+              'Affiche le nombre de jours restant avant la fin de la saison.'
+          },
+          {
+            element: '#tutorialGuildSeasonRewards',
+            title: 'Récompenses de saison',
+            intro: 'Permet de voir les récompenses de saison.'
+          }
+        ],
         crafting: [
           {
             element: '#tutorialCraftingListing',
