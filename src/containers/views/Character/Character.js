@@ -653,8 +653,10 @@ class Character extends Component {
                           </span>
                           <br />
                           <ProgressBar
-                            actual={user.experience - user.xpToActualLevel}
-                            max={user.xpToNextLevel - user.xpToActualLevel}
+                            actual={
+                              user.xpToNextLevel - user.xpMissingOnActualLevel
+                            }
+                            max={user.xpToNextLevel}
                             color="#F27625"
                             transparentColor="#7F8286"
                           />

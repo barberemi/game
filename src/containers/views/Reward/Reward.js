@@ -136,8 +136,12 @@ class Reward extends Component {
       .then((response) => {
         if (response.data) {
           const levelUp =
-            response.data.user.experience - response.data.monster.givenXp <
-            response.data.user.xpToActualLevel
+            response.data.user.xpToNextLevel -
+              response.data.user.xpMissingOnActualLevel -
+              response.data.monster.givenXp <=
+            0
+              ? true
+              : false
 
           this.setState({
             loading: false,
@@ -273,8 +277,11 @@ class Reward extends Component {
                                 {monster.givenXp.toLocaleString()}xp)
                               </div>
                               <ProgressBar
-                                actual={user.experience - user.xpToActualLevel}
-                                max={user.xpToNextLevel - user.xpToActualLevel}
+                                actual={
+                                  user.xpToNextLevel -
+                                  user.xpMissingOnActualLevel
+                                }
+                                max={user.xpToNextLevel}
                                 color="#F26725"
                                 transparentColor="#7F8286"
                               />

@@ -35,8 +35,8 @@ const ExperienceNavBar = ({ user }) => (
           <Bar className="col-sm-10">
             <div>Niv {user.level}</div>
             <ProgressBar
-              actual={user.experience - user.xpToActualLevel}
-              max={user.xpToNextLevel - user.xpToActualLevel}
+              actual={user.xpToNextLevel - user.xpMissingOnActualLevel}
+              max={user.xpToNextLevel}
               color="#F27625"
               transparentColor="#7F8286"
             />
