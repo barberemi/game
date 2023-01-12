@@ -100,6 +100,11 @@ class Login extends Component {
         this.setState({
           error: error.response.data
         })
+        setTimeout(() => {
+          this.setState({
+            error: null
+          })
+        }, 2500)
       })
   }
 
