@@ -17,15 +17,25 @@ const cssClassic = (props) =>
     margin: 0 auto;
     width: calc(${props.params.width} / ${props.params.nbByLine});
     height: ${props.params.height};
-    animation: sprite-monster ${props.params.timing}s
-      steps(${props.params.nbByLine}) infinite;
+    animation: sprite-monster-${props.params.size} ${props.params.timing}s steps(
+        ${props.params.nbByLine}
+      ) infinite;
 
-    @keyframes sprite-monster {
+    @keyframes sprite-monster-tall {
       from {
         background-position: 0;
       }
       to {
-        background-position: ${props.params.width};
+        background-position: 9216px;
+      }
+    }
+
+    @keyframes sprite-monster-small {
+      from {
+        background-position: 0;
+      }
+      to {
+        background-position: 6144px;
       }
     }
   `
@@ -42,15 +52,24 @@ const cssMobile = (props) =>
     margin: 0 auto;
     width: calc(${props.params.widthMobile} / ${props.params.nbByLine});
     height: ${props.params.heightMobile};
-    animation: sprite-mobile-monster ${props.params.timing}s
-      steps(${props.params.nbByLine}) infinite;
+    animation: sprite-mobile-monster-${props.params.size} ${props.params
+        .timing}s steps(${props.params.nbByLine}) infinite;
 
-    @keyframes sprite-mobile-monster {
+    @keyframes sprite-mobile-monster-tall {
       from {
         background-position: 0px;
       }
       to {
-        background-position: ${props.params.widthMobile};
+        background-position: 4608px;
+      }
+    }
+
+    @keyframes sprite-mobile-monster-small {
+      from {
+        background-position: 0px;
+      }
+      to {
+        background-position: 3072px;
       }
     }
   `

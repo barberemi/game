@@ -7,7 +7,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Fallen_Angels_2',
@@ -16,7 +17,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Fallen_Angels_3',
@@ -25,7 +27,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Goblin',
@@ -34,7 +37,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Ogre',
@@ -43,7 +47,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Orc',
@@ -52,7 +57,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Reaper_Man_1',
@@ -61,7 +67,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Reaper_Man_2',
@@ -70,7 +77,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   {
     name: 'Reaper_Man_3',
@@ -79,7 +87,8 @@ export const monsters = [
     widthMobile: '4608px',
     heightMobile: '170px',
     nbByLine: '18',
-    timing: 1.5
+    timing: 1.5,
+    size: 'tall'
   },
   // GOLEMS
   {
@@ -89,7 +98,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Golem_2',
@@ -98,7 +108,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Golem_3',
@@ -107,7 +118,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   // MINOTAURS
   {
@@ -117,7 +129,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Minotaur_2',
@@ -126,7 +139,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Minotaur_3',
@@ -135,7 +149,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   // SATYRS & WRAITHS
   {
@@ -145,7 +160,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Satyr_2',
@@ -154,7 +170,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Satyr_3',
@@ -163,7 +180,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '150px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Wraith_1',
@@ -172,7 +190,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '190px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Wraith_2',
@@ -181,7 +200,8 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '190px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   },
   {
     name: 'Wraith_3',
@@ -190,6 +210,7 @@ export const monsters = [
     widthMobile: '3072px',
     heightMobile: '190px',
     nbByLine: '12',
-    timing: 1.5
+    timing: 1.5,
+    size: 'small'
   }
 ]
