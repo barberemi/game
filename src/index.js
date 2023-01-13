@@ -37,7 +37,7 @@ import TawkMessengerReact from '@tawk.to/tawk-messenger-react'
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <BrowserRouter forceRefresh={true}>
+  <BrowserRouter>
     {/* Needed to refresh when click on Monster arrow next/previous */}
     <Switch>
       <AppRoute exact path="/maps" component={MapExploration} layout={Layout} />
@@ -72,6 +72,7 @@ ReactDOM.render(
         path="/character/:idCharacter"
         component={Character}
         layout={Layout}
+        key={Math.random()}
       />
       <AppRoute exact path="/character" component={Character} layout={Layout} />
       <AppRoute
