@@ -182,8 +182,27 @@ class SideBar extends Component {
 
     this.state = {
       displayMenu: false,
-      displayCharacterSubMenu: false,
-      displayGuildSubMenu: false
+      displayCharacterSubMenu: new RegExp(
+        [
+          'character#friendsTab',
+          'character#constructionsTab',
+          'character#itemsTab',
+          'character#skillsTab',
+          'character#generalTab'
+        ].join('|')
+      ).test(window.location.href),
+      displayGuildSubMenu: new RegExp(
+        [
+          'guild#choiceBossTab',
+          'guild#pantheonGuildTab',
+          'guild#fightBossTab',
+          'guild#friendsTab',
+          'guild#constructionsTab',
+          'guild#itemsGuildTab',
+          'guild#chatTab',
+          'guild#generalTab'
+        ].join('|')
+      ).test(window.location.href)
     }
   }
 
