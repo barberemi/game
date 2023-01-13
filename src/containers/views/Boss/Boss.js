@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import _ from 'lodash'
@@ -61,6 +61,7 @@ const LinkArrow = styled(Link)`
   color: #fff;
 
   &:hover {
+    cursor: pointer;
     color: #f26725;
   }
 `
@@ -69,21 +70,17 @@ const Card = styled.div`
   background-color: rgba(0, 0, 0, 0.8) !important;
 `
 
-class Boss extends Component {
-  constructor(props) {
-    super(props)
+function Boss(props) {
+  const [error, setError] = useState()
+  const [loading, setLoading] = useState(true)
+  const [id, setId] = useState(parseInt(props.match.params.idBoss))
+  const [boss, setBoss] = useState()
+  const [user, setUser] = useState()
+  const [stepsEnabled, setStepsEnabled] = useState(false)
+  const [selectedBoss, setSelectedBoss] = useState()
+  const orderTab = ['health', 'strength', 'intelligence']
 
-    this.state = {
-      loading: true,
-      id: parseInt(this.props.match.params.idBoss),
-      boss: undefined,
-      user: undefined,
-      stepsEnabled: false,
-      selectedBoss: undefined
-    }
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     const getMonsters = axios.get(
       process.env.REACT_APP_API_URL + '/monsters?order_by=level',
       {
@@ -104,176 +101,181 @@ class Boss extends Component {
       .all([getMonsters, getMe])
       .then((responses) => {
         if (responses[0].data && responses[1].data) {
-          this.setState({
-            loading: false,
-            boss: responses[0].data.items,
-            user: responses[1].data,
-            selectedBoss: this.state.id
-              ? _.find(responses[0].data.items, { id: this.state.id })
+          setLoading(false)
+          setBoss(responses[0].data.items)
+          setUser(responses[1].data)
+          setSelectedBoss(
+            id
+              ? _.find(responses[0].data.items, { id: id })
               : _.first(responses[0].data.items)
-          })
+          )
 
-          if (responses[1].data.isNoob) {
+          if (responses[1].data.isNoob && !id) {
             setTimeout(() => {
-              this.setState({
-                stepsEnabled: true
-              })
+              setStepsEnabled(true)
             }, 500)
           }
         }
       })
       .catch((errors) => {
-        this.setState({
-          loading: false,
-          error: errors[0].response.data.error
-        })
+        setLoading(false)
+        setError(errors[0].response.data.error)
       })
-  }
+  }, [id])
 
-  render() {
-    const { error, loading, boss, user, selectedBoss } = this.state
-    const orderTab = ['health', 'strength', 'intelligence']
+  return (
+    <Container className="container-fluid">
+      {loading && <Loader />}
+      <div className="container">
+        {error && (
+          <span className="text-danger">
+            <b>Erreur :</b> {error}
+          </span>
+        )}
+        {boss && selectedBoss && (
+          <SubContainer className="row h-100 mt-3 mb-3">
+            <Tutorial
+              stepsEnabled={stepsEnabled}
+              stepName="monsters"
+              onExit={() => setStepsEnabled(false)}
+            />
 
-    return (
-      <Container className="container-fluid">
-        {loading && <Loader />}
-        <div className="container">
-          {error && (
-            <span className="text-danger">
-              <b>Erreur :</b> {error}
-            </span>
-          )}
-          {boss && (
-            <SubContainer className="row h-100 mt-3 mb-3">
-              <Tutorial
-                stepsEnabled={this.state.stepsEnabled}
-                stepName="monsters"
-                onExit={() => this.setState({ stepsEnabled: false })}
-              />
-
-              <RightBox className="col-sm-12 my-auto">
-                <div className="tab-content">
-                  {/* General */}
-                  <div id="generalTab" role="tabpanel">
-                    <Card className="card">
-                      <div
-                        className="card-header"
-                        id="tutorialDescriptionMonster"
-                      >
-                        {selectedBoss.id !== _.first(boss).id && (
-                          <LeftArrayBox className="position-absolute">
-                            <LinkArrow
-                              arrow="left"
-                              to={
-                                '/boss/' +
+            <RightBox className="col-sm-12 my-auto">
+              <div className="tab-content">
+                {/* General */}
+                <div id="generalTab" role="tabpanel">
+                  <Card className="card">
+                    <div
+                      className="card-header"
+                      id="tutorialDescriptionMonster"
+                    >
+                      {selectedBoss.id !== _.first(boss).id && (
+                        <LeftArrayBox className="position-absolute">
+                          <LinkArrow
+                            arrow="left"
+                            to={
+                              '/boss/' +
+                              boss[
+                                _.findIndex(boss, { id: selectedBoss.id }) - 1
+                              ].id
+                            }
+                            onClick={() =>
+                              setId(
                                 boss[
                                   _.findIndex(boss, { id: selectedBoss.id }) - 1
                                 ].id
-                              }
-                            >
-                              <i className="fas fa-chevron-left fa-3x" />
-                            </LinkArrow>
-                          </LeftArrayBox>
-                        )}
-                        <MonsterSprite image={selectedBoss.image} />
-                        {selectedBoss.id !== _.last(boss).id && (
-                          <RightArrayBox
-                            className="position-absolute"
-                            id="tutorialNextMonster"
+                              )
+                            }
                           >
-                            <LinkArrow
-                              arrow="right"
-                              to={
-                                '/boss/' +
+                            <i className="fas fa-chevron-left fa-3x" />
+                          </LinkArrow>
+                        </LeftArrayBox>
+                      )}
+                      <MonsterSprite image={selectedBoss.image} />
+                      {selectedBoss.id !== _.last(boss).id && (
+                        <RightArrayBox
+                          className="position-absolute"
+                          id="tutorialNextMonster"
+                        >
+                          <LinkArrow
+                            arrow="right"
+                            to={
+                              '/boss/' +
+                              boss[
+                                _.findIndex(boss, { id: selectedBoss.id }) + 1
+                              ].id
+                            }
+                            onClick={() =>
+                              setId(
                                 boss[
                                   _.findIndex(boss, { id: selectedBoss.id }) + 1
                                 ].id
-                              }
-                            >
-                              <i className="fas fa-chevron-right fa-3x" />
-                            </LinkArrow>
-                          </RightArrayBox>
+                              )
+                            }
+                          >
+                            <i className="fas fa-chevron-right fa-3x" />
+                          </LinkArrow>
+                        </RightArrayBox>
+                      )}
+                      <br />
+                      {selectedBoss.name}{' '}
+                      <span style={{ color: selectedBoss.academy.color }}>
+                        ({selectedBoss.academy.label})
+                      </span>
+                      <LevelBox> - Niv {selectedBoss.level}</LevelBox>
+                      <br />
+                      <MonsterTypeBadge
+                        isGuildBoss={selectedBoss.isGuildBoss}
+                        isBoss={selectedBoss.isBoss}
+                      />
+                    </div>
+                    <div
+                      className="card-body"
+                      id="tutorialCharacteristicsMonster"
+                    >
+                      <Title>Caractéristiques</Title>
+                      <div className="col-sm-12">
+                        {_.map(
+                          _.sortBy(
+                            selectedBoss.characteristics,
+                            function (item) {
+                              return orderTab.indexOf(
+                                item.characteristic.name
+                              ) !== -1
+                                ? orderTab.indexOf(item.characteristic.name)
+                                : user.characteristics.length
+                            }
+                          ),
+                          (characteristic) => (
+                            <CharacteristicItem
+                              key={characteristic.characteristic.name}
+                              name={characteristic.characteristic.name}
+                              amount={characteristic.amount}
+                            />
+                          )
                         )}
-                        <br />
-                        {selectedBoss.name}{' '}
-                        <span style={{ color: selectedBoss.academy.color }}>
-                          ({selectedBoss.academy.label})
-                        </span>
-                        <LevelBox> - Niv {selectedBoss.level}</LevelBox>
-                        <br />
-                        <MonsterTypeBadge
-                          isGuildBoss={selectedBoss.isGuildBoss}
-                          isBoss={selectedBoss.isBoss}
+                        <CharacteristicItem
+                          key="experience"
+                          name="experience"
+                          amount={selectedBoss.givenXp}
                         />
                       </div>
-                      <div
-                        className="card-body"
-                        id="tutorialCharacteristicsMonster"
-                      >
-                        <Title>Caractéristiques</Title>
-                        <div className="col-sm-12">
-                          {_.map(
-                            _.sortBy(
-                              selectedBoss.characteristics,
-                              function (item) {
-                                return orderTab.indexOf(
-                                  item.characteristic.name
-                                ) !== -1
-                                  ? orderTab.indexOf(item.characteristic.name)
-                                  : user.characteristics.length
-                              }
-                            ),
-                            (characteristic) => (
-                              <CharacteristicItem
-                                key={characteristic.characteristic.name}
-                                name={characteristic.characteristic.name}
-                                amount={characteristic.amount}
-                              />
-                            )
-                          )}
-                          <CharacteristicItem
-                            key="experience"
-                            name="experience"
-                            amount={selectedBoss.givenXp}
-                          />
-                        </div>
-                      </div>
+                    </div>
 
-                      {/* Skills */}
-                      <div className="card-body" id="tutorialSkills">
-                        <div className="col-sm-12">
-                          <Title>Compétences du boss</Title>
-                        </div>
-                        <EquippedSkills
-                          skills={selectedBoss.skills}
-                          academyId={selectedBoss.academy.id}
-                          displayCheckbox={false}
-                          buttonOnRight={true}
-                          treeType={'light'}
-                        />
+                    {/* Skills */}
+                    <div className="card-body" id="tutorialSkills">
+                      <div className="col-sm-12">
+                        <Title>Compétences du boss</Title>
                       </div>
+                      <EquippedSkills
+                        skills={selectedBoss.skills}
+                        academyId={selectedBoss.academy.id}
+                        displayCheckbox={false}
+                        buttonOnRight={true}
+                        treeType={'light'}
+                      />
+                    </div>
 
-                      {/* Items */}
-                      <div className="card-body" id="tutorialItems">
-                        <div className="col-sm-12">
-                          <Title>Liste des objets lachés</Title>
-                        </div>
-                        <ItemList
-                          items={selectedBoss.items}
-                          displayActions={false}
-                          userLevel={user.level}
-                        />
+                    {/* Items */}
+                    <div className="card-body" id="tutorialItems">
+                      <div className="col-sm-12">
+                        <Title>Liste des objets lachés</Title>
                       </div>
-                    </Card>
-                  </div>
+                      <ItemList
+                        items={selectedBoss.items}
+                        displayActions={false}
+                        userLevel={user.level}
+                      />
+                    </div>
+                  </Card>
                 </div>
-              </RightBox>
-            </SubContainer>
-          )}
-        </div>
-      </Container>
-    )
-  }
+              </div>
+            </RightBox>
+          </SubContainer>
+        )}
+      </div>
+    </Container>
+  )
 }
 
 Boss.propTypes = {
